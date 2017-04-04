@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.system.m4.R;
@@ -20,11 +22,6 @@ public class PlaceholderFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "ARG_SECTION_NUMBER";
 
-    @BindView(R.id.section_label)
-    TextView sectionLabel;
-
-    Unbinder unbinder;
-
     public PlaceholderFragment() {
     }
 
@@ -38,25 +35,20 @@ public class PlaceholderFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_transaction_manager, container, false);
-        unbinder = ButterKnife.bind(this, rootView);
-        configureView(getArguments().getInt(ARG_SECTION_NUMBER));
+        View rootView = inflater.inflate(configureView(getArguments().getInt(ARG_SECTION_NUMBER)), container, false);
         return rootView;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    private void configureView(Integer position) {
-
-        switch (position){
+    private int configureView(int anInt) {
+        switch (anInt){
             case 0:
-                sectionLabel.setText("Data da Compra");
-
-                break;
+                return R.layout.fragment_transaction_manager_buy_date;
+            case 1:
+                return R.layout.fragment_transaction_manager_payment_date;
+            case 2:
+                return R.layout.fragment_transaction_manager_value;
+            default:
+                return -1;
         }
     }
 }
