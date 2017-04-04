@@ -15,18 +15,20 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:gravity="center"
-        android:text="Data da Compra"
+        android:text="Valor"
         android:textSize="25sp"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/value"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/section_label"
         android:layout_centerInParent="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:hint="R$ 0,00"
-        android:textSize="20sp" />
+        android:textSize="30sp" />
 
 </RelativeLayout>
