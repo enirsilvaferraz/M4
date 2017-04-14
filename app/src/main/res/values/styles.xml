@@ -24,7 +24,7 @@
 
 
     <style name="AppTheme.card">
-        <item name="android:paddingBottom">15dp</item>
+        <item name="android:paddingBottom">16dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingStart">24dp</item>
         <item name="android:clickable">true</item>

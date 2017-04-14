@@ -10,13 +10,12 @@ import com.system.m4.R;
 
 public class TransactionManagerDialog extends DialogFragment {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_transaction_manager, container, false);
-        return v;
-    }
-
     public static DialogFragment newInstance() {
         return new TransactionManagerDialog();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.dialog_transaction_manager, container, false);
     }
 }
