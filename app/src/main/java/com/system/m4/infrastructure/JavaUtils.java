@@ -28,6 +28,7 @@ public final class JavaUtils {
         public static final String MMMM_DE_YYYY = "MMMM 'de' yyyy";
         public static final String YYYY_MM_DD = "yyyy/MM/dd";
         public static final String MM_YYYY = "MM/yyyy";
+        public static final String DD_DE_MMMM_DE_YYYY = "dd 'de' MMMM 'de' yyyy";
 
         public static String format(Date date, String template) {
             if (date == null) {

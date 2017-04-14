@@ -67,6 +67,7 @@
                     android:text="@string/transaction_manager_payment_date" />
 
                 <TextView
+                    android:id="@+id/transaction_manager_textview_payment_date"
                     style="@style/AppTheme.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -94,6 +95,7 @@
                     android:text="@string/transaction_manager_purchase_date" />
 
                 <TextView
+                    android:id="@+id/transaction_manager_textview_purchase_date"
                     style="@style/AppTheme.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -121,6 +123,7 @@
                     android:text="@string/transaction_manager_value" />
 
                 <TextView
+                    android:id="@+id/transaction_manager_textview_value"
                     style="@style/AppTheme.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -148,6 +151,7 @@
                     android:text="@string/transaction_manager_tags" />
 
                 <TextView
+                    android:id="@+id/transaction_manager_textview_tags"
                     style="@style/AppTheme.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -175,6 +179,7 @@
                     android:text="@string/transaction_manager_payment_type" />
 
                 <TextView
+                    android:id="@+id/transaction_manager_textview_payment_type"
                     style="@style/AppTheme.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -202,6 +207,7 @@
                     android:text="@string/transaction_manager_content" />
 
                 <TextView
+                    android:id="@+id/transaction_manager_textview_content"
                     style="@style/AppTheme.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
