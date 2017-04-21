@@ -4,7 +4,7 @@
     android:id="@+id/container_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/divider"
+    android:orientation="vertical"
     tools:showIn="@layout/dialog_list_component">
 
     <TextView
@@ -19,5 +19,10 @@
         android:textSize="20sp"
         android:textStyle="bold"
         tools:text="@string/transaction_manager_title" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider" />
 
 </LinearLayout>

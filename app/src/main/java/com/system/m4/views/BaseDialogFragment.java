@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,9 @@ import butterknife.OnClick;
  */
 
 public abstract class BaseDialogFragment extends DialogFragment {
+
+    @BindView(R.id.base_dialog_container_action)
+    LinearLayout containerAction;
 
     @BindView(R.id.base_dialog_btn_done)
     Button btnDone;
@@ -39,7 +43,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     }
 
     protected void hideDoneBtn() {
-        btnDone.setVisibility(View.GONE);
+        containerAction.setVisibility(View.GONE);
     }
 
     protected void setTitle(String title) {

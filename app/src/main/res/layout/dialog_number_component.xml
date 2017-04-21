@@ -5,23 +5,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/include_toolbar_dialog"
-        layout="@layout/base_toolbar_dialog" />
+    <include layout="@layout/base_toolbar_dialog" />
 
     <EditText
         android:id="@+id/dialog_edit_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minWidth="250dp"
-        android:layout_margin="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:inputType="numberDecimal"
+        android:minWidth="250dp"
         android:textSize="28sp"
         tools:text="R$ 1000,00" />
 
-    <include
-        android:id="@+id/include_tab_buttom_dialog"
-        layout="@layout/base_tab_buttom_dialog" />
+    <include layout="@layout/base_tab_buttom_dialog" />
 
 </LinearLayout>

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container_action"
+    android:id="@+id/base_dialog_container_action"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
+    android:layout_height="52dp"
     android:layout_alignParentBottom="true"
-    android:background="@color/divider"
     android:gravity="end">
 
     <Button
@@ -12,13 +11,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
-        android:text="@string/system_action_cancel" />
+        android:text="@string/system_action_cancel"
+        android:textColor="@color/accent" />
 
     <Button
         android:id="@+id/base_dialog_btn_done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
-        android:text="@string/system_action_done" />
+        android:text="@string/system_action_done"
+        android:textColor="@color/accent" />
 
 </LinearLayout>
