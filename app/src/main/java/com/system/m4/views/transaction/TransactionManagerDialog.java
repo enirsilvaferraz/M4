@@ -1,4 +1,4 @@
-package com.system.m4.views;
+package com.system.m4.views.transaction;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.dialogs.list.ItemList;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.components.dialogs.list.OnItemSelectedListener;
@@ -79,7 +80,6 @@ public class TransactionManagerDialog extends BaseDialogFragment {
 
     @OnClick(R.id.transaction_manager_action_payment_date)
     public void actionPaymentDate() {
-
         JavaUtils.AndroidUtil.showDatePicker(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -91,7 +91,6 @@ public class TransactionManagerDialog extends BaseDialogFragment {
 
     @OnClick(R.id.transaction_manager_action_purchase_date)
     public void actionPurchaseDate() {
-
         JavaUtils.AndroidUtil.showDatePicker(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -122,12 +121,12 @@ public class TransactionManagerDialog extends BaseDialogFragment {
         list.add(new ItemList("Automovel"));
         list.add(new ItemList("Seguro"));
 
-        ListComponentDialog.show(getChildFragmentManager(), "Tags", list, new OnItemSelectedListener() {
+        ListComponentDialog.newInstance("Tags", list, new OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 tvTags.setText(item.getName());
             }
-        });
+        }).show(getChildFragmentManager(), "Tags");
     }
 
     @OnClick(R.id.transaction_manager_action_payment_type)
@@ -140,12 +139,12 @@ public class TransactionManagerDialog extends BaseDialogFragment {
         list.add(new ItemList("Transferência Itaú"));
         list.add(new ItemList("Transferência Bradesco"));
 
-        ListComponentDialog.show(getChildFragmentManager(), "Payment Type", list, new OnItemSelectedListener() {
+        ListComponentDialog.newInstance("Payment Type", list, new OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 tvPaymentType.setText(item.getName());
             }
-        });
+        }).show(getChildFragmentManager(), "dialog");
     }
 
     @OnClick(R.id.transaction_manager_action_content)

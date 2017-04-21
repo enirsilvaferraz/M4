@@ -1,6 +1,9 @@
 package com.system.m4.views;
 
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -53,6 +56,18 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     public void setOnFinishListener(OnFinishListener onFinishListener) {
         this.onFinishListener = onFinishListener;
+    }
+
+    public void show(FragmentManager fragmentManager, String id) {
+
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        Fragment prev = fragmentManager.findFragmentByTag(id);
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        super.show(ft, id);
     }
 
     public interface OnFinishListener {

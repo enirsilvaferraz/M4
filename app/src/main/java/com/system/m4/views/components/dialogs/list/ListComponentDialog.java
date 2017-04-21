@@ -3,9 +3,6 @@ package com.system.m4.views.components.dialogs.list;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,19 +42,6 @@ public class ListComponentDialog extends BaseDialogFragment {
         dialog.setArguments(bundle);
         dialog.setOnItemSelectedListener(onItemSelectedListener);
         return dialog;
-    }
-
-    public static void show(FragmentManager fragmentManager, String title, List<ItemList> list, OnItemSelectedListener onItemSelectedListener) {
-
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        Fragment prev = fragmentManager.findFragmentByTag("dialog2");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-        DialogFragment newFragment = ListComponentDialog.newInstance(title, list, onItemSelectedListener);
-        newFragment.show(ft, "dialog2");
     }
 
     @Override
