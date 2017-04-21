@@ -220,28 +220,6 @@
 
     </ScrollView>
 
-    <LinearLayout
-        android:id="@+id/container_action"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/divider"
-        android:gravity="end">
-
-        <Button
-            android:id="@+id/transaction_manager_btn_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="@string/system_action_cancel" />
-
-        <Button
-            android:id="@+id/transaction_manager_btn_done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="@string/system_action_done" />
-
-    </LinearLayout>
+    <include layout="@layout/base_tab_buttom_dialog" />
 
 </RelativeLayout>

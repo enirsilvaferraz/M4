@@ -1,0 +1,99 @@
+package com.system.m4.views.components.listdialog;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.system.m4.R;
+import com.system.m4.views.BaseDialogFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
+/**
+ * Created by eferraz on 14/04/17.
+ */
+
+public class ListComponentDialog extends BaseDialogFragment {
+
+    @BindView(R.id.dialog_list_recycler)
+    RecyclerView recyclerview;
+
+    Unbinder unbinder;
+    private OnItemSelectedListener onItemSelectedListener;
+
+    public static DialogFragment newInstance(String title, List<ItemList> list, OnItemSelectedListener onItemSelectedListener) {
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("LIST_ARG", new ArrayList<>(list));
+        bundle.putString("TITLE", title);
+
+        ListComponentDialog dialog = new ListComponentDialog();
+        dialog.setArguments(bundle);
+        dialog.setOnItemSelectedListener(onItemSelectedListener);
+        return dialog;
+    }
+
+    public static void show(FragmentManager fragmentManager, String title, List<ItemList> list, OnItemSelectedListener onItemSelectedListener) {
+
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        Fragment prev = fragmentManager.findFragmentByTag("dialog2");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        DialogFragment newFragment = ListComponentDialog.newInstance(title, list, onItemSelectedListener);
+        newFragment.show(ft, "dialog2");
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.dialog_list_component, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        hideDoneBtn();
+        setTitle(getArguments().getString("TITLE"));
+
+        List<ItemList> list = (List<ItemList>) getArguments().getSerializable("LIST_ARG");
+
+        recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerview.setItemAnimator(new DefaultItemAnimator());
+        recyclerview.setAdapter(new Adapter(list, new OnItemSelectedListener() {
+            @Override
+            public void onSelect(ItemList item) {
+                dismiss();
+                onItemSelectedListener.onSelect(item);
+            }
+        }));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    public void setOnItemSelectedListener(OnItemSelectedListener onItemSelectedListener) {
+        this.onItemSelectedListener = onItemSelectedListener;
+    }
+}

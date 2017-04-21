@@ -3,9 +3,7 @@ package com.system.m4.views;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,9 @@ import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
-import com.system.m4.views.components.ListComponentDialog;
+import com.system.m4.views.components.listdialog.ItemList;
+import com.system.m4.views.components.listdialog.ListComponentDialog;
+import com.system.m4.views.components.listdialog.OnItemSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -97,12 +97,39 @@ public class TransactionManagerFragment extends Fragment {
 
     @OnClick(R.id.transaction_manager_action_tags)
     public void actionTags() {
-        Toast.makeText(getContext(), "In development...", Toast.LENGTH_SHORT).show();
+
+        List<ItemList> list = new ArrayList<>();
+        list.add(new ItemList("Moradia"));
+        list.add(new ItemList("Aluguel"));
+        list.add(new ItemList("Celular"));
+        list.add(new ItemList("Internet"));
+        list.add(new ItemList("Automovel"));
+        list.add(new ItemList("Seguro"));
+
+        ListComponentDialog.show(getChildFragmentManager(), "Tags", list, new OnItemSelectedListener() {
+            @Override
+            public void onSelect(ItemList item) {
+                tvTags.setText(item.getName());
+            }
+        });
     }
 
     @OnClick(R.id.transaction_manager_action_payment_type)
     public void actionPaymentType() {
-        Toast.makeText(getContext(), "In development...", Toast.LENGTH_SHORT).show();
+
+        List<ItemList> list = new ArrayList<>();
+        list.add(new ItemList("Nubank"));
+        list.add(new ItemList("Dinheiro"));
+        list.add(new ItemList("Itaucard"));
+        list.add(new ItemList("Transferência Itaú"));
+        list.add(new ItemList("Transferência Bradesco"));
+
+        ListComponentDialog.show(getChildFragmentManager(), "Payment Type", list, new OnItemSelectedListener() {
+            @Override
+            public void onSelect(ItemList item) {
+                tvPaymentType.setText(item.getName());
+            }
+        });
     }
 
     @OnClick(R.id.transaction_manager_action_content)
@@ -112,35 +139,15 @@ public class TransactionManagerFragment extends Fragment {
 
     @OnClick(R.id.transaction_manager_btn_other_transaction)
     public void actionOtherTransaction() {
-
-
-        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        Fragment prev = getChildFragmentManager().findFragmentByTag("dialog2");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-
-        List<String> list = new ArrayList<>();
-        list.add("Moradia");
-        list.add("Aluguel");
-        list.add("Celular");
-        list.add("Internet");
-        list.add("Automovel");
-        list.add("Seguro");
-
-        DialogFragment newFragment = ListComponentDialog.newInstance(list);
-        newFragment.show(ft, "dialog2");
-
+        Toast.makeText(getContext(), "In development...", Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick(R.id.transaction_manager_btn_cancel)
+    @OnClick(R.id.base_dialog_btn_cancel)
     public void actionCancel() {
         Toast.makeText(getContext(), "In development...", Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick(R.id.transaction_manager_btn_done)
+    @OnClick(R.id.base_dialog_btn_done)
     public void actionDone() {
         Toast.makeText(getContext(), "In development...", Toast.LENGTH_SHORT).show();
     }
