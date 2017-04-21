@@ -35,6 +35,10 @@ public interface TransactionManagerContract {
         void showPaymentDateDialog(Date date);
 
         void showPurchaseDateDialog(Date date);
+
+        void dismissDialog();
+
+        void showError(String error);
     }
 
     interface Presenter {
@@ -74,5 +78,7 @@ public interface TransactionManagerContract {
         void clearPurchaseDateDialog();
 
         void clearPaymentDateDialog();
+
+        void validateForm();
     }
 }

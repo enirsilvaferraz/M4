@@ -136,6 +136,11 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     }
 
     @Override
+    public void validateForm() {
+        view.dismissDialog();
+    }
+
+    @Override
     public void setTags(String itemName) {
         view.setTags(itemName);
     }

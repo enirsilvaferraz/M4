@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
@@ -80,6 +81,11 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void actionDone() {
+        presenter.validateForm();
     }
 
     @OnClick(R.id.transaction_manager_action_payment_date)
@@ -242,5 +248,17 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
                 presenter.setPurchaseDate(year, month, dayOfMonth);
             }
         });
+    }
+
+    @Override
+    public void dismissDialog() {
+        Toast.makeText(getContext(), "Transaction saved!", Toast.LENGTH_SHORT).show();
+        dismiss();
+    }
+
+    @Override
+    public void showError(String error) {
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+        dismiss();
     }
 }
