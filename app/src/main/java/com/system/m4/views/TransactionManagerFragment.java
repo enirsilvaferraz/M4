@@ -13,9 +13,11 @@ import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
-import com.system.m4.views.components.listdialog.ItemList;
-import com.system.m4.views.components.listdialog.ListComponentDialog;
-import com.system.m4.views.components.listdialog.OnItemSelectedListener;
+import com.system.m4.views.components.dialogs.list.ItemList;
+import com.system.m4.views.components.dialogs.list.ListComponentDialog;
+import com.system.m4.views.components.dialogs.list.OnItemSelectedListener;
+import com.system.m4.views.components.dialogs.number.NumberComponentDialog;
+import com.system.m4.views.components.dialogs.text.TextComponentDialog;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -92,7 +94,12 @@ public class TransactionManagerFragment extends Fragment {
 
     @OnClick(R.id.transaction_manager_action_value)
     public void actionValue() {
-        Toast.makeText(getContext(), "In development...", Toast.LENGTH_SHORT).show();
+        NumberComponentDialog.show(getChildFragmentManager(), "Value", new BaseDialogFragment.OnFinishListener() {
+            @Override
+            public void onFinish(String value) {
+                tvValue.setText(JavaUtils.NumberUtil.currencyFormat(value));
+            }
+        });
     }
 
     @OnClick(R.id.transaction_manager_action_tags)
@@ -134,7 +141,12 @@ public class TransactionManagerFragment extends Fragment {
 
     @OnClick(R.id.transaction_manager_action_content)
     public void actionContent() {
-        Toast.makeText(getContext(), "In development...", Toast.LENGTH_SHORT).show();
+        TextComponentDialog.show(getChildFragmentManager(), "Content", new BaseDialogFragment.OnFinishListener() {
+            @Override
+            public void onFinish(String value) {
+                tvContent.setText(value);
+            }
+        });
     }
 
     @OnClick(R.id.transaction_manager_btn_other_transaction)

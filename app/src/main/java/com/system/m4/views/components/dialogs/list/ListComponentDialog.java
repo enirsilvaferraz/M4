@@ -1,4 +1,4 @@
-package com.system.m4.views.components.listdialog;
+package com.system.m4.views.components.dialogs.list;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -95,5 +95,10 @@ public class ListComponentDialog extends BaseDialogFragment {
 
     public void setOnItemSelectedListener(OnItemSelectedListener onItemSelectedListener) {
         this.onItemSelectedListener = onItemSelectedListener;
+    }
+
+    @Override
+    public void actionDone() {
+
     }
 }

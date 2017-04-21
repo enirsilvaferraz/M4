@@ -1,4 +1,4 @@
-package com.system.m4.views.components.listdialog;
+package com.system.m4.views.components.dialogs.list;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

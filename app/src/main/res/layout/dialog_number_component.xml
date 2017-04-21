@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/include_toolbar_dialog"
+        layout="@layout/base_toolbar_dialog" />
+
+    <EditText
+        android:id="@+id/dialog_edit_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minWidth="250dp"
+        android:layout_above="@id/include_tab_buttom_dialog"
+        android:layout_below="@id/include_toolbar_dialog"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:hint="R$ 0,00"
+        android:inputType="numberDecimal"
+        android:textSize="28sp"
+        tools:text="R$ 1000,00" />
+
+    <include
+        android:id="@+id/include_tab_buttom_dialog"
+        layout="@layout/base_tab_buttom_dialog" />
+
+</LinearLayout>

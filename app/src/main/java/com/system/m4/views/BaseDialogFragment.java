@@ -23,15 +23,15 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @BindView(R.id.dialog_title)
     TextView tvTitle;
 
+    private OnFinishListener onFinishListener;
+
     @OnClick(R.id.base_dialog_btn_cancel)
     public void actionCancel() {
        dismiss();
     }
 
     @OnClick(R.id.base_dialog_btn_done)
-    public void actionDone() {
-        Toast.makeText(getContext(), "In development...", Toast.LENGTH_SHORT).show();
-    }
+    public abstract void actionDone();
 
     protected void hideDoneBtn(){
         btnDone.setVisibility(View.GONE);
@@ -39,5 +39,17 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     protected void setTitle(String title){
         tvTitle.setText(title);
+    }
+
+    public void setOnFinishListener(OnFinishListener onFinishListener) {
+        this.onFinishListener = onFinishListener;
+    }
+
+    public OnFinishListener getOnFinishListener() {
+        return onFinishListener;
+    }
+
+    public interface OnFinishListener{
+        void onFinish(String value);
     }
 }
