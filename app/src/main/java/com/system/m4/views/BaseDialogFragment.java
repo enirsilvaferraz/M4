@@ -1,5 +1,6 @@
 package com.system.m4.views;
 
+import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,7 @@ import butterknife.OnClick;
 
 /**
  * Created by Enir on 20/04/2017.
+ * Base dialog
  */
 
 public abstract class BaseDialogFragment extends DialogFragment {
@@ -46,11 +48,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
         containerAction.setVisibility(View.GONE);
     }
 
-    protected void setTitle(String title) {
-        tvTitle.setText(title);
-    }
-
-    protected void setTitle(int titleId) {
+    protected void setTitle(@StringRes int titleId) {
         tvTitle.setText(getString(titleId));
     }
 
@@ -62,16 +60,16 @@ public abstract class BaseDialogFragment extends DialogFragment {
         this.onFinishListener = onFinishListener;
     }
 
-    public void show(FragmentManager fragmentManager, String id) {
+    public void show(FragmentManager fragmentManager) {
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        Fragment prev = fragmentManager.findFragmentByTag(id);
+        Fragment prev = fragmentManager.findFragmentByTag(getClass().getSimpleName());
         if (prev != null) {
             ft.remove(prev);
         }
         ft.addToBackStack(null);
 
-        super.show(ft, id);
+        super.show(ft, getClass().getSimpleName());
     }
 
     public interface OnFinishListener {

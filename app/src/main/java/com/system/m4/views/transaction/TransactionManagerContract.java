@@ -1,5 +1,6 @@
 package com.system.m4.views.transaction;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,9 +24,17 @@ public interface TransactionManagerContract {
 
         void setContent(String value);
 
-        void showTagsList(List<String> list);
+        void showTagsDialog(List<String> list);
 
-        void showPaymentTypeList(List<String> list);
+        void showPaymentTypeDialog(List<String> list);
+
+        void showValueDialog(Double value);
+
+        void showContentDialog(String value);
+
+        void showPaymentDateDialog(Date date);
+
+        void showPurchaseDateDialog(Date date);
     }
 
     interface Presenter {
@@ -42,8 +51,28 @@ public interface TransactionManagerContract {
 
         void setContent(String content);
 
-        void requestTagList();
+        void requestTagDialog();
 
-        void requestPaymentTypeList();
+        void requestPaymentTypeDialog();
+
+        void requestValueDialog(String text);
+
+        void requestContentDialog(String text);
+
+        void requestPaymentDateDialog(String text);
+
+        void requestPurchaseDateDialog(String text);
+
+        void clearContent();
+
+        void clearPaymentType();
+
+        void clearTagDialog();
+
+        void clearValueDialog();
+
+        void clearPurchaseDateDialog();
+
+        void clearPaymentDateDialog();
     }
 }

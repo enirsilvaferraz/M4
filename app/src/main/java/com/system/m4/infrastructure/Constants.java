@@ -5,4 +5,5 @@ package com.system.m4.infrastructure;
  */
 
 public interface Constants {
+    String EMPTY_FIELD = "--";
 }

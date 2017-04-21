@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 
 import java.lang.reflect.ParameterizedType;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,7 +43,7 @@ public final class JavaUtils {
             return format(date, DD_MM_YYYY);
         }
 
-        public static Date parse(String date) throws ParseException {
+        public static Date parse(String date) {
             return parse(date, DD_MM_YYYY);
         }
 
@@ -90,7 +91,7 @@ public final class JavaUtils {
             return calendar.get(constantCalendar);
         }
 
-        public static Date getDate(int year, int month, int day){
+        public static Date getDate(int year, int month, int day) {
             Calendar cInit = Calendar.getInstance();
             cInit.set(year, month, day);
             cInit.set(Calendar.HOUR_OF_DAY, 0);
@@ -125,10 +126,22 @@ public final class JavaUtils {
         }
 
         public static Double calcPercent(Double total, Double parcial) {
-            if (total == 0){
+            if (total == 0) {
                 return 0D;
             }
             return parcial * 100 / total;
+        }
+
+        public static Double removeFormat(String valueFormatted) {
+            try {
+                final NumberFormat format = NumberFormat.getNumberInstance();
+                if (format instanceof DecimalFormat) {
+                    ((DecimalFormat) format).setParseBigDecimal(true);
+                }
+                return format.parse(valueFormatted.replaceAll("[^\\d.,]", "")).doubleValue();
+            } catch (ParseException e) {
+                return null;
+            }
         }
     }
 
@@ -157,12 +170,14 @@ public final class JavaUtils {
             return (int) (px / ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
         }
 
-        public static void showDatePicker(Context context, DatePickerDialog.OnDateSetListener onDateSetListener) {
-
+        public static void showDatePicker(Context context, Date date, DatePickerDialog.OnDateSetListener onDateSetListener) {
             final Calendar c = Calendar.getInstance();
+            c.setTime(date);
+
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
+
             new DatePickerDialog(context, onDateSetListener, year, month, day).show();
         }
     }

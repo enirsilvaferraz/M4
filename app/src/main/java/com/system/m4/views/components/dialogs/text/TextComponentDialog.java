@@ -2,10 +2,7 @@ package com.system.m4.views.components.dialogs.text;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +18,7 @@ import butterknife.Unbinder;
 
 /**
  * Created by eferraz on 14/04/17.
+ * Text component dialog
  */
 
 public class TextComponentDialog extends BaseDialogFragment {
@@ -30,28 +28,19 @@ public class TextComponentDialog extends BaseDialogFragment {
 
     Unbinder unbinder;
 
-    public static DialogFragment newInstance(String title, OnFinishListener onFinishListener) {
+    public static TextComponentDialog newInstance(@StringRes int title, String value, OnFinishListener onFinishListener) {
 
         Bundle bundle = new Bundle();
-        bundle.putString("TITLE", title);
+        bundle.putInt("TITLE", title);
+
+        if (value != null) {
+            bundle.putString("VALUE", value);
+        }
 
         TextComponentDialog dialog = new TextComponentDialog();
         dialog.setArguments(bundle);
         dialog.setOnFinishListener(onFinishListener);
         return dialog;
-    }
-
-    public static void show(FragmentManager fragmentManager, String title, OnFinishListener onFinishListener) {
-
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        Fragment prev = fragmentManager.findFragmentByTag("dialog2");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-        DialogFragment newFragment = TextComponentDialog.newInstance(title, onFinishListener);
-        newFragment.show(ft, "dialog2");
     }
 
     @Override
@@ -65,9 +54,16 @@ public class TextComponentDialog extends BaseDialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setTitle(getArguments().getString("TITLE"));
+        setTitle(getArguments().getInt("TITLE"));
+
+        if (getArguments().containsKey("VALUE")) {
+            etText.setText(getArguments().getString("VALUE"));
+        }
         etText.requestFocus();
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        if (getDialog().getWindow() != null) {
+            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
     }
 
     @Override

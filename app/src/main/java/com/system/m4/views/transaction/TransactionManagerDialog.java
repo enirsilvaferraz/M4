@@ -19,11 +19,13 @@ import com.system.m4.views.components.dialogs.list.OnItemSelectedListener;
 import com.system.m4.views.components.dialogs.number.NumberComponentDialog;
 import com.system.m4.views.components.dialogs.text.TextComponentDialog;
 
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import butterknife.Unbinder;
 
 /**
@@ -82,52 +84,74 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @OnClick(R.id.transaction_manager_action_payment_date)
     public void actionPaymentDate() {
-        JavaUtils.AndroidUtil.showDatePicker(getContext(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                presenter.setPaymentDate(year, month, dayOfMonth);
-            }
-        });
+        presenter.requestPaymentDateDialog(tvPaymentDate.getText().toString());
     }
 
     @OnClick(R.id.transaction_manager_action_purchase_date)
     public void actionPurchaseDate() {
-        JavaUtils.AndroidUtil.showDatePicker(getContext(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                presenter.setPurchaseDate(year, month, dayOfMonth);
-            }
-        });
+        presenter.requestPurchaseDateDialog(tvPurchaseDate.getText().toString());
     }
 
     @OnClick(R.id.transaction_manager_action_value)
     public void actionValue() {
-        NumberComponentDialog.show(getChildFragmentManager(), "Value", new BaseDialogFragment.OnFinishListener() {
-            @Override
-            public void onFinish(String value) {
-                presenter.setValue(value);
-            }
-        });
+        presenter.requestValueDialog(tvValue.getText().toString());
     }
 
     @OnClick(R.id.transaction_manager_action_tags)
     public void actionTags() {
-        presenter.requestTagList();
+        presenter.requestTagDialog();
     }
 
     @OnClick(R.id.transaction_manager_action_payment_type)
     public void actionPaymentType() {
-        presenter.requestPaymentTypeList();
+        presenter.requestPaymentTypeDialog();
     }
 
     @OnClick(R.id.transaction_manager_action_content)
     public void actionContent() {
-        TextComponentDialog.show(getChildFragmentManager(), "Content", new BaseDialogFragment.OnFinishListener() {
-            @Override
-            public void onFinish(String value) {
-                presenter.setContent(value);
-            }
-        });
+        presenter.requestContentDialog(tvContent.getText().toString());
+    }
+
+    @OnLongClick(R.id.transaction_manager_action_payment_date)
+    public boolean clearPaymentDate() {
+        presenter.clearPaymentDateDialog();
+        tvPaymentDate.setText(R.string.system_empty_field);
+        return true;
+    }
+
+    @OnLongClick(R.id.transaction_manager_action_purchase_date)
+    public boolean clearPurchaseDate() {
+        presenter.clearPurchaseDateDialog();
+        tvPurchaseDate.setText(R.string.system_empty_field);
+        return true;
+    }
+
+    @OnLongClick(R.id.transaction_manager_action_value)
+    public boolean clearValue() {
+        presenter.clearValueDialog();
+        tvValue.setText(R.string.system_empty_field);
+        return true;
+    }
+
+    @OnLongClick(R.id.transaction_manager_action_tags)
+    public boolean clearTags() {
+        presenter.clearTagDialog();
+        tvTags.setText(R.string.system_empty_field);
+        return true;
+    }
+
+    @OnLongClick(R.id.transaction_manager_action_payment_type)
+    public boolean clearPaymentType() {
+        presenter.clearPaymentType();
+        tvPaymentType.setText(R.string.system_empty_field);
+        return true;
+    }
+
+    @OnLongClick(R.id.transaction_manager_action_content)
+    public boolean clearContent() {
+        presenter.clearContent();
+        tvContent.setText(R.string.system_empty_field);
+        return true;
     }
 
     @Override
@@ -161,22 +185,62 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     }
 
     @Override
-    public void showTagsList(List<String> list) {
-        ListComponentDialog.newInstance("Tags", ItemList.asList(list), new OnItemSelectedListener() {
+    public void showTagsDialog(List<String> list) {
+        ListComponentDialog.newInstance(R.string.transaction_manager_tags, ItemList.asList(list), new OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 presenter.setTags(item.getName());
             }
-        }).show(getChildFragmentManager(), "Tags");
+        }).show(getChildFragmentManager());
     }
 
     @Override
-    public void showPaymentTypeList(List<String> list) {
-        ListComponentDialog.newInstance("Payment Type", ItemList.asList(list), new OnItemSelectedListener() {
+    public void showPaymentTypeDialog(List<String> list) {
+        ListComponentDialog.newInstance(R.string.transaction_manager_payment_type, ItemList.asList(list), new OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 presenter.setPaymentType(item.getName());
             }
-        }).show(getChildFragmentManager(), "dialog");
+        }).show(getChildFragmentManager());
+    }
+
+    @Override
+    public void showValueDialog(Double value) {
+        NumberComponentDialog.newInstance(R.string.transaction_manager_value, value, new OnFinishListener() {
+            @Override
+            public void onFinish(String value) {
+                presenter.setValue(value);
+            }
+        }).show(getChildFragmentManager());
+    }
+
+    @Override
+    public void showContentDialog(String value) {
+        TextComponentDialog.newInstance(R.string.transaction_manager_content, value, new OnFinishListener() {
+            @Override
+            public void onFinish(String value) {
+                presenter.setContent(value);
+            }
+        }).show(getChildFragmentManager());
+    }
+
+    @Override
+    public void showPaymentDateDialog(Date date) {
+        JavaUtils.AndroidUtil.showDatePicker(getContext(), date, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                presenter.setPaymentDate(year, month, dayOfMonth);
+            }
+        });
+    }
+
+    @Override
+    public void showPurchaseDateDialog(Date date) {
+        JavaUtils.AndroidUtil.showDatePicker(getContext(), date, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                presenter.setPurchaseDate(year, month, dayOfMonth);
+            }
+        });
     }
 }

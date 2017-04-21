@@ -35,7 +35,7 @@
                     style="@style/AppTheme.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="--"
+                    android:text="@string/system_empty_field"
                     tools:text="25 de março de 2017" />
 
             </LinearLayout>
@@ -58,7 +58,7 @@
                     style="@style/AppTheme.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="--"
+                    android:text="@string/system_empty_field"
                     tools:text="1 de março de 2017" />
 
             </LinearLayout>
@@ -81,7 +81,7 @@
                     style="@style/AppTheme.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="--"
+                    android:text="@string/system_empty_field"
                     tools:text="R$ 500,00" />
 
             </LinearLayout>
@@ -104,7 +104,7 @@
                     style="@style/AppTheme.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="--"
+                    android:text="@string/system_empty_field"
                     tools:text="Moradia / Aluguel" />
 
             </LinearLayout>
@@ -127,7 +127,7 @@
                     style="@style/AppTheme.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="--"
+                    android:text="@string/system_empty_field"
                     tools:text="Cartão de Crédido Nubank" />
 
             </LinearLayout>
@@ -150,7 +150,7 @@
                     style="@style/AppTheme.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="--"
+                    android:text="@string/system_empty_field"
                     tools:text="Parcela 1 de 20." />
 
             </LinearLayout>

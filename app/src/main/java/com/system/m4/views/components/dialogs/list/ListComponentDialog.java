@@ -2,7 +2,7 @@ package com.system.m4.views.components.dialogs.list;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +22,7 @@ import butterknife.Unbinder;
 
 /**
  * Created by eferraz on 14/04/17.
+ * List component dialog
  */
 
 public class ListComponentDialog extends BaseDialogFragment {
@@ -32,11 +33,11 @@ public class ListComponentDialog extends BaseDialogFragment {
     Unbinder unbinder;
     private OnItemSelectedListener onItemSelectedListener;
 
-    public static DialogFragment newInstance(String title, List<ItemList> list, OnItemSelectedListener onItemSelectedListener) {
+    public static ListComponentDialog newInstance(@StringRes int title, List<ItemList> list, OnItemSelectedListener onItemSelectedListener) {
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("LIST_ARG", new ArrayList<>(list));
-        bundle.putString("TITLE", title);
+        bundle.putInt("TITLE", title);
 
         ListComponentDialog dialog = new ListComponentDialog();
         dialog.setArguments(bundle);
@@ -56,7 +57,7 @@ public class ListComponentDialog extends BaseDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         hideDoneBtn();
-        setTitle(getArguments().getString("TITLE"));
+        setTitle(getArguments().getInt("TITLE"));
 
         List<ItemList> list = (List<ItemList>) getArguments().getSerializable("LIST_ARG");
 
