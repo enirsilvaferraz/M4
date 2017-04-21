@@ -27,29 +27,35 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     @OnClick(R.id.base_dialog_btn_cancel)
     public void actionCancel() {
-       dismiss();
+        dismiss();
     }
 
     @OnClick(R.id.base_dialog_btn_done)
-    public abstract void actionDone();
+    public void actionDone() {
+        Toast.makeText(getContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show();
+    }
 
-    protected void hideDoneBtn(){
+    protected void hideDoneBtn() {
         btnDone.setVisibility(View.GONE);
     }
 
-    protected void setTitle(String title){
+    protected void setTitle(String title) {
         tvTitle.setText(title);
     }
 
-    public void setOnFinishListener(OnFinishListener onFinishListener) {
-        this.onFinishListener = onFinishListener;
+    protected void setTitle(int titleId) {
+        tvTitle.setText(getString(titleId));
     }
 
     public OnFinishListener getOnFinishListener() {
         return onFinishListener;
     }
 
-    public interface OnFinishListener{
+    public void setOnFinishListener(OnFinishListener onFinishListener) {
+        this.onFinishListener = onFinishListener;
+    }
+
+    public interface OnFinishListener {
         void onFinish(String value);
     }
 }

@@ -96,9 +96,4 @@ public class ListComponentDialog extends BaseDialogFragment {
     public void setOnItemSelectedListener(OnItemSelectedListener onItemSelectedListener) {
         this.onItemSelectedListener = onItemSelectedListener;
     }
-
-    @Override
-    public void actionDone() {
-
-    }
 }

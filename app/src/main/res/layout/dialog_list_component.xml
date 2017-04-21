@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -11,7 +11,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/dialog_list_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/include_tab_buttom_dialog"
         android:layout_below="@id/include_toolbar_dialog" />
 
@@ -19,4 +19,4 @@
         android:id="@+id/include_tab_buttom_dialog"
         layout="@layout/base_tab_buttom_dialog" />
 
-</RelativeLayout>
+</LinearLayout>

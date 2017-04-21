@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container_action"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="45dp"
     android:layout_alignParentBottom="true"
     android:background="@color/divider"
-    android:gravity="end"
-    tools:showIn="@layout/fragment_transaction_manager">
+    android:gravity="end">
 
     <Button
         android:id="@+id/base_dialog_btn_cancel"
