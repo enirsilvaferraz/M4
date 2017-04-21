@@ -19,8 +19,6 @@ import com.system.m4.views.components.dialogs.list.OnItemSelectedListener;
 import com.system.m4.views.components.dialogs.number.NumberComponentDialog;
 import com.system.m4.views.components.dialogs.text.TextComponentDialog;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,9 +28,10 @@ import butterknife.Unbinder;
 
 /**
  * Created by Enir on 12/04/2017.
+ * Dialog de manutencao de transacoes
  */
 
-public class TransactionManagerDialog extends BaseDialogFragment {
+public class TransactionManagerDialog extends BaseDialogFragment implements TransactionManagerContract.View {
 
     Unbinder unbinder;
 
@@ -54,6 +53,8 @@ public class TransactionManagerDialog extends BaseDialogFragment {
     @BindView(R.id.transaction_manager_textview_content)
     TextView tvContent;
 
+    private TransactionManagerContract.Presenter presenter;
+
     public static DialogFragment newInstance() {
         return new TransactionManagerDialog();
     }
@@ -63,6 +64,7 @@ public class TransactionManagerDialog extends BaseDialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.dialog_transaction_manager, container, false);
         unbinder = ButterKnife.bind(this, rootView);
+        presenter = new TransactionManagerPresenter(this);
         return rootView;
     }
 
@@ -83,8 +85,7 @@ public class TransactionManagerDialog extends BaseDialogFragment {
         JavaUtils.AndroidUtil.showDatePicker(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Date date = JavaUtils.DateUtil.getDate(year, month, dayOfMonth);
-                tvPaymentDate.setText(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY));
+                presenter.setPaymentDate(year, month, dayOfMonth);
             }
         });
     }
@@ -94,8 +95,7 @@ public class TransactionManagerDialog extends BaseDialogFragment {
         JavaUtils.AndroidUtil.showDatePicker(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Date date = JavaUtils.DateUtil.getDate(year, month, dayOfMonth);
-                tvPurchaseDate.setText(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY));
+                presenter.setPurchaseDate(year, month, dayOfMonth);
             }
         });
     }
@@ -105,46 +105,19 @@ public class TransactionManagerDialog extends BaseDialogFragment {
         NumberComponentDialog.show(getChildFragmentManager(), "Value", new BaseDialogFragment.OnFinishListener() {
             @Override
             public void onFinish(String value) {
-                tvValue.setText(JavaUtils.NumberUtil.currencyFormat(value));
+                presenter.setValue(value);
             }
         });
     }
 
     @OnClick(R.id.transaction_manager_action_tags)
     public void actionTags() {
-
-        List<ItemList> list = new ArrayList<>();
-        list.add(new ItemList("Moradia"));
-        list.add(new ItemList("Aluguel"));
-        list.add(new ItemList("Celular"));
-        list.add(new ItemList("Internet"));
-        list.add(new ItemList("Automovel"));
-        list.add(new ItemList("Seguro"));
-
-        ListComponentDialog.newInstance("Tags", list, new OnItemSelectedListener() {
-            @Override
-            public void onSelect(ItemList item) {
-                tvTags.setText(item.getName());
-            }
-        }).show(getChildFragmentManager(), "Tags");
+        presenter.requestTagList();
     }
 
     @OnClick(R.id.transaction_manager_action_payment_type)
     public void actionPaymentType() {
-
-        List<ItemList> list = new ArrayList<>();
-        list.add(new ItemList("Nubank"));
-        list.add(new ItemList("Dinheiro"));
-        list.add(new ItemList("Itaucard"));
-        list.add(new ItemList("Transferência Itaú"));
-        list.add(new ItemList("Transferência Bradesco"));
-
-        ListComponentDialog.newInstance("Payment Type", list, new OnItemSelectedListener() {
-            @Override
-            public void onSelect(ItemList item) {
-                tvPaymentType.setText(item.getName());
-            }
-        }).show(getChildFragmentManager(), "dialog");
+        presenter.requestPaymentTypeList();
     }
 
     @OnClick(R.id.transaction_manager_action_content)
@@ -152,8 +125,58 @@ public class TransactionManagerDialog extends BaseDialogFragment {
         TextComponentDialog.show(getChildFragmentManager(), "Content", new BaseDialogFragment.OnFinishListener() {
             @Override
             public void onFinish(String value) {
-                tvContent.setText(value);
+                presenter.setContent(value);
             }
         });
+    }
+
+    @Override
+    public void setPaymentDate(String value) {
+        tvPaymentDate.setText(value);
+    }
+
+    @Override
+    public void setPurchaseDate(String value) {
+        tvPurchaseDate.setText(value);
+    }
+
+    @Override
+    public void setValue(String value) {
+        tvValue.setText(value);
+    }
+
+    @Override
+    public void setTags(String value) {
+        tvTags.setText(value);
+    }
+
+    @Override
+    public void setPaymentType(String value) {
+        tvPaymentType.setText(value);
+    }
+
+    @Override
+    public void setContent(String value) {
+        tvContent.setText(value);
+    }
+
+    @Override
+    public void showTagsList(List<String> list) {
+        ListComponentDialog.newInstance("Tags", ItemList.asList(list), new OnItemSelectedListener() {
+            @Override
+            public void onSelect(ItemList item) {
+                presenter.setTags(item.getName());
+            }
+        }).show(getChildFragmentManager(), "Tags");
+    }
+
+    @Override
+    public void showPaymentTypeList(List<String> list) {
+        ListComponentDialog.newInstance("Payment Type", ItemList.asList(list), new OnItemSelectedListener() {
+            @Override
+            public void onSelect(ItemList item) {
+                presenter.setPaymentType(item.getName());
+            }
+        }).show(getChildFragmentManager(), "dialog");
     }
 }
