@@ -1,4 +1,4 @@
-package com.system.m4.views;
+package com.system.m4.views.home;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

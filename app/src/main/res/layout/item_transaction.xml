@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/item_transaction_tag"
+        style="@style/AppTheme.TextView.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Aluguel" />
+
+    <TextView
+        android:id="@+id/item_transaction_value"
+        style="@style/AppTheme.TextView.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="R$ 1000,00" />
+
+    <TextView
+        android:id="@+id/item_transaction_payment_date"
+        style="@style/AppTheme.TextView.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="10 de Janeiro de 2017" />
+
+    <TextView
+        android:id="@+id/item_transaction_purchase_date"
+        style="@style/AppTheme.TextView.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="10 de Janeiro de 2017" />
+
+    <TextView
+        android:id="@+id/item_transaction_payment_type"
+        style="@style/AppTheme.TextView.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Transferência Itaú" />
+
+    <TextView
+        android:id="@+id/item_transaction_payment_content"
+        style="@style/AppTheme.TextView.Secundary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Pagamento do Aluguel referente ao mes de Janeiro" />
+
+
+</LinearLayout>
