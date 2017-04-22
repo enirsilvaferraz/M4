@@ -3,7 +3,6 @@ package com.system.m4.views.transaction;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -41,28 +40,35 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     @Override
     public void requestTagDialog() {
 
-        List<String> list = new ArrayList<>();
-        list.add("Moradia");
-        list.add("Aluguel");
-        list.add("Celular");
-        list.add("Internet");
-        list.add("Automovel");
-        list.add("Seguro");
+        TransactionManagerBusinness.requestTagList(new TransactionManagerBusinness.OnResultListenner() {
 
-        view.showTagsDialog(list);
+            @Override
+            public void onSuccess(List<String> list) {
+                view.showTagsDialog(list);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e.getMessage());
+            }
+        });
     }
 
     @Override
     public void requestPaymentTypeDialog() {
 
-        List<String> list = new ArrayList<>();
-        list.add("Nubank");
-        list.add("Dinheiro");
-        list.add("Itaucard");
-        list.add("Transferência Itaú");
-        list.add("Transferência Bradesco");
+        TransactionManagerBusinness.requestPaymentTypeList(new TransactionManagerBusinness.OnResultListenner() {
 
-        view.showPaymentTypeDialog(list);
+            @Override
+            public void onSuccess(List<String> list) {
+                view.showPaymentTypeDialog(list);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e.getMessage());
+            }
+        });
     }
 
     @Override
