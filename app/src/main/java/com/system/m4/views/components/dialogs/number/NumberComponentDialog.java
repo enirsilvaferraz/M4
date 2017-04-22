@@ -7,9 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.EditText;
 
+import com.blackcat.currencyedittext.CurrencyEditText;
 import com.system.m4.R;
+import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
 
 import butterknife.BindView;
@@ -24,7 +25,7 @@ import butterknife.Unbinder;
 public class NumberComponentDialog extends BaseDialogFragment {
 
     @BindView(R.id.dialog_edit_number)
-    EditText etNumber;
+    CurrencyEditText etNumber;
 
     Unbinder unbinder;
 
@@ -56,10 +57,11 @@ public class NumberComponentDialog extends BaseDialogFragment {
 
         setTitle(getArguments().getInt("TITLE"));
 
-        if (getArguments().containsKey("VALUE")) {
-            etNumber.setText(String.valueOf(getArguments().getDouble("VALUE")));
-        }
+        etNumber.setDefaultHintEnabled(false);
         etNumber.requestFocus();
+
+        double value = getArguments().containsKey("VALUE") ? getArguments().getDouble("VALUE") : 0d;
+        etNumber.setText(JavaUtils.NumberUtil.currencyFormat(value));
 
         if (getDialog().getWindow() != null) {
             getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

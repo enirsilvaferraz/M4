@@ -7,7 +7,7 @@
 
     <include layout="@layout/base_toolbar_dialog" />
 
-    <EditText
+    <com.blackcat.currencyedittext.CurrencyEditText
         android:id="@+id/dialog_edit_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:inputType="numberDecimal"
+        android:inputType="number|text"
         android:minWidth="250dp"
         android:textSize="28sp"
         tools:text="R$ 1000,00" />

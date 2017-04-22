@@ -107,7 +107,7 @@ public final class JavaUtils {
     public static class NumberUtil {
 
         public static String currencyFormat(String value) {
-            return currencyFormat(Double.valueOf(value));
+            return currencyFormat(Double.valueOf(value.replace("R$", "").replace(".", "").replace(",", ".")));
         }
 
         public static String currencyFormat(Double value) {
