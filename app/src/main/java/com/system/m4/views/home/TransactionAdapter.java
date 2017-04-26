@@ -27,7 +27,7 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_dialog, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
         return new ViewHolder(view, onItemSelectedListener);
     }
 
@@ -52,7 +52,7 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
     /**
      *
      */
-    class ItemVO implements Serializable {
+    static class ItemVO implements Serializable {
 
         @Getter
         private String paymentDate;

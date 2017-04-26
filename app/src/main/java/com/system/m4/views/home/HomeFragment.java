@@ -42,9 +42,19 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ArrayList<TransactionAdapter.ItemVO> list = new ArrayList<>();
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerview.setAdapter(new TransactionAdapter(new ArrayList<TransactionAdapter.ItemVO>(), new TransactionAdapter.OnItemSelectedListener() {
+        mRecyclerview.setAdapter(new TransactionAdapter(list, new TransactionAdapter.OnItemSelectedListener() {
             @Override
             public void onSelect(TransactionAdapter.ItemVO item) {
 

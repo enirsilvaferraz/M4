@@ -43,4 +43,9 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="AppTheme.TextView.Label" parent="AppTheme.TextView">
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>
