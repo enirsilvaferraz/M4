@@ -51,6 +51,11 @@ public class HomeFragment extends Fragment {
         list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
         list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
         list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
 
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());

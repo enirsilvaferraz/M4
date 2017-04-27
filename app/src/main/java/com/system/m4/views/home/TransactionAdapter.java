@@ -15,7 +15,7 @@ import lombok.Getter;
 /**
  *
  */
-class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolder> {
+class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolderIf> {
 
     private List<ItemVO> list;
     private OnItemSelectedListener onItemSelectedListener;
@@ -26,13 +26,19 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
-        return new ViewHolder(view, onItemSelectedListener);
+    public ViewHolderIf onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        if (viewType == 0) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
+            return new ViewHolder(view, onItemSelectedListener);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_date, parent, false);
+            return new ViewHolderTitle(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolderIf holder, int position) {
         holder.bind(list.get(position));
     }
 
@@ -40,6 +46,7 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
     public int getItemCount() {
         return list.size();
     }
+
 
     /**
      *
@@ -85,7 +92,21 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
     /**
      *
      */
-    class ViewHolder extends RecyclerView.ViewHolder {
+    abstract class ViewHolderIf extends RecyclerView.ViewHolder {
+
+        public ViewHolderIf(View itemView) {
+            super(itemView);
+        }
+
+        public void bind(final ItemVO item) {
+
+        }
+    }
+
+    /**
+     *
+     */
+    class ViewHolder extends ViewHolderIf {
 
         private final OnItemSelectedListener onItemSelectedListener;
 
@@ -97,6 +118,16 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
 
         public void bind(final ItemVO item) {
 
+        }
+    }
+
+    /**
+     *
+     */
+    class ViewHolderTitle extends ViewHolderIf {
+
+        public ViewHolderTitle(View itemView) {
+            super(itemView);
         }
     }
 }
