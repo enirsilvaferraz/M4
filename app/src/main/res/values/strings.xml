@@ -19,4 +19,5 @@
     <string name="transaction_payment_date">Payment Date</string>
     <string name="transaction_purchase_date">Purchase Date</string>
     <string name="transaction_content">Content</string>
+    <string name="transaction_tag">Tag</string>
 </resources>
