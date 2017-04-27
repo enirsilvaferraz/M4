@@ -22,30 +22,57 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AppTheme.Form"></style>
 
-    <style name="AppTheme.card">
+    <style name="AppTheme.Form.Section">
         <item name="android:paddingBottom">16dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
         <item name="android:clickable">true</item>
         <item name="android:background">@drawable/ripple</item>
     </style>
 
+    <style name="AppTheme.Form.Section.Start" parent="AppTheme.Form.Section">
+        <item name="android:paddingEnd">12dp</item>
+    </style>
+
+    <style name="AppTheme.Form.Section.End" parent="AppTheme.Form.Section">
+        <item name="android:paddingStart">12dp</item>
+    </style>
+
     <style name="AppTheme.TextView" parent="Base.TextAppearance.AppCompat.Body1"></style>
 
-    <style name="AppTheme.TextView.Primary" parent="AppTheme.TextView">
+    <style name="AppTheme.Form.TextView.Primary" parent="AppTheme.TextView">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="AppTheme.TextView.Secundary" parent="AppTheme.TextView">
+    <style name="AppTheme.Form.TextView.Secundary" parent="AppTheme.TextView">
         <item name="android:textColor">@color/secondary_text</item>
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="AppTheme.TextView.Label" parent="AppTheme.TextView">
-        <item name="android:textColor">@color/accent</item>
+    <style name="AppTheme.Card">
+        <item name="android:background">@drawable/ripple</item>
+    </style>
+
+    <style name="AppTheme.Card.Section">
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/ripple</item>
+    </style>
+
+    <style name="AppTheme.Card.TextView.Secundary" parent="AppTheme.TextView">
+        <item name="android:textColor">@color/secondary_text</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AppTheme.Card.TextView.Primary" parent="AppTheme.TextView">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
 </resources>

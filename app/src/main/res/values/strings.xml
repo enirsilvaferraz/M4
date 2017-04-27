@@ -14,4 +14,9 @@
     <string name="system_action_cancel">Cancel</string>
     <string name="system_action_done">Done</string>
     <string name="system_empty_field">--</string>
+    <string name="transaction_payment_type">Payment Type</string>
+    <string name="transaction_price">Price</string>
+    <string name="transaction_payment_date">Payment Date</string>
+    <string name="transaction_purchase_date">Purchase Date</string>
+    <string name="transaction_content">Content</string>
 </resources>

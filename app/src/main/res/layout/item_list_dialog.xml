@@ -8,14 +8,14 @@
 
     <LinearLayout
         android:id="@+id/transaction_manager_action_payment_date"
-        style="@style/AppTheme.card"
+        style="@style/AppTheme.Form.Section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/item_list_dialog_text"
-            style="@style/AppTheme.TextView.Primary"
+            style="@style/AppTheme.Form.TextView.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="String do item" />

@@ -1,5 +1,6 @@
 package com.system.m4.views;
 
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @BindView(R.id.base_dialog_btn_done)
     Button btnDone;
 
+    @Nullable
     @BindView(R.id.dialog_title)
     TextView tvTitle;
 

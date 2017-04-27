@@ -58,8 +58,14 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     private TransactionManagerContract.Presenter presenter;
 
-    public static DialogFragment newInstance() {
-        return new TransactionManagerDialog();
+    public static DialogFragment newInstance(ItemList item) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString("TAG", item.getName());
+
+        TransactionManagerDialog fragment = new TransactionManagerDialog();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Nullable
@@ -74,7 +80,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setTitle(R.string.transaction_manager_title);
+        presenter.setTags(getArguments().getString("TAG"));
     }
 
     @Override

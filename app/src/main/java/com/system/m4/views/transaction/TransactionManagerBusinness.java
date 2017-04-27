@@ -28,8 +28,8 @@ class TransactionManagerBusinness {
         list.add("Nubank");
         list.add("Dinheiro");
         list.add("Itaucard");
-        list.add("Transferência Itaú");
-        list.add("Transferência Bradesco");
+        list.add("Transf. Itaú");
+        list.add("Transf. Bradesco");
 
         onResultListenner.onSuccess(list);
     }
