@@ -43,9 +43,9 @@ public interface TransactionManagerContract {
 
     interface Presenter {
 
-        void setPaymentDate(int year, int month, int dayOfMonth);
+        void setPaymentDate(String date);
 
-        void setPurchaseDate(int year, int month, int dayOfMonth);
+        void setPurchaseDate(String date);
 
         void setValue(String value);
 

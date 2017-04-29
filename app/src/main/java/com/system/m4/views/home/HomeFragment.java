@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.system.m4.R;
+import com.system.m4.views.transaction.ItemVO;
+import com.system.m4.views.transaction.TransactionManagerDialog;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,12 +23,14 @@ import butterknife.Unbinder;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements HomeContract.View {
 
     @BindView(R.id.home_recyclerview)
     RecyclerView mRecyclerview;
 
     Unbinder unbinder;
+
+    private HomeContract.Presenter presenter;
 
     public HomeFragment() {
     }
@@ -42,29 +46,25 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ArrayList<TransactionAdapter.ItemVO> list = new ArrayList<>();
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
-        list.add(new TransactionAdapter.ItemVO("", "", "", "", "", ""));
+        presenter = new HomePresenter(this);
+        presenter.requestListTransaction();
 
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerview.setAdapter(new TransactionAdapter(list, new TransactionAdapter.OnItemSelectedListener() {
-            @Override
-            public void onSelect(TransactionAdapter.ItemVO item) {
+    }
 
+    @Override
+    public void setListTransactions(List<ItemVO> list) {
+
+        TransactionAdapter adapter = new TransactionAdapter(list, new TransactionAdapter.OnItemSelectedListener() {
+            @Override
+            public void onSelect(ItemVO item) {
+                TransactionManagerDialog.newInstance(item).show(getChildFragmentManager(), TransactionManagerDialog.TAG);
             }
-        }));
+        });
+
+        mRecyclerview.setAdapter(adapter);
+        mRecyclerview.getAdapter().notifyDataSetChanged();
     }
 
     @Override

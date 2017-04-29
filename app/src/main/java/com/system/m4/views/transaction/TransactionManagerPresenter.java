@@ -23,20 +23,18 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     }
 
     @Override
-    public void setPaymentDate(int year, int month, int dayOfMonth) {
-        Date date = JavaUtils.DateUtil.getDate(year, month, dayOfMonth);
-        view.setPaymentDate(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY));
+    public void setPaymentDate(String date) {
+        view.setPaymentDate(JavaUtils.StringUtil.formatEmpty(date));
     }
 
     @Override
-    public void setPurchaseDate(int year, int month, int dayOfMonth) {
-        Date date = JavaUtils.DateUtil.getDate(year, month, dayOfMonth);
-        view.setPurchaseDate(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY));
+    public void setPurchaseDate(String date) {
+        view.setPurchaseDate(JavaUtils.StringUtil.formatEmpty(date));
     }
 
     @Override
     public void setValue(String value) {
-        view.setValue(JavaUtils.NumberUtil.currencyFormat(value));
+        view.setValue(JavaUtils.StringUtil.formatEmpty(JavaUtils.NumberUtil.currencyFormat(value)));
     }
 
     @Override
@@ -150,16 +148,16 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
 
     @Override
     public void setTags(String itemName) {
-        view.setTags(itemName);
+        view.setTags(JavaUtils.StringUtil.formatEmpty(itemName));
     }
 
     @Override
     public void setPaymentType(String itemName) {
-        view.setPaymentType(itemName);
+        view.setPaymentType(JavaUtils.StringUtil.formatEmpty(itemName));
     }
 
     @Override
     public void setContent(String content) {
-        view.setContent(content);
+        view.setContent(JavaUtils.StringUtil.formatEmpty(content));
     }
 }

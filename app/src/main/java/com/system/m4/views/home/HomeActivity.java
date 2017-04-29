@@ -15,6 +15,7 @@ import com.system.m4.views.components.dialogs.list.ListComponentAdapter;
 import com.system.m4.views.components.dialogs.list.ItemList;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.filter.FilterTransactionDialog;
+import com.system.m4.views.transaction.ItemVO;
 import com.system.m4.views.transaction.TransactionManagerDialog;
 
 import java.util.ArrayList;
@@ -35,27 +36,32 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                List<String> list = new ArrayList<>();
-                list.add("Moradia");
-                list.add("Aluguel");
-                list.add("Celular");
-                list.add("Internet");
-                list.add("Automovel");
-                list.add("Seguro");
-
-                ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
-                    @Override
-                    public void onSelect(ItemList item) {
-                        TransactionManagerDialog.newInstance(item.getName()).show(getSupportFragmentManager(), "dialog");
-                    }
-                }).addOnAddItemListenner(new ListComponentAdapter.OnAddItemListenner() {
-                    @Override
-                    public void onItemAdded(String content) {
-                        Toast.makeText(HomeActivity.this, "Item Added: " + content, Toast.LENGTH_SHORT).show();
-                    }
-                }).show(getSupportFragmentManager());
+                showTransactionManager();
             }
         });
+    }
+
+    private void showTransactionManager() {
+        List<String> list = new ArrayList<>();
+        list.add("Moradia");
+        list.add("Aluguel");
+        list.add("Celular");
+        list.add("Internet");
+        list.add("Automovel");
+        list.add("Seguro");
+
+        ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
+            @Override
+            public void onSelect(ItemList item) {
+                ItemVO vo = new ItemVO(item.getName());
+                TransactionManagerDialog.newInstance(vo).show(getSupportFragmentManager(), "dialog");
+            }
+        }).addOnAddItemListenner(new ListComponentAdapter.OnAddItemListenner() {
+            @Override
+            public void onItemAdded(String content) {
+                Toast.makeText(HomeActivity.this, "Item Added: " + content, Toast.LENGTH_SHORT).show();
+            }
+        }).show(getSupportFragmentManager());
     }
 
     @Override

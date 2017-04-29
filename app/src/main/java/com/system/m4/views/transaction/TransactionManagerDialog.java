@@ -16,8 +16,8 @@ import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.dialogs.NumberComponentDialog;
 import com.system.m4.views.components.dialogs.TextComponentDialog;
-import com.system.m4.views.components.dialogs.list.ListComponentAdapter;
 import com.system.m4.views.components.dialogs.list.ItemList;
+import com.system.m4.views.components.dialogs.list.ListComponentAdapter;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 
 import java.util.Date;
@@ -36,8 +36,8 @@ import butterknife.Unbinder;
 
 public class TransactionManagerDialog extends BaseDialogFragment implements TransactionManagerContract.View {
 
-    private static final String TAG_ARG = "TAG_ARG";
-
+    public static final String TAG = TransactionManagerDialog.class.getSimpleName();
+    private static final String BUNDLE_VO = "BUNDLE_VO";
     Unbinder unbinder;
 
     @BindView(R.id.transaction_manager_textview_payment_date)
@@ -60,9 +60,9 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     private TransactionManagerContract.Presenter presenter;
 
-    public static DialogFragment newInstance(String tag) {
+    public static DialogFragment newInstance(ItemVO itemVO) {
         Bundle bundle = new Bundle();
-        bundle.putString(TAG_ARG, tag);
+        bundle.putParcelable(BUNDLE_VO, itemVO);
 
         TransactionManagerDialog fragment = new TransactionManagerDialog();
         fragment.setArguments(bundle);
@@ -81,9 +81,17 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String tag = getArguments().getString(TAG_ARG);
-        presenter.setTags(tag);
-        setTitle(tag);
+        configureModel(((ItemVO) getArguments().getParcelable(BUNDLE_VO)));
+    }
+
+    private void configureModel(ItemVO itemVO) {
+        setTitle(itemVO.getTags());
+        presenter.setTags(itemVO.getTags());
+        presenter.setContent(itemVO.getContent());
+        presenter.setPaymentDate(itemVO.getPaymentDate());
+        presenter.setPurchaseDate(itemVO.getPurchaseDate());
+        presenter.setPaymentType(itemVO.getPaymentType());
+        presenter.setValue(itemVO.getValue());
     }
 
     @Override
@@ -244,7 +252,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
         JavaUtils.AndroidUtil.showDatePicker(getContext(), date, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                presenter.setPaymentDate(year, month, dayOfMonth);
+                presenter.setPaymentDate(JavaUtils.DateUtil.getDateString(year, month, dayOfMonth));
             }
         });
     }
@@ -254,7 +262,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
         JavaUtils.AndroidUtil.showDatePicker(getContext(), date, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                presenter.setPurchaseDate(year, month, dayOfMonth);
+                presenter.setPurchaseDate(JavaUtils.DateUtil.getDateString(year, month, dayOfMonth));
             }
         });
     }

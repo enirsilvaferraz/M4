@@ -6,16 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.system.m4.R;
+import com.system.m4.views.transaction.ItemVO;
 
-import java.io.Serializable;
 import java.util.List;
-
-import lombok.Getter;
 
 /**
  *
  */
-class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolderIf> {
+public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolderIf> {
 
     private List<ItemVO> list;
     private OnItemSelectedListener onItemSelectedListener;
@@ -55,40 +53,7 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
 
         void onSelect(ItemVO item);
     }
-
-    /**
-     *
-     */
-    static class ItemVO implements Serializable {
-
-        @Getter
-        private String paymentDate;
-
-        @Getter
-        private String purchaseDate;
-
-        @Getter
-        private String value;
-
-        @Getter
-        private String tags;
-
-        @Getter
-        private String paymentType;
-
-        @Getter
-        private String content;
-
-        public ItemVO(String paymentDate, String purchaseDate, String value, String tags, String paymentType, String content) {
-            this.paymentDate = paymentDate;
-            this.purchaseDate = purchaseDate;
-            this.value = value;
-            this.tags = tags;
-            this.paymentType = paymentType;
-            this.content = content;
-        }
-    }
-
+    
     /**
      *
      */

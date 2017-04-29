@@ -2,6 +2,7 @@ package com.system.m4.infrastructure;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import java.lang.reflect.ParameterizedType;
@@ -41,11 +42,11 @@ public final class JavaUtils {
         }
 
         public static String format(Date date) {
-            return format(date, DD_MM_YYYY);
+            return format(date, DD_DE_MMMM_DE_YYYY);
         }
 
         public static Date parse(String date) {
-            return parse(date, DD_MM_YYYY);
+            return parse(date, DD_DE_MMMM_DE_YYYY);
         }
 
         public static Date parse(String date, String template) {
@@ -100,6 +101,10 @@ public final class JavaUtils {
             cInit.set(Calendar.SECOND, 0);
             return cInit.getTime();
         }
+
+        public static String getDateString(int year, int month, int day) {
+            return format(getDate(year, month, day));
+        }
     }
 
     /**
@@ -108,6 +113,11 @@ public final class JavaUtils {
     public static class NumberUtil {
 
         public static String currencyFormat(String value) {
+
+            if (TextUtils.isEmpty(value)) {
+                return null;
+            }
+
             try {
                 final NumberFormat format = NumberFormat.getNumberInstance(Locale.getDefault());
                 if (format instanceof DecimalFormat) {
@@ -116,7 +126,7 @@ public final class JavaUtils {
                 BigDecimal parse = (BigDecimal) format.parse(value.replaceAll("[^\\d.,]", ""));
                 return currencyFormat(parse.doubleValue());
             } catch (ParseException e) {
-                return currencyFormat(Double.valueOf(value.replace("R$", "").replace(".", "").replace(",", ".")));
+                throw new RuntimeException(e);
             }
         }
 
@@ -162,6 +172,14 @@ public final class JavaUtils {
 
         public static boolean isEmpty(String string) {
             return string == null || string.trim().isEmpty();
+        }
+
+        public static String formatEmpty(String s) {
+            if (TextUtils.isEmpty(s)) {
+                return Constants.EMPTY_FIELD;
+            } else {
+                return s;
+            }
         }
     }
 
