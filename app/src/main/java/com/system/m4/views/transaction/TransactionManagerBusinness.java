@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Enir on 22/04/2017.
  */
 
-class TransactionManagerBusinness {
+public class TransactionManagerBusinness {
 
     public static void requestTagList(OnResultListenner onResultListenner) {
 
