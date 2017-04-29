@@ -24,6 +24,9 @@ import butterknife.OnClick;
 
 public abstract class BaseDialogFragment extends DialogFragment {
 
+    public static final String TITLE_BUNDLE = "TITLE_BUNDLE";
+    public static final String LIST_BUNDLE = "LIST_ARG";
+
     @BindView(R.id.base_dialog_container_action)
     LinearLayout containerAction;
 

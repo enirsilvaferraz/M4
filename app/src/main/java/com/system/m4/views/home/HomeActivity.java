@@ -8,14 +8,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.system.m4.R;
-import com.system.m4.views.BaseDialogFragment;
+import com.system.m4.views.components.dialogs.list.ListComponentAdapter;
 import com.system.m4.views.components.dialogs.list.ItemList;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
-import com.system.m4.views.components.dialogs.list.OnAddItemListenner;
-import com.system.m4.views.components.dialogs.list.OnItemSelectedListener;
-import com.system.m4.views.components.dialogs.text.TextComponentDialog;
 import com.system.m4.views.filter.FilterTransactionDialog;
 import com.system.m4.views.transaction.TransactionManagerDialog;
 
@@ -45,22 +43,15 @@ public class HomeActivity extends AppCompatActivity {
                 list.add("Automovel");
                 list.add("Seguro");
 
-                ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list), new OnItemSelectedListener() {
+                ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
                     @Override
                     public void onSelect(ItemList item) {
-                        TransactionManagerDialog.newInstance(item).show(getSupportFragmentManager(), "dialog");
+                        TransactionManagerDialog.newInstance(item.getName()).show(getSupportFragmentManager(), "dialog");
                     }
-                }).addOnAddItemListenner(new OnAddItemListenner() {
+                }).addOnAddItemListenner(new ListComponentAdapter.OnAddItemListenner() {
                     @Override
-                    public void onItemAdded(ItemList item) {
-
-                        TextComponentDialog.newInstance(R.string.transaction_tag, null, new BaseDialogFragment.OnFinishListener() {
-                            @Override
-                            public void onFinish(String value) {
-                                TransactionManagerDialog.newInstance(new ItemList(value)).show(getSupportFragmentManager(), "dialog");
-                            }
-                        }).show(getSupportFragmentManager(), TextComponentDialog.TAG);
-
+                    public void onItemAdded(String content) {
+                        Toast.makeText(HomeActivity.this, "Item Added: " + content, Toast.LENGTH_SHORT).show();
                     }
                 }).show(getSupportFragmentManager());
             }

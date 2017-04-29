@@ -14,11 +14,11 @@ import android.widget.Toast;
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
+import com.system.m4.views.components.dialogs.NumberComponentDialog;
+import com.system.m4.views.components.dialogs.TextComponentDialog;
+import com.system.m4.views.components.dialogs.list.ListComponentAdapter;
 import com.system.m4.views.components.dialogs.list.ItemList;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
-import com.system.m4.views.components.dialogs.list.OnItemSelectedListener;
-import com.system.m4.views.components.dialogs.number.NumberComponentDialog;
-import com.system.m4.views.components.dialogs.text.TextComponentDialog;
 
 import java.util.Date;
 import java.util.List;
@@ -35,6 +35,8 @@ import butterknife.Unbinder;
  */
 
 public class TransactionManagerDialog extends BaseDialogFragment implements TransactionManagerContract.View {
+
+    private static final String TAG_ARG = "TAG_ARG";
 
     Unbinder unbinder;
 
@@ -58,10 +60,9 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     private TransactionManagerContract.Presenter presenter;
 
-    public static DialogFragment newInstance(ItemList item) {
-
+    public static DialogFragment newInstance(String tag) {
         Bundle bundle = new Bundle();
-        bundle.putString("TAG", item.getName());
+        bundle.putString(TAG_ARG, tag);
 
         TransactionManagerDialog fragment = new TransactionManagerDialog();
         fragment.setArguments(bundle);
@@ -80,9 +81,9 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter.setTags(getArguments().getString("TAG"));
-        setTitle(R.string.transaction_manager_title);
-        setTitle(getArguments().getString("TAG"));
+        String tag = getArguments().getString(TAG_ARG);
+        presenter.setTags(tag);
+        setTitle(tag);
     }
 
     @Override
@@ -200,7 +201,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void showTagsDialog(List<String> list) {
-        ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list), new OnItemSelectedListener() {
+        ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 presenter.setTags(item.getName());
@@ -210,7 +211,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void showPaymentTypeDialog(List<String> list) {
-        ListComponentDialog.newInstance(R.string.transaction_payment_type, ItemList.asList(list), new OnItemSelectedListener() {
+        ListComponentDialog.newInstance(R.string.transaction_payment_type, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 presenter.setPaymentType(item.getName());

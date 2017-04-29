@@ -14,9 +14,9 @@ import android.widget.Toast;
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
+import com.system.m4.views.components.dialogs.list.ListComponentAdapter;
 import com.system.m4.views.components.dialogs.list.ItemList;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
-import com.system.m4.views.components.dialogs.list.OnItemSelectedListener;
 
 import java.util.Date;
 import java.util.List;
@@ -149,22 +149,24 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
 
     @Override
     public void showTagsDialog(List<String> list) {
-        ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list), new OnItemSelectedListener() {
-            @Override
-            public void onSelect(ItemList item) {
-                presenter.setTags(item.getName());
-            }
-        }).show(getChildFragmentManager());
+        ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list))
+                .addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
+                    @Override
+                    public void onSelect(ItemList item) {
+                        presenter.setTags(item.getName());
+                    }
+                }).show(getChildFragmentManager());
     }
 
     @Override
     public void showPaymentTypeDialog(List<String> list) {
-        ListComponentDialog.newInstance(R.string.transaction_payment_type, ItemList.asList(list), new OnItemSelectedListener() {
-            @Override
-            public void onSelect(ItemList item) {
-                presenter.setPaymentType(item.getName());
-            }
-        }).show(getChildFragmentManager());
+        ListComponentDialog.newInstance(R.string.transaction_payment_type, ItemList.asList(list))
+                .addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
+                    @Override
+                    public void onSelect(ItemList item) {
+                        presenter.setPaymentType(item.getName());
+                    }
+                }).show(getChildFragmentManager());
     }
 
 

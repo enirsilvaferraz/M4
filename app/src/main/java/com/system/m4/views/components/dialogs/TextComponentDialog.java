@@ -1,4 +1,4 @@
-package com.system.m4.views.components.dialogs.text;
+package com.system.m4.views.components.dialogs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
