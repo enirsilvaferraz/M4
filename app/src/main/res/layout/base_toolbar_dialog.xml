@@ -13,12 +13,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:fontFamily="sans-serif-medium"
         android:textSize="20sp"
         android:textStyle="bold"
-        tools:text="@string/transaction_manager_title" />
+        tools:text="Dialog Title" />
 
     <View
         android:layout_width="match_parent"

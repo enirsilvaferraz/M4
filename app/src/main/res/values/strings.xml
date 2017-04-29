@@ -1,19 +1,14 @@
 <resources>
-    <string name="app_name">M4</string>
-    <string name="title_activity_transaction_manager">Transaction Manager</string>
-    <string name="action_filter">Filter</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="title_activity_home">HomeActivity</string>
-    <string name="transaction_manager_title">Nova Transação</string>
-    <string name="transaction_manager_payment_date">Data de Pagamento</string>
-    <string name="transaction_manager_purchase_date">Data da Compra</string>
-    <string name="transaction_manager_value">Valor</string>
-    <string name="transaction_manager_tags">Tags</string>
-    <string name="transaction_manager_payment_type">Forma de Pagamento</string>
-    <string name="transaction_manager_content">Observações</string>
+    <string name="app_name">M4 (V2)</string>
+
     <string name="system_action_cancel">Cancel</string>
     <string name="system_action_done">Done</string>
     <string name="system_empty_field">--</string>
+
+    <string name="action_filter">Filter</string>
+
+    <string name="title_activity_transaction_manager">Transaction Manager</string>
+
     <string name="transaction_payment_type">Payment Type</string>
     <string name="transaction_price">Price</string>
     <string name="transaction_payment_date">Payment Date</string>
