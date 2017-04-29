@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 
 import java.lang.reflect.ParameterizedType;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -35,7 +36,7 @@ public final class JavaUtils {
             if (date == null) {
                 return "Not defined";
             }
-            final String format = new SimpleDateFormat(template, new Locale("pt", "BR")).format(date);
+            final String format = new SimpleDateFormat(template, Locale.getDefault()).format(date);
             return format.substring(0, 1).toUpperCase() + format.substring(1);
         }
 
@@ -49,7 +50,7 @@ public final class JavaUtils {
 
         public static Date parse(String date, String template) {
             try {
-                return new SimpleDateFormat(template, new Locale("pt", "BR")).parse(date);
+                return new SimpleDateFormat(template, Locale.getDefault()).parse(date);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -107,18 +108,27 @@ public final class JavaUtils {
     public static class NumberUtil {
 
         public static String currencyFormat(String value) {
-            return currencyFormat(Double.valueOf(value.replace("R$", "").replace(".", "").replace(",", ".")));
+            try {
+                final NumberFormat format = NumberFormat.getNumberInstance(Locale.getDefault());
+                if (format instanceof DecimalFormat) {
+                    ((DecimalFormat) format).setParseBigDecimal(true);
+                }
+                BigDecimal parse = (BigDecimal) format.parse(value.replaceAll("[^\\d.,]", ""));
+                return currencyFormat(parse.doubleValue());
+            } catch (ParseException e) {
+                return currencyFormat(Double.valueOf(value.replace("R$", "").replace(".", "").replace(",", ".")));
+            }
         }
 
         public static String currencyFormat(Double value) {
-            final NumberFormat instance = NumberFormat.getInstance(new Locale("pt", "BR"));
+            final NumberFormat instance = NumberFormat.getInstance(Locale.getDefault());
             instance.setMinimumFractionDigits(2);
             instance.setMinimumIntegerDigits(1);
             return "R$ " + instance.format(value);
         }
 
         public static String percentFormat(Double percentValue) {
-            final NumberFormat instance = NumberFormat.getInstance(new Locale("pt", "BR"));
+            final NumberFormat instance = NumberFormat.getInstance(Locale.getDefault());
             instance.setMinimumFractionDigits(1);
             instance.setMinimumIntegerDigits(1);
             instance.setMaximumFractionDigits(2);
