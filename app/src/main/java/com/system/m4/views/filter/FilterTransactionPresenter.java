@@ -10,9 +10,10 @@ import java.util.List;
 
 /**
  * Created by eferraz on 29/04/17.
+ * For M4
  */
 
-public class FilterTransactionPresenter implements FilterTransactionContract.Presenter {
+class FilterTransactionPresenter implements FilterTransactionContract.Presenter {
 
     private final FilterTransactionContract.View view;
 
