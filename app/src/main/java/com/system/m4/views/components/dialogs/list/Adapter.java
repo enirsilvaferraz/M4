@@ -14,9 +14,13 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
     private List<ItemList> list;
     private OnItemSelectedListener onItemSelectedListener;
 
-    public Adapter(List<ItemList> list, OnItemSelectedListener onItemSelectedListener) {
+    public Adapter(List<ItemList> list, boolean hasAddListener, OnItemSelectedListener onItemSelectedListener) {
         this.list = list;
         this.onItemSelectedListener = onItemSelectedListener;
+
+        if (hasAddListener) {
+            list.add(new ItemList("+ Add new item"));
+        }
     }
 
     @Override

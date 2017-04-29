@@ -10,9 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.system.m4.R;
+import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.dialogs.list.ItemList;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
+import com.system.m4.views.components.dialogs.list.OnAddItemListenner;
 import com.system.m4.views.components.dialogs.list.OnItemSelectedListener;
+import com.system.m4.views.components.dialogs.text.TextComponentDialog;
 import com.system.m4.views.filter.FilterTransactionDialog;
 import com.system.m4.views.transaction.TransactionManagerDialog;
 
@@ -46,6 +49,18 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onSelect(ItemList item) {
                         TransactionManagerDialog.newInstance(item).show(getSupportFragmentManager(), "dialog");
+                    }
+                }).addOnAddItemListenner(new OnAddItemListenner() {
+                    @Override
+                    public void onItemAdded(ItemList item) {
+
+                        TextComponentDialog.newInstance(R.string.transaction_tag, null, new BaseDialogFragment.OnFinishListener() {
+                            @Override
+                            public void onFinish(String value) {
+                                TransactionManagerDialog.newInstance(new ItemList(value)).show(getSupportFragmentManager(), "dialog");
+                            }
+                        }).show(getSupportFragmentManager(), TextComponentDialog.TAG);
+
                     }
                 }).show(getSupportFragmentManager());
             }

@@ -23,6 +23,8 @@ import butterknife.Unbinder;
 
 public class TextComponentDialog extends BaseDialogFragment {
 
+    public static final String TAG = TextComponentDialog.class.getSimpleName();
+
     @BindView(R.id.dialog_edit_text)
     EditText etText;
 

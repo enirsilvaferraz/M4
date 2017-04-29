@@ -31,7 +31,9 @@ public class ListComponentDialog extends BaseDialogFragment {
     RecyclerView recyclerview;
 
     Unbinder unbinder;
+
     private OnItemSelectedListener onItemSelectedListener;
+    private OnAddItemListenner onAddItemListenner;
 
     public static ListComponentDialog newInstance(@StringRes int title, List<ItemList> list, OnItemSelectedListener onItemSelectedListener) {
 
@@ -63,11 +65,16 @@ public class ListComponentDialog extends BaseDialogFragment {
 
         recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerview.setItemAnimator(new DefaultItemAnimator());
-        recyclerview.setAdapter(new Adapter(list, new OnItemSelectedListener() {
+        recyclerview.setAdapter(new Adapter(list, onAddItemListenner != null, new OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 dismiss();
-                onItemSelectedListener.onSelect(item);
+
+                if (item.getName().equals("+ Add new item")) {
+                    onAddItemListenner.onItemAdded(item);
+                } else {
+                    onItemSelectedListener.onSelect(item);
+                }
             }
         }));
     }
@@ -80,5 +87,10 @@ public class ListComponentDialog extends BaseDialogFragment {
 
     public void setOnItemSelectedListener(OnItemSelectedListener onItemSelectedListener) {
         this.onItemSelectedListener = onItemSelectedListener;
+    }
+
+    public ListComponentDialog addOnAddItemListenner(OnAddItemListenner onAddItemListenner) {
+        this.onAddItemListenner = onAddItemListenner;
+        return this;
     }
 }
