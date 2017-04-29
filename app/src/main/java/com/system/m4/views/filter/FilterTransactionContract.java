@@ -1,4 +1,4 @@
-package com.system.m4.views.home;
+package com.system.m4.views.filter;
 
 import java.util.Date;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.List;
  * Created by eferraz on 29/04/17.
  */
 
-public interface TransactionFilterContract {
+public interface FilterTransactionContract {
 
     interface View {
 

@@ -1,4 +1,4 @@
-package com.system.m4.views.home;
+package com.system.m4.views.filter;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -31,7 +31,7 @@ import butterknife.Unbinder;
  * Created by eferraz on 27/04/17.
  */
 
-public class FilterTransactionDialog extends BaseDialogFragment implements TransactionFilterContract.View {
+public class FilterTransactionDialog extends BaseDialogFragment implements FilterTransactionContract.View {
 
 
     public static final String TAG = FilterTransactionDialog.class.getSimpleName();
@@ -46,7 +46,7 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Trans
     TextView tvPaymentDateEnd;
 
     Unbinder unbinder;
-    private TransactionFilterContract.Presenter presenter;
+    private FilterTransactionContract.Presenter presenter;
 
     public static DialogFragment newInstance() {
 
@@ -69,7 +69,7 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Trans
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setTitle(R.string.transaction_filter_title);
-        presenter = new TransactionFilterPresenter(this);
+        presenter = new FilterTransactionPresenter(this);
     }
 
     @Override

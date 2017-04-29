@@ -1,4 +1,4 @@
-package com.system.m4.views.home;
+package com.system.m4.views.filter;
 
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
@@ -12,11 +12,11 @@ import java.util.List;
  * Created by eferraz on 29/04/17.
  */
 
-public class TransactionFilterPresenter implements TransactionFilterContract.Presenter {
+public class FilterTransactionPresenter implements FilterTransactionContract.Presenter {
 
-    private final TransactionFilterContract.View view;
+    private final FilterTransactionContract.View view;
 
-    TransactionFilterPresenter(TransactionFilterContract.View view) {
+    FilterTransactionPresenter(FilterTransactionContract.View view) {
         this.view = view;
     }
 
