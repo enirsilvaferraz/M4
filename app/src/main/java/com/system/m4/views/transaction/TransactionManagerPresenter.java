@@ -1,12 +1,13 @@
 package com.system.m4.views.transaction;
 
+import com.system.m4.businness.transaction.TransactionManagerBusinness;
+import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Enir on 21/04/2017.
@@ -41,7 +42,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     @Override
     public void requestTagDialog() {
 
-        TransactionManagerBusinness.requestTagList(new TransactionManagerBusinness.OnResultListenner() {
+        TransactionManagerBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner() {
 
             @Override
             public void onSuccess(List<String> list) {
@@ -58,7 +59,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     @Override
     public void requestPaymentTypeDialog() {
 
-        TransactionManagerBusinness.requestPaymentTypeList(new TransactionManagerBusinness.OnResultListenner() {
+        TransactionManagerBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner() {
 
             @Override
             public void onSuccess(List<String> list) {

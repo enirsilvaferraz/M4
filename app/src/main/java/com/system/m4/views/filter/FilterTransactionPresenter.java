@@ -1,8 +1,9 @@
 package com.system.m4.views.filter;
 
+import com.system.m4.businness.transaction.TransactionManagerBusinness;
+import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
-import com.system.m4.views.transaction.TransactionManagerBusinness;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -36,7 +37,7 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     @Override
     public void requestTagDialog() {
 
-        TransactionManagerBusinness.requestTagList(new TransactionManagerBusinness.OnResultListenner() {
+        TransactionManagerBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner() {
 
             @Override
             public void onSuccess(List<String> list) {
@@ -53,7 +54,7 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     @Override
     public void requestPaymentTypeDialog() {
 
-        TransactionManagerBusinness.requestPaymentTypeList(new TransactionManagerBusinness.OnResultListenner() {
+        TransactionManagerBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner() {
 
             @Override
             public void onSuccess(List<String> list) {
@@ -116,6 +117,11 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     @Override
     public void validateForm() {
         view.dismissDialog();
+    }
+
+    @Override
+    public void persistFilter() {
+
     }
 
     @Override

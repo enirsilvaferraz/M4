@@ -59,6 +59,8 @@ public interface FilterTransactionContract {
         void clearPaymentDateEnd();
 
         void validateForm();
+
+        void persistFilter();
     }
 
 }

@@ -1,4 +1,6 @@
-package com.system.m4.views.transaction;
+package com.system.m4.businness.transaction;
+
+import com.system.m4.infrastructure.BusinnessListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
 
 public class TransactionManagerBusinness {
 
-    public static void requestTagList(OnResultListenner onResultListenner) {
+    public static void requestTagList(BusinnessListener.OnMultiResultListenner onMultiResultListenner) {
 
         List<String> list = new ArrayList<>();
         list.add("Moradia");
@@ -19,10 +21,10 @@ public class TransactionManagerBusinness {
         list.add("Automovel");
         list.add("Seguro");
 
-        onResultListenner.onSuccess(list);
+        onMultiResultListenner.onSuccess(list);
     }
 
-    public static void requestPaymentTypeList(OnResultListenner onResultListenner) {
+    public static void requestPaymentTypeList(BusinnessListener.OnMultiResultListenner onMultiResultListenner) {
 
         List<String> list = new ArrayList<>();
         list.add("Nubank");
@@ -31,13 +33,6 @@ public class TransactionManagerBusinness {
         list.add("Transf. Itaú");
         list.add("Transf. Bradesco");
 
-        onResultListenner.onSuccess(list);
-    }
-
-    public interface OnResultListenner {
-
-        void onSuccess(List<String> list);
-
-        void onError(Exception e);
+        onMultiResultListenner.onSuccess(list);
     }
 }

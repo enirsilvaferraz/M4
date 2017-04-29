@@ -46,6 +46,7 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
     TextView tvPaymentDateEnd;
 
     Unbinder unbinder;
+
     private FilterTransactionContract.Presenter presenter;
 
     public static DialogFragment newInstance() {
@@ -200,5 +201,10 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
     public void showError(String error) {
         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
         dismiss();
+    }
+
+    @Override
+    public void actionDone() {
+        presenter.persistFilter();
     }
 }
