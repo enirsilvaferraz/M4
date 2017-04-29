@@ -45,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
                 list.add("Automovel");
                 list.add("Seguro");
 
-                ListComponentDialog.newInstance(R.string.transaction_manager_tags, ItemList.asList(list), new OnItemSelectedListener() {
+                ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list), new OnItemSelectedListener() {
                     @Override
                     public void onSelect(ItemList item) {
                         TransactionManagerDialog.newInstance(item).show(getSupportFragmentManager(), "dialog");

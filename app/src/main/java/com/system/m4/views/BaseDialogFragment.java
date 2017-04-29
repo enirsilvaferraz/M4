@@ -54,6 +54,10 @@ public abstract class BaseDialogFragment extends DialogFragment {
         tvTitle.setText(getString(titleId));
     }
 
+    protected void setTitle(String titleString) {
+        tvTitle.setText(titleString);
+    }
+
     public OnFinishListener getOnFinishListener() {
         return onFinishListener;
     }

@@ -149,7 +149,7 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
 
     @Override
     public void showTagsDialog(List<String> list) {
-        ListComponentDialog.newInstance(R.string.transaction_manager_tags, ItemList.asList(list), new OnItemSelectedListener() {
+        ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list), new OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 presenter.setTags(item.getName());
@@ -159,7 +159,7 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
 
     @Override
     public void showPaymentTypeDialog(List<String> list) {
-        ListComponentDialog.newInstance(R.string.transaction_manager_payment_type, ItemList.asList(list), new OnItemSelectedListener() {
+        ListComponentDialog.newInstance(R.string.transaction_payment_type, ItemList.asList(list), new OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 presenter.setPaymentType(item.getName());

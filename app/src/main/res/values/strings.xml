@@ -16,4 +16,5 @@
     <string name="transaction_content">Content</string>
     <string name="transaction_tag">Tag</string>
     <string name="transaction_filter_title">Transaction Filter</string>
+    <string name="transaction_manager_title">Transaction Manager</string>
 </resources>

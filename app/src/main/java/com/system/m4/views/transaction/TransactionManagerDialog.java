@@ -81,6 +81,8 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.setTags(getArguments().getString("TAG"));
+        setTitle(R.string.transaction_manager_title);
+        setTitle(getArguments().getString("TAG"));
     }
 
     @Override
@@ -198,7 +200,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void showTagsDialog(List<String> list) {
-        ListComponentDialog.newInstance(R.string.transaction_manager_tags, ItemList.asList(list), new OnItemSelectedListener() {
+        ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list), new OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 presenter.setTags(item.getName());
@@ -208,7 +210,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void showPaymentTypeDialog(List<String> list) {
-        ListComponentDialog.newInstance(R.string.transaction_manager_payment_type, ItemList.asList(list), new OnItemSelectedListener() {
+        ListComponentDialog.newInstance(R.string.transaction_payment_type, ItemList.asList(list), new OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 presenter.setPaymentType(item.getName());
@@ -218,7 +220,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void showValueDialog(Double value) {
-        NumberComponentDialog.newInstance(R.string.transaction_manager_value, value, new OnFinishListener() {
+        NumberComponentDialog.newInstance(R.string.transaction_price, value, new OnFinishListener() {
             @Override
             public void onFinish(String value) {
                 presenter.setValue(value);
@@ -228,7 +230,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void showContentDialog(String value) {
-        TextComponentDialog.newInstance(R.string.transaction_manager_content, value, new OnFinishListener() {
+        TextComponentDialog.newInstance(R.string.transaction_content, value, new OnFinishListener() {
             @Override
             public void onFinish(String value) {
                 presenter.setContent(value);
