@@ -1,5 +1,9 @@
 package com.system.m4.views.filter;
 
+import com.system.m4.views.vos.FilterTransactionVO;
+import com.system.m4.views.vos.PaymentTypeVO;
+import com.system.m4.views.vos.TagVO;
+
 import java.util.Date;
 import java.util.List;
 
@@ -19,9 +23,9 @@ public interface FilterTransactionContract {
 
         void setPaymentType(String value);
 
-        void showTagsDialog(List<String> list);
+        void showTagsDialog(List<TagVO> list);
 
-        void showPaymentTypeDialog(List<String> list);
+        void showPaymentTypeDialog(List<PaymentTypeVO> list);
 
         void showPaymentDateStartDialog(Date date);
 
@@ -30,6 +34,7 @@ public interface FilterTransactionContract {
         void dismissDialog();
 
         void showError(String error);
+
     }
 
     interface Presenter {

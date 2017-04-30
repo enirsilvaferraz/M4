@@ -2,31 +2,35 @@ package com.system.m4.views.home;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.system.m4.R;
-import com.system.m4.views.components.dialogs.list.ListComponentAdapter;
-import com.system.m4.views.components.dialogs.list.ItemList;
-import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.filter.FilterTransactionDialog;
-import com.system.m4.views.transaction.ItemVO;
-import com.system.m4.views.transaction.TransactionManagerDialog;
 
-import java.util.ArrayList;
-import java.util.List;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity {
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
+    private HomeContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -35,33 +39,20 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                showTransactionManager();
+                presenter.requestTransactionManager();
             }
         });
     }
 
-    private void showTransactionManager() {
-        List<String> list = new ArrayList<>();
-        list.add("Moradia");
-        list.add("Aluguel");
-        list.add("Celular");
-        list.add("Internet");
-        list.add("Automovel");
-        list.add("Seguro");
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
 
-        ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
-            @Override
-            public void onSelect(ItemList item) {
-                ItemVO vo = new ItemVO(item.getName());
-                TransactionManagerDialog.newInstance(vo).show(getSupportFragmentManager(), "dialog");
-            }
-        }).addOnAddItemListenner(new ListComponentAdapter.OnAddItemListenner() {
-            @Override
-            public void onItemAdded(String content) {
-                Toast.makeText(HomeActivity.this, "Item Added: " + content, Toast.LENGTH_SHORT).show();
-            }
-        }).show(getSupportFragmentManager());
+        if (fragment instanceof HomeContract.View) {
+            HomeContract.View view = (HomeContract.View) fragment;
+            presenter = new HomePresenter(view);
+            view.setPresenter(presenter);
+        }
     }
 
     @Override
@@ -73,12 +64,11 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_filter:
-                showFilter();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_filter) {
+            showFilter();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

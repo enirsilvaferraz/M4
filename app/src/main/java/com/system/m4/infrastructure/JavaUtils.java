@@ -126,7 +126,7 @@ public final class JavaUtils {
                 BigDecimal parse = (BigDecimal) format.parse(value.replaceAll("[^\\d.,]", ""));
                 return currencyFormat(parse.doubleValue());
             } catch (ParseException e) {
-                throw new RuntimeException(e);
+                return currencyFormat(Double.valueOf(value.replace("R$", "").replace(".", "").replace(",", ".")));
             }
         }
 

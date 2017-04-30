@@ -1,9 +1,14 @@
 package com.system.m4.views.transaction;
 
-import com.system.m4.businness.transaction.TransactionManagerBusinness;
+import com.system.m4.businness.PaymentTypeBusinness;
+import com.system.m4.businness.TagBusinness;
+import com.system.m4.businness.dtos.PaymentTypeDTO;
+import com.system.m4.businness.dtos.TagDTO;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.views.vos.PaymentTypeVO;
+import com.system.m4.views.vos.TagVO;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -40,11 +45,11 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     @Override
     public void requestTagDialog() {
 
-        TransactionManagerBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner() {
+        TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
 
             @Override
-            public void onSuccess(List<String> list) {
-                view.showTagsDialog(list);
+            public void onSuccess(List<TagDTO> list) {
+                view.showTagsDialog(TagVO.asList(list));
             }
 
             @Override
@@ -57,11 +62,11 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     @Override
     public void requestPaymentTypeDialog() {
 
-        TransactionManagerBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner() {
+        PaymentTypeBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner<PaymentTypeDTO>() {
 
             @Override
-            public void onSuccess(List<String> list) {
-                view.showPaymentTypeDialog(list);
+            public void onSuccess(List<PaymentTypeDTO> list) {
+                view.showPaymentTypeDialog(PaymentTypeVO.asList(list));
             }
 
             @Override

@@ -11,8 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.system.m4.R;
-import com.system.m4.views.transaction.ItemVO;
+import com.system.m4.views.components.dialogs.list.ItemList;
+import com.system.m4.views.components.dialogs.list.ListComponentAdapter;
+import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.transaction.TransactionManagerDialog;
+import com.system.m4.views.vos.TagVO;
+import com.system.m4.views.vos.TransactionVO;
 
 import java.util.List;
 
@@ -45,24 +49,26 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        presenter = new HomePresenter(this);
-        presenter.requestListTransaction();
-
-        mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerview.setItemAnimator(new DefaultItemAnimator());
+        this.presenter.requestListTransaction();
     }
 
     @Override
-    public void setListTransactions(List<ItemVO> list) {
+    public void setPresenter(HomeContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void setListTransactions(List<TransactionVO> list) {
 
         TransactionAdapter adapter = new TransactionAdapter(list, new TransactionAdapter.OnItemSelectedListener() {
             @Override
-            public void onSelect(ItemVO item) {
+            public void onSelect(TransactionVO item) {
                 TransactionManagerDialog.newInstance(item).show(getChildFragmentManager(), TransactionManagerDialog.TAG);
             }
         });
 
+        mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerview.setItemAnimator(new DefaultItemAnimator());
         mRecyclerview.setAdapter(adapter);
         mRecyclerview.getAdapter().notifyDataSetChanged();
     }
@@ -72,4 +78,22 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+    @Override
+    public void showTransactionManager(List<TagVO> list) {
+
+        ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
+            @Override
+            public void onSelect(ItemList item) {
+                TransactionVO vo = new TransactionVO(item.getName());
+                TransactionManagerDialog.newInstance(vo).show(getChildFragmentManager(), TransactionManagerDialog.TAG);
+            }
+        }).addOnAddItemListenner(new ListComponentAdapter.OnAddItemListenner() {
+            @Override
+            public void onItemAdded(String content) {
+                presenter.saveTag(content);
+            }
+        }).show(getChildFragmentManager());
+    }
+
 }

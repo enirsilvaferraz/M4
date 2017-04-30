@@ -19,6 +19,9 @@ import com.system.m4.views.components.dialogs.TextComponentDialog;
 import com.system.m4.views.components.dialogs.list.ItemList;
 import com.system.m4.views.components.dialogs.list.ListComponentAdapter;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
+import com.system.m4.views.vos.PaymentTypeVO;
+import com.system.m4.views.vos.TagVO;
+import com.system.m4.views.vos.TransactionVO;
 
 import java.util.Date;
 import java.util.List;
@@ -60,9 +63,9 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     private TransactionManagerContract.Presenter presenter;
 
-    public static DialogFragment newInstance(ItemVO itemVO) {
+    public static DialogFragment newInstance(TransactionVO transactionVO) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(BUNDLE_VO, itemVO);
+        bundle.putParcelable(BUNDLE_VO, transactionVO);
 
         TransactionManagerDialog fragment = new TransactionManagerDialog();
         fragment.setArguments(bundle);
@@ -81,17 +84,17 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        configureModel(((ItemVO) getArguments().getParcelable(BUNDLE_VO)));
+        configureModel(((TransactionVO) getArguments().getParcelable(BUNDLE_VO)));
     }
 
-    private void configureModel(ItemVO itemVO) {
-        setTitle(itemVO.getTags());
-        presenter.setTags(itemVO.getTags());
-        presenter.setContent(itemVO.getContent());
-        presenter.setPaymentDate(itemVO.getPaymentDate());
-        presenter.setPurchaseDate(itemVO.getPurchaseDate());
-        presenter.setPaymentType(itemVO.getPaymentType());
-        presenter.setValue(itemVO.getValue());
+    private void configureModel(TransactionVO transactionVO) {
+        setTitle(transactionVO.getTags());
+        presenter.setTags(transactionVO.getTags());
+        presenter.setContent(transactionVO.getContent());
+        presenter.setPaymentDate(transactionVO.getPaymentDate());
+        presenter.setPurchaseDate(transactionVO.getPurchaseDate());
+        presenter.setPaymentType(transactionVO.getPaymentType());
+        presenter.setValue(transactionVO.getValue());
     }
 
     @Override
@@ -208,7 +211,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     }
 
     @Override
-    public void showTagsDialog(List<String> list) {
+    public void showTagsDialog(List<TagVO> list) {
         ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
@@ -218,7 +221,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     }
 
     @Override
-    public void showPaymentTypeDialog(List<String> list) {
+    public void showPaymentTypeDialog(List<PaymentTypeVO> list) {
         ListComponentDialog.newInstance(R.string.transaction_payment_type, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {

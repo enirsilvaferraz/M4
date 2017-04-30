@@ -1,24 +1,28 @@
-package com.system.m4.views.transaction;
+package com.system.m4.views.vos;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.system.m4.businness.dtos.TransactionDTO;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  */
-public class ItemVO implements Serializable, Parcelable {
+public class TransactionVO implements Serializable, Parcelable {
 
-    public static final Parcelable.Creator<ItemVO> CREATOR = new Parcelable.Creator<ItemVO>() {
+    public static final Parcelable.Creator<TransactionVO> CREATOR = new Parcelable.Creator<TransactionVO>() {
         @Override
-        public ItemVO createFromParcel(Parcel source) {
-            return new ItemVO(source);
+        public TransactionVO createFromParcel(Parcel source) {
+            return new TransactionVO(source);
         }
 
         @Override
-        public ItemVO[] newArray(int size) {
-            return new ItemVO[size];
+        public TransactionVO[] newArray(int size) {
+            return new TransactionVO[size];
         }
     };
 
@@ -29,7 +33,7 @@ public class ItemVO implements Serializable, Parcelable {
     private String paymentType;
     private String content;
 
-    public ItemVO(String paymentDate, String purchaseDate, String value, String tags, String paymentType, String content) {
+    public TransactionVO(String paymentDate, String purchaseDate, String value, String tags, String paymentType, String content) {
         this.paymentDate = paymentDate;
         this.purchaseDate = purchaseDate;
         this.value = value;
@@ -38,7 +42,7 @@ public class ItemVO implements Serializable, Parcelable {
         this.content = content;
     }
 
-    public ItemVO(Parcel in) {
+    public TransactionVO(Parcel in) {
         this.paymentDate = in.readString();
         this.purchaseDate = in.readString();
         this.value = in.readString();
@@ -47,8 +51,16 @@ public class ItemVO implements Serializable, Parcelable {
         this.content = in.readString();
     }
 
-    public ItemVO(String tag) {
+    public TransactionVO(String tag) {
         this.tags = tag;
+    }
+
+    public static List<TransactionVO> asList(List<TransactionDTO> list) {
+        List<TransactionVO> voList = new ArrayList<>();
+        for (TransactionDTO dto : list) {
+            voList.add(new TransactionVO(dto.getPaymentDate(), dto.getPurchaseDate(), dto.getPrice(), dto.getTag(), dto.getPaymentType(), dto.getContent()));
+        }
+        return voList;
     }
 
     public String getPaymentDate() {

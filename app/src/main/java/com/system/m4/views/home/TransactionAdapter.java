@@ -4,39 +4,38 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.system.m4.R;
-import com.system.m4.views.transaction.ItemVO;
+import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.views.vos.TransactionVO;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  *
  */
-public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolderIf> {
+public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolder> {
 
-    private List<ItemVO> list;
+    private List<TransactionVO> list;
     private OnItemSelectedListener onItemSelectedListener;
 
-    TransactionAdapter(List<ItemVO> list, OnItemSelectedListener onItemSelectedListener) {
+    TransactionAdapter(List<TransactionVO> list, OnItemSelectedListener onItemSelectedListener) {
         this.list = list;
         this.onItemSelectedListener = onItemSelectedListener;
     }
 
     @Override
-    public ViewHolderIf onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        if (viewType == 0) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
-            return new ViewHolder(view, onItemSelectedListener);
-        } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_date, parent, false);
-            return new ViewHolderTitle(view);
-        }
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolderIf holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         holder.bind(list.get(position));
     }
 
@@ -51,48 +50,45 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
      */
     interface OnItemSelectedListener {
 
-        void onSelect(ItemVO item);
+        void onSelect(TransactionVO item);
     }
-    
-    /**
-     *
-     */
-    abstract class ViewHolderIf extends RecyclerView.ViewHolder {
 
-        public ViewHolderIf(View itemView) {
-            super(itemView);
-        }
-
-        public void bind(final ItemVO item) {
-
-        }
-    }
 
     /**
      *
      */
-    class ViewHolder extends ViewHolderIf {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final OnItemSelectedListener onItemSelectedListener;
+        @BindView(R.id.item_transaction_tag)
+        TextView tvTag;
 
+        @BindView(R.id.item_transaction_payment_type)
+        TextView tvPaymentType;
 
-        public ViewHolder(View itemView, OnItemSelectedListener onItemSelectedListener) {
+        @BindView(R.id.item_transaction_payment_date)
+        TextView tvPaymentDate;
+
+        @BindView(R.id.item_transaction_price)
+        TextView tvPrice;
+
+        public ViewHolder(View itemView) {
             super(itemView);
-            this.onItemSelectedListener = onItemSelectedListener;
+            ButterKnife.bind(this, itemView);
         }
 
-        public void bind(final ItemVO item) {
+        public void bind(final TransactionVO item) {
 
-        }
-    }
+            tvTag.setText(JavaUtils.StringUtil.formatEmpty(item.getTags()));
+            tvPaymentType.setText(JavaUtils.StringUtil.formatEmpty(item.getPaymentType()));
+            tvPaymentDate.setText(JavaUtils.StringUtil.formatEmpty(item.getPaymentDate()));
+            tvPrice.setText(JavaUtils.StringUtil.formatEmpty(item.getValue()));
 
-    /**
-     *
-     */
-    class ViewHolderTitle extends ViewHolderIf {
-
-        public ViewHolderTitle(View itemView) {
-            super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemSelectedListener.onSelect(item);
+                }
+            });
         }
     }
 }

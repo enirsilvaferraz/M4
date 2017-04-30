@@ -1,5 +1,8 @@
 package com.system.m4.views.transaction;
 
+import com.system.m4.views.vos.PaymentTypeVO;
+import com.system.m4.views.vos.TagVO;
+
 import java.util.Date;
 import java.util.List;
 
@@ -24,9 +27,9 @@ public interface TransactionManagerContract {
 
         void setContent(String value);
 
-        void showTagsDialog(List<String> list);
+        void showTagsDialog(List<TagVO> list);
 
-        void showPaymentTypeDialog(List<String> list);
+        void showPaymentTypeDialog(List<PaymentTypeVO> list);
 
         void showValueDialog(Double value);
 

@@ -1,6 +1,7 @@
 package com.system.m4.views.home;
 
-import com.system.m4.views.transaction.ItemVO;
+import com.system.m4.views.vos.TagVO;
+import com.system.m4.views.vos.TransactionVO;
 
 import java.util.List;
 
@@ -16,7 +17,11 @@ public class HomeContract {
      */
     interface View {
 
-        void setListTransactions(List<ItemVO> list);
+        void setPresenter(Presenter presenter);
+
+        void setListTransactions(List<TransactionVO> list);
+
+        void showTransactionManager(List<TagVO> list);
     }
 
     /**
@@ -25,5 +30,9 @@ public class HomeContract {
     interface Presenter {
 
         void requestListTransaction();
+
+        void requestTransactionManager();
+
+        void saveTag(String tag);
     }
 }

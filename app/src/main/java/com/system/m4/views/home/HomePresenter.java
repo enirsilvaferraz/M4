@@ -1,8 +1,14 @@
 package com.system.m4.views.home;
 
-import com.system.m4.views.transaction.ItemVO;
+import com.system.m4.businness.TagBusinness;
+import com.system.m4.businness.TransactionBusinness;
+import com.system.m4.businness.dtos.TagDTO;
+import com.system.m4.businness.dtos.TransactionDTO;
+import com.system.m4.infrastructure.BusinnessListener;
+import com.system.m4.views.vos.TagVO;
+import com.system.m4.views.vos.TransactionVO;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by eferraz on 29/04/17.
@@ -20,21 +26,52 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestListTransaction() {
 
-        ArrayList<ItemVO> list = new ArrayList<>();
-        list.add(new ItemVO("", "", "", "", "", ""));
-        list.add(new ItemVO("", "", "", "", "", ""));
-        list.add(new ItemVO("", "", "", "", "", ""));
-        list.add(new ItemVO("", "", "", "", "", ""));
-        list.add(new ItemVO("", "", "", "", "", ""));
-        list.add(new ItemVO("", "", "", "", "", ""));
-        list.add(new ItemVO("", "", "", "", "", ""));
-        list.add(new ItemVO("", "", "", "", "", ""));
-        list.add(new ItemVO("", "", "", "", "", ""));
-        list.add(new ItemVO("", "", "", "", "", ""));
-        list.add(new ItemVO("", "", "", "", "", ""));
-        list.add(new ItemVO("", "", "", "", "", ""));
-        list.add(new ItemVO("", "", "", "", "", ""));
+        TransactionBusinness.requestTransactions(new BusinnessListener.OnMultiResultListenner<TransactionDTO>() {
 
-        view.setListTransactions(list);
+            @Override
+            public void onSuccess(List<TransactionDTO> list) {
+                view.setListTransactions(TransactionVO.asList(list));
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+
+    }
+
+    @Override
+    public void requestTransactionManager() {
+
+        TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
+
+            @Override
+            public void onSuccess(List<TagDTO> list) {
+                view.showTransactionManager(TagVO.asList(list));
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+    }
+
+    @Override
+    public void saveTag(String tag) {
+
+        TagBusinness.saveTag(new TagDTO(tag), new BusinnessListener.OnPersistListener() {
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
     }
 }

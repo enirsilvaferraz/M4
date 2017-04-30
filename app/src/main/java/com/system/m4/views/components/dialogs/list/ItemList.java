@@ -3,6 +3,8 @@ package com.system.m4.views.components.dialogs.list;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.system.m4.views.vos.VOInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +40,10 @@ public class ItemList implements Parcelable {
         this.name = in.readString();
     }
 
-    public static List<ItemList> asList(List<String> listString) {
-
+    public static List<ItemList> asList(List<? extends VOInterface> listString) {
         List<ItemList> list = new ArrayList<>();
-        for (String string : listString) {
-            list.add(new ItemList(string));
+        for (VOInterface vo : listString) {
+            list.add(new ItemList(vo.getName()));
         }
         return list;
     }

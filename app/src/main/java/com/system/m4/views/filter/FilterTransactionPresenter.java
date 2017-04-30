@@ -1,9 +1,16 @@
 package com.system.m4.views.filter;
 
-import com.system.m4.businness.transaction.TransactionManagerBusinness;
+import com.system.m4.businness.FilterTransactionBusinness;
+import com.system.m4.businness.PaymentTypeBusinness;
+import com.system.m4.businness.TagBusinness;
+import com.system.m4.businness.dtos.PaymentTypeDTO;
+import com.system.m4.businness.dtos.TagDTO;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.views.vos.FilterTransactionVO;
+import com.system.m4.views.vos.PaymentTypeVO;
+import com.system.m4.views.vos.TagVO;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -17,9 +24,11 @@ import java.util.List;
 class FilterTransactionPresenter implements FilterTransactionContract.Presenter {
 
     private final FilterTransactionContract.View view;
+    private final FilterTransactionVO mVo;
 
     FilterTransactionPresenter(FilterTransactionContract.View view) {
         this.view = view;
+        this.mVo = new FilterTransactionVO();
     }
 
     @Override
@@ -37,11 +46,11 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     @Override
     public void requestTagDialog() {
 
-        TransactionManagerBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner() {
+        TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
 
             @Override
-            public void onSuccess(List<String> list) {
-                view.showTagsDialog(list);
+            public void onSuccess(List<TagDTO> list) {
+                view.showTagsDialog(TagVO.asList(list));
             }
 
             @Override
@@ -54,11 +63,11 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     @Override
     public void requestPaymentTypeDialog() {
 
-        TransactionManagerBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner() {
+        PaymentTypeBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner<PaymentTypeDTO>() {
 
             @Override
-            public void onSuccess(List<String> list) {
-                view.showPaymentTypeDialog(list);
+            public void onSuccess(List<PaymentTypeDTO> list) {
+                view.showPaymentTypeDialog(PaymentTypeVO.asList(list));
             }
 
             @Override
@@ -96,22 +105,22 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
 
     @Override
     public void clearPaymentType() {
-
+        mVo.setPaymentType(null);
     }
 
     @Override
     public void clearTag() {
-
+        mVo.setTags(null);
     }
 
     @Override
     public void clearPaymentDateStart() {
-
+        mVo.setPaymentDateStart(null);
     }
 
     @Override
     public void clearPaymentDateEnd() {
-
+        mVo.setPaymentDateEnd(null);
     }
 
     @Override
@@ -122,6 +131,18 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     @Override
     public void persistFilter() {
 
+        FilterTransactionBusinness.persistFilter(mVo, new BusinnessListener.OnPersistListener() {
+
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e.getMessage());
+            }
+        });
     }
 
     @Override
