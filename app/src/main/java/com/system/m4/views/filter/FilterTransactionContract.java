@@ -1,6 +1,7 @@
 package com.system.m4.views.filter;
 
-import com.system.m4.views.vos.FilterTransactionVO;
+import android.support.annotation.StringRes;
+
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 
@@ -9,19 +10,20 @@ import java.util.List;
 
 /**
  * Created by eferraz on 29/04/17.
+ * For M4
  */
 
-public interface FilterTransactionContract {
+interface FilterTransactionContract {
 
     interface View {
 
-        void setPaymentDateStart(String value);
-
         void setPaymentDateEnd(String value);
 
-        void setTag(String value);
+        void setPaymentDateStart(String value);
 
         void setPaymentType(String value);
+
+        void setTag(String value);
 
         void showTagsDialog(List<TagVO> list);
 
@@ -31,41 +33,37 @@ public interface FilterTransactionContract {
 
         void showPaymentDateEndDialog(Date date);
 
-        void dismissDialog();
-
         void showError(String error);
 
+        void showError(@StringRes int template, @StringRes int... params);
     }
 
     interface Presenter {
 
-        void setPaymentDateStart(int year, int month, int dayOfMonth);
-
-        void setPaymentDateEnd(int year, int month, int dayOfMonth);
-
-        void setTags(String itemName);
-
-        void setPaymentType(String itemName);
-
         void requestTagDialog();
 
-        void requestPaymentTypeDialog();
+        void requestPaymentDateEndDialog(String text);
 
         void requestPaymentDateStartDialog(String text);
 
-        void requestPaymentDateEndDialog(String text);
+        void requestPaymentTypeDialog();
+
+        void clearPaymentDateEnd();
+
+        void clearPaymentDateStart();
 
         void clearPaymentType();
 
         void clearTag();
 
-        void clearPaymentDateStart();
+        void setPaymentDateEnd(int year, int month, int dayOfMonth);
 
-        void clearPaymentDateEnd();
+        void setPaymentDateStart(int year, int month, int dayOfMonth);
+
+        void setPaymentType(String itemName);
+
+        void setTags(String itemName);
 
         void validateForm();
-
-        void persistFilter();
     }
-
 }

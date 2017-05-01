@@ -1,6 +1,8 @@
 package com.system.m4.views.filter;
 
-import com.system.m4.businness.FilterTransactionBusinness;
+import android.text.TextUtils;
+
+import com.system.m4.R;
 import com.system.m4.businness.PaymentTypeBusinness;
 import com.system.m4.businness.TagBusinness;
 import com.system.m4.businness.dtos.PaymentTypeDTO;
@@ -24,23 +26,12 @@ import java.util.List;
 class FilterTransactionPresenter implements FilterTransactionContract.Presenter {
 
     private final FilterTransactionContract.View view;
+
     private final FilterTransactionVO mVo;
 
     FilterTransactionPresenter(FilterTransactionContract.View view) {
         this.view = view;
         this.mVo = new FilterTransactionVO();
-    }
-
-    @Override
-    public void setPaymentDateStart(int year, int month, int dayOfMonth) {
-        Date date = JavaUtils.DateUtil.getDate(year, month, dayOfMonth);
-        view.setPaymentDateStart(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY));
-    }
-
-    @Override
-    public void setPaymentDateEnd(int year, int month, int dayOfMonth) {
-        Date date = JavaUtils.DateUtil.getDate(year, month, dayOfMonth);
-        view.setPaymentDateEnd(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY));
     }
 
     @Override
@@ -61,6 +52,32 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     }
 
     @Override
+    public void requestPaymentDateEndDialog(String text) {
+
+        Date date;
+        if (text.isEmpty() || text.equals(Constants.EMPTY_FIELD)) {
+            date = Calendar.getInstance().getTime();
+        } else {
+            date = JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY);
+        }
+
+        view.showPaymentDateEndDialog(date);
+    }
+
+    @Override
+    public void requestPaymentDateStartDialog(String text) {
+
+        Date date;
+        if (text.isEmpty() || text.equals(Constants.EMPTY_FIELD)) {
+            date = Calendar.getInstance().getTime();
+        } else {
+            date = JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY);
+        }
+
+        view.showPaymentDateStartDialog(date);
+    }
+
+    @Override
     public void requestPaymentTypeDialog() {
 
         PaymentTypeBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner<PaymentTypeDTO>() {
@@ -78,29 +95,13 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     }
 
     @Override
-    public void requestPaymentDateStartDialog(String text) {
-
-        Date date;
-        if (text.isEmpty() || text.equals(Constants.EMPTY_FIELD)) {
-            date = Calendar.getInstance().getTime();
-        } else {
-            date = JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY);
-        }
-
-        view.showPaymentDateStartDialog(date);
+    public void clearPaymentDateEnd() {
+        mVo.setPaymentDateEnd(null);
     }
 
     @Override
-    public void requestPaymentDateEndDialog(String text) {
-
-        Date date;
-        if (text.isEmpty() || text.equals(Constants.EMPTY_FIELD)) {
-            date = Calendar.getInstance().getTime();
-        } else {
-            date = JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY);
-        }
-
-        view.showPaymentDateEndDialog(date);
+    public void clearPaymentDateStart() {
+        mVo.setPaymentDateStart(null);
     }
 
     @Override
@@ -114,45 +115,40 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     }
 
     @Override
-    public void clearPaymentDateStart() {
-        mVo.setPaymentDateStart(null);
+    public void setPaymentDateEnd(int year, int month, int dayOfMonth) {
+        Date date = JavaUtils.DateUtil.getDate(year, month, dayOfMonth);
+        view.setPaymentDateEnd(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY));
     }
 
     @Override
-    public void clearPaymentDateEnd() {
-        mVo.setPaymentDateEnd(null);
-    }
-
-    @Override
-    public void validateForm() {
-        view.dismissDialog();
-    }
-
-    @Override
-    public void persistFilter() {
-
-        FilterTransactionBusinness.persistFilter(mVo, new BusinnessListener.OnPersistListener() {
-
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onError(Exception e) {
-                view.showError(e.getMessage());
-            }
-        });
-    }
-
-    @Override
-    public void setTags(String itemName) {
-        view.setTag(itemName);
+    public void setPaymentDateStart(int year, int month, int dayOfMonth) {
+        Date date = JavaUtils.DateUtil.getDate(year, month, dayOfMonth);
+        view.setPaymentDateStart(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY));
     }
 
     @Override
     public void setPaymentType(String itemName) {
+        mVo.setPaymentType(itemName);
         view.setPaymentType(itemName);
     }
 
+    @Override
+    public void setTags(String itemName) {
+        mVo.setTags(itemName);
+        view.setTag(itemName);
+    }
+
+    @Override
+    public void validateForm() {
+
+        if (TextUtils.isEmpty(mVo.getTags())) {
+            view.showError(R.string.system_error_required_field, R.string.transaction_tag);
+        } else if (TextUtils.isEmpty(mVo.getPaymentType())) {
+            view.showError(R.string.system_error_required_field, R.string.transaction_payment_type);
+        } else if (TextUtils.isEmpty(mVo.getPaymentDateStart())) {
+            view.showError(R.string.system_error_required_field, R.string.transaction_payment_date_start);
+        } else if (TextUtils.isEmpty(mVo.getPaymentDateEnd())) {
+            view.showError(R.string.system_error_required_field, R.string.transaction_payment_date_end);
+        }
+    }
 }

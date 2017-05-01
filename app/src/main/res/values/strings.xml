@@ -4,11 +4,11 @@
     <string name="system_action_cancel">Cancel</string>
     <string name="system_action_done">Done</string>
     <string name="system_empty_field">--</string>
+    <string name="system_error_required_field">\'%1$s\' is required.</string>
 
     <string name="action_filter">Filter</string>
 
     <string name="title_activity_transaction_manager">Transaction Manager</string>
-
     <string name="transaction_payment_type">Payment Type</string>
     <string name="transaction_price">Price</string>
     <string name="transaction_payment_date">Payment Date</string>
@@ -17,4 +17,7 @@
     <string name="transaction_tag">Tag</string>
     <string name="transaction_filter_title">Transaction Filter</string>
     <string name="transaction_manager_title">Transaction Manager</string>
+    <string name="transaction_payment_date_start">Payment Date Start</string>
+    <string name="transaction_payment_date_end">Payment Date End</string>
+
 </resources>

@@ -3,6 +3,7 @@ package com.system.m4.views.filter;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -195,19 +196,22 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
     }
 
     @Override
-    public void dismissDialog() {
-        Toast.makeText(getContext(), "Transaction saved!", Toast.LENGTH_SHORT).show();
-        dismiss();
+    public void showError(String error) {
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void showError(String error) {
-        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-        dismiss();
+    public void showError(@StringRes int template, @StringRes int... params) {
+        String[] arrayString = new String[params.length];
+        for (int i = 0; i < params.length; i++) {
+            arrayString[i] = getString(params[i]);
+        }
+        Toast.makeText(getContext(), getString(template, arrayString), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void actionDone() {
-        presenter.persistFilter();
+        presenter.validateForm();
+        dismiss();
     }
 }
