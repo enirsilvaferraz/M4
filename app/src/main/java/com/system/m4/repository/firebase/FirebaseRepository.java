@@ -18,16 +18,12 @@ import java.util.Map;
  * For AndroidPigBank
  */
 
-public class FirebaseUtil<T extends DTOAbs> {
+public class FirebaseRepository<T extends DTOAbs> {
 
     private DatabaseReference databaseRef;
 
-    private FirebaseUtil(String flavor, String databaseName) {
+    FirebaseRepository(String flavor, String databaseName) {
         databaseRef = FirebaseDatabase.getInstance().getReference(flavor + "/" + databaseName);
-    }
-
-    public static FirebaseUtil newInstance(String flavor, String databaseName) {
-        return new FirebaseUtil(flavor, databaseName);
     }
 
     public void save(T dto, FirebaseSingleReturnListener<T> listener) {
@@ -99,7 +95,7 @@ public class FirebaseUtil<T extends DTOAbs> {
     /**
      *
      */
-    interface FirebaseMultiReturnListener<T extends DTOAbs> {
+    public interface FirebaseMultiReturnListener<T extends DTOAbs> {
 
         void onFindAll(List<T> list);
 

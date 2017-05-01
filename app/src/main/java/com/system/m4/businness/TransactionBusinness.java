@@ -1,10 +1,11 @@
 package com.system.m4.businness;
 
+import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.repository.dtos.FilterTransactionDTO;
 import com.system.m4.repository.dtos.TransactionDTO;
-import com.system.m4.infrastructure.BusinnessListener;
+import com.system.m4.repository.firebase.FirebaseRepository;
+import com.system.m4.repository.firebase.TransactionFirebaseRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,39 +13,37 @@ import java.util.List;
  * For M4
  */
 
-public class TransactionBusinness {
+public final class TransactionBusinness {
+
+    private TransactionBusinness() {
+        // Nothing to do
+    }
 
     public static void requestTransactions(final BusinnessListener.OnMultiResultListenner<TransactionDTO> onMultiResultListenner) {
-
-        final List<TransactionDTO> list = new ArrayList<>();
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
 
         FilterTransactionBusinness.requestFilter(new BusinnessListener.OnSingleResultListener<FilterTransactionDTO>() {
 
             @Override
             public void onSuccess(FilterTransactionDTO dto) {
-                onMultiResultListenner.onSuccess(list);
+
+                new TransactionFirebaseRepository("dev").findByFilter(dto, new FirebaseRepository.FirebaseMultiReturnListener<TransactionDTO>() {
+
+                    @Override
+                    public void onFindAll(List<TransactionDTO> list) {
+                        onMultiResultListenner.onSuccess(list);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        onMultiResultListenner.onError(new Exception(error));
+                    }
+                });
             }
 
             @Override
             public void onError(Exception e) {
-
+                onMultiResultListenner.onError(e);
             }
         });
-
-
     }
 }
