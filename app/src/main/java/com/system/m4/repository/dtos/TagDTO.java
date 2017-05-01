@@ -15,6 +15,10 @@ public class TagDTO extends DTOAbs {
 
     private String name;
 
+    public TagDTO() {
+        // Nothing to do
+    }
+
     public TagDTO(String name) {
         this.name = name;
     }

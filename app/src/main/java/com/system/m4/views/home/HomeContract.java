@@ -22,6 +22,8 @@ public class HomeContract {
         void setListTransactions(List<TransactionVO> list);
 
         void showTransactionManager(List<TagVO> list);
+
+        void showError(String message);
     }
 
     /**

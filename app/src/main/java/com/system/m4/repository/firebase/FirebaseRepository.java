@@ -22,7 +22,7 @@ public class FirebaseRepository<T extends DTOAbs> {
 
     private DatabaseReference databaseRef;
 
-    FirebaseRepository(String flavor, String databaseName) {
+    public FirebaseRepository(String flavor, String databaseName) {
         databaseRef = FirebaseDatabase.getInstance().getReference(flavor + "/" + databaseName);
     }
 
@@ -41,13 +41,13 @@ public class FirebaseRepository<T extends DTOAbs> {
         listener.onFind(dto);
     }
 
-    public void findByKey(String key, final FirebaseSingleReturnListener<T> firebaseSingleReturnListener) {
+    public void findByKey(final Class<T> classe, String key, final FirebaseSingleReturnListener<T> firebaseSingleReturnListener) {
 
         Query reference = databaseRef.child(key).orderByKey();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                firebaseSingleReturnListener.onFind(getTInstance(dataSnapshot));
+                firebaseSingleReturnListener.onFind(getTInstance(classe, dataSnapshot));
             }
 
             @Override
@@ -57,13 +57,13 @@ public class FirebaseRepository<T extends DTOAbs> {
         });
     }
 
-    private T getTInstance(DataSnapshot postSnapshot) {
-        T entity = ((T) postSnapshot.getValue(JavaUtils.ClassUtil.getTClass(this)));
+    private T getTInstance(Class<T> classe, DataSnapshot postSnapshot) {
+        T entity = postSnapshot.getValue(classe);
         entity.setKey(postSnapshot.getKey());
         return entity;
     }
 
-    public void findAll(final FirebaseMultiReturnListener<T> firebaseMultiReturnListener) {
+    public void findAll(final Class<T> classe, final FirebaseMultiReturnListener<T> firebaseMultiReturnListener) {
 
         Query reference = databaseRef.orderByKey();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -71,7 +71,7 @@ public class FirebaseRepository<T extends DTOAbs> {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<T> list = new ArrayList<>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    list.add(getTInstance(postSnapshot));
+                    list.add(getTInstance(classe, postSnapshot));
                 }
                 firebaseMultiReturnListener.onFindAll(list);
             }
@@ -105,7 +105,7 @@ public class FirebaseRepository<T extends DTOAbs> {
     /**
      *
      */
-    interface FirebaseSingleReturnListener<T extends DTOAbs> {
+    public interface FirebaseSingleReturnListener<T extends DTOAbs> {
 
         void onFind(T list);
 

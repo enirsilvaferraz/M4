@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.views.components.dialogs.list.ItemList;
@@ -95,5 +96,10 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                 presenter.saveTag(content);
             }
         }).show(getChildFragmentManager());
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

@@ -220,6 +220,7 @@ public final class JavaUtils {
     public static class ClassUtil {
 
         public static Class getTClass(Object object) {
+
             final ParameterizedType type = (ParameterizedType) object.getClass().getGenericSuperclass();
             return (Class) (type).getActualTypeArguments()[0];
         }

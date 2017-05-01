@@ -2,9 +2,9 @@ package com.system.m4.views.home;
 
 import com.system.m4.businness.TagBusinness;
 import com.system.m4.businness.TransactionBusinness;
+import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.repository.dtos.TransactionDTO;
-import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 
@@ -53,7 +53,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
             @Override
             public void onError(Exception e) {
-
+                view.showError(e.getMessage());
             }
         });
     }
