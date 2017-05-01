@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.system.m4.R;
 
@@ -103,6 +104,13 @@ public class ListComponentAdapter extends RecyclerView.Adapter<ListComponentAdap
                 @Override
                 public void onClick(View view) {
                     onItemSelectedListener.onSelect(item);
+                }
+            });
+            container.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Toast.makeText(itemView.getContext(), "Long Click not implemented!", Toast.LENGTH_SHORT).show();
+                    return false;
                 }
             });
         }
