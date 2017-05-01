@@ -37,4 +37,9 @@ public class TransactionFirebaseRepository extends FirebaseRepository<Transactio
 
         firebaseMultiReturnListener.onFindAll(list);
     }
+
+    @Override
+    protected Class<TransactionDTO> getTClass() {
+        return TransactionDTO.class;
+    }
 }

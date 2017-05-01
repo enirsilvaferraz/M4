@@ -1,7 +1,7 @@
 package com.system.m4.businness;
 
 import com.system.m4.repository.dtos.PaymentTypeDTO;
-import com.system.m4.repository.firebase.DTOAbs;
+import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.infrastructure.BusinnessListener;
 
 import java.util.ArrayList;

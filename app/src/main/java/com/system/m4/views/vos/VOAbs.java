@@ -2,7 +2,7 @@ package com.system.m4.views.vos;
 
 import android.os.Parcelable;
 
-import com.system.m4.repository.firebase.DTOAbs;
+import com.system.m4.repository.dtos.DTOAbs;
 
 /**
  * Created by eferraz on 05/12/15.

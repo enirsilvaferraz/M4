@@ -1,7 +1,5 @@
 package com.system.m4.repository.dtos;
 
-import com.system.m4.repository.firebase.DTOAbs;
-
 import java.util.Map;
 
 public class TransactionDTO extends DTOAbs {

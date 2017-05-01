@@ -1,4 +1,4 @@
-package com.system.m4.repository.firebase;
+package com.system.m4.repository.dtos;
 
 import java.util.Map;
 

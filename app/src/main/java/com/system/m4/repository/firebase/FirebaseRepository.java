@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.repository.dtos.DTOAbs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import java.util.Map;
  * For AndroidPigBank
  */
 
-public class FirebaseRepository<T extends DTOAbs> {
+public abstract class FirebaseRepository<T extends DTOAbs> {
 
     private DatabaseReference databaseRef;
 
@@ -41,13 +42,13 @@ public class FirebaseRepository<T extends DTOAbs> {
         listener.onFind(dto);
     }
 
-    public void findByKey(final Class<T> classe, String key, final FirebaseSingleReturnListener<T> firebaseSingleReturnListener) {
+    public void findByKey(String key, final FirebaseSingleReturnListener<T> firebaseSingleReturnListener) {
 
         Query reference = databaseRef.child(key).orderByKey();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                firebaseSingleReturnListener.onFind(getTInstance(classe, dataSnapshot));
+                firebaseSingleReturnListener.onFind(getTInstance(dataSnapshot));
             }
 
             @Override
@@ -57,13 +58,15 @@ public class FirebaseRepository<T extends DTOAbs> {
         });
     }
 
-    private T getTInstance(Class<T> classe, DataSnapshot postSnapshot) {
-        T entity = postSnapshot.getValue(classe);
+    private T getTInstance(DataSnapshot postSnapshot) {
+        T entity = postSnapshot.getValue(getTClass());
         entity.setKey(postSnapshot.getKey());
         return entity;
     }
 
-    public void findAll(final Class<T> classe, final FirebaseMultiReturnListener<T> firebaseMultiReturnListener) {
+    protected abstract Class<T> getTClass();
+
+    public void findAll(final FirebaseMultiReturnListener<T> firebaseMultiReturnListener) {
 
         Query reference = databaseRef.orderByKey();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -71,7 +74,7 @@ public class FirebaseRepository<T extends DTOAbs> {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<T> list = new ArrayList<>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    list.add(getTInstance(classe, postSnapshot));
+                    list.add(getTInstance(postSnapshot));
                 }
                 firebaseMultiReturnListener.onFindAll(list);
             }
