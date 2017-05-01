@@ -2,8 +2,8 @@ package com.system.m4.views.transaction;
 
 import com.system.m4.businness.PaymentTypeBusinness;
 import com.system.m4.businness.TagBusinness;
-import com.system.m4.businness.dtos.PaymentTypeDTO;
-import com.system.m4.businness.dtos.TagDTO;
+import com.system.m4.repository.dtos.PaymentTypeDTO;
+import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;

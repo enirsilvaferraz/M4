@@ -1,6 +1,12 @@
-package com.system.m4.businness.dtos;
+package com.system.m4.repository.dtos;
 
-public class TransactionDTO implements DTOInterface {
+import com.system.m4.repository.firebase.DTOAbs;
+
+import java.util.Map;
+
+public class TransactionDTO extends DTOAbs {
+
+    private String key;
 
     private String paymentDate;
 
@@ -72,5 +78,20 @@ public class TransactionDTO implements DTOInterface {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    @Override
+    public Map<String, String> getMapUpdate() {
+        return null;
     }
 }

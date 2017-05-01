@@ -5,6 +5,8 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -28,22 +30,14 @@ public final class JavaUtils {
     public static class DateUtil {
 
         public static final String DD_MM_YYYY = "dd/MM/yyyy";
+
         public static final String MMMM_DE_YYYY = "MMMM 'de' yyyy";
+
         public static final String YYYY_MM_DD = "yyyy/MM/dd";
+
         public static final String MM_YYYY = "MM/yyyy";
+
         public static final String DD_DE_MMMM_DE_YYYY = "dd 'de' MMMM 'de' yyyy";
-
-        public static String format(Date date, String template) {
-            if (date == null) {
-                return "Not defined";
-            }
-            final String format = new SimpleDateFormat(template, Locale.getDefault()).format(date);
-            return format.substring(0, 1).toUpperCase() + format.substring(1);
-        }
-
-        public static String format(Date date) {
-            return format(date, DD_DE_MMMM_DE_YYYY);
-        }
 
         public static Date parse(String date) {
             return parse(date, DD_DE_MMMM_DE_YYYY);
@@ -87,10 +81,26 @@ public final class JavaUtils {
             return cInit.compareTo(cEnd);
         }
 
+        public static String format(Date date, String template) {
+            if (date == null) {
+                return "Not defined";
+            }
+            final String format = new SimpleDateFormat(template, Locale.getDefault()).format(date);
+            return format.substring(0, 1).toUpperCase() + format.substring(1);
+        }
+
         public static int get(int constantCalendar, Date date) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             return calendar.get(constantCalendar);
+        }
+
+        public static String getDateString(int year, int month, int day) {
+            return format(getDate(year, month, day));
+        }
+
+        public static String format(Date date) {
+            return format(date, DD_DE_MMMM_DE_YYYY);
         }
 
         public static Date getDate(int year, int month, int day) {
@@ -100,10 +110,6 @@ public final class JavaUtils {
             cInit.set(Calendar.MINUTE, 0);
             cInit.set(Calendar.SECOND, 0);
             return cInit.getTime();
-        }
-
-        public static String getDateString(int year, int month, int day) {
-            return format(getDate(year, month, day));
         }
     }
 
@@ -216,6 +222,14 @@ public final class JavaUtils {
         public static Class getTClass(Object object) {
             final ParameterizedType type = (ParameterizedType) object.getClass().getGenericSuperclass();
             return (Class) (type).getActualTypeArguments()[0];
+        }
+    }
+
+    public static class FirebaseUtil {
+
+        public static void enableOffline(String flavor) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            FirebaseDatabase.getInstance().getReference(flavor + "-database/").keepSynced(true);
         }
     }
 }

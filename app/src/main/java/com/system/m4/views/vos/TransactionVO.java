@@ -3,7 +3,7 @@ package com.system.m4.views.vos;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.system.m4.businness.dtos.TransactionDTO;
+import com.system.m4.repository.dtos.TransactionDTO;
 
 import java.io.Serializable;
 import java.util.ArrayList;

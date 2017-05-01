@@ -1,7 +1,5 @@
 package com.system.m4.infrastructure;
 
-import com.system.m4.businness.dtos.DTOInterface;
-
 import java.util.List;
 
 /**
@@ -14,7 +12,7 @@ public interface BusinnessListener {
     /**
      *
      */
-    interface OnMultiResultListenner<T extends DTOInterface> {
+    interface OnMultiResultListenner<T> {
 
         void onSuccess(List<T> list);
 
@@ -24,7 +22,7 @@ public interface BusinnessListener {
     /**
      *
      */
-    interface OnSingleResultListener<T extends DTOInterface> {
+    interface OnSingleResultListener<T> {
 
         void onSuccess(T dto);
 

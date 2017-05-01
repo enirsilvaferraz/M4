@@ -1,9 +1,9 @@
-package com.system.m4.businness.dtos;
+package com.system.m4.repository.dtos;
 
 /**
  *
  */
-public class FilterTransactionDTO implements DTOInterface {
+public class FilterTransactionDTO {
 
     private String paymentDateStart;
     private String paymentDateEnd;

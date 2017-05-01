@@ -206,7 +206,7 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
         for (int i = 0; i < params.length; i++) {
             arrayString[i] = getString(params[i]);
         }
-        Toast.makeText(getContext(), getString(template, arrayString), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(template, (Object[]) arrayString), Toast.LENGTH_SHORT).show();
     }
 
     @Override

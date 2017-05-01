@@ -37,6 +37,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     private HomeContract.Presenter presenter;
 
     public HomeFragment() {
+        // Nothing to do
     }
 
     @Override
@@ -50,6 +51,12 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.presenter.requestListTransaction();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override
@@ -74,12 +81,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @Override
     public void showTransactionManager(List<TagVO> list) {
 
         ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
@@ -95,5 +96,4 @@ public class HomeFragment extends Fragment implements HomeContract.View {
             }
         }).show(getChildFragmentManager());
     }
-
 }

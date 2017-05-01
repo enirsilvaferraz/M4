@@ -2,7 +2,7 @@ package com.system.m4.views.vos;
 
 import android.os.Parcel;
 
-import com.system.m4.businness.dtos.TagDTO;
+import com.system.m4.repository.dtos.TagDTO;
 
 import java.util.ArrayList;
 import java.util.List;

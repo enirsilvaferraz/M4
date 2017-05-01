@@ -1,6 +1,6 @@
 package com.system.m4.businness;
 
-import com.system.m4.businness.dtos.FilterTransactionDTO;
+import com.system.m4.repository.dtos.FilterTransactionDTO;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.views.vos.FilterTransactionVO;
 
