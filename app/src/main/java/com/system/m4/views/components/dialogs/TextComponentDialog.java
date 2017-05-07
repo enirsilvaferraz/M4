@@ -1,4 +1,4 @@
-package com.system.m4.views.components.dialogs.text;
+package com.system.m4.views.components.dialogs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +22,8 @@ import butterknife.Unbinder;
  */
 
 public class TextComponentDialog extends BaseDialogFragment {
+
+    public static final String TAG = TextComponentDialog.class.getSimpleName();
 
     @BindView(R.id.dialog_edit_text)
     EditText etText;

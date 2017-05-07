@@ -2,9 +2,13 @@ package com.system.m4.infrastructure;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.lang.reflect.ParameterizedType;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -26,30 +30,22 @@ public final class JavaUtils {
     public static class DateUtil {
 
         public static final String DD_MM_YYYY = "dd/MM/yyyy";
+
         public static final String MMMM_DE_YYYY = "MMMM 'de' yyyy";
+
         public static final String YYYY_MM_DD = "yyyy/MM/dd";
+
         public static final String MM_YYYY = "MM/yyyy";
+
         public static final String DD_DE_MMMM_DE_YYYY = "dd 'de' MMMM 'de' yyyy";
 
-        public static String format(Date date, String template) {
-            if (date == null) {
-                return "Not defined";
-            }
-            final String format = new SimpleDateFormat(template, new Locale("pt", "BR")).format(date);
-            return format.substring(0, 1).toUpperCase() + format.substring(1);
-        }
-
-        public static String format(Date date) {
-            return format(date, DD_MM_YYYY);
-        }
-
         public static Date parse(String date) {
-            return parse(date, DD_MM_YYYY);
+            return parse(date, DD_DE_MMMM_DE_YYYY);
         }
 
         public static Date parse(String date, String template) {
             try {
-                return new SimpleDateFormat(template, new Locale("pt", "BR")).parse(date);
+                return new SimpleDateFormat(template, Locale.getDefault()).parse(date);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -85,10 +81,26 @@ public final class JavaUtils {
             return cInit.compareTo(cEnd);
         }
 
+        public static String format(Date date, String template) {
+            if (date == null) {
+                return "Not defined";
+            }
+            final String format = new SimpleDateFormat(template, Locale.getDefault()).format(date);
+            return format.substring(0, 1).toUpperCase() + format.substring(1);
+        }
+
         public static int get(int constantCalendar, Date date) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             return calendar.get(constantCalendar);
+        }
+
+        public static String getDateString(int year, int month, int day) {
+            return format(getDate(year, month, day));
+        }
+
+        public static String format(Date date) {
+            return format(date, DD_DE_MMMM_DE_YYYY);
         }
 
         public static Date getDate(int year, int month, int day) {
@@ -107,18 +119,32 @@ public final class JavaUtils {
     public static class NumberUtil {
 
         public static String currencyFormat(String value) {
-            return currencyFormat(Double.valueOf(value.replace("R$", "").replace(".", "").replace(",", ".")));
+
+            if (TextUtils.isEmpty(value)) {
+                return null;
+            }
+
+            try {
+                final NumberFormat format = NumberFormat.getNumberInstance(Locale.getDefault());
+                if (format instanceof DecimalFormat) {
+                    ((DecimalFormat) format).setParseBigDecimal(true);
+                }
+                BigDecimal parse = (BigDecimal) format.parse(value.replaceAll("[^\\d.,]", ""));
+                return currencyFormat(parse.doubleValue());
+            } catch (ParseException e) {
+                return currencyFormat(Double.valueOf(value.replace("R$", "").replace(".", "").replace(",", ".")));
+            }
         }
 
         public static String currencyFormat(Double value) {
-            final NumberFormat instance = NumberFormat.getInstance(new Locale("pt", "BR"));
+            final NumberFormat instance = NumberFormat.getInstance(Locale.getDefault());
             instance.setMinimumFractionDigits(2);
             instance.setMinimumIntegerDigits(1);
             return "R$ " + instance.format(value);
         }
 
         public static String percentFormat(Double percentValue) {
-            final NumberFormat instance = NumberFormat.getInstance(new Locale("pt", "BR"));
+            final NumberFormat instance = NumberFormat.getInstance(Locale.getDefault());
             instance.setMinimumFractionDigits(1);
             instance.setMinimumIntegerDigits(1);
             instance.setMaximumFractionDigits(2);
@@ -153,6 +179,14 @@ public final class JavaUtils {
         public static boolean isEmpty(String string) {
             return string == null || string.trim().isEmpty();
         }
+
+        public static String formatEmpty(String s) {
+            if (TextUtils.isEmpty(s)) {
+                return Constants.EMPTY_FIELD;
+            } else {
+                return s;
+            }
+        }
     }
 
     /**
@@ -186,8 +220,17 @@ public final class JavaUtils {
     public static class ClassUtil {
 
         public static Class getTClass(Object object) {
+
             final ParameterizedType type = (ParameterizedType) object.getClass().getGenericSuperclass();
             return (Class) (type).getActualTypeArguments()[0];
+        }
+    }
+
+    public static class FirebaseUtil {
+
+        public static void enableOffline(String flavor) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            FirebaseDatabase.getInstance().getReference(flavor + "-database/").keepSynced(true);
         }
     }
 }

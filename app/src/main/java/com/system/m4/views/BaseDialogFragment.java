@@ -24,6 +24,9 @@ import butterknife.OnClick;
 
 public abstract class BaseDialogFragment extends DialogFragment {
 
+    public static final String TITLE_BUNDLE = "TITLE_BUNDLE";
+    public static final String LIST_BUNDLE = "LIST_ARG";
+
     @BindView(R.id.base_dialog_container_action)
     LinearLayout containerAction;
 
@@ -52,6 +55,10 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     protected void setTitle(@StringRes int titleId) {
         tvTitle.setText(getString(titleId));
+    }
+
+    protected void setTitle(String titleString) {
+        tvTitle.setText(titleString);
     }
 
     public OnFinishListener getOnFinishListener() {

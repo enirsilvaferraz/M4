@@ -14,11 +14,14 @@ import android.widget.Toast;
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
+import com.system.m4.views.components.dialogs.NumberComponentDialog;
+import com.system.m4.views.components.dialogs.TextComponentDialog;
 import com.system.m4.views.components.dialogs.list.ItemList;
+import com.system.m4.views.components.dialogs.list.ListComponentAdapter;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
-import com.system.m4.views.components.dialogs.list.OnItemSelectedListener;
-import com.system.m4.views.components.dialogs.number.NumberComponentDialog;
-import com.system.m4.views.components.dialogs.text.TextComponentDialog;
+import com.system.m4.views.vos.PaymentTypeVO;
+import com.system.m4.views.vos.TagVO;
+import com.system.m4.views.vos.TransactionVO;
 
 import java.util.Date;
 import java.util.List;
@@ -36,6 +39,8 @@ import butterknife.Unbinder;
 
 public class TransactionManagerDialog extends BaseDialogFragment implements TransactionManagerContract.View {
 
+    public static final String TAG = TransactionManagerDialog.class.getSimpleName();
+    private static final String BUNDLE_VO = "BUNDLE_VO";
     Unbinder unbinder;
 
     @BindView(R.id.transaction_manager_textview_payment_date)
@@ -58,10 +63,9 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     private TransactionManagerContract.Presenter presenter;
 
-    public static DialogFragment newInstance(ItemList item) {
-
+    public static DialogFragment newInstance(TransactionVO transactionVO) {
         Bundle bundle = new Bundle();
-        bundle.putString("TAG", item.getName());
+        bundle.putParcelable(BUNDLE_VO, transactionVO);
 
         TransactionManagerDialog fragment = new TransactionManagerDialog();
         fragment.setArguments(bundle);
@@ -80,7 +84,17 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter.setTags(getArguments().getString("TAG"));
+        configureModel(((TransactionVO) getArguments().getParcelable(BUNDLE_VO)));
+    }
+
+    private void configureModel(TransactionVO transactionVO) {
+        setTitle(transactionVO.getTags());
+        presenter.setTags(transactionVO.getTags());
+        presenter.setContent(transactionVO.getContent());
+        presenter.setPaymentDate(transactionVO.getPaymentDate());
+        presenter.setPurchaseDate(transactionVO.getPurchaseDate());
+        presenter.setPaymentType(transactionVO.getPaymentType());
+        presenter.setValue(transactionVO.getValue());
     }
 
     @Override
@@ -197,8 +211,8 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     }
 
     @Override
-    public void showTagsDialog(List<String> list) {
-        ListComponentDialog.newInstance(R.string.transaction_manager_tags, ItemList.asList(list), new OnItemSelectedListener() {
+    public void showTagsDialog(List<TagVO> list) {
+        ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 presenter.setTags(item.getName());
@@ -207,8 +221,8 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     }
 
     @Override
-    public void showPaymentTypeDialog(List<String> list) {
-        ListComponentDialog.newInstance(R.string.transaction_manager_payment_type, ItemList.asList(list), new OnItemSelectedListener() {
+    public void showPaymentTypeDialog(List<PaymentTypeVO> list) {
+        ListComponentDialog.newInstance(R.string.transaction_payment_type, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
             @Override
             public void onSelect(ItemList item) {
                 presenter.setPaymentType(item.getName());
@@ -218,7 +232,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void showValueDialog(Double value) {
-        NumberComponentDialog.newInstance(R.string.transaction_manager_value, value, new OnFinishListener() {
+        NumberComponentDialog.newInstance(R.string.transaction_price, value, new OnFinishListener() {
             @Override
             public void onFinish(String value) {
                 presenter.setValue(value);
@@ -228,7 +242,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void showContentDialog(String value) {
-        TextComponentDialog.newInstance(R.string.transaction_manager_content, value, new OnFinishListener() {
+        TextComponentDialog.newInstance(R.string.transaction_content, value, new OnFinishListener() {
             @Override
             public void onFinish(String value) {
                 presenter.setContent(value);
@@ -241,7 +255,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
         JavaUtils.AndroidUtil.showDatePicker(getContext(), date, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                presenter.setPaymentDate(year, month, dayOfMonth);
+                presenter.setPaymentDate(JavaUtils.DateUtil.getDateString(year, month, dayOfMonth));
             }
         });
     }
@@ -251,7 +265,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
         JavaUtils.AndroidUtil.showDatePicker(getContext(), date, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                presenter.setPurchaseDate(year, month, dayOfMonth);
+                presenter.setPurchaseDate(JavaUtils.DateUtil.getDateString(year, month, dayOfMonth));
             }
         });
     }

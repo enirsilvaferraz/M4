@@ -61,7 +61,7 @@
     <style name="AppTheme.Card.Section" parent="AppTheme.Card">
         <item name="android:paddingBottom">16dp</item>
         <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingStart">24dp</item>
     </style>
 
     <style name="AppTheme.Card.TextView.Secundary" parent="AppTheme.TextView">

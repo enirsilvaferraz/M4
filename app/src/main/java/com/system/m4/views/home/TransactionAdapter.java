@@ -4,41 +4,38 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.system.m4.R;
+import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.views.vos.TransactionVO;
 
-import java.io.Serializable;
 import java.util.List;
 
-import lombok.Getter;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  *
  */
-class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolderIf> {
+public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolder> {
 
-    private List<ItemVO> list;
+    private List<TransactionVO> list;
     private OnItemSelectedListener onItemSelectedListener;
 
-    TransactionAdapter(List<ItemVO> list, OnItemSelectedListener onItemSelectedListener) {
+    TransactionAdapter(List<TransactionVO> list, OnItemSelectedListener onItemSelectedListener) {
         this.list = list;
         this.onItemSelectedListener = onItemSelectedListener;
     }
 
     @Override
-    public ViewHolderIf onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        if (viewType == 0) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
-            return new ViewHolder(view, onItemSelectedListener);
-        } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_date, parent, false);
-            return new ViewHolderTitle(view);
-        }
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolderIf holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         holder.bind(list.get(position));
     }
 
@@ -53,81 +50,45 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
      */
     interface OnItemSelectedListener {
 
-        void onSelect(ItemVO item);
+        void onSelect(TransactionVO item);
     }
+
 
     /**
      *
      */
-    static class ItemVO implements Serializable {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Getter
-        private String paymentDate;
+        @BindView(R.id.item_transaction_tag)
+        TextView tvTag;
 
-        @Getter
-        private String purchaseDate;
+        @BindView(R.id.item_transaction_payment_type)
+        TextView tvPaymentType;
 
-        @Getter
-        private String value;
+        @BindView(R.id.item_transaction_payment_date)
+        TextView tvPaymentDate;
 
-        @Getter
-        private String tags;
+        @BindView(R.id.item_transaction_price)
+        TextView tvPrice;
 
-        @Getter
-        private String paymentType;
-
-        @Getter
-        private String content;
-
-        public ItemVO(String paymentDate, String purchaseDate, String value, String tags, String paymentType, String content) {
-            this.paymentDate = paymentDate;
-            this.purchaseDate = purchaseDate;
-            this.value = value;
-            this.tags = tags;
-            this.paymentType = paymentType;
-            this.content = content;
-        }
-    }
-
-    /**
-     *
-     */
-    abstract class ViewHolderIf extends RecyclerView.ViewHolder {
-
-        public ViewHolderIf(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
 
-        public void bind(final ItemVO item) {
+        public void bind(final TransactionVO item) {
 
-        }
-    }
+            tvTag.setText(JavaUtils.StringUtil.formatEmpty(item.getTags()));
+            tvPaymentType.setText(JavaUtils.StringUtil.formatEmpty(item.getPaymentType()));
+            tvPaymentDate.setText(JavaUtils.StringUtil.formatEmpty(item.getPaymentDate()));
+            tvPrice.setText(JavaUtils.StringUtil.formatEmpty(item.getValue()));
 
-    /**
-     *
-     */
-    class ViewHolder extends ViewHolderIf {
-
-        private final OnItemSelectedListener onItemSelectedListener;
-
-
-        public ViewHolder(View itemView, OnItemSelectedListener onItemSelectedListener) {
-            super(itemView);
-            this.onItemSelectedListener = onItemSelectedListener;
-        }
-
-        public void bind(final ItemVO item) {
-
-        }
-    }
-
-    /**
-     *
-     */
-    class ViewHolderTitle extends ViewHolderIf {
-
-        public ViewHolderTitle(View itemView) {
-            super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemSelectedListener.onSelect(item);
+                }
+            });
         }
     }
 }

@@ -2,25 +2,35 @@ package com.system.m4.views.home;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.system.m4.R;
-import com.system.m4.views.components.dialogs.list.ItemList;
-import com.system.m4.views.components.dialogs.list.ListComponentDialog;
-import com.system.m4.views.components.dialogs.list.OnItemSelectedListener;
-import com.system.m4.views.transaction.TransactionManagerDialog;
+import com.system.m4.views.filter.FilterTransactionDialog;
 
-import java.util.ArrayList;
-import java.util.List;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity {
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
+    private HomeContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -29,23 +39,40 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                List<String> list = new ArrayList<>();
-                list.add("Moradia");
-                list.add("Aluguel");
-                list.add("Celular");
-                list.add("Internet");
-                list.add("Automovel");
-                list.add("Seguro");
-
-                ListComponentDialog.newInstance(R.string.transaction_manager_tags, ItemList.asList(list), new OnItemSelectedListener() {
-                    @Override
-                    public void onSelect(ItemList item) {
-                        TransactionManagerDialog.newInstance(item).show(getSupportFragmentManager(), "dialog");
-                    }
-                }).show(getSupportFragmentManager());
+                presenter.requestTransactionManager();
             }
         });
     }
 
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+
+        if (fragment instanceof HomeContract.View) {
+            HomeContract.View view = (HomeContract.View) fragment;
+            presenter = new HomePresenter(view);
+            view.setPresenter(presenter);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_filter) {
+            showFilter();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showFilter() {
+        FilterTransactionDialog.newInstance().show(getSupportFragmentManager(), FilterTransactionDialog.TAG);
+    }
 }
