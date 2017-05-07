@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:fontFamily="sans-serif-medium"
         android:textSize="25sp"
@@ -27,8 +27,34 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:background="?android:attr/selectableItemBackground"
-        android:padding="24dp"
-        android:src="@drawable/ic_add_circle_outline_black_24dp"
+        android:padding="16dp"
+        android:src="@drawable/ic_add_black_24dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <ImageButton
+        android:id="@+id/dialog_edit_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="16dp"
+        android:src="@drawable/ic_edit_black_24dp"
+        android:visibility="gone"
+        tools:layout_alignParentEnd="false"
+        tools:layout_toStartOf="@id/dialog_add_item"
+        tools:visibility="visible" />
+
+    <ImageButton
+        android:id="@+id/dialog_delete_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/dialog_edit_item"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="16dp"
+        android:src="@drawable/ic_delete_black_24dp"
         android:visibility="gone"
         tools:visibility="visible" />
 

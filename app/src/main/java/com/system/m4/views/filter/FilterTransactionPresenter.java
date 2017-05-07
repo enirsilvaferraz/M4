@@ -5,11 +5,11 @@ import android.text.TextUtils;
 import com.system.m4.R;
 import com.system.m4.businness.PaymentTypeBusinness;
 import com.system.m4.businness.TagBusinness;
-import com.system.m4.repository.dtos.PaymentTypeDTO;
-import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.repository.dtos.PaymentTypeDTO;
+import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
@@ -150,5 +150,85 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
         } else if (TextUtils.isEmpty(mVo.getPaymentDateEnd())) {
             view.showError(R.string.system_error_required_field, R.string.transaction_payment_date_end);
         }
+    }
+
+    @Override
+    public void saveTag(String name) {
+
+        TagDTO dto = new TagDTO();
+        dto.setName(name);
+
+        TagBusinness.saveTag(dto, new BusinnessListener.OnPersistListener() {
+
+            @Override
+            public void onSuccess() {
+                // Nothing to do
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void deleteTag(String key) {
+
+        TagDTO dto = new TagDTO();
+        dto.setKey(key);
+
+        TagBusinness.deleteTag(dto, new BusinnessListener.OnPersistListener() {
+
+            @Override
+            public void onSuccess() {
+                // Nothing to do
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void savePaymentType(String name) {
+
+        PaymentTypeDTO dto = new PaymentTypeDTO();
+        dto.setName(name);
+
+        PaymentTypeBusinness.save(dto, new BusinnessListener.OnPersistListener() {
+
+            @Override
+            public void onSuccess() {
+                // Nothing to do
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void deletePaymentType(String key) {
+
+        PaymentTypeDTO dto = new PaymentTypeDTO();
+        dto.setKey(key);
+
+        PaymentTypeBusinness.delete(dto, new BusinnessListener.OnPersistListener() {
+
+            @Override
+            public void onSuccess() {
+                // Nothing to do
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e.getMessage());
+            }
+        });
     }
 }

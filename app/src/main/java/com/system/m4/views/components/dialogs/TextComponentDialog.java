@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.system.m4.R;
+import com.system.m4.infrastructure.Constants;
 import com.system.m4.views.BaseDialogFragment;
 
 import butterknife.BindView;
@@ -33,11 +34,8 @@ public class TextComponentDialog extends BaseDialogFragment {
     public static TextComponentDialog newInstance(@StringRes int title, String value, OnFinishListener onFinishListener) {
 
         Bundle bundle = new Bundle();
-        bundle.putInt("TITLE", title);
-
-        if (value != null) {
-            bundle.putString("VALUE", value);
-        }
+        bundle.putInt(Constants.TITLE_BUNDLE, title);
+        bundle.putString(Constants.VALUE_BUNDLE, value);
 
         TextComponentDialog dialog = new TextComponentDialog();
         dialog.setArguments(bundle);
@@ -56,16 +54,17 @@ public class TextComponentDialog extends BaseDialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setTitle(getArguments().getInt("TITLE"));
-
-        if (getArguments().containsKey("VALUE")) {
-            etText.setText(getArguments().getString("VALUE"));
-        }
-        etText.requestFocus();
+        setTitle(getArguments().getInt(Constants.TITLE_BUNDLE));
+        setTextContent(getArguments().getString(Constants.VALUE_BUNDLE));
 
         if (getDialog().getWindow() != null) {
             getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
+    }
+
+    public void setTextContent(String name) {
+        etText.setText(name);
+        etText.requestFocus();
     }
 
     @Override

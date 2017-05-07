@@ -2,6 +2,7 @@ package com.system.m4.views.home;
 
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.VOInterface;
 
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class HomeContract {
         void showTransactionManager(List<TagVO> list);
 
         void showError(String message);
+
+        void showSuccessMessage(int template, int param);
     }
 
     /**
@@ -35,6 +38,8 @@ public class HomeContract {
 
         void requestTransactionManager();
 
-        void saveTag(String tag);
+        void saveTag(VOInterface vo);
+
+        void deleteTag(VOInterface vo);
     }
 }

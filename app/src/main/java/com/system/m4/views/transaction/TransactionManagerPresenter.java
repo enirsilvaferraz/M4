@@ -152,6 +152,26 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     }
 
     @Override
+    public void saveTag(String name) {
+
+    }
+
+    @Override
+    public void deleteTag(String key) {
+
+    }
+
+    @Override
+    public void savePaymentType(String name) {
+
+    }
+
+    @Override
+    public void deletePaymentType(String key) {
+
+    }
+
+    @Override
     public void setTags(String itemName) {
         view.setTags(JavaUtils.StringUtil.formatEmpty(itemName));
     }

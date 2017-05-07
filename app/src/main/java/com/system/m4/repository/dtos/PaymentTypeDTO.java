@@ -13,6 +13,10 @@ public class PaymentTypeDTO extends DTOAbs {
 
     private String name;
 
+    public PaymentTypeDTO() {
+        // Nothing to do
+    }
+
     public PaymentTypeDTO(String name) {
         this.name = name;
     }

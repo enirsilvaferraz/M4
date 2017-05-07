@@ -83,5 +83,13 @@ public interface TransactionManagerContract {
         void clearPaymentDateDialog();
 
         void validateForm();
+
+        void saveTag(String name);
+
+        void deleteTag(String key);
+
+        void savePaymentType(String name);
+
+        void deletePaymentType(String key);
     }
 }

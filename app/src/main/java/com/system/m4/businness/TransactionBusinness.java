@@ -13,7 +13,7 @@ import java.util.List;
  * For M4
  */
 
-public final class TransactionBusinness {
+public abstract class TransactionBusinness {
 
     private TransactionBusinness() {
         // Nothing to do

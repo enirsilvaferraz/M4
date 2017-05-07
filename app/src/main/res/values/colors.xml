@@ -9,5 +9,7 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#eae8e8</color>
     <color name="divider2">#b7b7b7</color>
+
+    <color name="item_marcked">#dcdada</color>
 </resources>
 

@@ -1,6 +1,7 @@
 package com.system.m4.views.components.dialogs.list;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -9,18 +10,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.system.m4.R;
 import com.system.m4.views.BaseDialogFragment;
+import com.system.m4.views.components.DialogToolbar;
 import com.system.m4.views.components.dialogs.TextComponentDialog;
+import com.system.m4.views.vos.VOInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -28,25 +29,24 @@ import butterknife.Unbinder;
  * List component dialog
  */
 
-public class ListComponentDialog extends BaseDialogFragment {
+public class ListComponentDialog extends BaseDialogFragment implements DialogToolbar.OnClickListener {
 
     @BindView(R.id.dialog_list_recycler)
     RecyclerView recyclerview;
 
-    @BindView(R.id.dialog_add_item)
-    ImageButton btnAddItem;
+    @BindView(R.id.dialog_toolbar_title)
+    DialogToolbar mToolbar;
 
     Unbinder unbinder;
 
-    private ListComponentAdapter.OnItemSelectedListener onItemSelectedListener;
-    private ListComponentAdapter.OnAddItemListenner onAddItemListenner;
+    private OnItemListenner onItemListenner;
 
     private ListComponentAdapter mAdapter;
 
-    public static ListComponentDialog newInstance(@StringRes int title, List<ItemList> list) {
+    public static ListComponentDialog newInstance(@StringRes int title, List<VOInterface> list) {
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(LIST_BUNDLE, new ArrayList<>(list));
         bundle.putInt(TITLE_BUNDLE, title);
+        bundle.putParcelableArrayList(LIST_BUNDLE, new ArrayList<>(list));
 
         ListComponentDialog dialog = new ListComponentDialog();
         dialog.setArguments(bundle);
@@ -64,29 +64,35 @@ public class ListComponentDialog extends BaseDialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        showAddButtom();
         hideDoneBtn();
 
-        setTitle(getArguments().getInt(TITLE_BUNDLE));
+        mToolbar.setTitle(getArguments().getInt(TITLE_BUNDLE));
+        mToolbar.setOnClickListener(this);
 
-        List<ItemList> list = getArguments().getParcelableArrayList(LIST_BUNDLE);
+        List<VOInterface> list = getArguments().getParcelableArrayList(LIST_BUNDLE);
         mAdapter = new ListComponentAdapter(list, new ListComponentAdapter.OnItemSelectedListener() {
+
             @Override
-            public void onSelect(ItemList item) {
+            public void onSelect(VOInterface item) {
                 dismiss();
-                onItemSelectedListener.onSelect(item);
+                onItemListenner.onItemSelected(item);
             }
+
+            @Override
+            public void onMarkOn(VOInterface item) {
+                mToolbar.configureEditMode();
+            }
+
+            @Override
+            public void onMarkOff() {
+                mToolbar.configureCreateMode();
+            }
+
         });
 
         recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(mAdapter);
-    }
-
-    private void showAddButtom() {
-        if (onAddItemListenner != null) {
-            btnAddItem.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -95,27 +101,59 @@ public class ListComponentDialog extends BaseDialogFragment {
         unbinder.unbind();
     }
 
-    @OnClick(R.id.dialog_add_item)
-    public void addItemAction() {
-        TextComponentDialog.newInstance(R.string.transaction_tag, null, new BaseDialogFragment.OnFinishListener() {
+    public void showItemManager(@NonNull final VOInterface vo) {
+
+        TextComponentDialog.newInstance(R.string.transaction_tag, vo.getName(), new BaseDialogFragment.OnFinishListener() {
             @Override
             public void onFinish(String value) {
-
-                ItemList item = new ItemList(value);
-                mAdapter.addItem(item);
-
-                onAddItemListenner.onItemAdded(value);
+                vo.setName(value);
+                mAdapter.addItem(vo);
+                mAdapter.markItemOff();
+                mToolbar.configureCreateMode();
+                onItemListenner.onItemAdded(vo);
             }
         }).show(getChildFragmentManager(), TextComponentDialog.TAG);
     }
 
-    public ListComponentDialog addOnItemSelectedListener(ListComponentAdapter.OnItemSelectedListener onItemSelectedListener) {
-        this.onItemSelectedListener = onItemSelectedListener;
+    public ListComponentDialog addOnItemListenner(OnItemListenner onAddItemListenner) {
+        this.onItemListenner = onAddItemListenner;
         return this;
     }
 
-    public ListComponentDialog addOnAddItemListenner(ListComponentAdapter.OnAddItemListenner onAddItemListenner) {
-        this.onAddItemListenner = onAddItemListenner;
-        return this;
+    /**
+     * Dialog listener
+     */
+
+    @Override
+    public void onAddClick() {
+        showItemManager(onItemListenner.onIntanceRequested());
+    }
+
+    @Override
+    public void onEditClick() {
+        showItemManager(mAdapter.getMarkedItem());
+    }
+
+    @Override
+    public void onDeleteClick() {
+        VOInterface markedItem = mAdapter.getMarkedItem();
+        mAdapter.removeItem(markedItem);
+        mAdapter.markItemOff();
+        mToolbar.configureCreateMode();
+        onItemListenner.onItemDeleted(markedItem);
+    }
+
+    /**
+     *
+     */
+    public interface OnItemListenner {
+
+        VOInterface onIntanceRequested();
+
+        void onItemAdded(VOInterface item);
+
+        void onItemDeleted(VOInterface item);
+
+        void onItemSelected(VOInterface item);
     }
 }

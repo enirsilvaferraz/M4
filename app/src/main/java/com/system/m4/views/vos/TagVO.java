@@ -14,16 +14,37 @@ import java.util.List;
 
 public class TagVO implements VOInterface {
 
+    public static final Creator<TagVO> CREATOR = new Creator<TagVO>() {
+        @Override
+        public TagVO createFromParcel(Parcel source) {
+            return new TagVO(source);
+        }
+
+        @Override
+        public TagVO[] newArray(int size) {
+            return new TagVO[size];
+        }
+    };
+
+    private String key;
     private String name;
 
-    public TagVO(String name) {
-        this.name = name;
+    public TagVO(TagDTO dto) {
+        this.key = dto.getKey();
+        this.name = dto.getName();
+    }
+
+    public TagVO() {
+    }
+
+    protected TagVO(Parcel in) {
+        this.name = in.readString();
     }
 
     public static List<TagVO> asList(List<TagDTO> dtolist) {
         List<TagVO> volist = new ArrayList<>();
         for (TagDTO dto : dtolist) {
-            volist.add(new TagVO(dto.getName()));
+            volist.add(new TagVO(dto));
         }
         return volist;
     }
@@ -46,19 +67,27 @@ public class TagVO implements VOInterface {
         dest.writeString(this.name);
     }
 
-    protected TagVO(Parcel in) {
-        this.name = in.readString();
+    public String getKey() {
+        return key;
     }
 
-    public static final Creator<TagVO> CREATOR = new Creator<TagVO>() {
-        @Override
-        public TagVO createFromParcel(Parcel source) {
-            return new TagVO(source);
-        }
+    public void setKey(String key) {
+        this.key = key;
+    }
 
-        @Override
-        public TagVO[] newArray(int size) {
-            return new TagVO[size];
-        }
-    };
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TagVO tagVO = (TagVO) o;
+
+        return key != null ? key.equals(tagVO.key) : tagVO.key == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return key != null ? key.hashCode() : 0;
+    }
 }

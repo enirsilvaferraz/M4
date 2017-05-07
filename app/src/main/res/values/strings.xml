@@ -5,6 +5,8 @@
     <string name="system_action_done">Done</string>
     <string name="system_empty_field">--</string>
     <string name="system_error_required_field">\'%1$s\' is required.</string>
+    <string name="system_message_saved">%1$s saved!</string>
+    <string name="system_message_deleted">%1$s deleted!</string>
 
     <string name="action_filter">Filter</string>
 

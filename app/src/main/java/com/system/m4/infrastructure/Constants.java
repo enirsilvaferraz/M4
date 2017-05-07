@@ -6,4 +6,7 @@ package com.system.m4.infrastructure;
 
 public interface Constants {
     String EMPTY_FIELD = "--";
+    String TITLE_BUNDLE = "TITLE_BUNDLE";
+    String PARCELABLE_BUNDLE = "PARCELABLE_BUNDLE";
+    String VALUE_BUNDLE = "VALUE_BUNDLE";
 }

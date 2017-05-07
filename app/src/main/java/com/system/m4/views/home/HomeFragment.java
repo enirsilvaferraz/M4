@@ -12,13 +12,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.system.m4.R;
-import com.system.m4.views.components.dialogs.list.ItemList;
-import com.system.m4.views.components.dialogs.list.ListComponentAdapter;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.transaction.TransactionManagerDialog;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.VOInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -84,22 +84,39 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void showTransactionManager(List<TagVO> list) {
 
-        ListComponentDialog.newInstance(R.string.transaction_tag, ItemList.asList(list)).addOnItemSelectedListener(new ListComponentAdapter.OnItemSelectedListener() {
+        ListComponentDialog.newInstance(R.string.transaction_tag, new ArrayList<VOInterface>(list)).addOnItemListenner(new ListComponentDialog.OnItemListenner() {
+
             @Override
-            public void onSelect(ItemList item) {
-                TransactionVO vo = new TransactionVO(item.getName());
-                TransactionManagerDialog.newInstance(vo).show(getChildFragmentManager(), TransactionManagerDialog.TAG);
+            public VOInterface onIntanceRequested() {
+                return new TagVO();
             }
-        }).addOnAddItemListenner(new ListComponentAdapter.OnAddItemListenner() {
+
             @Override
-            public void onItemAdded(String content) {
-                presenter.saveTag(content);
+            public void onItemAdded(VOInterface item) {
+                presenter.saveTag(item);
             }
+
+            @Override
+            public void onItemDeleted(VOInterface item) {
+                presenter.deleteTag(item);
+            }
+
+            @Override
+            public void onItemSelected(VOInterface item) {
+                TransactionManagerDialog.newInstance(new TransactionVO(item.getName())).show(getChildFragmentManager(), TransactionManagerDialog.TAG);
+            }
+
         }).show(getChildFragmentManager());
     }
 
     @Override
     public void showError(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showSuccessMessage(int template, int param) {
+        String message = getString(template, getString(param));
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

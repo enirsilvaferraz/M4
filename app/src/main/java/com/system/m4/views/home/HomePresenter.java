@@ -1,5 +1,6 @@
 package com.system.m4.views.home;
 
+import com.system.m4.R;
 import com.system.m4.businness.TagBusinness;
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
@@ -7,6 +8,7 @@ import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.repository.dtos.TransactionDTO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.VOInterface;
 
 import java.util.List;
 
@@ -59,18 +61,35 @@ public class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public void saveTag(String tag) {
+    public void saveTag(VOInterface vo) {
 
-        TagBusinness.saveTag(new TagDTO(tag), new BusinnessListener.OnPersistListener() {
+        TagBusinness.saveTag(new TagDTO(((TagVO) vo)), new BusinnessListener.OnPersistListener() {
 
             @Override
             public void onSuccess() {
-
+                view.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
             }
 
             @Override
             public void onError(Exception e) {
+                view.showError(e.getMessage());
+            }
+        });
+    }
 
+    @Override
+    public void deleteTag(VOInterface vo) {
+
+        TagBusinness.deleteTag(new TagDTO(((TagVO) vo)), new BusinnessListener.OnPersistListener() {
+
+            @Override
+            public void onSuccess() {
+                view.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e.getMessage());
             }
         });
     }

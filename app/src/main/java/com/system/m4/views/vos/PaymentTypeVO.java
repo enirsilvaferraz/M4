@@ -14,10 +14,28 @@ import java.util.List;
 
 public class PaymentTypeVO implements VOInterface {
 
+    public static final Creator<PaymentTypeVO> CREATOR = new Creator<PaymentTypeVO>() {
+        @Override
+        public PaymentTypeVO createFromParcel(Parcel source) {
+            return new PaymentTypeVO(source);
+        }
+
+        @Override
+        public PaymentTypeVO[] newArray(int size) {
+            return new PaymentTypeVO[size];
+        }
+    };
+
+    private String key;
     private String name;
 
     public PaymentTypeVO(String name) {
         this.name = name;
+    }
+
+    protected PaymentTypeVO(Parcel in) {
+        this.key = in.readString();
+        this.name = in.readString();
     }
 
     public static List<PaymentTypeVO> asList(List<PaymentTypeDTO> dtolist) {
@@ -37,28 +55,22 @@ public class PaymentTypeVO implements VOInterface {
     }
 
     @Override
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.key);
         dest.writeString(this.name);
     }
-
-    protected PaymentTypeVO(Parcel in) {
-        this.name = in.readString();
-    }
-
-    public static final Creator<PaymentTypeVO> CREATOR = new Creator<PaymentTypeVO>() {
-        @Override
-        public PaymentTypeVO createFromParcel(Parcel source) {
-            return new PaymentTypeVO(source);
-        }
-
-        @Override
-        public PaymentTypeVO[] newArray(int size) {
-            return new PaymentTypeVO[size];
-        }
-    };
 }

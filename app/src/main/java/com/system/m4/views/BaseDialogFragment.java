@@ -1,6 +1,5 @@
 package com.system.m4.views;
 
-import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -9,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.system.m4.R;
@@ -33,10 +31,6 @@ public abstract class BaseDialogFragment extends DialogFragment {
     @BindView(R.id.base_dialog_btn_done)
     Button btnDone;
 
-    @Nullable
-    @BindView(R.id.dialog_title)
-    TextView tvTitle;
-
     private OnFinishListener onFinishListener;
 
     @OnClick(R.id.base_dialog_btn_cancel)
@@ -54,11 +48,10 @@ public abstract class BaseDialogFragment extends DialogFragment {
     }
 
     protected void setTitle(@StringRes int titleId) {
-        tvTitle.setText(getString(titleId));
+
     }
 
     protected void setTitle(String titleString) {
-        tvTitle.setText(titleString);
     }
 
     public OnFinishListener getOnFinishListener() {

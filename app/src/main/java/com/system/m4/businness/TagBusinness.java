@@ -7,7 +7,7 @@ import com.system.m4.repository.firebase.TagFirebaseRepository;
 
 import java.util.List;
 
-public class TagBusinness {
+public abstract class TagBusinness {
 
     private TagBusinness() {
         // Nothing to do
@@ -32,6 +32,22 @@ public class TagBusinness {
     public static void saveTag(TagDTO tagDTO, final BusinnessListener.OnPersistListener persistListener) {
 
         new TagFirebaseRepository("dev").save(tagDTO, new FirebaseRepository.FirebaseSingleReturnListener<TagDTO>() {
+
+            @Override
+            public void onFind(TagDTO dto) {
+                persistListener.onSuccess();
+            }
+
+            @Override
+            public void onError(String error) {
+                persistListener.onError(new Exception(error));
+            }
+        });
+    }
+
+    public static void deleteTag(TagDTO tagDTO, final BusinnessListener.OnPersistListener persistListener) {
+
+        new TagFirebaseRepository("dev").delete(tagDTO, new FirebaseRepository.FirebaseSingleReturnListener<TagDTO>() {
 
             @Override
             public void onFind(TagDTO dto) {

@@ -1,5 +1,11 @@
 package com.system.m4.repository.dtos;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import com.system.m4.views.vos.TagVO;
+
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -9,16 +15,19 @@ import java.util.Map;
 
 public class TagDTO extends DTOAbs {
 
+    @SerializedName("key")
     private String key;
 
+    @SerializedName("name")
     private String name;
 
     public TagDTO() {
         // Nothing to do
     }
 
-    public TagDTO(String name) {
-        this.name = name;
+    public TagDTO(TagVO vo) {
+        this.key = vo.getKey();
+        this.name = vo.getName();
     }
 
     public String getName() {
@@ -41,6 +50,9 @@ public class TagDTO extends DTOAbs {
 
     @Override
     public Map<String, String> getMapUpdate() {
-        return null;
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>() {
+        }.getType();
+        return gson.fromJson(gson.toJson(this), type);
     }
 }

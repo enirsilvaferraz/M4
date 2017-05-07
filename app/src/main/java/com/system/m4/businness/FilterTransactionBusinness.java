@@ -9,7 +9,11 @@ import com.system.m4.views.vos.FilterTransactionVO;
  * For M4
  */
 
-public class FilterTransactionBusinness {
+public abstract class FilterTransactionBusinness {
+
+    private FilterTransactionBusinness() {
+        // Nothing to do
+    }
 
     public static void persistFilter(FilterTransactionVO mVo, BusinnessListener.OnPersistListener persistListener) {
         persistListener.onSuccess();
