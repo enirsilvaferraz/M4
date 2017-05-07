@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
+import com.system.m4.views.components.DialogToolbar;
 import com.system.m4.views.components.dialogs.NumberComponentDialog;
 import com.system.m4.views.components.dialogs.TextComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
@@ -61,6 +62,9 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @BindView(R.id.transaction_manager_textview_content)
     TextView tvContent;
 
+    @BindView(R.id.dialog_toolbar_title)
+    DialogToolbar mToolbar;
+
     private TransactionManagerContract.Presenter presenter;
 
     public static DialogFragment newInstance(TransactionVO transactionVO) {
@@ -88,7 +92,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     }
 
     private void configureModel(TransactionVO transactionVO) {
-        setTitle(transactionVO.getTags());
+        mToolbar.setTitle(transactionVO.getTags());
         presenter.setTags(transactionVO.getTags());
         presenter.setContent(transactionVO.getContent());
         presenter.setPaymentDate(transactionVO.getPaymentDate());

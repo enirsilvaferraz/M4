@@ -46,11 +46,13 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestTransactionManager() {
 
+        view.showTransactionManagerDialog(); // TODO Colocar PLaceholder e remover if list == null do adapter
+
         TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
 
             @Override
             public void onSuccess(List<TagDTO> list) {
-                view.showTransactionManager(TagVO.asList(list));
+                view.configureListTagsTransactionManager(TagVO.asList(list));
             }
 
             @Override

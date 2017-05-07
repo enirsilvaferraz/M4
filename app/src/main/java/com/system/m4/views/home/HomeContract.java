@@ -11,7 +11,7 @@ import java.util.List;
  * For M4
  */
 
-public class HomeContract {
+class HomeContract {
 
     /**
      *
@@ -22,11 +22,13 @@ public class HomeContract {
 
         void setListTransactions(List<TransactionVO> list);
 
-        void showTransactionManager(List<TagVO> list);
+        void configureListTagsTransactionManager(List<TagVO> list);
 
         void showError(String message);
 
         void showSuccessMessage(int template, int param);
+
+        void showTransactionManagerDialog();
     }
 
     /**

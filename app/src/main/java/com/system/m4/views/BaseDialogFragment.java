@@ -47,10 +47,12 @@ public abstract class BaseDialogFragment extends DialogFragment {
         containerAction.setVisibility(View.GONE);
     }
 
+    @Deprecated
     protected void setTitle(@StringRes int titleId) {
 
     }
 
+    @Deprecated
     protected void setTitle(String titleString) {
     }
 

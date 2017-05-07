@@ -36,6 +36,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     Unbinder unbinder;
 
     private HomeContract.Presenter presenter;
+    private ListComponentDialog listComponentDialog;
 
     public HomeFragment() {
         // Nothing to do
@@ -82,9 +83,10 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void showTransactionManager(List<TagVO> list) {
+    public void showTransactionManagerDialog() {
 
-        ListComponentDialog.newInstance(R.string.transaction_tag, new ArrayList<VOInterface>(list)).addOnItemListenner(new ListComponentDialog.OnItemListenner() {
+        listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag, null);
+        listComponentDialog.addOnItemListenner(new ListComponentDialog.OnItemListenner() {
 
             @Override
             public VOInterface onIntanceRequested() {
@@ -107,6 +109,11 @@ public class HomeFragment extends Fragment implements HomeContract.View {
             }
 
         }).show(getChildFragmentManager());
+    }
+
+    @Override
+    public void configureListTagsTransactionManager(List<TagVO> list) {
+        listComponentDialog.addList(new ArrayList<VOInterface>(list));
     }
 
     @Override

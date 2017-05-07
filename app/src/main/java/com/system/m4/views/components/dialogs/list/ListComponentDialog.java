@@ -44,6 +44,11 @@ public class ListComponentDialog extends BaseDialogFragment implements DialogToo
     private ListComponentAdapter mAdapter;
 
     public static ListComponentDialog newInstance(@StringRes int title, List<VOInterface> list) {
+
+        if (list == null) {
+            list = new ArrayList<VOInterface>();
+        }
+
         Bundle bundle = new Bundle();
         bundle.putInt(TITLE_BUNDLE, title);
         bundle.putParcelableArrayList(LIST_BUNDLE, new ArrayList<>(list));
@@ -67,6 +72,7 @@ public class ListComponentDialog extends BaseDialogFragment implements DialogToo
         hideDoneBtn();
 
         mToolbar.setTitle(getArguments().getInt(TITLE_BUNDLE));
+        mToolbar.configureCreateMode();
         mToolbar.setOnClickListener(this);
 
         List<VOInterface> list = getArguments().getParcelableArrayList(LIST_BUNDLE);
@@ -141,6 +147,10 @@ public class ListComponentDialog extends BaseDialogFragment implements DialogToo
         mAdapter.markItemOff();
         mToolbar.configureCreateMode();
         onItemListenner.onItemDeleted(markedItem);
+    }
+
+    public void addList(List<VOInterface> list) {
+        mAdapter.addList(list);
     }
 
     /**

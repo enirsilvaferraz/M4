@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.system.m4.R;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.views.BaseDialogFragment;
+import com.system.m4.views.components.DialogToolbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +26,9 @@ import butterknife.Unbinder;
 public class TextComponentDialog extends BaseDialogFragment {
 
     public static final String TAG = TextComponentDialog.class.getSimpleName();
+
+    @BindView(R.id.dialog_toolbar_title)
+    DialogToolbar mToolbar;
 
     @BindView(R.id.dialog_edit_text)
     EditText etText;
@@ -54,7 +58,7 @@ public class TextComponentDialog extends BaseDialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setTitle(getArguments().getInt(Constants.TITLE_BUNDLE));
+        mToolbar.setTitle(getArguments().getInt(Constants.TITLE_BUNDLE));
         setTextContent(getArguments().getString(Constants.VALUE_BUNDLE));
 
         if (getDialog().getWindow() != null) {

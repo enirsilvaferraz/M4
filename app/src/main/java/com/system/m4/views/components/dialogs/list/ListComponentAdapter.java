@@ -75,22 +75,22 @@ class ListComponentAdapter extends RecyclerView.Adapter<ListComponentAdapter.Ite
         return markedViewHolder.getItemList();
     }
 
-    public void markItemOff() {
+    void markItemOff() {
         if (markedViewHolder != null) {
             markedViewHolder.markItemOff();
         }
     }
 
-    public void markItemOn() {
-        markedViewHolder.markItemOn();
-    }
-
-    public void removeItem(VOInterface item) {
+    void removeItem(VOInterface item) {
         int indexOf = list.indexOf(item);
         list.remove(item);
         notifyItemRemoved(indexOf);
     }
 
+    void addList(List<VOInterface> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
 
     /**
      *

@@ -44,7 +44,7 @@ public class DialogToolbar extends RelativeLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
-        configureCreateMode();
+        configureNoActionMode();
     }
 
     public void configureEditMode() {
@@ -55,6 +55,12 @@ public class DialogToolbar extends RelativeLayout {
 
     public void configureCreateMode() {
         mAddItem.setVisibility(VISIBLE);
+        mEditItem.setVisibility(GONE);
+        mDeleteItem.setVisibility(GONE);
+    }
+
+    public void configureNoActionMode() {
+        mAddItem.setVisibility(GONE);
         mEditItem.setVisibility(GONE);
         mDeleteItem.setVisibility(GONE);
     }
