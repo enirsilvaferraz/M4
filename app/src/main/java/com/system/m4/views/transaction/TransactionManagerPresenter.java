@@ -1,14 +1,17 @@
 package com.system.m4.views.transaction;
 
+import com.system.m4.R;
 import com.system.m4.businness.PaymentTypeBusinness;
 import com.system.m4.businness.TagBusinness;
-import com.system.m4.repository.dtos.PaymentTypeDTO;
-import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.repository.dtos.PaymentTypeDTO;
+import com.system.m4.repository.dtos.TagDTO;
+import com.system.m4.repository.dtos.TransactionDTO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
+import com.system.m4.views.vos.TransactionVO;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -21,10 +24,14 @@ import java.util.List;
 
 class TransactionManagerPresenter implements TransactionManagerContract.Presenter {
 
+    private final TransactionVO mVO;
     private final TransactionManagerContract.View view;
+    private TransactionDTO mDTO;
 
     TransactionManagerPresenter(TransactionManagerContract.View view) {
         this.view = view;
+        this.mVO = new TransactionVO();
+        this.mDTO = new TransactionDTO();
     }
 
     @Override
@@ -44,12 +51,12 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
 
     @Override
     public void requestTagDialog() {
-
+        view.showTagsDialog();
         TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
 
             @Override
             public void onSuccess(List<TagDTO> list) {
-                view.showTagsDialog(TagVO.asList(list));
+                view.configureTagList(TagVO.asList(list));
             }
 
             @Override
@@ -61,12 +68,12 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
 
     @Override
     public void requestPaymentTypeDialog() {
-
+        view.showPaymentTypeDialog();
         PaymentTypeBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner<PaymentTypeDTO>() {
 
             @Override
             public void onSuccess(List<PaymentTypeDTO> list) {
-                view.showPaymentTypeDialog(PaymentTypeVO.asList(list));
+                view.configurePaymentTypeList(PaymentTypeVO.asList(list));
             }
 
             @Override
@@ -118,32 +125,32 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
 
     @Override
     public void clearContent() {
-
+        mVO.setContent(null);
     }
 
     @Override
     public void clearPaymentType() {
-
+        mVO.setPaymentType(null);
     }
 
     @Override
-    public void clearTagDialog() {
-
+    public void clearTag() {
+        mVO.setTag(null);
     }
 
     @Override
-    public void clearValueDialog() {
-
+    public void clearPrice() {
+        mVO.setPrice(null);
     }
 
     @Override
-    public void clearPurchaseDateDialog() {
-
+    public void clearPurchaseDate() {
+        mVO.setPurchaseDate(null);
     }
 
     @Override
     public void clearPaymentDateDialog() {
-
+        mVO.setContent(null);
     }
 
     @Override
@@ -152,28 +159,79 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     }
 
     @Override
-    public void saveTag(String name) {
+    public void saveTag(TagVO vo) {
+        TagBusinness.save(new TagDTO(vo), new BusinnessListener.OnPersistListener() {
 
+            @Override
+            public void onSuccess() {
+                view.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e.getMessage());
+            }
+        });
     }
 
     @Override
-    public void deleteTag(String key) {
+    public void deleteTag(TagVO vo) {
+        TagBusinness.delete(new TagDTO(vo), new BusinnessListener.OnPersistListener() {
 
+            @Override
+            public void onSuccess() {
+                view.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e.getMessage());
+            }
+        });
     }
 
     @Override
-    public void savePaymentType(String name) {
+    public void savePaymentType(PaymentTypeVO vo) {
+        PaymentTypeBusinness.save(new PaymentTypeDTO(vo), new BusinnessListener.OnPersistListener() {
 
+            @Override
+            public void onSuccess() {
+                view.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e.getMessage());
+            }
+        });
     }
 
     @Override
-    public void deletePaymentType(String key) {
+    public void deletePaymentType(PaymentTypeVO vo) {
+        PaymentTypeBusinness.delete(new PaymentTypeDTO(vo), new BusinnessListener.OnPersistListener() {
 
+            @Override
+            public void onSuccess() {
+                view.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                view.showError(e.getMessage());
+            }
+        });
     }
 
     @Override
-    public void setTags(String itemName) {
-        view.setTags(JavaUtils.StringUtil.formatEmpty(itemName));
+    public void init(TransactionVO transactionVO, TagVO tagVO) {
+        mDTO = new TransactionDTO(transactionVO, tagVO);
+        view.configureModel(transactionVO);
+    }
+
+    @Override
+    public void setTags(TagVO tagVO) {
+        mDTO.setTag(tagVO.toDTO());
+        view.setTags(JavaUtils.StringUtil.formatEmpty(tagVO.getName()));
     }
 
     @Override

@@ -158,7 +158,7 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
         TagDTO dto = new TagDTO();
         dto.setName(name);
 
-        TagBusinness.saveTag(dto, new BusinnessListener.OnPersistListener() {
+        TagBusinness.save(dto, new BusinnessListener.OnPersistListener() {
 
             @Override
             public void onSuccess() {
@@ -178,7 +178,7 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
         TagDTO dto = new TagDTO();
         dto.setKey(key);
 
-        TagBusinness.deleteTag(dto, new BusinnessListener.OnPersistListener() {
+        TagBusinness.delete(dto, new BusinnessListener.OnPersistListener() {
 
             @Override
             public void onSuccess() {

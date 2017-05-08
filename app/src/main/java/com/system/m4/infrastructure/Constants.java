@@ -9,4 +9,7 @@ public interface Constants {
     String TITLE_BUNDLE = "TITLE_BUNDLE";
     String PARCELABLE_BUNDLE = "PARCELABLE_BUNDLE";
     String VALUE_BUNDLE = "VALUE_BUNDLE";
+
+    String BUNDLE_TRANSACTION_VO = "BUNDLE_TRANSACTION_VO";
+    String BUNDLE_TAG_VO = "BUNDLE_TAG_VO";
 }

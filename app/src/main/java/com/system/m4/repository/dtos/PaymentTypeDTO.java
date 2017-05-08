@@ -1,5 +1,7 @@
 package com.system.m4.repository.dtos;
 
+import com.system.m4.views.vos.PaymentTypeVO;
+
 import java.util.Map;
 
 /**
@@ -19,6 +21,11 @@ public class PaymentTypeDTO extends DTOAbs {
 
     public PaymentTypeDTO(String name) {
         this.name = name;
+    }
+
+    public PaymentTypeDTO(PaymentTypeVO vo) {
+        this.key = vo.getKey();
+        this.name = vo.getName();
     }
 
     public String getName() {

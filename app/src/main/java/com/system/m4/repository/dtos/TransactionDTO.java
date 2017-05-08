@@ -1,5 +1,8 @@
 package com.system.m4.repository.dtos;
 
+import com.system.m4.views.vos.TagVO;
+import com.system.m4.views.vos.TransactionVO;
+
 import java.util.Map;
 
 public class TransactionDTO extends DTOAbs {
@@ -12,7 +15,7 @@ public class TransactionDTO extends DTOAbs {
 
     private String price;
 
-    private String tag;
+    private TagDTO tag;
 
     private String paymentType;
 
@@ -21,13 +24,13 @@ public class TransactionDTO extends DTOAbs {
     public TransactionDTO() {
     }
 
-    public TransactionDTO(String paymentDate, String purchaseDate, String price, String tag, String paymentType, String content) {
-        this.paymentDate = paymentDate;
-        this.purchaseDate = purchaseDate;
-        this.price = price;
-        this.tag = tag;
-        this.paymentType = paymentType;
-        this.content = content;
+    public TransactionDTO(TransactionVO vo, TagVO tagVO) {
+        this.paymentDate = vo.getPaymentDate();
+        this.purchaseDate = vo.getPurchaseDate();
+        this.price = vo.getPrice();
+        this.tag = new TagDTO(tagVO);
+        this.paymentType = vo.getPaymentType();
+        this.content = vo.getContent();
     }
 
     public String getPaymentDate() {
@@ -70,11 +73,11 @@ public class TransactionDTO extends DTOAbs {
         this.content = content;
     }
 
-    public String getTag() {
+    public TagDTO getTag() {
         return tag;
     }
 
-    public void setTag(String tag) {
+    public void setTag(TagDTO tag) {
         this.tag = tag;
     }
 

@@ -85,7 +85,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void showTransactionManagerDialog() {
 
-        listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag, null);
+        listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag);
         listComponentDialog.addOnItemListenner(new ListComponentDialog.OnItemListenner() {
 
             @Override
@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
             @Override
             public void onItemSelected(VOInterface item) {
-                TransactionManagerDialog.newInstance(new TransactionVO(item.getName())).show(getChildFragmentManager(), TransactionManagerDialog.TAG);
+                TransactionManagerDialog.newInstance((TagVO) item).show(getChildFragmentManager(), TransactionManagerDialog.TAG);
             }
 
         }).show(getChildFragmentManager());

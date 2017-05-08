@@ -29,7 +29,7 @@ public abstract class TagBusinness {
         });
     }
 
-    public static void saveTag(TagDTO tagDTO, final BusinnessListener.OnPersistListener persistListener) {
+    public static void save(TagDTO tagDTO, final BusinnessListener.OnPersistListener persistListener) {
 
         new TagFirebaseRepository("dev").save(tagDTO, new FirebaseRepository.FirebaseSingleReturnListener<TagDTO>() {
 
@@ -45,7 +45,7 @@ public abstract class TagBusinness {
         });
     }
 
-    public static void deleteTag(TagDTO tagDTO, final BusinnessListener.OnPersistListener persistListener) {
+    public static void delete(TagDTO tagDTO, final BusinnessListener.OnPersistListener persistListener) {
 
         new TagFirebaseRepository("dev").delete(tagDTO, new FirebaseRepository.FirebaseSingleReturnListener<TagDTO>() {
 

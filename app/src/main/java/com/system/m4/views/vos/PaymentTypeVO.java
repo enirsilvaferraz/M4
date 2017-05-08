@@ -29,8 +29,7 @@ public class PaymentTypeVO implements VOInterface {
     private String key;
     private String name;
 
-    public PaymentTypeVO(String name) {
-        this.name = name;
+    public PaymentTypeVO() {
     }
 
     protected PaymentTypeVO(Parcel in) {
@@ -38,10 +37,15 @@ public class PaymentTypeVO implements VOInterface {
         this.name = in.readString();
     }
 
+    public PaymentTypeVO(PaymentTypeDTO dto) {
+        this.key = dto.getKey();
+        this.name = dto.getName();
+    }
+
     public static List<PaymentTypeVO> asList(List<PaymentTypeDTO> dtolist) {
         List<PaymentTypeVO> volist = new ArrayList<>();
         for (PaymentTypeDTO dto : dtolist) {
-            volist.add(new PaymentTypeVO(dto.getName()));
+            volist.add(new PaymentTypeVO(dto));
         }
         return volist;
     }

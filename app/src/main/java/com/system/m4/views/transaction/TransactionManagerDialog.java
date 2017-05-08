@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.system.m4.R;
+import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.DialogToolbar;
@@ -42,6 +43,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     public static final String TAG = TransactionManagerDialog.class.getSimpleName();
     private static final String BUNDLE_VO = "BUNDLE_VO";
+
     Unbinder unbinder;
 
     @BindView(R.id.transaction_manager_textview_payment_date)
@@ -66,10 +68,13 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     DialogToolbar mToolbar;
 
     private TransactionManagerContract.Presenter presenter;
+    private ListComponentDialog listComponentTagsDialog;
+    private ListComponentDialog listComponentPaymentTypeDialog;
 
-    public static DialogFragment newInstance(TransactionVO transactionVO) {
+    public static DialogFragment newInstance(TransactionVO transactionVO, TagVO tagVO) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(BUNDLE_VO, transactionVO);
+        bundle.putParcelable(Constants.BUNDLE_TRANSACTION_VO, transactionVO);
+        bundle.putParcelable(Constants.BUNDLE_TAG_VO, tagVO);
 
         TransactionManagerDialog fragment = new TransactionManagerDialog();
         fragment.setArguments(bundle);
@@ -88,17 +93,20 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        configureModel(((TransactionVO) getArguments().getParcelable(BUNDLE_VO)));
+        TransactionVO transactionVO = getArguments().getParcelable(Constants.BUNDLE_TRANSACTION_VO);
+        TagVO tagVO = getArguments().getParcelable(Constants.BUNDLE_TAG_VO);
+        presenter.init(transactionVO, tagVO);
     }
 
-    private void configureModel(TransactionVO transactionVO) {
-        mToolbar.setTitle(transactionVO.getTags());
-        presenter.setTags(transactionVO.getTags());
+    @Override
+    public void configureModel(TransactionVO transactionVO) {
+        mToolbar.setTitle(transactionVO.getTag());
+        presenter.setTags(transactionVO.getTag());
         presenter.setContent(transactionVO.getContent());
         presenter.setPaymentDate(transactionVO.getPaymentDate());
         presenter.setPurchaseDate(transactionVO.getPurchaseDate());
         presenter.setPaymentType(transactionVO.getPaymentType());
-        presenter.setValue(transactionVO.getValue());
+        presenter.setValue(transactionVO.getPrice());
     }
 
     @Override
@@ -151,21 +159,21 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @OnLongClick(R.id.transaction_manager_action_purchase_date)
     public boolean clearPurchaseDate() {
-        presenter.clearPurchaseDateDialog();
+        presenter.clearPurchaseDate();
         tvPurchaseDate.setText(R.string.system_empty_field);
         return true;
     }
 
     @OnLongClick(R.id.transaction_manager_action_value)
     public boolean clearValue() {
-        presenter.clearValueDialog();
+        presenter.clearPrice();
         tvValue.setText(R.string.system_empty_field);
         return true;
     }
 
     @OnLongClick(R.id.transaction_manager_action_tags)
     public boolean clearTags() {
-        presenter.clearTagDialog();
+        presenter.clearTag();
         tvTags.setText(R.string.system_empty_field);
         return true;
     }
@@ -215,22 +223,33 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     }
 
     @Override
-    public void showTagsDialog(List<TagVO> list) {
-        ListComponentDialog.newInstance(R.string.transaction_tag, new ArrayList<VOInterface>(list)).addOnItemListenner(new ListComponentDialog.OnItemListenner() {
+    public void configureTagList(List<TagVO> list) {
+        listComponentTagsDialog.addList(new ArrayList<VOInterface>(list));
+    }
+
+    @Override
+    public void configurePaymentTypeList(List<PaymentTypeVO> list) {
+        listComponentPaymentTypeDialog.addList(new ArrayList<VOInterface>(list));
+    }
+
+    @Override
+    public void showTagsDialog() {
+        listComponentTagsDialog = ListComponentDialog.newInstance(R.string.transaction_tag);
+        listComponentTagsDialog.addOnItemListenner(new ListComponentDialog.OnItemListenner() {
 
             @Override
             public VOInterface onIntanceRequested() {
-                return null;
+                return new TagVO();
             }
 
             @Override
             public void onItemAdded(VOInterface item) {
-                presenter.saveTag(item.getName());
+                presenter.saveTag((TagVO) item);
             }
 
             @Override
             public void onItemDeleted(VOInterface item) {
-                presenter.deleteTag(item.getKey());
+                presenter.deleteTag((TagVO) item);
             }
 
             @Override
@@ -242,22 +261,23 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     }
 
     @Override
-    public void showPaymentTypeDialog(List<PaymentTypeVO> list) {
-        ListComponentDialog.newInstance(R.string.transaction_payment_type, new ArrayList<VOInterface>(list)).addOnItemListenner(new ListComponentDialog.OnItemListenner() {
+    public void showPaymentTypeDialog() {
+        listComponentPaymentTypeDialog = ListComponentDialog.newInstance(R.string.transaction_payment_type);
+        listComponentPaymentTypeDialog.addOnItemListenner(new ListComponentDialog.OnItemListenner() {
 
             @Override
             public VOInterface onIntanceRequested() {
-                return null;
+                return new PaymentTypeVO();
             }
 
             @Override
             public void onItemAdded(VOInterface item) {
-                presenter.savePaymentType(item.getName());
+                presenter.savePaymentType((PaymentTypeVO) item);
             }
 
             @Override
             public void onItemDeleted(VOInterface item) {
-                presenter.deletePaymentType(item.getKey());
+                presenter.deletePaymentType((PaymentTypeVO) item);
             }
 
             @Override
@@ -310,7 +330,8 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void dismissDialog() {
-        Toast.makeText(getContext(), "Transaction saved!", Toast.LENGTH_SHORT).show();
+        String message = getString(R.string.system_message_saved, getString(R.string.transaction));
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         dismiss();
     }
 
@@ -318,5 +339,11 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     public void showError(String error) {
         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
         dismiss();
+    }
+
+    @Override
+    public void showSuccessMessage(int template, int param) {
+        String message = getString(template, getString(param));
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

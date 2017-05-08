@@ -43,15 +43,10 @@ public class ListComponentDialog extends BaseDialogFragment implements DialogToo
 
     private ListComponentAdapter mAdapter;
 
-    public static ListComponentDialog newInstance(@StringRes int title, List<VOInterface> list) {
-
-        if (list == null) {
-            list = new ArrayList<VOInterface>();
-        }
+    public static ListComponentDialog newInstance(@StringRes int title) {
 
         Bundle bundle = new Bundle();
         bundle.putInt(TITLE_BUNDLE, title);
-        bundle.putParcelableArrayList(LIST_BUNDLE, new ArrayList<>(list));
 
         ListComponentDialog dialog = new ListComponentDialog();
         dialog.setArguments(bundle);
@@ -75,7 +70,7 @@ public class ListComponentDialog extends BaseDialogFragment implements DialogToo
         mToolbar.configureCreateMode();
         mToolbar.setOnClickListener(this);
 
-        List<VOInterface> list = getArguments().getParcelableArrayList(LIST_BUNDLE);
+        List<VOInterface> list = new ArrayList<>();
         mAdapter = new ListComponentAdapter(list, new ListComponentAdapter.OnItemSelectedListener() {
 
             @Override

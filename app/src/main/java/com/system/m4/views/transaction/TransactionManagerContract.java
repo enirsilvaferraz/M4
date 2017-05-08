@@ -2,6 +2,7 @@ package com.system.m4.views.transaction;
 
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
+import com.system.m4.views.vos.TransactionVO;
 
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,8 @@ public interface TransactionManagerContract {
 
     interface View {
 
+        void configureModel(TransactionVO transactionVO);
+
         void setPaymentDate(String value);
 
         void setPurchaseDate(String value);
@@ -27,9 +30,13 @@ public interface TransactionManagerContract {
 
         void setContent(String value);
 
-        void showTagsDialog(List<TagVO> list);
+        void configureTagList(List<TagVO> list);
 
-        void showPaymentTypeDialog(List<PaymentTypeVO> list);
+        void configurePaymentTypeList(List<PaymentTypeVO> list);
+
+        void showTagsDialog();
+
+        void showPaymentTypeDialog();
 
         void showValueDialog(Double value);
 
@@ -42,6 +49,8 @@ public interface TransactionManagerContract {
         void dismissDialog();
 
         void showError(String error);
+
+        void showSuccessMessage(int template, int param);
     }
 
     interface Presenter {
@@ -74,22 +83,24 @@ public interface TransactionManagerContract {
 
         void clearPaymentType();
 
-        void clearTagDialog();
+        void clearTag();
 
-        void clearValueDialog();
+        void clearPrice();
 
-        void clearPurchaseDateDialog();
+        void clearPurchaseDate();
 
         void clearPaymentDateDialog();
 
         void validateForm();
 
-        void saveTag(String name);
+        void saveTag(TagVO vo);
 
-        void deleteTag(String key);
+        void deleteTag(TagVO vo);
 
-        void savePaymentType(String name);
+        void savePaymentType(PaymentTypeVO vo);
 
-        void deletePaymentType(String key);
+        void deletePaymentType(PaymentTypeVO vo);
+
+        void init(TransactionVO transactionVO, TagVO tagVO);
     }
 }

@@ -29,11 +29,33 @@ public abstract class PaymentTypeBusinness {
         });
     }
 
-    public static void save(PaymentTypeDTO dto, BusinnessListener.OnPersistListener persistListener) {
+    public static void save(PaymentTypeDTO dto, final BusinnessListener.OnPersistListener persistListener) {
+        new PaymentTypeFirebaseRepository("dev").save(dto, new FirebaseRepository.FirebaseSingleReturnListener<PaymentTypeDTO>() {
 
+            @Override
+            public void onFind(PaymentTypeDTO dto) {
+                persistListener.onSuccess();
+            }
+
+            @Override
+            public void onError(String error) {
+                persistListener.onError(new Exception(error));
+            }
+        });
     }
 
-    public static void delete(PaymentTypeDTO dto, BusinnessListener.OnPersistListener persistListener) {
+    public static void delete(PaymentTypeDTO dto, final BusinnessListener.OnPersistListener persistListener) {
+        new PaymentTypeFirebaseRepository("dev").delete(dto, new FirebaseRepository.FirebaseSingleReturnListener<PaymentTypeDTO>() {
 
+            @Override
+            public void onFind(PaymentTypeDTO dto) {
+                persistListener.onSuccess();
+            }
+
+            @Override
+            public void onError(String error) {
+                persistListener.onError(new Exception(error));
+            }
+        });
     }
 }

@@ -21,5 +21,6 @@
     <string name="transaction_manager_title">Transaction Manager</string>
     <string name="transaction_payment_date_start">Payment Date Start</string>
     <string name="transaction_payment_date_end">Payment Date End</string>
+    <string name="transaction">Transaction</string>
 
 </resources>

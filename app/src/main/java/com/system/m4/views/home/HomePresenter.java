@@ -17,11 +17,11 @@ import java.util.List;
  * For M4
  */
 
-public class HomePresenter implements HomeContract.Presenter {
+class HomePresenter implements HomeContract.Presenter {
 
     private HomeContract.View view;
 
-    public HomePresenter(HomeContract.View view) {
+    HomePresenter(HomeContract.View view) {
         this.view = view;
     }
 
@@ -46,7 +46,7 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestTransactionManager() {
 
-        view.showTransactionManagerDialog(); // TODO Colocar PLaceholder e remover if list == null do adapter
+        view.showTransactionManagerDialog(); // Colocar PLaceholder e remover if list == null do adapter
 
         TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
 
@@ -65,7 +65,7 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void saveTag(VOInterface vo) {
 
-        TagBusinness.saveTag(new TagDTO(((TagVO) vo)), new BusinnessListener.OnPersistListener() {
+        TagBusinness.save(new TagDTO(((TagVO) vo)), new BusinnessListener.OnPersistListener() {
 
             @Override
             public void onSuccess() {
@@ -82,7 +82,7 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void deleteTag(VOInterface vo) {
 
-        TagBusinness.deleteTag(new TagDTO(((TagVO) vo)), new BusinnessListener.OnPersistListener() {
+        TagBusinness.delete(new TagDTO(((TagVO) vo)), new BusinnessListener.OnPersistListener() {
 
             @Override
             public void onSuccess() {

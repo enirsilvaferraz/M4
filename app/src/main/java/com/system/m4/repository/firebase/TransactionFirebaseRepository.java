@@ -20,21 +20,6 @@ public class TransactionFirebaseRepository extends FirebaseRepository<Transactio
     public void findByFilter(FilterTransactionDTO filterTransactionDTO, FirebaseMultiReturnListener<TransactionDTO> firebaseMultiReturnListener) {
 
         final List<TransactionDTO> list = new ArrayList<>();
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-        list.add(new TransactionDTO("10 de Outubro de 2017", "10 de Outubro de 2017", "R$ 1000,00", "Transporte", "Nubank", "2x sem juros"));
-
         firebaseMultiReturnListener.onFindAll(list);
     }
 

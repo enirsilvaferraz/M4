@@ -154,7 +154,8 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
 
     @Override
     public void showTagsDialog(List<TagVO> list) {
-        ListComponentDialog.newInstance(R.string.transaction_tag, new ArrayList<VOInterface>(list)).addOnItemListenner(new ListComponentDialog.OnItemListenner() {
+        ListComponentDialog listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag);
+        listComponentDialog.addOnItemListenner(new ListComponentDialog.OnItemListenner() {
 
             @Override
             public VOInterface onIntanceRequested() {
@@ -177,11 +178,15 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
             }
 
         }).show(getChildFragmentManager());
+
+        ArrayList<VOInterface> voInterfaces = new ArrayList<VOInterface>(list);
+        listComponentDialog.addList(voInterfaces);
     }
 
     @Override
     public void showPaymentTypeDialog(List<PaymentTypeVO> list) {
-        ListComponentDialog.newInstance(R.string.transaction_payment_type, new ArrayList<VOInterface>(list)).addOnItemListenner(new ListComponentDialog.OnItemListenner() {
+        ListComponentDialog listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_payment_type);
+        listComponentDialog.addOnItemListenner(new ListComponentDialog.OnItemListenner() {
 
             @Override
             public VOInterface onIntanceRequested() {
@@ -204,6 +209,8 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
             }
 
         }).show(getChildFragmentManager());
+        ArrayList<VOInterface> voInterfaces = new ArrayList<VOInterface>(list);
+        listComponentDialog.addList(voInterfaces);
     }
 
 
