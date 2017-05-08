@@ -61,9 +61,9 @@ public interface TransactionManagerContract {
 
         void setValue(String value);
 
-        void setTags(String itemName);
+        void setTags(TagVO tagVO);
 
-        void setPaymentType(String itemName);
+        void setPaymentType(PaymentTypeVO paymentTypeVO);
 
         void setContent(String content);
 

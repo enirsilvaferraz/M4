@@ -230,13 +230,14 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
 
     @Override
     public void setTags(TagVO tagVO) {
-        mDTO.setTag(tagVO.toDTO());
+        mDTO.setTag(new TagDTO(tagVO));
         view.setTags(JavaUtils.StringUtil.formatEmpty(tagVO.getName()));
     }
 
     @Override
-    public void setPaymentType(String itemName) {
-        view.setPaymentType(JavaUtils.StringUtil.formatEmpty(itemName));
+    public void setPaymentType(PaymentTypeVO paymentTypeVO) {
+        mDTO.setPaymentType(new PaymentTypeDTO(paymentTypeVO));
+        view.setPaymentType(JavaUtils.StringUtil.formatEmpty(paymentTypeVO.getName()));
     }
 
     @Override

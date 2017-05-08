@@ -1,5 +1,6 @@
 package com.system.m4.repository.dtos;
 
+import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 
@@ -17,19 +18,19 @@ public class TransactionDTO extends DTOAbs {
 
     private TagDTO tag;
 
-    private String paymentType;
+    private PaymentTypeDTO paymentType;
 
     private String content;
 
     public TransactionDTO() {
     }
 
-    public TransactionDTO(TransactionVO vo, TagVO tagVO) {
+    public TransactionDTO(TransactionVO vo, TagVO tagVO, PaymentTypeVO paymentTypeVO) {
         this.paymentDate = vo.getPaymentDate();
         this.purchaseDate = vo.getPurchaseDate();
         this.price = vo.getPrice();
         this.tag = new TagDTO(tagVO);
-        this.paymentType = vo.getPaymentType();
+        this.paymentType = new PaymentTypeDTO(paymentTypeVO);
         this.content = vo.getContent();
     }
 
@@ -49,11 +50,11 @@ public class TransactionDTO extends DTOAbs {
         this.purchaseDate = purchaseDate;
     }
 
-    public String getPaymentType() {
+    public PaymentTypeDTO getPaymentType() {
         return paymentType;
     }
 
-    public void setPaymentType(String paymentType) {
+    public void setPaymentType(PaymentTypeDTO paymentType) {
         this.paymentType = paymentType;
     }
 
