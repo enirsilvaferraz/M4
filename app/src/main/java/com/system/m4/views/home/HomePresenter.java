@@ -7,7 +7,6 @@ import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.repository.dtos.TransactionDTO;
 import com.system.m4.views.vos.TagVO;
-import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOInterface;
 
 import java.util.List;
@@ -32,7 +31,7 @@ class HomePresenter implements HomeContract.Presenter {
 
             @Override
             public void onSuccess(List<TransactionDTO> list) {
-                view.setListTransactions(TransactionVO.asList(list));
+               // view.setListTransactions(TransactionVO.asList(list));
             }
 
             @Override

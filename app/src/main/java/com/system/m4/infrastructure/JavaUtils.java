@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.system.m4.views.vos.VOInterface;
 
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
@@ -110,6 +111,11 @@ public final class JavaUtils {
             cInit.set(Calendar.MINUTE, 0);
             cInit.set(Calendar.SECOND, 0);
             return cInit.getTime();
+        }
+
+        public static String format(String date, String originalFormat, String finalFormat) {
+            Date dateObject = parse(date, originalFormat);
+            return format(dateObject, finalFormat);
         }
     }
 
@@ -223,6 +229,10 @@ public final class JavaUtils {
 
             final ParameterizedType type = (ParameterizedType) object.getClass().getGenericSuperclass();
             return (Class) (type).getActualTypeArguments()[0];
+        }
+
+        public static boolean isEmpty(VOInterface vo){
+            return vo == null || vo.getKey() == null || vo.getKey().isEmpty();
         }
     }
 

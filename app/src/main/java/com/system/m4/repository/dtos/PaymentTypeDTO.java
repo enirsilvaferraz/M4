@@ -1,5 +1,6 @@
 package com.system.m4.repository.dtos;
 
+import com.google.gson.annotations.Expose;
 import com.system.m4.views.vos.PaymentTypeVO;
 
 import java.util.Map;
@@ -11,8 +12,10 @@ import java.util.Map;
 
 public class PaymentTypeDTO extends DTOAbs {
 
+    @Expose
     private String key;
 
+    @Expose
     private String name;
 
     public PaymentTypeDTO() {

@@ -111,7 +111,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void actionDone() {
-        presenter.validateForm();
+        presenter.save();
     }
 
     @OnClick(R.id.transaction_manager_action_payment_date)
@@ -332,7 +332,11 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @Override
     public void showError(String error) {
         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-        dismiss();
+    }
+
+    @Override
+    public void showError(int template, int param) {
+        Toast.makeText(getContext(), getString(template, getString(param)), Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -51,6 +51,8 @@ public interface TransactionManagerContract {
         void showError(String error);
 
         void showSuccessMessage(int template, int param);
+
+        void showError(int template, int param);
     }
 
     interface Presenter {
@@ -91,7 +93,7 @@ public interface TransactionManagerContract {
 
         void clearPaymentDateDialog();
 
-        void validateForm();
+        void save();
 
         void saveTag(TagVO vo);
 

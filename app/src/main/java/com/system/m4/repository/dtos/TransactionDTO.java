@@ -1,35 +1,33 @@
 package com.system.m4.repository.dtos;
 
-import com.system.m4.views.vos.TransactionVO;
+import com.google.gson.annotations.Expose;
 
 import java.util.Map;
 
 public class TransactionDTO extends DTOAbs {
 
+    @Expose
     private String key;
 
+    @Expose
     private String paymentDate;
 
+    @Expose
     private String purchaseDate;
 
-    private String price;
+    @Expose
+    private Double price;
 
-    private TagDTO tag;
+    @Expose
+    private String tag;
 
-    private PaymentTypeDTO paymentType;
+    @Expose
+    private String paymentType;
 
+    @Expose
     private String content;
 
     public TransactionDTO() {
-    }
-
-    public TransactionDTO(TransactionVO vo) {
-        this.paymentDate = vo.getPaymentDate();
-        this.purchaseDate = vo.getPurchaseDate();
-        this.price = vo.getPrice();
-        this.tag = new TagDTO(vo.getTag());
-        this.paymentType = new PaymentTypeDTO(vo.getPaymentType());
-        this.content = vo.getContent();
     }
 
     public String getPaymentDate() {
@@ -48,19 +46,19 @@ public class TransactionDTO extends DTOAbs {
         this.purchaseDate = purchaseDate;
     }
 
-    public PaymentTypeDTO getPaymentType() {
+    public String getPaymentType() {
         return paymentType;
     }
 
-    public void setPaymentType(PaymentTypeDTO paymentType) {
+    public void setPaymentType(String paymentType) {
         this.paymentType = paymentType;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -72,11 +70,11 @@ public class TransactionDTO extends DTOAbs {
         this.content = content;
     }
 
-    public TagDTO getTag() {
+    public String getTag() {
         return tag;
     }
 
-    public void setTag(TagDTO tag) {
+    public void setTag(String tag) {
         this.tag = tag;
     }
 

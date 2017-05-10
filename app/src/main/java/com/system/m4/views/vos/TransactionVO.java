@@ -3,11 +3,12 @@ package com.system.m4.views.vos;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.repository.dtos.PaymentTypeDTO;
+import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.repository.dtos.TransactionDTO;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -25,6 +26,7 @@ public class TransactionVO implements Serializable, Parcelable {
             return new TransactionVO[size];
         }
     };
+
     private String paymentDate;
     private String purchaseDate;
     private String price;
@@ -35,12 +37,12 @@ public class TransactionVO implements Serializable, Parcelable {
     public TransactionVO() {
     }
 
-    public TransactionVO(TransactionDTO dto) {
+    public TransactionVO(TransactionDTO dto, TagDTO tagDTO, PaymentTypeDTO paymentTypeDTO) {
         this.paymentDate = dto.getPaymentDate();
         this.purchaseDate = dto.getPurchaseDate();
-        this.price = dto.getPrice();
-        this.tag = new TagVO(dto.getTag());
-        this.paymentType = new PaymentTypeVO(dto.getPaymentType());
+        this.price = JavaUtils.NumberUtil.currencyFormat(dto.getPrice());
+        this.tag = new TagVO(tagDTO);
+        this.paymentType = new PaymentTypeVO(paymentTypeDTO);
         this.content = dto.getContent();
     }
 
@@ -55,14 +57,6 @@ public class TransactionVO implements Serializable, Parcelable {
 
     public TransactionVO(TagVO tagVO) {
         this.tag = tagVO;
-    }
-
-    public static List<TransactionVO> asList(List<TransactionDTO> list) {
-        List<TransactionVO> voList = new ArrayList<>();
-        for (TransactionDTO dto : list) {
-            voList.add(new TransactionVO(dto));
-        }
-        return voList;
     }
 
     public String getPaymentDate() {
