@@ -5,7 +5,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include layout="@layout/base_toolbar_dialog" />
+    <com.system.m4.views.components.DialogToolbar
+        android:id="@+id/dialog_toolbar_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"

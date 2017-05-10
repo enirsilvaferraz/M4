@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.system.m4.R;
+import com.system.m4.views.components.DialogToolbar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -23,7 +24,9 @@ import butterknife.OnClick;
 public abstract class BaseDialogFragment extends DialogFragment {
 
     public static final String TITLE_BUNDLE = "TITLE_BUNDLE";
-    public static final String LIST_BUNDLE = "LIST_ARG";
+
+    @BindView(R.id.dialog_toolbar_title)
+    DialogToolbar mToolbar;
 
     @BindView(R.id.base_dialog_container_action)
     LinearLayout containerAction;
@@ -47,13 +50,12 @@ public abstract class BaseDialogFragment extends DialogFragment {
         containerAction.setVisibility(View.GONE);
     }
 
-    @Deprecated
     protected void setTitle(@StringRes int titleId) {
-
+        mToolbar.setTitle(titleId);
     }
 
-    @Deprecated
     protected void setTitle(String titleString) {
+        mToolbar.setTitle(titleString);
     }
 
     public OnFinishListener getOnFinishListener() {

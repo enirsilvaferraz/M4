@@ -15,7 +15,6 @@ import com.system.m4.R;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
-import com.system.m4.views.components.DialogToolbar;
 import com.system.m4.views.components.dialogs.NumberComponentDialog;
 import com.system.m4.views.components.dialogs.TextComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
@@ -63,9 +62,6 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @BindView(R.id.transaction_manager_textview_content)
     TextView tvContent;
 
-    @BindView(R.id.dialog_toolbar_title)
-    DialogToolbar mToolbar;
-
     private TransactionManagerContract.Presenter presenter;
 
     private ListComponentDialog listComponentTagsDialog;
@@ -98,7 +94,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void configureModel(TransactionVO transactionVO) {
-        mToolbar.setTitle(transactionVO.getTag().getName());
+        setTitle(transactionVO.getTag().getName());
         presenter.setTags(transactionVO.getTag());
         presenter.setContent(transactionVO.getContent());
         presenter.setPaymentDate(transactionVO.getPaymentDate());
