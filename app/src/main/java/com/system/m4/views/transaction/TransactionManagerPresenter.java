@@ -223,8 +223,8 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     }
 
     @Override
-    public void init(TransactionVO transactionVO, TagVO tagVO) {
-        mDTO = new TransactionDTO(transactionVO, tagVO);
+    public void init(TransactionVO transactionVO) {
+        mDTO = new TransactionDTO(transactionVO);
         view.configureModel(transactionVO);
     }
 
@@ -236,8 +236,10 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
 
     @Override
     public void setPaymentType(PaymentTypeVO paymentTypeVO) {
-        mDTO.setPaymentType(new PaymentTypeDTO(paymentTypeVO));
-        view.setPaymentType(JavaUtils.StringUtil.formatEmpty(paymentTypeVO.getName()));
+        if (paymentTypeVO != null) {
+            mDTO.setPaymentType(new PaymentTypeDTO(paymentTypeVO));
+            view.setPaymentType(JavaUtils.StringUtil.formatEmpty(paymentTypeVO.getName()));
+        }
     }
 
     @Override

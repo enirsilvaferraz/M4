@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.system.m4.R;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.transaction.TransactionManagerDialog;
+import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOInterface;
@@ -105,7 +106,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
             @Override
             public void onItemSelected(VOInterface item) {
-                TransactionManagerDialog.newInstance((TagVO) item).show(getChildFragmentManager(), TransactionManagerDialog.TAG);
+                TransactionManagerDialog.newInstance(new TransactionVO(((TagVO) item))).show(getChildFragmentManager(), TransactionManagerDialog.TAG);
             }
 
         }).show(getChildFragmentManager());

@@ -101,6 +101,6 @@ public interface TransactionManagerContract {
 
         void deletePaymentType(PaymentTypeVO vo);
 
-        void init(TransactionVO transactionVO, TagVO tagVO);
+        void init(TransactionVO transactionVO);
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class TransactionVO implements Serializable, Parcelable {
 
-    public static final Parcelable.Creator<TransactionVO> CREATOR = new Parcelable.Creator<TransactionVO>() {
+    public static final Creator<TransactionVO> CREATOR = new Creator<TransactionVO>() {
         @Override
         public TransactionVO createFromParcel(Parcel source) {
             return new TransactionVO(source);
@@ -25,33 +25,36 @@ public class TransactionVO implements Serializable, Parcelable {
             return new TransactionVO[size];
         }
     };
-
     private String paymentDate;
     private String purchaseDate;
     private String price;
-    private String tag;
-    private String paymentType;
+    private TagVO tag;
+    private PaymentTypeVO paymentType;
     private String content;
 
     public TransactionVO() {
-    }
-
-    public TransactionVO(Parcel in) {
-        this.paymentDate = in.readString();
-        this.purchaseDate = in.readString();
-        this.price = in.readString();
-        this.tag = in.readString();
-        this.paymentType = in.readString();
-        this.content = in.readString();
     }
 
     public TransactionVO(TransactionDTO dto) {
         this.paymentDate = dto.getPaymentDate();
         this.purchaseDate = dto.getPurchaseDate();
         this.price = dto.getPrice();
-        this.tag = dto.getTag().getName();
-        this.paymentType = dto.getPaymentType();
+        this.tag = new TagVO(dto.getTag());
+        this.paymentType = new PaymentTypeVO(dto.getPaymentType());
         this.content = dto.getContent();
+    }
+
+    protected TransactionVO(Parcel in) {
+        this.paymentDate = in.readString();
+        this.purchaseDate = in.readString();
+        this.price = in.readString();
+        this.tag = in.readParcelable(TagVO.class.getClassLoader());
+        this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
+        this.content = in.readString();
+    }
+
+    public TransactionVO(TagVO tagVO) {
+        this.tag = tagVO;
     }
 
     public static List<TransactionVO> asList(List<TransactionDTO> list) {
@@ -86,19 +89,19 @@ public class TransactionVO implements Serializable, Parcelable {
         this.price = price;
     }
 
-    public String getTag() {
+    public TagVO getTag() {
         return tag;
     }
 
-    public void setTag(String tag) {
+    public void setTag(TagVO tag) {
         this.tag = tag;
     }
 
-    public String getPaymentType() {
+    public PaymentTypeVO getPaymentType() {
         return paymentType;
     }
 
-    public void setPaymentType(String paymentType) {
+    public void setPaymentType(PaymentTypeVO paymentType) {
         this.paymentType = paymentType;
     }
 
@@ -120,8 +123,8 @@ public class TransactionVO implements Serializable, Parcelable {
         dest.writeString(this.paymentDate);
         dest.writeString(this.purchaseDate);
         dest.writeString(this.price);
-        dest.writeString(this.tag);
-        dest.writeString(this.paymentType);
+        dest.writeParcelable(this.tag, flags);
+        dest.writeParcelable(this.paymentType, flags);
         dest.writeString(this.content);
     }
 }

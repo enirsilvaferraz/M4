@@ -24,8 +24,10 @@ public class PaymentTypeDTO extends DTOAbs {
     }
 
     public PaymentTypeDTO(PaymentTypeVO vo) {
-        this.key = vo.getKey();
-        this.name = vo.getName();
+        if (vo != null) {
+            this.key = vo.getKey();
+            this.name = vo.getName();
+        }
     }
 
     public String getName() {

@@ -78,8 +78,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         public void bind(final TransactionVO item) {
 
-            tvTag.setText(JavaUtils.StringUtil.formatEmpty(item.getTag()));
-            tvPaymentType.setText(JavaUtils.StringUtil.formatEmpty(item.getPaymentType()));
+            tvTag.setText(JavaUtils.StringUtil.formatEmpty(item.getTag().getName()));
+            tvPaymentType.setText(JavaUtils.StringUtil.formatEmpty(item.getPaymentType().getName()));
             tvPaymentDate.setText(JavaUtils.StringUtil.formatEmpty(item.getPaymentDate()));
             tvPrice.setText(JavaUtils.StringUtil.formatEmpty(item.getPrice()));
 

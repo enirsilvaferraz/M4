@@ -42,7 +42,6 @@ import butterknife.Unbinder;
 public class TransactionManagerDialog extends BaseDialogFragment implements TransactionManagerContract.View {
 
     public static final String TAG = TransactionManagerDialog.class.getSimpleName();
-    private static final String BUNDLE_VO = "BUNDLE_VO";
 
     Unbinder unbinder;
 
@@ -68,13 +67,13 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     DialogToolbar mToolbar;
 
     private TransactionManagerContract.Presenter presenter;
+
     private ListComponentDialog listComponentTagsDialog;
     private ListComponentDialog listComponentPaymentTypeDialog;
 
-    public static DialogFragment newInstance(TransactionVO transactionVO, TagVO tagVO) {
+    public static DialogFragment newInstance(TransactionVO transactionVO) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.BUNDLE_TRANSACTION_VO, transactionVO);
-        bundle.putParcelable(Constants.BUNDLE_TAG_VO, tagVO);
 
         TransactionManagerDialog fragment = new TransactionManagerDialog();
         fragment.setArguments(bundle);
@@ -94,13 +93,12 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TransactionVO transactionVO = getArguments().getParcelable(Constants.BUNDLE_TRANSACTION_VO);
-        TagVO tagVO = getArguments().getParcelable(Constants.BUNDLE_TAG_VO);
-        presenter.init(transactionVO, tagVO);
+        presenter.init(transactionVO);
     }
 
     @Override
     public void configureModel(TransactionVO transactionVO) {
-        mToolbar.setTitle(transactionVO.getTag());
+        mToolbar.setTitle(transactionVO.getTag().getName());
         presenter.setTags(transactionVO.getTag());
         presenter.setContent(transactionVO.getContent());
         presenter.setPaymentDate(transactionVO.getPaymentDate());
@@ -254,7 +252,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
             @Override
             public void onItemSelected(VOInterface item) {
-                presenter.setTags(item.getName());
+                presenter.setTags((TagVO) item);
             }
 
         }).show(getChildFragmentManager());
@@ -282,7 +280,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
             @Override
             public void onItemSelected(VOInterface item) {
-                presenter.setPaymentType(item.getName());
+                presenter.setPaymentType((PaymentTypeVO) item);
             }
 
         }).show(getChildFragmentManager());
