@@ -3,6 +3,7 @@ package com.system.m4.views.home;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,6 @@ import android.widget.Toast;
 import com.system.m4.R;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.transaction.TransactionManagerDialog;
-import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOInterface;
@@ -33,6 +33,9 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
     @BindView(R.id.home_recyclerview)
     RecyclerView mRecyclerview;
+
+    @BindView(R.id.home_swipe_refresh)
+    SwipeRefreshLayout mSwipeRefresh;
 
     Unbinder unbinder;
 
@@ -53,6 +56,20 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.requestListTransaction();
+            }
+        });
+
+        mSwipeRefresh.setColorSchemeResources(R.color.accent,
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
         this.presenter.requestListTransaction();
     }
 
@@ -69,6 +86,8 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
     @Override
     public void setListTransactions(List<TransactionVO> list) {
+
+        refreshOff();
 
         TransactionAdapter adapter = new TransactionAdapter(list, new TransactionAdapter.OnItemSelectedListener() {
             @Override
@@ -106,7 +125,14 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
             @Override
             public void onItemSelected(VOInterface item) {
-                TransactionManagerDialog.newInstance(new TransactionVO(((TagVO) item))).show(getChildFragmentManager(), TransactionManagerDialog.TAG);
+                TransactionManagerDialog dialogFragment = TransactionManagerDialog.newInstance(new TransactionVO(((TagVO) item)));
+                dialogFragment.setDialogListener(new TransactionManagerDialog.DialogListener() {
+                    @Override
+                    public void onDismiss() {
+                        presenter.requestListTransaction();
+                    }
+                });
+                dialogFragment.show(getChildFragmentManager(), TransactionManagerDialog.TAG);
             }
 
         }).show(getChildFragmentManager());
@@ -119,7 +145,14 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
     @Override
     public void showError(String message) {
+        refreshOff();
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void refreshOff() {
+        if (mSwipeRefresh.isRefreshing()) {
+            mSwipeRefresh.setRefreshing(false);
+        }
     }
 
     @Override

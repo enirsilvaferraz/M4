@@ -145,9 +145,9 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
             view.showError(R.string.system_error_required_field, R.string.transaction_tag);
         } else if (TextUtils.isEmpty(mVo.getPaymentType())) {
             view.showError(R.string.system_error_required_field, R.string.transaction_payment_type);
-        } else if (TextUtils.isEmpty(mVo.getPaymentDateStart())) {
+        } else if (mVo.getPaymentDateStart() == null) {
             view.showError(R.string.system_error_required_field, R.string.transaction_payment_date_start);
-        } else if (TextUtils.isEmpty(mVo.getPaymentDateEnd())) {
+        } else if (mVo.getPaymentDateEnd() == null) {
             view.showError(R.string.system_error_required_field, R.string.transaction_payment_date_end);
         }
     }

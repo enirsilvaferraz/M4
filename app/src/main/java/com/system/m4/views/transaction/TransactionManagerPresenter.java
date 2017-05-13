@@ -26,89 +26,89 @@ import java.util.List;
 
 class TransactionManagerPresenter implements TransactionManagerContract.Presenter {
 
-    private final TransactionManagerContract.View view;
+    private final TransactionManagerContract.View mView;
 
     private TransactionVO mVO;
 
-    TransactionManagerPresenter(TransactionManagerContract.View view) {
-        this.view = view;
+    TransactionManagerPresenter(TransactionManagerContract.View mView) {
+        this.mView = mView;
         this.mVO = new TransactionVO();
     }
 
     @Override
-    public void setPaymentDate(String date) {
+    public void setPaymentDate(Date date) {
         mVO.setPaymentDate(date);
-        view.setPaymentDate(JavaUtils.StringUtil.formatEmpty(date));
+        mView.setPaymentDate(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)));
     }
 
     @Override
-    public void setPurchaseDate(String date) {
+    public void setPurchaseDate(Date date) {
         mVO.setPurchaseDate(date);
-        view.setPurchaseDate(JavaUtils.StringUtil.formatEmpty(date));
+        mView.setPurchaseDate(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)));
     }
 
     @Override
     public void setValue(String value) {
         mVO.setPrice(value);
-        view.setValue(JavaUtils.StringUtil.formatEmpty(JavaUtils.NumberUtil.currencyFormat(value)));
+        mView.setValue(JavaUtils.StringUtil.formatEmpty(JavaUtils.NumberUtil.currencyFormat(value)));
     }
 
     @Override
     public void init(TransactionVO transactionVO) {
         mVO = transactionVO;
-        view.configureModel(transactionVO);
+        mView.configureModel(transactionVO);
     }
 
     @Override
     public void setTags(TagVO tagVO) {
         mVO.setTag(tagVO);
-        view.setTags(JavaUtils.StringUtil.formatEmpty(tagVO.getName()));
+        mView.setTags(JavaUtils.StringUtil.formatEmpty(tagVO.getName()));
     }
 
     @Override
     public void setPaymentType(PaymentTypeVO paymentTypeVO) {
         if (paymentTypeVO != null) {
             mVO.setPaymentType(paymentTypeVO);
-            view.setPaymentType(JavaUtils.StringUtil.formatEmpty(paymentTypeVO.getName()));
+            mView.setPaymentType(JavaUtils.StringUtil.formatEmpty(paymentTypeVO.getName()));
         }
     }
 
     @Override
     public void setContent(String content) {
         mVO.setContent(content);
-        view.setContent(JavaUtils.StringUtil.formatEmpty(content));
+        mView.setContent(JavaUtils.StringUtil.formatEmpty(content));
     }
 
     @Override
     public void requestTagDialog() {
-        view.showTagsDialog();
+        mView.showTagsDialog();
         TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
 
             @Override
             public void onSuccess(List<TagDTO> list) {
-                view.configureTagList(TagVO.asList(list));
+                mView.configureTagList(TagVO.asList(list));
             }
 
             @Override
             public void onError(Exception e) {
-                view.showError(e.getMessage());
+                mView.showError(e.getMessage());
             }
         });
     }
 
     @Override
     public void requestPaymentTypeDialog() {
-        view.showPaymentTypeDialog();
+        mView.showPaymentTypeDialog();
         PaymentTypeBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner<PaymentTypeDTO>() {
 
             @Override
             public void onSuccess(List<PaymentTypeDTO> list) {
-                view.configurePaymentTypeList(PaymentTypeVO.asList(list));
+                mView.configurePaymentTypeList(PaymentTypeVO.asList(list));
             }
 
             @Override
             public void onError(Exception e) {
-                view.showError(e.getMessage());
+                mView.showError(e.getMessage());
             }
         });
     }
@@ -116,7 +116,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     @Override
     public void requestValueDialog(String text) {
         Double value = text.isEmpty() || text.equals(Constants.EMPTY_FIELD) ? null : JavaUtils.NumberUtil.removeFormat(text);
-        view.showValueDialog(value);
+        mView.showValueDialog(value);
     }
 
     @Override
@@ -124,7 +124,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
         if (text.equals(Constants.EMPTY_FIELD)) {
             text = null;
         }
-        view.showContentDialog(text);
+        mView.showContentDialog(text);
     }
 
     @Override
@@ -137,7 +137,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
             date = JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY);
         }
 
-        view.showPaymentDateDialog(date);
+        mView.showPaymentDateDialog(date);
     }
 
     @Override
@@ -150,7 +150,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
             date = JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY);
         }
 
-        view.showPurchaseDateDialog(date);
+        mView.showPurchaseDateDialog(date);
     }
 
     @Override
@@ -187,27 +187,27 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     public void save() {
 
         if (JavaUtils.ClassUtil.isEmpty(mVO.getTag())) {
-            view.showError(R.string.system_error_required_field, R.string.transaction_tag);
+            mView.showError(R.string.system_error_required_field, R.string.transaction_tag);
         } else if (JavaUtils.ClassUtil.isEmpty(mVO.getPaymentType())) {
-            view.showError(R.string.system_error_required_field, R.string.transaction_payment_type);
-        } else if (TextUtils.isEmpty(mVO.getPaymentDate())) {
-            view.showError(R.string.system_error_required_field, R.string.transaction_payment_date);
-        } else if (TextUtils.isEmpty(mVO.getPurchaseDate())) {
-            view.showError(R.string.system_error_required_field, R.string.transaction_purchase_date);
+            mView.showError(R.string.system_error_required_field, R.string.transaction_payment_type);
+        } else if (mVO.getPaymentDate() == null) {
+            mView.showError(R.string.system_error_required_field, R.string.transaction_payment_date);
+        } else if (mVO.getPurchaseDate() == null) {
+            mView.showError(R.string.system_error_required_field, R.string.transaction_purchase_date);
         } else if (TextUtils.isEmpty(mVO.getPrice())) {
-            view.showError(R.string.system_error_required_field, R.string.transaction_price);
+            mView.showError(R.string.system_error_required_field, R.string.transaction_price);
         } else {
 
             TransactionBusinness.save(mVO, new BusinnessListener.OnPersistListener() {
 
                 @Override
                 public void onSuccess() {
-                    view.dismissDialog();
+                    mView.dismissDialog();
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    view.showError(e.getMessage());
+                    mView.showError(e.getMessage());
                 }
             });
         }
@@ -219,12 +219,12 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
 
             @Override
             public void onSuccess() {
-                view.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
+                mView.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
             }
 
             @Override
             public void onError(Exception e) {
-                view.showError(e.getMessage());
+                mView.showError(e.getMessage());
             }
         });
     }
@@ -235,12 +235,12 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
 
             @Override
             public void onSuccess() {
-                view.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
+                mView.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
             }
 
             @Override
             public void onError(Exception e) {
-                view.showError(e.getMessage());
+                mView.showError(e.getMessage());
             }
         });
     }
@@ -251,12 +251,12 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
 
             @Override
             public void onSuccess() {
-                view.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
+                mView.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
             }
 
             @Override
             public void onError(Exception e) {
-                view.showError(e.getMessage());
+                mView.showError(e.getMessage());
             }
         });
     }
@@ -267,12 +267,12 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
 
             @Override
             public void onSuccess() {
-                view.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
+                mView.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
             }
 
             @Override
             public void onError(Exception e) {
-                view.showError(e.getMessage());
+                mView.showError(e.getMessage());
             }
         });
     }

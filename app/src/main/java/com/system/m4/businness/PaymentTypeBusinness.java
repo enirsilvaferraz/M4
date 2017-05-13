@@ -13,7 +13,7 @@ public abstract class PaymentTypeBusinness {
         // Nothing to do
     }
 
-    public static void requestPaymentTypeList(final BusinnessListener.OnMultiResultListenner onMultiResultListenner) {
+    public static void requestPaymentTypeList(final BusinnessListener.OnMultiResultListenner<PaymentTypeDTO> onMultiResultListenner) {
 
         new PaymentTypeFirebaseRepository("dev").findAll(new FirebaseRepository.FirebaseMultiReturnListener<PaymentTypeDTO>() {
 

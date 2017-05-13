@@ -15,6 +15,22 @@ public class PaymentTypeDTO extends DTOAbs {
     @Expose
     private String key;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PaymentTypeDTO that = (PaymentTypeDTO) o;
+
+        return key.equals(that.key);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return key.hashCode();
+    }
+
     @Expose
     private String name;
 
@@ -22,8 +38,8 @@ public class PaymentTypeDTO extends DTOAbs {
         // Nothing to do
     }
 
-    public PaymentTypeDTO(String name) {
-        this.name = name;
+    public PaymentTypeDTO(String key) {
+        this.key = key;
     }
 
     public PaymentTypeDTO(PaymentTypeVO vo) {

@@ -12,7 +12,7 @@ import java.util.List;
  * Contrato para TransactionManager
  */
 
-public interface TransactionManagerContract {
+interface TransactionManagerContract {
 
     interface View {
 
@@ -57,9 +57,9 @@ public interface TransactionManagerContract {
 
     interface Presenter {
 
-        void setPaymentDate(String date);
+        void setPaymentDate(Date date);
 
-        void setPurchaseDate(String date);
+        void setPurchaseDate(Date date);
 
         void setValue(String value);
 

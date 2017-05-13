@@ -30,13 +30,13 @@ public abstract class FirebaseRepository<T extends DTOAbs> {
     public void save(T dto, FirebaseSingleReturnListener<T> listener) {
 
         if (JavaUtils.StringUtil.isEmpty(dto.getKey())) {
-            DatabaseReference push = databaseRef.push();
+            DatabaseReference push = getDatabaseRef().push();
             dto.setKey(push.getKey());
             push.setValue(dto);
         } else {
             Map<String, Object> map = new HashMap<>();
             map.put(dto.getKey(), dto.getMapUpdate());
-            databaseRef.updateChildren(map);
+            getDatabaseRef().updateChildren(map);
         }
 
         listener.onFind(dto);
@@ -44,7 +44,7 @@ public abstract class FirebaseRepository<T extends DTOAbs> {
 
     public void findByKey(String key, final FirebaseSingleReturnListener<T> firebaseSingleReturnListener) {
 
-        Query reference = databaseRef.child(key).orderByKey();
+        Query reference = getDatabaseRef().child(key).orderByKey();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -58,7 +58,7 @@ public abstract class FirebaseRepository<T extends DTOAbs> {
         });
     }
 
-    private T getTInstance(DataSnapshot postSnapshot) {
+    protected T getTInstance(DataSnapshot postSnapshot) {
         T entity = postSnapshot.getValue(getTClass());
         entity.setKey(postSnapshot.getKey());
         return entity;
@@ -68,7 +68,7 @@ public abstract class FirebaseRepository<T extends DTOAbs> {
 
     public void findAll(final FirebaseMultiReturnListener<T> firebaseMultiReturnListener) {
 
-        Query reference = databaseRef.orderByKey();
+        Query reference = getDatabaseRef().orderByKey();
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -87,12 +87,16 @@ public abstract class FirebaseRepository<T extends DTOAbs> {
     }
 
     public void delete(final T entity, final FirebaseSingleReturnListener<T> listener) {
-        databaseRef.child(entity.getKey()).removeValue(new DatabaseReference.CompletionListener() {
+        getDatabaseRef().child(entity.getKey()).removeValue(new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 listener.onFind(entity);
             }
         });
+    }
+
+    public DatabaseReference getDatabaseRef() {
+        return databaseRef;
     }
 
     /**

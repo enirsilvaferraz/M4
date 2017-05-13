@@ -52,19 +52,40 @@ public final class JavaUtils {
             }
         }
 
-        public static Date getActualMaximum(int year, int month) {
+        public static Date getActualMaximum(Date date) {
             Calendar cInit = Calendar.getInstance();
-            cInit.set(year, month, 1); // DATE = 1 Evita avancar o mes (31)
-            cInit.set(Calendar.DATE, cInit.getActualMaximum(Calendar.DATE));
+            cInit.set(Calendar.DAY_OF_MONTH, 1); // DATE = 1 Evita avancar o mes (31)
+            cInit.setTime(date);
+            cInit.set(Calendar.DATE, cInit.getActualMaximum(Calendar.DAY_OF_MONTH));
             cInit.set(Calendar.HOUR_OF_DAY, cInit.getActualMaximum(Calendar.HOUR_OF_DAY));
             cInit.set(Calendar.MINUTE, cInit.getActualMaximum(Calendar.MINUTE));
             cInit.set(Calendar.SECOND, cInit.getActualMaximum(Calendar.SECOND));
             return cInit.getTime();
         }
 
+        public static Date getActualMaximum(int year, int month) {
+            Calendar cInit = Calendar.getInstance();
+            cInit.set(year, month, 1); // DATE = 1 Evita avancar o mes (31)
+            cInit.set(Calendar.DATE, cInit.getActualMaximum(Calendar.DAY_OF_MONTH));
+            cInit.set(Calendar.HOUR_OF_DAY, cInit.getActualMaximum(Calendar.HOUR_OF_DAY));
+            cInit.set(Calendar.MINUTE, cInit.getActualMaximum(Calendar.MINUTE));
+            cInit.set(Calendar.SECOND, cInit.getActualMaximum(Calendar.SECOND));
+            return cInit.getTime();
+        }
+
+        public static Date getActualMinimum(Date date) {
+            Calendar cInit = Calendar.getInstance();
+            cInit.setTime(date);
+            cInit.set(Calendar.DAY_OF_MONTH, cInit.getActualMinimum(Calendar.DAY_OF_MONTH));
+            cInit.set(Calendar.HOUR_OF_DAY, cInit.getActualMinimum(Calendar.HOUR_OF_DAY));
+            cInit.set(Calendar.MINUTE, cInit.getActualMinimum(Calendar.MINUTE));
+            cInit.set(Calendar.SECOND, cInit.getActualMinimum(Calendar.SECOND));
+            return cInit.getTime();
+        }
+
         public static Date getActualMinimum(int year, int month) {
             Calendar cInit = Calendar.getInstance();
-            cInit.set(year, month, cInit.getActualMinimum(Calendar.DATE));
+            cInit.set(year, month, cInit.getActualMinimum(Calendar.DAY_OF_MONTH));
             cInit.set(Calendar.HOUR_OF_DAY, cInit.getActualMinimum(Calendar.HOUR_OF_DAY));
             cInit.set(Calendar.MINUTE, cInit.getActualMinimum(Calendar.MINUTE));
             cInit.set(Calendar.SECOND, cInit.getActualMinimum(Calendar.SECOND));
@@ -84,7 +105,7 @@ public final class JavaUtils {
 
         public static String format(Date date, String template) {
             if (date == null) {
-                return "Not defined";
+                return null;
             }
             final String format = new SimpleDateFormat(template, Locale.getDefault()).format(date);
             return format.substring(0, 1).toUpperCase() + format.substring(1);
@@ -94,10 +115,6 @@ public final class JavaUtils {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             return calendar.get(constantCalendar);
-        }
-
-        public static String getDateString(int year, int month, int day) {
-            return format(getDate(year, month, day));
         }
 
         public static String format(Date date) {
@@ -240,7 +257,7 @@ public final class JavaUtils {
 
         public static void enableOffline(String flavor) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            FirebaseDatabase.getInstance().getReference(flavor + "-database/").keepSynced(true);
+            FirebaseDatabase.getInstance().getReference(flavor).keepSynced(true);
         }
     }
 }

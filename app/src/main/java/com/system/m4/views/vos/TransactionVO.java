@@ -3,17 +3,12 @@ package com.system.m4.views.vos;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.system.m4.infrastructure.JavaUtils;
-import com.system.m4.repository.dtos.PaymentTypeDTO;
-import com.system.m4.repository.dtos.TagDTO;
-import com.system.m4.repository.dtos.TransactionDTO;
-
-import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
  */
-public class TransactionVO implements Serializable, Parcelable {
+public class TransactionVO implements Parcelable {
 
     public static final Creator<TransactionVO> CREATOR = new Creator<TransactionVO>() {
         @Override
@@ -26,9 +21,8 @@ public class TransactionVO implements Serializable, Parcelable {
             return new TransactionVO[size];
         }
     };
-
-    private String paymentDate;
-    private String purchaseDate;
+    private Date paymentDate;
+    private Date purchaseDate;
     private String price;
     private TagVO tag;
     private PaymentTypeVO paymentType;
@@ -37,41 +31,34 @@ public class TransactionVO implements Serializable, Parcelable {
     public TransactionVO() {
     }
 
-    public TransactionVO(TransactionDTO dto, TagDTO tagDTO, PaymentTypeDTO paymentTypeDTO) {
-        this.paymentDate = dto.getPaymentDate();
-        this.purchaseDate = dto.getPurchaseDate();
-        this.price = JavaUtils.NumberUtil.currencyFormat(dto.getPrice());
-        this.tag = new TagVO(tagDTO);
-        this.paymentType = new PaymentTypeVO(paymentTypeDTO);
-        this.content = dto.getContent();
+    public TransactionVO(TagVO tagVO) {
+        this.tag = tagVO;
     }
 
     protected TransactionVO(Parcel in) {
-        this.paymentDate = in.readString();
-        this.purchaseDate = in.readString();
+        long tmpPaymentDate = in.readLong();
+        this.paymentDate = tmpPaymentDate == -1 ? null : new Date(tmpPaymentDate);
+        long tmpPurchaseDate = in.readLong();
+        this.purchaseDate = tmpPurchaseDate == -1 ? null : new Date(tmpPurchaseDate);
         this.price = in.readString();
         this.tag = in.readParcelable(TagVO.class.getClassLoader());
         this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
         this.content = in.readString();
     }
 
-    public TransactionVO(TagVO tagVO) {
-        this.tag = tagVO;
-    }
-
-    public String getPaymentDate() {
+    public Date getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(String paymentDate) {
+    public void setPaymentDate(Date paymentDate) {
         this.paymentDate = paymentDate;
     }
 
-    public String getPurchaseDate() {
+    public Date getPurchaseDate() {
         return purchaseDate;
     }
 
-    public void setPurchaseDate(String purchaseDate) {
+    public void setPurchaseDate(Date purchaseDate) {
         this.purchaseDate = purchaseDate;
     }
 
@@ -114,8 +101,8 @@ public class TransactionVO implements Serializable, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.paymentDate);
-        dest.writeString(this.purchaseDate);
+        dest.writeLong(this.paymentDate != null ? this.paymentDate.getTime() : -1);
+        dest.writeLong(this.purchaseDate != null ? this.purchaseDate.getTime() : -1);
         dest.writeString(this.price);
         dest.writeParcelable(this.tag, flags);
         dest.writeParcelable(this.paymentType, flags);

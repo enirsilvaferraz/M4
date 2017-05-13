@@ -3,7 +3,6 @@ package com.system.m4.views.transaction;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +66,9 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     private ListComponentDialog listComponentTagsDialog;
     private ListComponentDialog listComponentPaymentTypeDialog;
 
-    public static DialogFragment newInstance(TransactionVO transactionVO) {
+    private DialogListener dialogListener;
+
+    public static TransactionManagerDialog newInstance(TransactionVO transactionVO) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.BUNDLE_TRANSACTION_VO, transactionVO);
 
@@ -307,7 +308,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
         JavaUtils.AndroidUtil.showDatePicker(getContext(), date, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                presenter.setPaymentDate(JavaUtils.DateUtil.getDateString(year, month, dayOfMonth));
+                presenter.setPaymentDate(JavaUtils.DateUtil.getDate(year, month, dayOfMonth));
             }
         });
     }
@@ -317,7 +318,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
         JavaUtils.AndroidUtil.showDatePicker(getContext(), date, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                presenter.setPurchaseDate(JavaUtils.DateUtil.getDateString(year, month, dayOfMonth));
+                presenter.setPurchaseDate(JavaUtils.DateUtil.getDate(year, month, dayOfMonth));
             }
         });
     }
@@ -327,6 +328,10 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
         String message = getString(R.string.system_message_saved, getString(R.string.transaction));
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         dismiss();
+
+        if (dialogListener != null) {
+            dialogListener.onDismiss();
+        }
     }
 
     @Override
@@ -343,5 +348,13 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     public void showSuccessMessage(int template, int param) {
         String message = getString(template, getString(param));
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void setDialogListener(DialogListener dialogListener) {
+        this.dialogListener = dialogListener;
+    }
+
+    public interface DialogListener {
+        void onDismiss();
     }
 }

@@ -4,11 +4,16 @@ import com.system.m4.R;
 import com.system.m4.businness.TagBusinness;
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
+import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.TagDTO;
-import com.system.m4.repository.dtos.TransactionDTO;
+import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.TagVO;
+import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOInterface;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,19 +32,30 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestListTransaction() {
 
-        TransactionBusinness.requestTransactions(new BusinnessListener.OnMultiResultListenner<TransactionDTO>() {
+        FilterTransactionVO vo = new FilterTransactionVO();
+        vo.setPaymentDateStart(JavaUtils.DateUtil.getActualMinimum(new Date()));
+        vo.setPaymentDateEnd(JavaUtils.DateUtil.getActualMaximum(new Date()));
+
+        TransactionBusinness.findByFilter(vo, new BusinnessListener.OnMultiResultListenner<TransactionVO>() {
 
             @Override
-            public void onSuccess(List<TransactionDTO> list) {
-               // view.setListTransactions(TransactionVO.asList(list));
+            public void onSuccess(List<TransactionVO> list) {
+
+                Collections.sort(list, new Comparator<TransactionVO>() {
+                    @Override
+                    public int compare(TransactionVO vo0, TransactionVO vo1) {
+                        return vo0.getPaymentDate().compareTo(vo1.getPaymentDate());
+                    }
+                });
+
+                view.setListTransactions(list);
             }
 
             @Override
             public void onError(Exception e) {
-
+                view.showError(e.getMessage());
             }
         });
-
     }
 
     @Override

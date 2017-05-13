@@ -1,13 +1,14 @@
 package com.system.m4.businness;
 
 import com.system.m4.infrastructure.BusinnessListener;
+import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.ConveterUtils;
-import com.system.m4.repository.dtos.FilterTransactionDTO;
 import com.system.m4.repository.dtos.PaymentTypeDTO;
 import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.repository.dtos.TransactionDTO;
 import com.system.m4.repository.firebase.FirebaseRepository;
 import com.system.m4.repository.firebase.TransactionFirebaseRepository;
+import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.TransactionVO;
 
 import java.util.ArrayList;
@@ -24,42 +25,6 @@ public abstract class TransactionBusinness {
         // Nothing to do
     }
 
-    public static void requestTransactions(final BusinnessListener.OnMultiResultListenner<TransactionDTO> onMultiResultListenner) {
-
-        FilterTransactionBusinness.requestFilter(new BusinnessListener.OnSingleResultListener<FilterTransactionDTO>() {
-
-            @Override
-            public void onSuccess(FilterTransactionDTO dto) {
-
-                new TransactionFirebaseRepository("dev").findByFilter(dto, new FirebaseRepository.FirebaseMultiReturnListener<TransactionDTO>() {
-
-                    @Override
-                    public void onFindAll(List<TransactionDTO> list) {
-                        onMultiResultListenner.onSuccess(list);
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        onMultiResultListenner.onError(new Exception(error));
-                    }
-                });
-            }
-
-            @Override
-            public void onError(Exception e) {
-                onMultiResultListenner.onError(e);
-            }
-        });
-    }
-
-    public static List<TransactionVO> getListTransaction(List<TransactionDTO> transactionDTOList, List<TagDTO> tagDTOList, List<PaymentTypeDTO> paymentTypeDTOList) {
-        List<TransactionVO> list = new ArrayList<>();
-        for (TransactionDTO transactionDTO : transactionDTOList) {
-            list.add(ConveterUtils.fromTransaction(transactionDTO, tagDTOList, paymentTypeDTOList));
-        }
-        return list;
-    }
-
     public static void save(TransactionVO vo, final BusinnessListener.OnPersistListener persistListener) {
         TransactionDTO dto = ConveterUtils.fromTransaction(vo);
         new TransactionFirebaseRepository("dev").save(dto, new FirebaseRepository.FirebaseSingleReturnListener<TransactionDTO>() {
@@ -74,5 +39,80 @@ public abstract class TransactionBusinness {
                 persistListener.onError(new Exception(error));
             }
         });
+    }
+
+    public static void findByFilter(FilterTransactionVO vo, final BusinnessListener.OnMultiResultListenner<TransactionVO> multiResultListenner) {
+
+        final List<TransactionDTO> listTransaction = new ArrayList<>();
+        final List<TagDTO> listTag = new ArrayList<>();
+        final List<PaymentTypeDTO> listPaymentType = new ArrayList<>();
+
+        new TransactionFirebaseRepository("dev").findByFilter(vo.getPaymentDateStart(), vo.getPaymentDateEnd(), new FirebaseRepository.FirebaseMultiReturnListener<TransactionDTO>() {
+
+            @Override
+            public void onFindAll(List<TransactionDTO> list) {
+                if (!list.isEmpty()) {
+                    listTransaction.addAll(list);
+                    configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
+                } else {
+                    onError(Constants.NOT_FOUND);
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                multiResultListenner.onError(new Exception(error));
+            }
+        });
+
+        TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
+
+            @Override
+            public void onSuccess(List<TagDTO> list) {
+                if (!list.isEmpty()) {
+                    listTag.addAll(list);
+                    configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
+                } else {
+                    onError(new Exception(Constants.NOT_FOUND));
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                multiResultListenner.onError(e);
+            }
+        });
+
+        PaymentTypeBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner<PaymentTypeDTO>() {
+
+            @Override
+            public void onSuccess(List<PaymentTypeDTO> list) {
+                if (!list.isEmpty()) {
+                    listPaymentType.addAll(list);
+                    configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
+                } else {
+                    onError(new Exception(Constants.NOT_FOUND));
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                multiResultListenner.onError(e);
+            }
+        });
+
+    }
+
+    private static void configureList(List<TransactionDTO> listTransaction, List<TagDTO> listTag, List<PaymentTypeDTO> listPaymentType, BusinnessListener.OnMultiResultListenner<TransactionVO> multiResultListenner) {
+
+        if (!listTransaction.isEmpty() && !listTag.isEmpty() && !listPaymentType.isEmpty()) {
+
+            List<TransactionVO> listVo = new ArrayList<>();
+            for (TransactionDTO dto : listTransaction) {
+                listVo.add(ConveterUtils.fromTransaction(dto, listTag, listPaymentType));
+            }
+
+            multiResultListenner.onSuccess(listVo);
+        }
     }
 }

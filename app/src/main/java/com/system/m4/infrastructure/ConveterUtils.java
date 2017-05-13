@@ -24,8 +24,8 @@ public final class ConveterUtils {
         TransactionDTO dto = new TransactionDTO();
         dto.setTag(vo.getTag().getKey());
         dto.setPaymentType(vo.getPaymentType().getKey());
-        dto.setPaymentDate(JavaUtils.DateUtil.format(vo.getPaymentDate(), JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY, JavaUtils.DateUtil.DD_MM_YYYY ));
-        dto.setPurchaseDate(JavaUtils.DateUtil.format(vo.getPurchaseDate(), JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY, JavaUtils.DateUtil.DD_MM_YYYY ));
+        dto.setPaymentDate(JavaUtils.DateUtil.format(vo.getPaymentDate(), JavaUtils.DateUtil.YYYY_MM_DD ));
+        dto.setPurchaseDate(JavaUtils.DateUtil.format(vo.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD ));
         dto.setContent(vo.getContent());
         dto.setPrice(JavaUtils.NumberUtil.removeFormat(vo.getPrice()));
         return dto;
@@ -39,8 +39,8 @@ public final class ConveterUtils {
         TransactionVO vo = new TransactionVO();
         vo.setTag(fromTag(tagDTO));
         vo.setPaymentType(fromPatmentType(paymentTypeDTO));
-        vo.setPaymentDate(mDTO.getPaymentDate());
-        vo.setPurchaseDate(mDTO.getPurchaseDate());
+        vo.setPaymentDate(JavaUtils.DateUtil.parse(mDTO.getPaymentDate(), JavaUtils.DateUtil.YYYY_MM_DD));
+        vo.setPurchaseDate(JavaUtils.DateUtil.parse(mDTO.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD));
         vo.setContent(mDTO.getContent());
         vo.setPrice(JavaUtils.NumberUtil.currencyFormat(mDTO.getPrice()));
         return vo;
@@ -53,7 +53,7 @@ public final class ConveterUtils {
         return vo;
     }
 
-    public static TagVO fromTag(TagDTO dto) {
+    private static TagVO fromTag(TagDTO dto) {
         TagVO vo = new TagVO();
         vo.setKey(dto.getKey());
         vo.setName(dto.getName());

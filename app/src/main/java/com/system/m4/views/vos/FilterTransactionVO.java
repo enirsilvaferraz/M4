@@ -3,11 +3,8 @@ package com.system.m4.views.vos;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.system.m4.repository.dtos.FilterTransactionDTO;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 /**
  *
@@ -26,51 +23,44 @@ public class FilterTransactionVO implements Serializable, Parcelable {
         }
     };
 
-    private String paymentDateStart;
-    private String paymentDateEnd;
+    private Date paymentDateStart;
+    private Date paymentDateEnd;
     private String tags;
     private String paymentType;
 
-    public FilterTransactionVO(String paymentDateStart, String paymentDateEnd, String tags, String paymentType) {
+    public FilterTransactionVO(Date paymentDateStart, Date paymentDateEnd, String tags, String paymentType) {
         this.paymentDateStart = paymentDateStart;
         this.paymentDateEnd = paymentDateEnd;
         this.tags = tags;
         this.paymentType = paymentType;
     }
 
-    protected FilterTransactionVO(Parcel in) {
-        this.paymentDateStart = in.readString();
-        this.paymentDateEnd = in.readString();
-        this.tags = in.readString();
-        this.paymentType = in.readString();
-    }
-
     public FilterTransactionVO() {
 
     }
 
-    public static List<FilterTransactionVO> asList(List<FilterTransactionDTO> list) {
-        List<FilterTransactionVO> voList = new ArrayList<>();
-        for (FilterTransactionDTO dto : list) {
-            voList.add(new FilterTransactionVO(dto.getPaymentDateStart(), dto.getPaymentDateEnd(), dto.getTags(), dto.getPaymentType()));
-        }
-        return voList;
+    protected FilterTransactionVO(Parcel in) {
+        long tmpPaymentDateStart = in.readLong();
+        this.paymentDateStart = tmpPaymentDateStart == -1 ? null : new Date(tmpPaymentDateStart);
+        long tmpPaymentDateEnd = in.readLong();
+        this.paymentDateEnd = tmpPaymentDateEnd == -1 ? null : new Date(tmpPaymentDateEnd);
+        this.tags = in.readString();
+        this.paymentType = in.readString();
     }
 
-    public String getPaymentDateStart() {
-
+    public Date getPaymentDateStart() {
         return paymentDateStart;
     }
 
-    public void setPaymentDateStart(String paymentDateStart) {
+    public void setPaymentDateStart(Date paymentDateStart) {
         this.paymentDateStart = paymentDateStart;
     }
 
-    public String getPaymentDateEnd() {
+    public Date getPaymentDateEnd() {
         return paymentDateEnd;
     }
 
-    public void setPaymentDateEnd(String paymentDateEnd) {
+    public void setPaymentDateEnd(Date paymentDateEnd) {
         this.paymentDateEnd = paymentDateEnd;
     }
 
@@ -97,8 +87,8 @@ public class FilterTransactionVO implements Serializable, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.paymentDateStart);
-        dest.writeString(this.paymentDateEnd);
+        dest.writeLong(this.paymentDateStart != null ? this.paymentDateStart.getTime() : -1);
+        dest.writeLong(this.paymentDateEnd != null ? this.paymentDateEnd.getTime() : -1);
         dest.writeString(this.tags);
         dest.writeString(this.paymentType);
     }

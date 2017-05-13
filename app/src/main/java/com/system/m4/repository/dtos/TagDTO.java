@@ -56,8 +56,25 @@ public class TagDTO extends DTOAbs {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TagDTO tagDTO = (TagDTO) o;
+
+        return key.equals(tagDTO.key);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return key.hashCode();
+    }
+
+    @Override
     public Map<String, String> getMapUpdate() {
         Gson gson = new Gson();
+
         Type type = new TypeToken<Map<String, String>>() {
         }.getType();
         return gson.fromJson(gson.toJson(this), type);
