@@ -2,6 +2,7 @@ package com.system.m4.views.components.dialogs.list;
 
 import android.support.annotation.NonNull;
 
+import com.system.m4.views.components.DialogToolbar;
 import com.system.m4.views.vos.VOInterface;
 
 import java.util.List;
@@ -13,26 +14,36 @@ import java.util.List;
 
 public interface ListComponentContract {
 
-    interface View {
+    interface View extends DialogToolbar.OnClickListener {
 
         void renderList(List<VOInterface> list);
 
         void showNewItemDialog(@NonNull VOInterface vo);
 
-        void addNewItem(@NonNull VOInterface vo);
+        void addItem(@NonNull VOInterface vo);
+
+        void changeItem(@NonNull VOInterface vo);
 
         void deleteItem(@NonNull VOInterface vo);
 
         void selectItem(@NonNull VOInterface vo);
 
-        void markItemOn();
-
         void markItemOff();
+
+        void closeDialog();
+
+        void showError(String message);
+
+        void configureCreateMode();
+
+        void configureEditMode();
     }
 
     interface Presenter {
 
-        void init();
+        void requestList();
+
+        void selectItem(VOInterface item);
 
         void requestAdd();
 
@@ -42,10 +53,13 @@ public interface ListComponentContract {
 
         void save(String value, VOInterface vo);
 
-        void selectItem(VOInterface item);
-
         void markItemOn(VOInterface item);
 
         void markItemOff();
+    }
+
+    interface DialogListener {
+
+        void onFinish(VOInterface vo);
     }
 }

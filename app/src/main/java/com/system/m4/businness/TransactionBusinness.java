@@ -2,7 +2,7 @@ package com.system.m4.businness;
 
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
-import com.system.m4.infrastructure.ConveterUtils;
+import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.repository.dtos.PaymentTypeDTO;
 import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.repository.dtos.TransactionDTO;
@@ -26,7 +26,7 @@ public abstract class TransactionBusinness {
     }
 
     public static void save(TransactionVO vo, final BusinnessListener.OnPersistListener persistListener) {
-        TransactionDTO dto = ConveterUtils.fromTransaction(vo);
+        TransactionDTO dto = ConverterUtils.fromTransaction(vo);
         new TransactionFirebaseRepository("dev").save(dto, new FirebaseRepository.FirebaseSingleReturnListener<TransactionDTO>() {
 
             @Override
@@ -109,7 +109,7 @@ public abstract class TransactionBusinness {
 
             List<TransactionVO> listVo = new ArrayList<>();
             for (TransactionDTO dto : listTransaction) {
-                listVo.add(ConveterUtils.fromTransaction(dto, listTag, listPaymentType));
+                listVo.add(ConverterUtils.fromTransaction(dto, listTag, listPaymentType));
             }
 
             multiResultListenner.onSuccess(listVo);
