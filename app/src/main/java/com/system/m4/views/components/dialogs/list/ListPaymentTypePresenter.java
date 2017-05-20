@@ -1,11 +1,11 @@
 package com.system.m4.views.components.dialogs.list;
 
-import com.system.m4.businness.TagBusinness;
+import com.system.m4.businness.PaymentTypeBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.repository.dtos.DTOAbs;
-import com.system.m4.repository.dtos.TagDTO;
-import com.system.m4.views.vos.TagVO;
+import com.system.m4.repository.dtos.PaymentTypeDTO;
+import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.VOInterface;
 
 import java.util.ArrayList;
@@ -16,22 +16,22 @@ import java.util.List;
  * For M4
  */
 
-public class ListTagPresenter extends ListComponentPresenterAbs {
+public class ListPaymentTypePresenter extends ListComponentPresenterAbs {
 
-    public ListTagPresenter(ListComponentContract.View view) {
+    public ListPaymentTypePresenter(ListComponentContract.View view) {
         super(view);
     }
 
     @Override
     public void requestList() {
 
-        TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
+        PaymentTypeBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner<PaymentTypeDTO>() {
 
             @Override
-            public void onSuccess(List<TagDTO> list) {
+            public void onSuccess(List<PaymentTypeDTO> list) {
                 List<VOInterface> voList = new ArrayList<>();
-                for (TagDTO dto : list) {
-                    voList.add(ConverterUtils.fromTag(dto));
+                for (PaymentTypeDTO dto : list) {
+                    voList.add(ConverterUtils.fromPaymentType(dto));
                 }
                 getView().renderList(voList);
             }
@@ -46,7 +46,7 @@ public class ListTagPresenter extends ListComponentPresenterAbs {
     @Override
     public void requestDelete() {
 
-        TagBusinness.delete(ConverterUtils.fromTag((TagVO) getSelectedItem()), new BusinnessListener.OnPersistListener() {
+        PaymentTypeBusinness.delete(ConverterUtils.fromPaymentType((PaymentTypeVO) getSelectedItem()), new BusinnessListener.OnPersistListener() {
 
             @Override
             public void onSuccess(DTOAbs dto) {
@@ -65,14 +65,14 @@ public class ListTagPresenter extends ListComponentPresenterAbs {
     public void save(String value, final VOInterface vo) {
 
         vo.setName(value);
-        TagBusinness.save(ConverterUtils.fromTag((TagVO) vo), new BusinnessListener.OnPersistListener() {
+        PaymentTypeBusinness.save(ConverterUtils.fromPaymentType((PaymentTypeVO) vo), new BusinnessListener.OnPersistListener() {
 
             @Override
             public void onSuccess(DTOAbs dto) {
                 if (vo.getKey() != null) {
-                    getView().changeItem(ConverterUtils.fromTag((TagDTO) dto));
+                    getView().changeItem(ConverterUtils.fromPaymentType((PaymentTypeDTO) dto));
                 } else {
-                    getView().addItem(ConverterUtils.fromTag((TagDTO) dto));
+                    getView().addItem(ConverterUtils.fromPaymentType((PaymentTypeDTO) dto));
                 }
                 getView().markItemOff();
             }
@@ -84,7 +84,7 @@ public class ListTagPresenter extends ListComponentPresenterAbs {
         });
     }
 
-    protected TagVO getVoInstance() {
-        return new TagVO();
+    protected PaymentTypeVO getVoInstance() {
+        return new PaymentTypeVO();
     }
 }

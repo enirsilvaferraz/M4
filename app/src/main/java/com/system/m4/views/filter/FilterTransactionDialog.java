@@ -15,12 +15,9 @@ import android.widget.Toast;
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
-import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
-import com.system.m4.views.vos.VOInterface;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -154,63 +151,12 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
 
     @Override
     public void showTagsDialog(List<TagVO> list) {
-        ListComponentDialog listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag);
-        listComponentDialog.addOnItemListenner(new ListComponentDialog.OnItemListenner() {
 
-            @Override
-            public VOInterface onIntanceRequested() {
-                return null;
-            }
-
-            @Override
-            public void onItemAdded(VOInterface item) {
-                presenter.saveTag(item.getName());
-            }
-
-            @Override
-            public void onItemDeleted(VOInterface item) {
-                presenter.deleteTag(item.getKey());
-            }
-
-            @Override
-            public void onItemSelected(VOInterface item) {
-                presenter.setTags(item.getName());
-            }
-
-        }).show(getChildFragmentManager());
-
-        ArrayList<VOInterface> voInterfaces = new ArrayList<VOInterface>(list);
-        listComponentDialog.addList(voInterfaces);
     }
 
     @Override
     public void showPaymentTypeDialog(List<PaymentTypeVO> list) {
-        ListComponentDialog listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_payment_type);
-        listComponentDialog.addOnItemListenner(new ListComponentDialog.OnItemListenner() {
 
-            @Override
-            public VOInterface onIntanceRequested() {
-                return null;
-            }
-
-            @Override
-            public void onItemAdded(VOInterface item) {
-                presenter.savePaymentType(item.getName());
-            }
-
-            @Override
-            public void onItemDeleted(VOInterface item) {
-                presenter.deletePaymentType(item.getKey());
-            }
-
-            @Override
-            public void onItemSelected(VOInterface item) {
-                presenter.setPaymentType(item.getName());
-            }
-
-        }).show(getChildFragmentManager());
-        ArrayList<VOInterface> voInterfaces = new ArrayList<VOInterface>(list);
-        listComponentDialog.addList(voInterfaces);
     }
 
 

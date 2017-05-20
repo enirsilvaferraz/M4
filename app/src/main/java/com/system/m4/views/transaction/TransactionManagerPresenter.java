@@ -3,22 +3,17 @@ package com.system.m4.views.transaction;
 import android.text.TextUtils;
 
 import com.system.m4.R;
-import com.system.m4.businness.PaymentTypeBusinness;
-import com.system.m4.businness.TagBusinness;
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.DTOAbs;
-import com.system.m4.repository.dtos.PaymentTypeDTO;
-import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Enir on 21/04/2017.
@@ -83,35 +78,11 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     @Override
     public void requestTagDialog() {
         mView.showTagsDialog();
-        TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
-
-            @Override
-            public void onSuccess(List<TagDTO> list) {
-                mView.configureTagList(TagVO.asList(list));
-            }
-
-            @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
-            }
-        });
     }
 
     @Override
     public void requestPaymentTypeDialog() {
         mView.showPaymentTypeDialog();
-        PaymentTypeBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner<PaymentTypeDTO>() {
-
-            @Override
-            public void onSuccess(List<PaymentTypeDTO> list) {
-                mView.configurePaymentTypeList(PaymentTypeVO.asList(list));
-            }
-
-            @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
-            }
-        });
     }
 
     @Override
@@ -212,69 +183,5 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
                 }
             });
         }
-    }
-
-    @Override
-    public void saveTag(TagVO vo) {
-        TagBusinness.save(new TagDTO(vo), new BusinnessListener.OnPersistListener() {
-
-            @Override
-            public void onSuccess(DTOAbs dto) {
-                mView.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
-            }
-        });
-    }
-
-    @Override
-    public void deleteTag(TagVO vo) {
-        TagBusinness.delete(new TagDTO(vo), new BusinnessListener.OnPersistListener() {
-
-            @Override
-            public void onSuccess(DTOAbs dto) {
-                mView.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
-            }
-        });
-    }
-
-    @Override
-    public void savePaymentType(PaymentTypeVO vo) {
-        PaymentTypeBusinness.save(new PaymentTypeDTO(vo), new BusinnessListener.OnPersistListener() {
-
-            @Override
-            public void onSuccess(DTOAbs dto) {
-                mView.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
-            }
-        });
-    }
-
-    @Override
-    public void deletePaymentType(PaymentTypeVO vo) {
-        PaymentTypeBusinness.delete(new PaymentTypeDTO(vo), new BusinnessListener.OnPersistListener() {
-
-            @Override
-            public void onSuccess(DTOAbs dto) {
-                mView.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
-            }
-        });
     }
 }

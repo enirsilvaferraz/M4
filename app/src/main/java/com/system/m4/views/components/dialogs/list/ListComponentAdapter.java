@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.system.m4.R;
 import com.system.m4.views.vos.VOInterface;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -23,20 +21,19 @@ import butterknife.ButterKnife;
  */
 class ListComponentAdapter extends RecyclerView.Adapter<ListComponentAdapter.ItemViewHolder> {
 
+    private final ListComponentContract.Presenter presenter;
     private List<VOInterface> list;
-    private OnItemSelectedListener onItemSelectedListener;
     private ListComponentAdapter.ItemViewHolder markedViewHolder;
 
-    ListComponentAdapter(List<VOInterface> list, OnItemSelectedListener onItemSelectedListener) {
+    ListComponentAdapter(List<VOInterface> list, ListComponentContract.Presenter presenter) {
         this.list = list;
-        this.onItemSelectedListener = onItemSelectedListener;
-        sortItens();
+        this.presenter = presenter;
     }
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_dialog, parent, false);
-        return new ItemViewHolder(view, onItemSelectedListener);
+        return new ItemViewHolder(view);
     }
 
     @Override
@@ -50,35 +47,15 @@ class ListComponentAdapter extends RecyclerView.Adapter<ListComponentAdapter.Ite
     }
 
     void addItem(VOInterface item) {
-
-        if (!list.contains(item)) {
-            list.add(item);
-        } else {
-            list.remove(item);
-            list.add(item);
-        }
-
-        sortItens();
-        notifyDataSetChanged();
+        list.add(item);
+        notifyItemInserted(list.indexOf(item));
     }
 
-    private void sortItens() {
-        Collections.sort(list, new Comparator<VOInterface>() {
-            @Override
-            public int compare(VOInterface o1, VOInterface o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-    }
-
-    VOInterface getMarkedItem() {
-        return markedViewHolder.getItemList();
-    }
-
-    void markItemOff() {
-        if (markedViewHolder != null) {
-            markedViewHolder.markItemOff();
-        }
+    void changeItem(VOInterface vo) {
+        int indexOf = list.indexOf(vo);
+        list.remove(indexOf);
+        notifyItemRemoved(indexOf);
+        addItem(vo);
     }
 
     void removeItem(VOInterface item) {
@@ -92,77 +69,65 @@ class ListComponentAdapter extends RecyclerView.Adapter<ListComponentAdapter.Ite
         notifyDataSetChanged();
     }
 
-    /**
-     *
-     */
-    interface OnItemSelectedListener {
-
-        void onSelect(VOInterface item);
-
-        void onMarkOn(VOInterface item);
-
-        void onMarkOff();
+    void markItemOff() {
+        if (markedViewHolder != null) {
+            markedViewHolder.markItemOff();
+        }
     }
 
     /**
      *
      */
-    class ItemViewHolder extends RecyclerView.ViewHolder {
-
-        private final OnItemSelectedListener onItemSelectedListener;
+    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         @BindView(R.id.transaction_manager_action_payment_date)
         View container;
+
         @BindView(R.id.item_list_dialog_text)
         TextView tvItem;
 
-        private VOInterface itemList;
+        private VOInterface item;
 
-        private ItemViewHolder(View itemView, OnItemSelectedListener onItemSelectedListener) {
+        private ItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            this.onItemSelectedListener = onItemSelectedListener;
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         private void bind(final VOInterface item) {
-
-            itemList = item;
-
             tvItem.setText(item.getName());
+            this.item = item;
+        }
 
-            container.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (markedViewHolder == null) {
-                        onItemSelectedListener.onSelect(item);
-                    } else {
-                        markedViewHolder.markItemOff();
-                        onItemSelectedListener.onMarkOff();
-                    }
-                }
-            });
+        @Override
+        public void onClick(View v) {
+            if (markedViewHolder == null) {
+                presenter.selectItem(item);
+            } else {
+                markedViewHolder.markItemOff();
+                presenter.markItemOff();
+            }
+        }
 
-            container.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (markedViewHolder == null) {
-                        markItemOn();
-                        onItemSelectedListener.onMarkOn(item);
-                    } else if (!markedViewHolder.equals(ItemViewHolder.this)) {
-                        markedViewHolder.markItemOff();
-                        markItemOn();
-                        onItemSelectedListener.onMarkOn(item);
-                    } else {
-                        markedViewHolder.markItemOff();
-                        onItemSelectedListener.onMarkOff();
-                    }
-                    return true;
-                }
-            });
+        @Override
+        public boolean onLongClick(View v) {
+            if (markedViewHolder == null) {
+                markItemOn();
+                presenter.markItemOn(item);
+            } else if (!markedViewHolder.equals(ItemViewHolder.this)) {
+                markedViewHolder.markItemOff();
+                markItemOn();
+                presenter.markItemOn(item);
+            } else {
+                markedViewHolder.markItemOff();
+                presenter.markItemOff();
+            }
+            return true;
         }
 
         private void markItemOff() {
-            container.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), android.R.color.white));
+            container.setBackground(itemView.getContext().getDrawable(R.drawable.ripple));
             tvItem.setTypeface(Typeface.DEFAULT);
             markedViewHolder = null;
         }
@@ -171,10 +136,6 @@ class ListComponentAdapter extends RecyclerView.Adapter<ListComponentAdapter.Ite
             container.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.item_marcked));
             tvItem.setTypeface(Typeface.DEFAULT_BOLD);
             markedViewHolder = this;
-        }
-
-        VOInterface getItemList() {
-            return itemList;
         }
     }
 }

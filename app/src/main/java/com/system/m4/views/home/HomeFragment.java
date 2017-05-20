@@ -14,7 +14,8 @@ import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.views.components.dialogs.list.ListComponentContract;
-import com.system.m4.views.components.dialogs.list.ListTagDialog;
+import com.system.m4.views.components.dialogs.list.ListComponentDialog;
+import com.system.m4.views.components.dialogs.list.ListTagPresenter;
 import com.system.m4.views.transaction.TransactionManagerDialog;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
@@ -40,7 +41,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     Unbinder unbinder;
 
     private HomeContract.Presenter presenter;
-    private ListTagDialog listComponentDialog;
+    private ListComponentDialog listComponentDialog;
 
     public HomeFragment() {
         // Nothing to do
@@ -137,7 +138,8 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 //
 //        }).show(getChildFragmentManager());
 
-        listComponentDialog = ListTagDialog.newInstance(R.string.transaction_tag, new ListComponentContract.DialogListener() {
+        listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new ListComponentContract.DialogListener() {
+
             @Override
             public void onFinish(VOInterface vo) {
 
@@ -145,7 +147,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                 dialogFragment.setDialogListener(new TransactionManagerDialog.DialogListener() {
                     @Override
                     public void onDismiss() {
-                        presenter.requestListTransaction();
+                        HomeFragment.this.presenter.requestListTransaction();
                     }
                 });
 
@@ -153,12 +155,13 @@ public class HomeFragment extends Fragment implements HomeContract.View {
             }
         });
 
-        listComponentDialog.show(getChildFragmentManager(), ListTagDialog.class.getSimpleName());
+        listComponentDialog.setPresenter(new ListTagPresenter(listComponentDialog));
+        listComponentDialog.show(getChildFragmentManager(), ListComponentDialog.class.getSimpleName());
     }
 
     @Override
     public void configureListTagsTransactionManager(List<TagVO> list) {
-       // listComponentDialog.addList(new ArrayList<VOInterface>(list));
+        // listComponentDialog.addList(new ArrayList<VOInterface>(list));
     }
 
     @Override

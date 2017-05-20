@@ -5,7 +5,6 @@ import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Enir on 21/04/2017.
@@ -29,10 +28,6 @@ interface TransactionManagerContract {
         void setPaymentType(String value);
 
         void setContent(String value);
-
-        void configureTagList(List<TagVO> list);
-
-        void configurePaymentTypeList(List<PaymentTypeVO> list);
 
         void showTagsDialog();
 
@@ -94,14 +89,6 @@ interface TransactionManagerContract {
         void clearPaymentDateDialog();
 
         void save();
-
-        void saveTag(TagVO vo);
-
-        void deleteTag(TagVO vo);
-
-        void savePaymentType(PaymentTypeVO vo);
-
-        void deletePaymentType(PaymentTypeVO vo);
 
         void init(TransactionVO transactionVO);
     }

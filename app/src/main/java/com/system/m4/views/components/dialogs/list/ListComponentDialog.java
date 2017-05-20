@@ -10,10 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.views.BaseDialogFragment;
-import com.system.m4.views.components.DialogToolbar;
 import com.system.m4.views.components.dialogs.TextComponentDialog;
 import com.system.m4.views.vos.VOInterface;
 
@@ -25,28 +25,29 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by eferraz on 14/04/17.
- * List component dialog
+ * Created by eferraz on 18/05/17.
+ * For M4
  */
 
-public class ListComponentDialog extends BaseDialogFragment implements DialogToolbar.OnClickListener {
+public class ListComponentDialog extends BaseDialogFragment implements ListComponentContract.View {
 
     @BindView(R.id.dialog_list_recycler)
     RecyclerView recyclerview;
 
     Unbinder unbinder;
 
-    private OnItemListenner onItemListenner;
-
     private ListComponentAdapter mAdapter;
+    private ListComponentContract.Presenter presenter;
+    private ListComponentContract.DialogListener listener;
 
-    public static ListComponentDialog newInstance(@StringRes int title) {
+    public static ListComponentDialog newInstance(@StringRes int title, ListComponentContract.DialogListener listener) {
 
         Bundle bundle = new Bundle();
         bundle.putInt(TITLE_BUNDLE, title);
 
         ListComponentDialog dialog = new ListComponentDialog();
         dialog.setArguments(bundle);
+        dialog.setListener(listener);
         return dialog;
     }
 
@@ -62,100 +63,104 @@ public class ListComponentDialog extends BaseDialogFragment implements DialogToo
         super.onViewCreated(view, savedInstanceState);
 
         hideDoneBtn();
-
-        mToolbar.setTitle(getArguments().getInt(TITLE_BUNDLE));
+        setTitle(getArguments().getInt(TITLE_BUNDLE));
         mToolbar.configureCreateMode();
         mToolbar.setOnClickListener(this);
 
         List<VOInterface> list = new ArrayList<>();
-        mAdapter = new ListComponentAdapter(list, new ListComponentAdapter.OnItemSelectedListener() {
-
-            @Override
-            public void onSelect(VOInterface item) {
-                dismiss();
-                onItemListenner.onItemSelected(item);
-            }
-
-            @Override
-            public void onMarkOn(VOInterface item) {
-                mToolbar.configureEditMode();
-            }
-
-            @Override
-            public void onMarkOff() {
-                mToolbar.configureCreateMode();
-            }
-
-        });
+        mAdapter = new ListComponentAdapter(list, presenter);
 
         recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(mAdapter);
+
+        presenter.requestList();
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    public void renderList(List<VOInterface> list) {
+        mAdapter.addList(list);
     }
 
-    public void showItemManager(@NonNull final VOInterface vo) {
-
+    @Override
+    public void showNewItemDialog(@NonNull final VOInterface vo) {
         TextComponentDialog.newInstance(R.string.transaction_tag, vo.getName(), new BaseDialogFragment.OnFinishListener() {
             @Override
             public void onFinish(String value) {
-                vo.setName(value);
-                mAdapter.addItem(vo);
-                mAdapter.markItemOff();
-                mToolbar.configureCreateMode();
-                onItemListenner.onItemAdded(vo);
+                presenter.save(value, vo);
             }
         }).show(getChildFragmentManager(), TextComponentDialog.TAG);
     }
 
-    public ListComponentDialog addOnItemListenner(OnItemListenner onAddItemListenner) {
-        this.onItemListenner = onAddItemListenner;
-        return this;
+    @Override
+    public void addItem(@NonNull VOInterface vo) {
+        mAdapter.addItem(vo);
     }
 
-    /**
-     * Dialog listener
-     */
+    @Override
+    public void changeItem(@NonNull VOInterface vo) {
+        mAdapter.changeItem(vo);
+    }
+
+    @Override
+    public void deleteItem(@NonNull VOInterface vo) {
+        mAdapter.removeItem(vo);
+    }
+
+    @Override
+    public void selectItem(@NonNull VOInterface vo) {
+        listener.onFinish(vo);
+    }
+
+    @Override
+    public void markItemOff() {
+        mAdapter.markItemOff();
+    }
+
+    @Override
+    public void closeDialog() {
+        dismiss();
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void configureCreateMode() {
+        mToolbar.configureCreateMode();
+    }
+
+    @Override
+    public void configureEditMode() {
+        mToolbar.configureEditMode();
+    }
 
     @Override
     public void onAddClick() {
-        showItemManager(onItemListenner.onIntanceRequested());
+        presenter.requestAdd();
     }
 
     @Override
     public void onEditClick() {
-        showItemManager(mAdapter.getMarkedItem());
+        presenter.requestEdit();
     }
 
     @Override
     public void onDeleteClick() {
-        VOInterface markedItem = mAdapter.getMarkedItem();
-        mAdapter.removeItem(markedItem);
-        mAdapter.markItemOff();
-        mToolbar.configureCreateMode();
-        onItemListenner.onItemDeleted(markedItem);
+        presenter.requestDelete();
     }
 
-    public void addList(List<VOInterface> list) {
-        mAdapter.addList(list);
+    public ListComponentContract.DialogListener getListener() {
+        return listener;
     }
 
-    /**
-     *
-     */
-    public interface OnItemListenner {
+    public void setListener(ListComponentContract.DialogListener listener) {
+        this.listener = listener;
+    }
 
-        VOInterface onIntanceRequested();
-
-        void onItemAdded(VOInterface item);
-
-        void onItemDeleted(VOInterface item);
-
-        void onItemSelected(VOInterface item);
+    public void setPresenter(ListComponentContract.Presenter presenter) {
+        this.presenter = presenter;
     }
 }
