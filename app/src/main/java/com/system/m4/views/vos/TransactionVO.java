@@ -2,13 +2,14 @@ package com.system.m4.views.vos;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.Date;
 
 /**
  *
  */
-public class TransactionVO implements Parcelable {
+public class TransactionVO implements Parcelable, Comparable<TransactionVO> {
 
     public static final Creator<TransactionVO> CREATOR = new Creator<TransactionVO>() {
         @Override
@@ -119,5 +120,10 @@ public class TransactionVO implements Parcelable {
         dest.writeParcelable(this.tag, flags);
         dest.writeParcelable(this.paymentType, flags);
         dest.writeString(this.content);
+    }
+
+    @Override
+    public int compareTo(@NonNull TransactionVO o) {
+        return paymentDate.compareTo(o.getPaymentDate());
     }
 }

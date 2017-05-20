@@ -60,18 +60,10 @@ interface FilterTransactionContract {
 
         void setPaymentDateStart(int year, int month, int dayOfMonth);
 
-        void setPaymentType(String itemName);
+        void setPaymentType(PaymentTypeVO vo);
 
-        void setTags(String itemName);
+        void setTag(TagVO vo);
 
         void validateForm();
-
-        void saveTag(String name);
-
-        void deleteTag(String key);
-
-        void savePaymentType(String name);
-
-        void deletePaymentType(String key);
     }
 }

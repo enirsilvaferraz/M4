@@ -8,7 +8,6 @@ import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -36,14 +35,7 @@ class HomePresenter implements HomeContract.Presenter {
 
             @Override
             public void onSuccess(List<TransactionVO> list) {
-
-                Collections.sort(list, new Comparator<TransactionVO>() {
-                    @Override
-                    public int compare(TransactionVO vo0, TransactionVO vo1) {
-                        return vo0.getPaymentDate().compareTo(vo1.getPaymentDate());
-                    }
-                });
-
+                Collections.sort(list);
                 mView.setListTransactions(list);
                 mView.refreshOff();
             }

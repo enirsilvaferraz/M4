@@ -22,16 +22,15 @@ public class FilterTransactionVO implements Serializable, Parcelable {
             return new FilterTransactionVO[size];
         }
     };
-
     private Date paymentDateStart;
     private Date paymentDateEnd;
-    private String tags;
-    private String paymentType;
+    private TagVO tag;
+    private PaymentTypeVO paymentType;
 
-    public FilterTransactionVO(Date paymentDateStart, Date paymentDateEnd, String tags, String paymentType) {
+    public FilterTransactionVO(Date paymentDateStart, Date paymentDateEnd, TagVO tag, PaymentTypeVO paymentType) {
         this.paymentDateStart = paymentDateStart;
         this.paymentDateEnd = paymentDateEnd;
-        this.tags = tags;
+        this.tag = tag;
         this.paymentType = paymentType;
     }
 
@@ -44,8 +43,8 @@ public class FilterTransactionVO implements Serializable, Parcelable {
         this.paymentDateStart = tmpPaymentDateStart == -1 ? null : new Date(tmpPaymentDateStart);
         long tmpPaymentDateEnd = in.readLong();
         this.paymentDateEnd = tmpPaymentDateEnd == -1 ? null : new Date(tmpPaymentDateEnd);
-        this.tags = in.readString();
-        this.paymentType = in.readString();
+        this.tag = in.readParcelable(TagVO.class.getClassLoader());
+        this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
     }
 
     public Date getPaymentDateStart() {
@@ -64,19 +63,19 @@ public class FilterTransactionVO implements Serializable, Parcelable {
         this.paymentDateEnd = paymentDateEnd;
     }
 
-    public String getTags() {
-        return tags;
+    public TagVO getTag() {
+        return tag;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setTag(TagVO tags) {
+        this.tag = tags;
     }
 
-    public String getPaymentType() {
+    public PaymentTypeVO getPaymentType() {
         return paymentType;
     }
 
-    public void setPaymentType(String paymentType) {
+    public void setPaymentType(PaymentTypeVO paymentType) {
         this.paymentType = paymentType;
     }
 
@@ -89,7 +88,7 @@ public class FilterTransactionVO implements Serializable, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.paymentDateStart != null ? this.paymentDateStart.getTime() : -1);
         dest.writeLong(this.paymentDateEnd != null ? this.paymentDateEnd.getTime() : -1);
-        dest.writeString(this.tags);
-        dest.writeString(this.paymentType);
+        dest.writeParcelable(this.tag, flags);
+        dest.writeParcelable(this.paymentType, flags);
     }
 }

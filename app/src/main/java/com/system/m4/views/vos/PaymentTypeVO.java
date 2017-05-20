@@ -1,6 +1,7 @@
 package com.system.m4.views.vos;
 
 import android.os.Parcel;
+import android.support.annotation.NonNull;
 
 import com.system.m4.repository.dtos.PaymentTypeDTO;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * For M4
  */
 
-public class PaymentTypeVO implements VOInterface {
+public class PaymentTypeVO implements VOInterface<PaymentTypeVO> {
 
     public static final Creator<PaymentTypeVO> CREATOR = new Creator<PaymentTypeVO>() {
         @Override
@@ -76,5 +77,10 @@ public class PaymentTypeVO implements VOInterface {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.key);
         dest.writeString(this.name);
+    }
+
+    @Override
+    public int compareTo(@NonNull PaymentTypeVO o) {
+        return this.name.compareTo(o.getName());
     }
 }

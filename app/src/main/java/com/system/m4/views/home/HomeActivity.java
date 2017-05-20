@@ -73,6 +73,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void showFilter() {
-        FilterTransactionDialog.newInstance().show(getSupportFragmentManager(), FilterTransactionDialog.TAG);
+        FilterTransactionDialog.newInstance().show(getSupportFragmentManager(), FilterTransactionDialog.class.getSimpleName());
     }
 }

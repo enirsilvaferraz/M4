@@ -9,6 +9,7 @@ import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.VOInterface;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,6 +34,7 @@ public class ListTagPresenter extends ListComponentPresenterAbs {
                 for (TagDTO dto : list) {
                     voList.add(ConverterUtils.fromTag(dto));
                 }
+                Collections.sort(voList);
                 getView().renderList(voList);
             }
 
