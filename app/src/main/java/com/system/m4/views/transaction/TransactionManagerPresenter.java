@@ -174,7 +174,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
 
                 @Override
                 public void onSuccess(DTOAbs dto) {
-                    mView.dismissDialog();
+                    mView.dismissDialog(null);
                 }
 
                 @Override

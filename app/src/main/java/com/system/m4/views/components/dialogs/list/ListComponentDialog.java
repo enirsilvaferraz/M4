@@ -38,9 +38,9 @@ public class ListComponentDialog extends BaseDialogFragment implements ListCompo
 
     private ListComponentAdapter mAdapter;
     private ListComponentContract.Presenter presenter;
-    private ListComponentContract.DialogListener listener;
+    private DialogListener listener;
 
-    public static ListComponentDialog newInstance(@StringRes int title, ListComponentContract.DialogListener listener) {
+    public static ListComponentDialog newInstance(@StringRes int title, DialogListener listener) {
 
         Bundle bundle = new Bundle();
         bundle.putInt(TITLE_BUNDLE, title);
@@ -152,11 +152,7 @@ public class ListComponentDialog extends BaseDialogFragment implements ListCompo
         presenter.requestDelete();
     }
 
-    public ListComponentContract.DialogListener getListener() {
-        return listener;
-    }
-
-    public void setListener(ListComponentContract.DialogListener listener) {
+    public void setListener(DialogListener listener) {
         this.listener = listener;
     }
 

@@ -16,7 +16,6 @@ import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.dialogs.NumberComponentDialog;
 import com.system.m4.views.components.dialogs.TextComponentDialog;
-import com.system.m4.views.components.dialogs.list.ListComponentContract;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListPaymentTypePresenter;
 import com.system.m4.views.components.dialogs.list.ListTagPresenter;
@@ -39,8 +38,6 @@ import butterknife.Unbinder;
  */
 
 public class TransactionManagerDialog extends BaseDialogFragment implements TransactionManagerContract.View {
-
-    public static final String TAG = TransactionManagerDialog.class.getSimpleName();
 
     Unbinder unbinder;
 
@@ -218,7 +215,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void showTagsDialog() {
-        ListComponentDialog listComponentTagsDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new ListComponentContract.DialogListener() {
+        ListComponentDialog listComponentTagsDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new DialogListener() {
             @Override
             public void onFinish(VOInterface vo) {
                 TransactionManagerDialog.this.presenter.setTags((TagVO) vo);
@@ -230,7 +227,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void showPaymentTypeDialog() {
-        ListComponentDialog listComponentPaymentTypeDialog = ListComponentDialog.newInstance(R.string.transaction_payment_type, new ListComponentContract.DialogListener() {
+        ListComponentDialog listComponentPaymentTypeDialog = ListComponentDialog.newInstance(R.string.transaction_payment_type, new DialogListener() {
             @Override
             public void onFinish(VOInterface vo) {
                 TransactionManagerDialog.this.presenter.setPaymentType(((PaymentTypeVO) vo));
@@ -281,14 +278,9 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     }
 
     @Override
-    public void dismissDialog() {
-        String message = getString(R.string.system_message_saved, getString(R.string.transaction));
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-        dismiss();
-
-        if (dialogListener != null) {
-            dialogListener.onDismiss();
-        }
+    public void dismissDialog(VOInterface vo) {
+       dismiss();
+        dialogListener.onFinish(vo);
     }
 
     @Override
@@ -309,9 +301,5 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     public void setDialogListener(DialogListener dialogListener) {
         this.dialogListener = dialogListener;
-    }
-
-    public interface DialogListener {
-        void onDismiss();
     }
 }

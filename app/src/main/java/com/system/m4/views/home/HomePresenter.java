@@ -1,16 +1,11 @@
 package com.system.m4.views.home;
 
-import com.system.m4.R;
-import com.system.m4.businness.TagBusinness;
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.JavaUtils;
-import com.system.m4.repository.dtos.DTOAbs;
-import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
-import com.system.m4.views.vos.VOInterface;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,10 +19,10 @@ import java.util.List;
 
 class HomePresenter implements HomeContract.Presenter {
 
-    private HomeContract.View view;
+    private HomeContract.View mView;
 
     HomePresenter(HomeContract.View view) {
-        this.view = view;
+        this.mView = view;
     }
 
     @Override
@@ -49,66 +44,30 @@ class HomePresenter implements HomeContract.Presenter {
                     }
                 });
 
-                view.setListTransactions(list);
+                mView.setListTransactions(list);
+                mView.refreshOff();
             }
 
             @Override
             public void onError(Exception e) {
-                view.showError(e.getMessage());
+                mView.showError(e.getMessage());
+                mView.refreshOff();
             }
         });
     }
 
     @Override
     public void requestTransactionManager() {
-
-        view.showTransactionManagerDialog(); // Colocar PLaceholder e remover if list == null do adapter
-
-        TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
-
-            @Override
-            public void onSuccess(List<TagDTO> list) {
-                view.configureListTagsTransactionManager(TagVO.asList(list));
-            }
-
-            @Override
-            public void onError(Exception e) {
-                view.showError(e.getMessage());
-            }
-        });
+        mView.requestTransactionManagerDialog(); // Colocar PLaceholder e remover if list == null do adapter
     }
 
     @Override
-    public void saveTag(VOInterface vo) {
-
-        TagBusinness.save(new TagDTO(((TagVO) vo)), new BusinnessListener.OnPersistListener() {
-
-            @Override
-            public void onSuccess(DTOAbs dto) {
-                view.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                view.showError(e.getMessage());
-            }
-        });
+    public void requestTransactionDialog(TransactionVO vo) {
+        mView.showTransactionDialog(vo);
     }
 
     @Override
-    public void deleteTag(VOInterface vo) {
-
-        TagBusinness.delete(new TagDTO(((TagVO) vo)), new BusinnessListener.OnPersistListener() {
-
-            @Override
-            public void onSuccess(DTOAbs dto) {
-                view.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                view.showError(e.getMessage());
-            }
-        });
+    public void requestTransactionDialog(TagVO vo) {
+        mView.showTransactionDialog(vo);
     }
 }

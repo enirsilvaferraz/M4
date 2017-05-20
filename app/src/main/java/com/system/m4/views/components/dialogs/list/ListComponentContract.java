@@ -12,7 +12,7 @@ import java.util.List;
  * For M4
  */
 
-public interface ListComponentContract {
+interface ListComponentContract {
 
     interface View extends DialogToolbar.OnClickListener {
 
@@ -58,8 +58,4 @@ public interface ListComponentContract {
         void markItemOff();
     }
 
-    interface DialogListener {
-
-        void onFinish(VOInterface vo);
-    }
 }

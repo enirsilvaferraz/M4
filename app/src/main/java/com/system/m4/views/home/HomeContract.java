@@ -22,13 +22,17 @@ class HomeContract {
 
         void setListTransactions(List<TransactionVO> list);
 
-        void configureListTagsTransactionManager(List<TagVO> list);
+        void showTransactionDialog(TagVO vo);
+
+        void showTransactionDialog(TransactionVO vo);
 
         void showError(String message);
 
+        void refreshOff();
+
         void showSuccessMessage(int template, int param);
 
-        void showTransactionManagerDialog();
+        void requestTransactionManagerDialog();
     }
 
     /**
@@ -40,8 +44,8 @@ class HomeContract {
 
         void requestTransactionManager();
 
-        void saveTag(VOInterface vo);
+        void requestTransactionDialog(TransactionVO vo);
 
-        void deleteTag(VOInterface vo);
+        void requestTransactionDialog(TagVO vo);
     }
 }

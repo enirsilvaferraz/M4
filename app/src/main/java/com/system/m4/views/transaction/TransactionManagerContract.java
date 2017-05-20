@@ -3,6 +3,7 @@ package com.system.m4.views.transaction;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.VOInterface;
 
 import java.util.Date;
 
@@ -41,7 +42,7 @@ interface TransactionManagerContract {
 
         void showPurchaseDateDialog(Date date);
 
-        void dismissDialog();
+        void dismissDialog(VOInterface vo);
 
         void showError(String error);
 

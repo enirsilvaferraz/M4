@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.system.m4.R;
-import com.system.m4.views.components.dialogs.list.ListComponentContract;
+import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListTagPresenter;
 import com.system.m4.views.transaction.TransactionManagerDialog;
@@ -87,12 +87,10 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void setListTransactions(List<TransactionVO> list) {
 
-        refreshOff();
-
         TransactionAdapter adapter = new TransactionAdapter(list, new TransactionAdapter.OnItemSelectedListener() {
             @Override
             public void onSelect(TransactionVO item) {
-                TransactionManagerDialog.newInstance(item).show(getChildFragmentManager(), TransactionManagerDialog.TAG);
+                presenter.requestTransactionDialog(item);
             }
         });
 
@@ -103,54 +101,12 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void showTransactionManagerDialog() {
+    public void requestTransactionManagerDialog() {
 
-//        listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag);
-//        listComponentDialog.addOnItemListenner(new ListComponentDialog.OnItemListenner() {
-//
-//            @Override
-//            public VOInterface onIntanceRequested() {
-//                return new TagVO();
-//            }
-//
-//            @Override
-//            public void onItemAdded(VOInterface item) {
-//                presenter.saveTag(item);
-//            }
-//
-//            @Override
-//            public void onItemDeleted(VOInterface item) {
-//                presenter.deleteTag(item);
-//            }
-//
-//            @Override
-//            public void onItemSelected(VOInterface item) {
-//                TransactionManagerDialog dialogFragment = TransactionManagerDialog.newInstance(new TransactionVO(((TagVO) item)));
-//                dialogFragment.setDialogListener(new TransactionManagerDialog.DialogListener() {
-//                    @Override
-//                    public void onDismiss() {
-//                        presenter.requestListTransaction();
-//                    }
-//                });
-//                dialogFragment.show(getChildFragmentManager(), TransactionManagerDialog.TAG);
-//            }
-//
-//        }).show(getChildFragmentManager());
-
-        ListComponentDialog listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new ListComponentContract.DialogListener() {
-
+        ListComponentDialog listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new BaseDialogFragment.DialogListener() {
             @Override
             public void onFinish(VOInterface vo) {
-
-                TransactionManagerDialog dialogFragment = TransactionManagerDialog.newInstance(new TransactionVO(((TagVO) vo)));
-                dialogFragment.setDialogListener(new TransactionManagerDialog.DialogListener() {
-                    @Override
-                    public void onDismiss() {
-                        HomeFragment.this.presenter.requestListTransaction();
-                    }
-                });
-
-                dialogFragment.show(getChildFragmentManager(), TransactionManagerDialog.class.getSimpleName());
+                presenter.requestTransactionDialog((TagVO) vo);
             }
         });
 
@@ -159,17 +115,29 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void configureListTagsTransactionManager(List<TagVO> list) {
-        // listComponentDialog.addList(new ArrayList<VOInterface>(list));
+    public void showTransactionDialog(TagVO vo) {
+        showTransactionDialog(new TransactionVO(vo));
+    }
+
+    @Override
+    public void showTransactionDialog(TransactionVO vo) {
+        TransactionManagerDialog dialogFragment = TransactionManagerDialog.newInstance(vo);
+        dialogFragment.setDialogListener(new BaseDialogFragment.DialogListener() {
+            @Override
+            public void onFinish(VOInterface vo) {
+                presenter.requestListTransaction();
+            }
+        });
+        dialogFragment.show(getChildFragmentManager(), TransactionManagerDialog.class.getSimpleName());
     }
 
     @Override
     public void showError(String message) {
-        refreshOff();
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    private void refreshOff() {
+    @Override
+    public void refreshOff() {
         if (mSwipeRefresh.isRefreshing()) {
             mSwipeRefresh.setRefreshing(false);
         }

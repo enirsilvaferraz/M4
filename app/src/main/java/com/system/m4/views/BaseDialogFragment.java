@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.views.components.DialogToolbar;
+import com.system.m4.views.vos.VOInterface;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -80,5 +81,10 @@ public abstract class BaseDialogFragment extends DialogFragment {
 
     public interface OnFinishListener {
         void onFinish(String value);
+    }
+
+    public interface DialogListener {
+
+        void onFinish(VOInterface vo);
     }
 }
