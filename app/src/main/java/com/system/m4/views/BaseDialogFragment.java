@@ -26,7 +26,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public static final String TITLE_BUNDLE = "TITLE_BUNDLE";
 
     @BindView(R.id.dialog_toolbar_title)
-    DialogToolbar mToolbar;
+    public DialogToolbar mToolbar;
 
     @BindView(R.id.base_dialog_container_action)
     LinearLayout containerAction;

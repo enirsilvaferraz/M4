@@ -34,9 +34,6 @@ public class ListComponentDialog extends BaseDialogFragment implements DialogToo
     @BindView(R.id.dialog_list_recycler)
     RecyclerView recyclerview;
 
-    @BindView(R.id.dialog_toolbar_title)
-    DialogToolbar mToolbar;
-
     Unbinder unbinder;
 
     private OnItemListenner onItemListenner;

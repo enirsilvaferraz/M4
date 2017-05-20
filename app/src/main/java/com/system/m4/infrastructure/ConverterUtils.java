@@ -14,9 +14,9 @@ import java.util.List;
  * For M4
  */
 
-public final class ConveterUtils {
+public final class ConverterUtils {
 
-    private ConveterUtils() {
+    private ConverterUtils() {
         // Do nothing
     }
 
@@ -53,7 +53,14 @@ public final class ConveterUtils {
         return vo;
     }
 
-    private static TagVO fromTag(TagDTO dto) {
+    public static TagDTO fromTag(TagVO mVO) {
+        TagDTO dto = new TagDTO();
+        dto.setKey(mVO.getKey());
+        dto.setName(mVO.getName());
+        return dto;
+    }
+
+    public static TagVO fromTag(TagDTO dto) {
         TagVO vo = new TagVO();
         vo.setKey(dto.getKey());
         vo.setName(dto.getName());
