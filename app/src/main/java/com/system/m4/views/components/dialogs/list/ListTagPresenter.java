@@ -3,6 +3,7 @@ package com.system.m4.views.components.dialogs.list;
 import com.system.m4.businness.TagBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.ConverterUtils;
+import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.VOInterface;
@@ -48,6 +49,7 @@ class ListTagPresenter implements ListComponentContract.Presenter {
     @Override
     public void selectItem(VOInterface item) {
         mView.selectItem(item);
+        mView.closeDialog();
     }
 
     @Override
@@ -66,7 +68,7 @@ class ListTagPresenter implements ListComponentContract.Presenter {
         TagBusinness.delete(ConverterUtils.fromTag((TagVO) selectedItem), new BusinnessListener.OnPersistListener() {
 
             @Override
-            public void onSuccess() {
+            public void onSuccess(DTOAbs dto) {
                 mView.deleteItem(selectedItem);
                 markItemOff();
             }
@@ -85,11 +87,11 @@ class ListTagPresenter implements ListComponentContract.Presenter {
         TagBusinness.save(ConverterUtils.fromTag((TagVO) vo), new BusinnessListener.OnPersistListener() {
 
             @Override
-            public void onSuccess() {
+            public void onSuccess(DTOAbs dto) {
                 if (vo.getKey() != null) {
-                    mView.changeItem(vo);
+                    mView.changeItem(ConverterUtils.fromTag((TagDTO) dto));
                 } else {
-                    mView.addItem(vo);
+                    mView.addItem(ConverterUtils.fromTag((TagDTO) dto));
                 }
                 mView.markItemOff();
             }

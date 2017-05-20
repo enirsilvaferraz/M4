@@ -91,6 +91,8 @@ class ListTagAdapter extends RecyclerView.Adapter<ListTagAdapter.ItemViewHolder>
         private ItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         private void bind(final VOInterface item) {
@@ -125,7 +127,7 @@ class ListTagAdapter extends RecyclerView.Adapter<ListTagAdapter.ItemViewHolder>
         }
 
         private void markItemOff() {
-            container.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), android.R.color.white));
+            container.setBackground(itemView.getContext().getDrawable(R.drawable.ripple));
             tvItem.setTypeface(Typeface.DEFAULT);
             markedViewHolder = null;
         }

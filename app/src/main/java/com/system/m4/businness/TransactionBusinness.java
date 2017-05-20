@@ -31,7 +31,7 @@ public abstract class TransactionBusinness {
 
             @Override
             public void onFind(TransactionDTO dto) {
-                persistListener.onSuccess();
+                persistListener.onSuccess(dto);
             }
 
             @Override

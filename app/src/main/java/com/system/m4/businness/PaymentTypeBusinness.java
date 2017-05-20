@@ -34,7 +34,7 @@ public abstract class PaymentTypeBusinness {
 
             @Override
             public void onFind(PaymentTypeDTO dto) {
-                persistListener.onSuccess();
+                persistListener.onSuccess(dto);
             }
 
             @Override
@@ -49,7 +49,7 @@ public abstract class PaymentTypeBusinness {
 
             @Override
             public void onFind(PaymentTypeDTO dto) {
-                persistListener.onSuccess();
+                persistListener.onSuccess(dto);
             }
 
             @Override

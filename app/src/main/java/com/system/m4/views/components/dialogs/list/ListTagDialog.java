@@ -75,6 +75,8 @@ public class ListTagDialog extends BaseDialogFragment implements ListComponentCo
         recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(mAdapter);
+
+        presenter.requestList();
     }
 
     @Override

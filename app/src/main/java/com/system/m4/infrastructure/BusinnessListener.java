@@ -1,5 +1,7 @@
 package com.system.m4.infrastructure;
 
+import com.system.m4.repository.dtos.DTOAbs;
+
 import java.util.List;
 
 /**
@@ -34,7 +36,7 @@ public interface BusinnessListener {
      */
     interface OnPersistListener {
 
-        void onSuccess();
+        void onSuccess(DTOAbs dto);
 
         void onError(Exception e);
     }

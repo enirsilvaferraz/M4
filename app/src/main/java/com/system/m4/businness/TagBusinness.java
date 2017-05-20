@@ -29,13 +29,13 @@ public abstract class TagBusinness {
         });
     }
 
-    public static void save(TagDTO tagDTO, final BusinnessListener.OnPersistListener persistListener) {
+    public static void save(final TagDTO tagDTO, final BusinnessListener.OnPersistListener persistListener) {
 
         new TagFirebaseRepository("dev").save(tagDTO, new FirebaseRepository.FirebaseSingleReturnListener<TagDTO>() {
 
             @Override
             public void onFind(TagDTO dto) {
-                persistListener.onSuccess();
+                persistListener.onSuccess(dto);
             }
 
             @Override
@@ -51,7 +51,7 @@ public abstract class TagBusinness {
 
             @Override
             public void onFind(TagDTO dto) {
-                persistListener.onSuccess();
+                persistListener.onSuccess(dto);
             }
 
             @Override

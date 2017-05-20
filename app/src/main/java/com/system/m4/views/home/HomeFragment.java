@@ -13,13 +13,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.system.m4.R;
-import com.system.m4.views.components.dialogs.list.ListComponentDialog;
+import com.system.m4.views.components.dialogs.list.ListComponentContract;
+import com.system.m4.views.components.dialogs.list.ListTagDialog;
 import com.system.m4.views.transaction.TransactionManagerDialog;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOInterface;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     Unbinder unbinder;
 
     private HomeContract.Presenter presenter;
-    private ListComponentDialog listComponentDialog;
+    private ListTagDialog listComponentDialog;
 
     public HomeFragment() {
         // Nothing to do
@@ -105,42 +105,60 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void showTransactionManagerDialog() {
 
-        listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag);
-        listComponentDialog.addOnItemListenner(new ListComponentDialog.OnItemListenner() {
+//        listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag);
+//        listComponentDialog.addOnItemListenner(new ListComponentDialog.OnItemListenner() {
+//
+//            @Override
+//            public VOInterface onIntanceRequested() {
+//                return new TagVO();
+//            }
+//
+//            @Override
+//            public void onItemAdded(VOInterface item) {
+//                presenter.saveTag(item);
+//            }
+//
+//            @Override
+//            public void onItemDeleted(VOInterface item) {
+//                presenter.deleteTag(item);
+//            }
+//
+//            @Override
+//            public void onItemSelected(VOInterface item) {
+//                TransactionManagerDialog dialogFragment = TransactionManagerDialog.newInstance(new TransactionVO(((TagVO) item)));
+//                dialogFragment.setDialogListener(new TransactionManagerDialog.DialogListener() {
+//                    @Override
+//                    public void onDismiss() {
+//                        presenter.requestListTransaction();
+//                    }
+//                });
+//                dialogFragment.show(getChildFragmentManager(), TransactionManagerDialog.TAG);
+//            }
+//
+//        }).show(getChildFragmentManager());
 
+        listComponentDialog = ListTagDialog.newInstance(R.string.transaction_tag, new ListComponentContract.DialogListener() {
             @Override
-            public VOInterface onIntanceRequested() {
-                return new TagVO();
-            }
+            public void onFinish(VOInterface vo) {
 
-            @Override
-            public void onItemAdded(VOInterface item) {
-                presenter.saveTag(item);
-            }
-
-            @Override
-            public void onItemDeleted(VOInterface item) {
-                presenter.deleteTag(item);
-            }
-
-            @Override
-            public void onItemSelected(VOInterface item) {
-                TransactionManagerDialog dialogFragment = TransactionManagerDialog.newInstance(new TransactionVO(((TagVO) item)));
+                TransactionManagerDialog dialogFragment = TransactionManagerDialog.newInstance(new TransactionVO(((TagVO) vo)));
                 dialogFragment.setDialogListener(new TransactionManagerDialog.DialogListener() {
                     @Override
                     public void onDismiss() {
                         presenter.requestListTransaction();
                     }
                 });
-                dialogFragment.show(getChildFragmentManager(), TransactionManagerDialog.TAG);
-            }
 
-        }).show(getChildFragmentManager());
+                dialogFragment.show(getChildFragmentManager(), TransactionManagerDialog.class.getSimpleName());
+            }
+        });
+
+        listComponentDialog.show(getChildFragmentManager(), ListTagDialog.class.getSimpleName());
     }
 
     @Override
     public void configureListTagsTransactionManager(List<TagVO> list) {
-        listComponentDialog.addList(new ArrayList<VOInterface>(list));
+       // listComponentDialog.addList(new ArrayList<VOInterface>(list));
     }
 
     @Override

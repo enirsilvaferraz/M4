@@ -5,6 +5,7 @@ import com.system.m4.businness.TagBusinness;
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.TagVO;
@@ -83,7 +84,7 @@ class HomePresenter implements HomeContract.Presenter {
         TagBusinness.save(new TagDTO(((TagVO) vo)), new BusinnessListener.OnPersistListener() {
 
             @Override
-            public void onSuccess() {
+            public void onSuccess(DTOAbs dto) {
                 view.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
             }
 
@@ -100,7 +101,7 @@ class HomePresenter implements HomeContract.Presenter {
         TagBusinness.delete(new TagDTO(((TagVO) vo)), new BusinnessListener.OnPersistListener() {
 
             @Override
-            public void onSuccess() {
+            public void onSuccess(DTOAbs dto) {
                 view.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
             }
 

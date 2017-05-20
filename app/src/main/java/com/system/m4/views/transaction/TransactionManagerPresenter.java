@@ -9,6 +9,7 @@ import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.repository.dtos.PaymentTypeDTO;
 import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.views.vos.PaymentTypeVO;
@@ -201,7 +202,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
             TransactionBusinness.save(mVO, new BusinnessListener.OnPersistListener() {
 
                 @Override
-                public void onSuccess() {
+                public void onSuccess(DTOAbs dto) {
                     mView.dismissDialog();
                 }
 
@@ -218,7 +219,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
         TagBusinness.save(new TagDTO(vo), new BusinnessListener.OnPersistListener() {
 
             @Override
-            public void onSuccess() {
+            public void onSuccess(DTOAbs dto) {
                 mView.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
             }
 
@@ -234,7 +235,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
         TagBusinness.delete(new TagDTO(vo), new BusinnessListener.OnPersistListener() {
 
             @Override
-            public void onSuccess() {
+            public void onSuccess(DTOAbs dto) {
                 mView.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
             }
 
@@ -250,7 +251,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
         PaymentTypeBusinness.save(new PaymentTypeDTO(vo), new BusinnessListener.OnPersistListener() {
 
             @Override
-            public void onSuccess() {
+            public void onSuccess(DTOAbs dto) {
                 mView.showSuccessMessage(R.string.system_message_saved, R.string.transaction_tag);
             }
 
@@ -266,7 +267,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
         PaymentTypeBusinness.delete(new PaymentTypeDTO(vo), new BusinnessListener.OnPersistListener() {
 
             @Override
-            public void onSuccess() {
+            public void onSuccess(DTOAbs dto) {
                 mView.showSuccessMessage(R.string.system_message_deleted, R.string.transaction_tag);
             }
 
