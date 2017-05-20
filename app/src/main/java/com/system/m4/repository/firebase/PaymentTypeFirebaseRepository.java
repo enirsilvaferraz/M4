@@ -9,8 +9,8 @@ import com.system.m4.repository.dtos.PaymentTypeDTO;
 
 public class PaymentTypeFirebaseRepository extends FirebaseRepository<PaymentTypeDTO> {
 
-    public PaymentTypeFirebaseRepository(String flavor) {
-        super(flavor, "PaymentType");
+    public PaymentTypeFirebaseRepository() {
+        super(PaymentTypeDTO.class.getSimpleName().replace("DTO", ""));
     }
 
     @Override

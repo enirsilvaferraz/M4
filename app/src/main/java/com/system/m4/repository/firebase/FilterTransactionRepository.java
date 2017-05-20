@@ -9,8 +9,8 @@ import com.system.m4.repository.dtos.FilterTransactionDTO;
 
 public class FilterTransactionRepository extends FirebaseRepository<FilterTransactionDTO> {
 
-    public FilterTransactionRepository(String flavor) {
-        super(flavor, FilterTransactionDTO.class.getSimpleName().replace("DTO", ""));
+    public FilterTransactionRepository() {
+        super(FilterTransactionDTO.class.getSimpleName().replace("DTO", ""));
     }
 
     @Override

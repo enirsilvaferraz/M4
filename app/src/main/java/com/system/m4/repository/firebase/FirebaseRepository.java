@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.system.m4.BuildConfig;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.DTOAbs;
 
@@ -23,8 +24,8 @@ public abstract class FirebaseRepository<T extends DTOAbs> {
 
     private DatabaseReference databaseRef;
 
-    public FirebaseRepository(String flavor, String databaseName) {
-        databaseRef = FirebaseDatabase.getInstance().getReference(flavor + "/" + databaseName);
+    FirebaseRepository(String databaseName) {
+        databaseRef = FirebaseDatabase.getInstance().getReference(BuildConfig.FLAVOR + "/" + databaseName);
     }
 
     public void save(T dto, FirebaseSingleReturnListener<T> listener) {
@@ -58,7 +59,7 @@ public abstract class FirebaseRepository<T extends DTOAbs> {
         });
     }
 
-    protected T getTInstance(DataSnapshot postSnapshot) {
+    T getTInstance(DataSnapshot postSnapshot) {
         T entity = postSnapshot.getValue(getTClass());
         entity.setKey(postSnapshot.getKey());
         return entity;
@@ -95,7 +96,7 @@ public abstract class FirebaseRepository<T extends DTOAbs> {
         });
     }
 
-    public DatabaseReference getDatabaseRef() {
+    DatabaseReference getDatabaseRef() {
         return databaseRef;
     }
 

@@ -15,7 +15,7 @@ public abstract class TagBusinness {
 
     public static void requestTagList(final BusinnessListener.OnMultiResultListenner<TagDTO> onMultiResultListenner) {
 
-        new TagFirebaseRepository("dev").findAll(new FirebaseRepository.FirebaseMultiReturnListener<TagDTO>() {
+        new TagFirebaseRepository().findAll(new FirebaseRepository.FirebaseMultiReturnListener<TagDTO>() {
 
             @Override
             public void onFindAll(List<TagDTO> list) {
@@ -31,7 +31,7 @@ public abstract class TagBusinness {
 
     public static void save(final TagDTO tagDTO, final BusinnessListener.OnPersistListener persistListener) {
 
-        new TagFirebaseRepository("dev").save(tagDTO, new FirebaseRepository.FirebaseSingleReturnListener<TagDTO>() {
+        new TagFirebaseRepository().save(tagDTO, new FirebaseRepository.FirebaseSingleReturnListener<TagDTO>() {
 
             @Override
             public void onFind(TagDTO dto) {
@@ -47,7 +47,7 @@ public abstract class TagBusinness {
 
     public static void delete(TagDTO tagDTO, final BusinnessListener.OnPersistListener persistListener) {
 
-        new TagFirebaseRepository("dev").delete(tagDTO, new FirebaseRepository.FirebaseSingleReturnListener<TagDTO>() {
+        new TagFirebaseRepository().delete(tagDTO, new FirebaseRepository.FirebaseSingleReturnListener<TagDTO>() {
 
             @Override
             public void onFind(TagDTO dto) {

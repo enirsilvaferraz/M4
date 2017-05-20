@@ -18,8 +18,8 @@ import java.util.List;
 
 public class TransactionFirebaseRepository extends FirebaseRepository<TransactionDTO> {
 
-    public TransactionFirebaseRepository(String flavor) {
-        super(flavor, "Transaction");
+    public TransactionFirebaseRepository() {
+        super(TransactionDTO.class.getSimpleName().replace("DTO", ""));
     }
 
     @Override

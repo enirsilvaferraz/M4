@@ -30,7 +30,7 @@ public class FilterTransactionBusinness {
         final List<TagDTO> listTag = new ArrayList<>();
         final List<PaymentTypeDTO> listPaymentType = new ArrayList<>();
 
-        new FilterTransactionRepository("dev").findAll(new FirebaseRepository.FirebaseMultiReturnListener<FilterTransactionDTO>() {
+        new FilterTransactionRepository().findAll(new FirebaseRepository.FirebaseMultiReturnListener<FilterTransactionDTO>() {
 
             @Override
             public void onFindAll(List<FilterTransactionDTO> list) {
@@ -98,7 +98,7 @@ public class FilterTransactionBusinness {
 
     public static void save(FilterTransactionDTO dto, final BusinnessListener.OnPersistListener listener) {
 
-        new FilterTransactionRepository("dev").save(dto, new FirebaseRepository.FirebaseSingleReturnListener<FilterTransactionDTO>() {
+        new FilterTransactionRepository().save(dto, new FirebaseRepository.FirebaseSingleReturnListener<FilterTransactionDTO>() {
 
             @Override
             public void onFind(FilterTransactionDTO dtoParam) {
@@ -114,7 +114,7 @@ public class FilterTransactionBusinness {
 
     public static void delete(FilterTransactionDTO dto, final BusinnessListener.OnPersistListener listener) {
 
-        new FilterTransactionRepository("dev").delete(dto, new FirebaseRepository.FirebaseSingleReturnListener<FilterTransactionDTO>() {
+        new FilterTransactionRepository().delete(dto, new FirebaseRepository.FirebaseSingleReturnListener<FilterTransactionDTO>() {
 
             @Override
             public void onFind(FilterTransactionDTO dtoParam) {

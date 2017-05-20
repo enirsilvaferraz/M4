@@ -30,7 +30,7 @@ public abstract class TransactionBusinness {
 
     public static void save(TransactionVO vo, final BusinnessListener.OnPersistListener persistListener) {
         TransactionDTO dto = ConverterUtils.fromTransaction(vo);
-        new TransactionFirebaseRepository("dev").save(dto, new FirebaseRepository.FirebaseSingleReturnListener<TransactionDTO>() {
+        new TransactionFirebaseRepository().save(dto, new FirebaseRepository.FirebaseSingleReturnListener<TransactionDTO>() {
 
             @Override
             public void onFind(TransactionDTO dto) {
@@ -46,7 +46,7 @@ public abstract class TransactionBusinness {
 
     public static void findByFilter(final BusinnessListener.OnMultiResultListenner<TransactionVO> multiResultListenner) {
 
-        new FilterTransactionRepository("dev").findAll(new FirebaseRepository.FirebaseMultiReturnListener<FilterTransactionDTO>() {
+        new FilterTransactionRepository().findAll(new FirebaseRepository.FirebaseMultiReturnListener<FilterTransactionDTO>() {
 
             @Override
             public void onFindAll(List<FilterTransactionDTO> list) {
@@ -82,7 +82,7 @@ public abstract class TransactionBusinness {
         Date paymentDateStart = filterDTO.getPaymentDateStart() != null ? JavaUtils.DateUtil.parse(filterDTO.getPaymentDateStart(), JavaUtils.DateUtil.YYYY_MM_DD) : null;
         Date paymentDateEnd = filterDTO.getPaymentDateEnd() != null ? JavaUtils.DateUtil.parse(filterDTO.getPaymentDateEnd(), JavaUtils.DateUtil.YYYY_MM_DD) : null;
 
-        new TransactionFirebaseRepository("dev").findByFilter(paymentDateStart, paymentDateEnd, new FirebaseRepository.FirebaseMultiReturnListener<TransactionDTO>() {
+        new TransactionFirebaseRepository().findByFilter(paymentDateStart, paymentDateEnd, new FirebaseRepository.FirebaseMultiReturnListener<TransactionDTO>() {
 
             @Override
             public void onFindAll(List<TransactionDTO> list) {

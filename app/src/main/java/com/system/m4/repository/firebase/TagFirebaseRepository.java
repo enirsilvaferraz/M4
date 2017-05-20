@@ -9,8 +9,8 @@ import com.system.m4.repository.dtos.TagDTO;
 
 public class TagFirebaseRepository extends FirebaseRepository<TagDTO> {
 
-    public TagFirebaseRepository(String flavor) {
-        super(flavor, "Tag");
+    public TagFirebaseRepository() {
+        super("Tag");
     }
 
     @Override
