@@ -4,8 +4,8 @@
     android:id="@+id/container_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    tools:showIn="@layout/dialog_list_component">
+    android:background="@color/accent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/dialog_title"
@@ -16,6 +16,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:fontFamily="sans-serif-medium"
+        android:textColor="@android:color/white"
         android:textSize="25sp"
         android:textStyle="bold"
         tools:text="Dialog Title" />
@@ -29,6 +30,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:padding="16dp"
         android:src="@drawable/ic_add_black_24dp"
+        android:tint="@android:color/white"
         android:visibility="gone"
         tools:visibility="visible" />
 
@@ -41,6 +43,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:padding="16dp"
         android:src="@drawable/ic_edit_black_24dp"
+        android:tint="@android:color/white"
         android:visibility="gone"
         tools:layout_alignParentEnd="false"
         tools:layout_toStartOf="@id/dialog_add_item"
@@ -55,6 +58,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:padding="16dp"
         android:src="@drawable/ic_delete_black_24dp"
+        android:tint="@android:color/white"
         android:visibility="gone"
         tools:visibility="visible" />
 

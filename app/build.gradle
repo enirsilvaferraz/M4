@@ -23,8 +23,10 @@ android {
     }
     productFlavors {
         dev {
+            applicationId 'com.system.m4.dev'
         }
         prd {
+            applicationId "com.system.m4"
         }
     }
 }
