@@ -22,6 +22,7 @@ public final class ConverterUtils {
 
     public static TransactionDTO fromTransaction(TransactionVO vo) {
         TransactionDTO dto = new TransactionDTO();
+        dto.setKey(vo.getKey());
         dto.setTag(vo.getTag().getKey());
         dto.setPaymentType(vo.getPaymentType().getKey());
         dto.setPaymentDate(JavaUtils.DateUtil.format(vo.getPaymentDate(), JavaUtils.DateUtil.YYYY_MM_DD));
@@ -37,6 +38,7 @@ public final class ConverterUtils {
         PaymentTypeDTO paymentTypeDTO = paymentTypes.get(paymentTypes.indexOf(new PaymentTypeDTO(mDTO.getPaymentType())));
 
         TransactionVO vo = new TransactionVO();
+        vo.setKey(mDTO.getKey());
         vo.setTag(fromTag(tagDTO));
         vo.setPaymentType(fromPaymentType(paymentTypeDTO));
         vo.setPaymentDate(JavaUtils.DateUtil.parse(mDTO.getPaymentDate(), JavaUtils.DateUtil.YYYY_MM_DD));

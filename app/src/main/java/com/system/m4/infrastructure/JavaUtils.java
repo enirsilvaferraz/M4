@@ -6,6 +6,9 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.views.vos.VOInterface;
 
 import java.lang.reflect.ParameterizedType;
@@ -17,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by eferraz on 14/04/17.
@@ -248,8 +252,14 @@ public final class JavaUtils {
             return (Class) (type).getActualTypeArguments()[0];
         }
 
-        public static boolean isEmpty(VOInterface vo){
+        public static boolean isEmpty(VOInterface vo) {
             return vo == null || vo.getKey() == null || vo.getKey().isEmpty();
+        }
+
+        public static Map pojo2Map(DTOAbs obj) {
+            Gson gson = new GsonBuilder().create();
+            String json = gson.toJson(obj);
+            return new Gson().fromJson(json, Map.class);
         }
     }
 

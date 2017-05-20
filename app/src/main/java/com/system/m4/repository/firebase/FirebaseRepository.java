@@ -35,7 +35,7 @@ public abstract class FirebaseRepository<T extends DTOAbs> {
             push.setValue(dto);
         } else {
             Map<String, Object> map = new HashMap<>();
-            map.put(dto.getKey(), dto.getMapUpdate());
+            map.put(dto.getKey(), JavaUtils.ClassUtil.pojo2Map(dto));
             getDatabaseRef().updateChildren(map);
         }
 

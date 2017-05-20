@@ -2,6 +2,7 @@ package com.system.m4.repository.dtos;
 
 import com.google.gson.annotations.Expose;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class TransactionDTO extends DTOAbs {
@@ -90,6 +91,8 @@ public class TransactionDTO extends DTOAbs {
 
     @Override
     public Map<String, String> getMapUpdate() {
-        return null;
+        Map<String, String> map = new HashMap<>();
+        
+        return map;
     }
 }

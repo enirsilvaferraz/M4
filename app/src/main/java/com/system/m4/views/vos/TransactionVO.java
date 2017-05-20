@@ -21,6 +21,8 @@ public class TransactionVO implements Parcelable {
             return new TransactionVO[size];
         }
     };
+
+    private String key;
     private Date paymentDate;
     private Date purchaseDate;
     private String price;
@@ -36,6 +38,7 @@ public class TransactionVO implements Parcelable {
     }
 
     protected TransactionVO(Parcel in) {
+        this.key = in.readString();
         long tmpPaymentDate = in.readLong();
         this.paymentDate = tmpPaymentDate == -1 ? null : new Date(tmpPaymentDate);
         long tmpPurchaseDate = in.readLong();
@@ -94,6 +97,14 @@ public class TransactionVO implements Parcelable {
         this.content = content;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -101,6 +112,7 @@ public class TransactionVO implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.key);
         dest.writeLong(this.paymentDate != null ? this.paymentDate.getTime() : -1);
         dest.writeLong(this.purchaseDate != null ? this.purchaseDate.getTime() : -1);
         dest.writeString(this.price);
