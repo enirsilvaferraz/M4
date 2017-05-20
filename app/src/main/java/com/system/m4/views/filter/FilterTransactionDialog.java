@@ -18,6 +18,7 @@ import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListPaymentTypePresenter;
 import com.system.m4.views.components.dialogs.list.ListTagPresenter;
+import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.VOInterface;
@@ -54,11 +55,12 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
 
     private FilterTransactionContract.Presenter presenter;
 
-    public static DialogFragment newInstance() {
+    public static DialogFragment newInstance(DialogListener dialogListener) {
         Bundle bundle = new Bundle();
 
         FilterTransactionDialog fragment = new FilterTransactionDialog();
         fragment.setArguments(bundle);
+        fragment.setDialogListener(dialogListener);
         return fragment;
     }
 
@@ -67,6 +69,7 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.dialog_transaction_filter, container, false);
         unbinder = ButterKnife.bind(this, rootView);
+        mFooter.setListener(this);
         return rootView;
     }
 
@@ -75,6 +78,7 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
         super.onViewCreated(view, savedInstanceState);
         setTitle(R.string.transaction_filter_title);
         presenter = new FilterTransactionPresenter(this);
+        presenter.init();
     }
 
     @Override
@@ -212,8 +216,23 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
     }
 
     @Override
-    public void actionDone() {
-        presenter.validateForm();
+    public void dismissDialog(FilterTransactionVO vo) {
         dismiss();
+        getDialogListener().onFinish(vo);
+    }
+
+    @Override
+    public void onDoneClick() {
+        presenter.done();
+    }
+
+    @Override
+    public void onCancelClick() {
+dismiss();
+    }
+
+    @Override
+    public void onDeleteClick() {
+presenter.delete();
     }
 }

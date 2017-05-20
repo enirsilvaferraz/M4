@@ -11,7 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.system.m4.R;
+import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.filter.FilterTransactionDialog;
+import com.system.m4.views.vos.VOInterface;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,6 +75,11 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void showFilter() {
-        FilterTransactionDialog.newInstance().show(getSupportFragmentManager(), FilterTransactionDialog.class.getSimpleName());
+        FilterTransactionDialog.newInstance(new BaseDialogFragment.DialogListener() {
+            @Override
+            public void onFinish(VOInterface vo) {
+                presenter.requestListTransaction();
+            }
+        }).show(getSupportFragmentManager(), FilterTransactionDialog.class.getSimpleName());
     }
 }

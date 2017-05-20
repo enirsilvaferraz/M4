@@ -12,6 +12,4 @@ public abstract class DTOAbs {
     public abstract String getKey();
 
     public abstract void setKey(String key);
-
-    public abstract Map<String, String> getMapUpdate();
 }

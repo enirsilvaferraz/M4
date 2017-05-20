@@ -2,6 +2,7 @@ package com.system.m4.views.filter;
 
 import android.support.annotation.StringRes;
 
+import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 
@@ -36,9 +37,13 @@ interface FilterTransactionContract {
         void showError(String error);
 
         void showError(@StringRes int template, @StringRes int... params);
+
+        void dismissDialog(FilterTransactionVO vo);
     }
 
     interface Presenter {
+
+        void init();
 
         void requestTagDialog();
 
@@ -64,6 +69,8 @@ interface FilterTransactionContract {
 
         void setTag(TagVO vo);
 
-        void validateForm();
+        void done();
+
+        void delete();
     }
 }

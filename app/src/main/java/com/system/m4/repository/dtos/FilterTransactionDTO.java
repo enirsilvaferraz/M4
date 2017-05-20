@@ -3,19 +3,13 @@ package com.system.m4.repository.dtos;
 /**
  *
  */
-public class FilterTransactionDTO {
+public class FilterTransactionDTO extends DTOAbs {
 
+    private String key;
     private String paymentDateStart;
     private String paymentDateEnd;
     private String tags;
     private String paymentType;
-
-    public FilterTransactionDTO(String paymentDateStart, String paymentDateEnd, String tags, String paymentType) {
-        this.paymentDateStart = paymentDateStart;
-        this.paymentDateEnd = paymentDateEnd;
-        this.tags = tags;
-        this.paymentType = paymentType;
-    }
     
     public String getPaymentDateStart() {
         return paymentDateStart;
@@ -49,4 +43,13 @@ public class FilterTransactionDTO {
         this.paymentType = paymentType;
     }
 
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
+    }
 }

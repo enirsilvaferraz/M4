@@ -1,8 +1,10 @@
 package com.system.m4.infrastructure;
 
+import com.system.m4.repository.dtos.FilterTransactionDTO;
 import com.system.m4.repository.dtos.PaymentTypeDTO;
 import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.repository.dtos.TransactionDTO;
+import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
@@ -73,6 +75,32 @@ public final class ConverterUtils {
         TagVO vo = new TagVO();
         vo.setKey(dto.getKey());
         vo.setName(dto.getName());
+        return vo;
+    }
+
+    public static FilterTransactionDTO fromFilterTransaction(FilterTransactionVO vo) {
+        FilterTransactionDTO dto = new FilterTransactionDTO();
+        dto.setKey(vo.getKey());
+        dto.setPaymentType(vo.getPaymentType() != null ? vo.getPaymentType().getKey() : null);
+        dto.setTags(vo.getTag() != null ? vo.getTag().getKey() : null);
+        dto.setPaymentDateStart(vo.getPaymentDateStart() != null ? JavaUtils.DateUtil.format(vo.getPaymentDateStart(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
+        dto.setPaymentDateEnd(vo.getPaymentDateEnd() != null ? JavaUtils.DateUtil.format(vo.getPaymentDateEnd(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
+        return dto;
+    }
+
+    public static FilterTransactionVO fromFilterTransaction(FilterTransactionDTO dto, List<TagDTO> tags, List<PaymentTypeDTO> paymentTypes) {
+        int indexOf = tags.indexOf(new TagDTO(dto.getTags()));
+        TagDTO tagDTO = indexOf != -1 ? tags.get(indexOf) : new TagDTO();
+
+        indexOf = paymentTypes.indexOf(new PaymentTypeDTO(dto.getPaymentType()));
+        PaymentTypeDTO paymentTypeDTO = indexOf != -1 ? paymentTypes.get(indexOf) : new PaymentTypeDTO();
+
+        FilterTransactionVO vo = new FilterTransactionVO();
+        vo.setKey(dto.getKey());
+        vo.setPaymentType(fromPaymentType(paymentTypeDTO));
+        vo.setPaymentDateStart(dto.getPaymentDateStart() != null ? JavaUtils.DateUtil.parse(dto.getPaymentDateStart(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
+        vo.setPaymentDateEnd(dto.getPaymentDateEnd() != null ? JavaUtils.DateUtil.parse(dto.getPaymentDateEnd(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
+        vo.setTag(fromTag(tagDTO));
         return vo;
     }
 }

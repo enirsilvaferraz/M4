@@ -33,7 +33,7 @@ public class DialogToolbar extends RelativeLayout {
     @BindView(R.id.dialog_delete_item)
     ImageButton mDeleteItem;
 
-    private OnClickListener onClickListener;
+    private OnClickListener listener;
 
     public DialogToolbar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -65,8 +65,8 @@ public class DialogToolbar extends RelativeLayout {
         mDeleteItem.setVisibility(GONE);
     }
 
-    public void setOnClickListener(DialogToolbar.OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
+    public void setListener(DialogToolbar.OnClickListener listener) {
+        this.listener = listener;
     }
 
     public void setTitle(String titleString) {
@@ -79,22 +79,22 @@ public class DialogToolbar extends RelativeLayout {
 
     @OnClick(R.id.dialog_add_item)
     public void onClickAdd() {
-        if (onClickListener != null) {
-            onClickListener.onAddClick();
+        if (listener != null) {
+            listener.onAddClick();
         }
     }
 
     @OnClick(R.id.dialog_edit_item)
     public void onClickEdit() {
-        if (onClickListener != null) {
-            onClickListener.onEditClick();
+        if (listener != null) {
+            listener.onEditClick();
         }
     }
 
     @OnClick(R.id.dialog_delete_item)
     public void onClickDelete() {
-        if (onClickListener != null) {
-            onClickListener.onDeleteClick();
+        if (listener != null) {
+            listener.onDeleteClick();
         }
     }
 

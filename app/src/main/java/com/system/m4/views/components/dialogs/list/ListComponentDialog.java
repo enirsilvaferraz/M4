@@ -62,10 +62,10 @@ public class ListComponentDialog extends BaseDialogFragment implements ListCompo
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        hideDoneBtn();
+        hideFooter();
         setTitle(getArguments().getInt(TITLE_BUNDLE));
         mToolbar.configureCreateMode();
-        mToolbar.setOnClickListener(this);
+        mToolbar.setListener(this);
 
         List<VOInterface> list = new ArrayList<>();
         mAdapter = new ListComponentAdapter(list, presenter);
@@ -158,5 +158,14 @@ public class ListComponentDialog extends BaseDialogFragment implements ListCompo
 
     public void setPresenter(ListComponentContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void onDoneClick() {
+    }
+
+    @Override
+    public void onCancelClick() {
+        dismiss();
     }
 }

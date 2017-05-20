@@ -78,7 +78,7 @@ public class TextComponentDialog extends BaseDialogFragment {
     }
 
     @Override
-    public void actionDone() {
+    public void onDoneClick() {
         dismiss();
         getOnFinishListener().onFinish(etText.getText().toString());
     }

@@ -2,6 +2,7 @@ package com.system.m4.repository.firebase;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.TransactionDTO;
@@ -44,9 +45,16 @@ public class TransactionFirebaseRepository extends FirebaseRepository<Transactio
             }
         };
 
-        getDatabaseRef().orderByChild("paymentDate")
-                .startAt(JavaUtils.DateUtil.format(start, JavaUtils.DateUtil.YYYY_MM_DD))
-                .endAt(JavaUtils.DateUtil.format(end, JavaUtils.DateUtil.YYYY_MM_DD))
-                .addListenerForSingleValueEvent(listener);
+        Query query = getDatabaseRef().orderByChild("paymentDate");
+
+        if (start != null) {
+            query.startAt(JavaUtils.DateUtil.format(start, JavaUtils.DateUtil.YYYY_MM_DD));
+        }
+
+        if (end != null) {
+            query.endAt(JavaUtils.DateUtil.format(end, JavaUtils.DateUtil.YYYY_MM_DD));
+        }
+
+        query.addListenerForSingleValueEvent(listener);
     }
 }

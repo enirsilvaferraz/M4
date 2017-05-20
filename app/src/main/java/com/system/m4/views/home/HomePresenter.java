@@ -2,13 +2,11 @@ package com.system.m4.views.home;
 
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
-import com.system.m4.infrastructure.JavaUtils;
-import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,11 +25,7 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestListTransaction() {
 
-        FilterTransactionVO vo = new FilterTransactionVO();
-        vo.setPaymentDateStart(JavaUtils.DateUtil.getActualMinimum(new Date()));
-        vo.setPaymentDateEnd(JavaUtils.DateUtil.getActualMaximum(new Date()));
-
-        TransactionBusinness.findByFilter(vo, new BusinnessListener.OnMultiResultListenner<TransactionVO>() {
+        TransactionBusinness.findByFilter(new BusinnessListener.OnMultiResultListenner<TransactionVO>() {
 
             @Override
             public void onSuccess(List<TransactionVO> list) {
@@ -42,6 +36,7 @@ class HomePresenter implements HomeContract.Presenter {
 
             @Override
             public void onError(Exception e) {
+                mView.setListTransactions(new ArrayList<TransactionVO>());
                 mView.showError(e.getMessage());
                 mView.refreshOff();
             }

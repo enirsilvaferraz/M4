@@ -1,28 +1,28 @@
 package com.system.m4.views;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.system.m4.R;
+import com.system.m4.views.components.DialogFooter;
 import com.system.m4.views.components.DialogToolbar;
 import com.system.m4.views.vos.VOInterface;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * Created by Enir on 20/04/2017.
  * Base dialog
  */
 
-public abstract class BaseDialogFragment extends DialogFragment {
+public abstract class BaseDialogFragment extends DialogFragment implements DialogFooter.OnClickListener, DialogToolbar.OnClickListener {
 
     public static final String TITLE_BUNDLE = "TITLE_BUNDLE";
 
@@ -30,25 +30,22 @@ public abstract class BaseDialogFragment extends DialogFragment {
     public DialogToolbar mToolbar;
 
     @BindView(R.id.base_dialog_container_action)
-    LinearLayout containerAction;
+    public DialogFooter mFooter;
 
-    @BindView(R.id.base_dialog_btn_done)
-    Button btnDone;
-
+    @Deprecated
     private OnFinishListener onFinishListener;
 
-    @OnClick(R.id.base_dialog_btn_cancel)
-    public void actionCancel() {
-        dismiss();
+    private DialogListener dialogListener;
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mToolbar.setListener(this);
+        mFooter.setListener(this);
     }
 
-    @OnClick(R.id.base_dialog_btn_done)
-    public void actionDone() {
-        Toast.makeText(getContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show();
-    }
-
-    protected void hideDoneBtn() {
-        containerAction.setVisibility(View.GONE);
+    protected void hideFooter() {
+        mFooter.setVisibility(View.GONE);
     }
 
     protected void setTitle(@StringRes int titleId) {
@@ -79,12 +76,45 @@ public abstract class BaseDialogFragment extends DialogFragment {
         super.show(ft, getClass().getSimpleName());
     }
 
+    @Override
+    public void onAddClick() {
+        Toast.makeText(getContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onEditClick() {
+        Toast.makeText(getContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDeleteClick() {
+        Toast.makeText(getContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onDoneClick() {
+        Toast.makeText(getContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCancelClick() {
+        dismiss();
+    }
+
+    public DialogListener getDialogListener() {
+        return dialogListener;
+    }
+
+    public void setDialogListener(DialogListener dialogListener) {
+        this.dialogListener = dialogListener;
+    }
+
     public interface OnFinishListener {
         void onFinish(String value);
     }
 
     public interface DialogListener {
-
         void onFinish(VOInterface vo);
     }
 }

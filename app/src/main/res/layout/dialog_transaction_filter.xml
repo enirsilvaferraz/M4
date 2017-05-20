@@ -18,6 +18,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:baselineAligned="false"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -71,6 +72,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:baselineAligned="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -127,6 +129,9 @@
 
     </LinearLayout>
 
-    <include layout="@layout/base_tab_buttom_dialog" />
+    <com.system.m4.views.components.DialogFooter
+        android:id="@+id/base_dialog_container_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -3,15 +3,18 @@ package com.system.m4.businness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.ConverterUtils;
+import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.repository.dtos.FilterTransactionDTO;
 import com.system.m4.repository.dtos.PaymentTypeDTO;
 import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.repository.dtos.TransactionDTO;
+import com.system.m4.repository.firebase.FilterTransactionRepository;
 import com.system.m4.repository.firebase.FirebaseRepository;
 import com.system.m4.repository.firebase.TransactionFirebaseRepository;
-import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.TransactionVO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,18 +44,55 @@ public abstract class TransactionBusinness {
         });
     }
 
-    public static void findByFilter(FilterTransactionVO vo, final BusinnessListener.OnMultiResultListenner<TransactionVO> multiResultListenner) {
+    public static void findByFilter(final BusinnessListener.OnMultiResultListenner<TransactionVO> multiResultListenner) {
+
+        new FilterTransactionRepository("dev").findAll(new FirebaseRepository.FirebaseMultiReturnListener<FilterTransactionDTO>() {
+
+            @Override
+            public void onFindAll(List<FilterTransactionDTO> list) {
+
+                final FilterTransactionDTO filterDTO;
+                if (list.isEmpty()) {
+                    Date actualMinimum = JavaUtils.DateUtil.getActualMinimum(new Date());
+                    Date actualMaximum = JavaUtils.DateUtil.getActualMaximum(new Date());
+
+                    filterDTO = new FilterTransactionDTO();
+                    filterDTO.setPaymentDateStart(JavaUtils.DateUtil.format(actualMinimum, JavaUtils.DateUtil.DD_MM_YYYY));
+                    filterDTO.setPaymentDateEnd(JavaUtils.DateUtil.format(actualMaximum, JavaUtils.DateUtil.DD_MM_YYYY));
+                } else {
+                    filterDTO = list.get(0);
+                }
+
+                findTransactions(filterDTO, multiResultListenner);
+            }
+
+            @Override
+            public void onError(String error) {
+                multiResultListenner.onError(new Exception(error));
+            }
+        });
+    }
+
+    private static void findTransactions(final FilterTransactionDTO filterDTO, final BusinnessListener.OnMultiResultListenner<TransactionVO> multiResultListenner) {
 
         final List<TransactionDTO> listTransaction = new ArrayList<>();
         final List<TagDTO> listTag = new ArrayList<>();
         final List<PaymentTypeDTO> listPaymentType = new ArrayList<>();
 
-        new TransactionFirebaseRepository("dev").findByFilter(vo.getPaymentDateStart(), vo.getPaymentDateEnd(), new FirebaseRepository.FirebaseMultiReturnListener<TransactionDTO>() {
+        Date paymentDateStart = filterDTO.getPaymentDateStart() != null ? JavaUtils.DateUtil.parse(filterDTO.getPaymentDateStart(), JavaUtils.DateUtil.YYYY_MM_DD) : null;
+        Date paymentDateEnd = filterDTO.getPaymentDateEnd() != null ? JavaUtils.DateUtil.parse(filterDTO.getPaymentDateEnd(), JavaUtils.DateUtil.YYYY_MM_DD) : null;
+
+        new TransactionFirebaseRepository("dev").findByFilter(paymentDateStart, paymentDateEnd, new FirebaseRepository.FirebaseMultiReturnListener<TransactionDTO>() {
 
             @Override
             public void onFindAll(List<TransactionDTO> list) {
                 if (!list.isEmpty()) {
-                    listTransaction.addAll(list);
+                    for (TransactionDTO transactionDTO : list) {
+                        if ((JavaUtils.StringUtil.isEmpty(filterDTO.getTags()) || transactionDTO.getTag().equals(filterDTO.getTags())) &&
+                                (JavaUtils.StringUtil.isEmpty(filterDTO.getPaymentType()) || transactionDTO.getPaymentType().equals(filterDTO.getPaymentType()))) {
+                            listTransaction.add(transactionDTO);
+                        }
+                    }
                     configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
                 } else {
                     onError(Constants.NOT_FOUND);
@@ -100,7 +140,6 @@ public abstract class TransactionBusinness {
                 multiResultListenner.onError(e);
             }
         });
-
     }
 
     private static void configureList(List<TransactionDTO> listTransaction, List<TagDTO> listTag, List<PaymentTypeDTO> listPaymentType, BusinnessListener.OnMultiResultListenner<TransactionVO> multiResultListenner) {

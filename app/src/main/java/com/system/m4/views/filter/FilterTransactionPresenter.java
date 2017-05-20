@@ -1,11 +1,13 @@
 package com.system.m4.views.filter;
 
-import com.system.m4.R;
+import com.system.m4.businness.FilterTransactionBusinness;
 import com.system.m4.businness.PaymentTypeBusinness;
 import com.system.m4.businness.TagBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
+import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.repository.dtos.PaymentTypeDTO;
 import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.views.vos.FilterTransactionVO;
@@ -25,11 +27,34 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
 
     private final FilterTransactionContract.View mView;
 
-    private final FilterTransactionVO mVo;
+    private FilterTransactionVO mVo;
 
     FilterTransactionPresenter(FilterTransactionContract.View view) {
         this.mView = view;
         this.mVo = new FilterTransactionVO();
+    }
+
+    @Override
+    public void init() {
+
+        FilterTransactionBusinness.get(new BusinnessListener.OnSingleResultListener<FilterTransactionVO>() {
+
+            @Override
+            public void onSuccess(FilterTransactionVO vo) {
+                if (vo != null) {
+                    mVo = vo;
+                    mView.setTag(JavaUtils.StringUtil.formatEmpty(vo.getTag().getName()));
+                    mView.setPaymentType(JavaUtils.StringUtil.formatEmpty(vo.getPaymentType().getName()));
+                    mView.setPaymentDateStart(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(vo.getPaymentDateStart())));
+                    mView.setPaymentDateEnd(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(vo.getPaymentDateEnd())));
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                mView.showError(e.getMessage());
+            }
+        });
     }
 
     @Override
@@ -115,12 +140,14 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     @Override
     public void setPaymentDateEnd(int year, int month, int dayOfMonth) {
         Date date = JavaUtils.DateUtil.getDate(year, month, dayOfMonth);
+        mVo.setPaymentDateEnd(date);
         mView.setPaymentDateEnd(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY));
     }
 
     @Override
     public void setPaymentDateStart(int year, int month, int dayOfMonth) {
         Date date = JavaUtils.DateUtil.getDate(year, month, dayOfMonth);
+        mVo.setPaymentDateStart(date);
         mView.setPaymentDateStart(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY));
     }
 
@@ -137,16 +164,36 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     }
 
     @Override
-    public void validateForm() {
+    public void done() {
 
-        if (JavaUtils.ClassUtil.isEmpty(mVo.getTag())) {
-            mView.showError(R.string.system_error_required_field, R.string.transaction_tag);
-        } else if (JavaUtils.ClassUtil.isEmpty(mVo.getPaymentType())) {
-            mView.showError(R.string.system_error_required_field, R.string.transaction_payment_type);
-        } else if (mVo.getPaymentDateStart() == null) {
-            mView.showError(R.string.system_error_required_field, R.string.transaction_payment_date_start);
-        } else if (mVo.getPaymentDateEnd() == null) {
-            mView.showError(R.string.system_error_required_field, R.string.transaction_payment_date_end);
-        }
+        FilterTransactionBusinness.save(ConverterUtils.fromFilterTransaction(mVo), new BusinnessListener.OnPersistListener() {
+
+            @Override
+            public void onSuccess(DTOAbs dto) {
+                mView.dismissDialog(null);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                mView.showError(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void delete() {
+
+        FilterTransactionBusinness.delete(ConverterUtils.fromFilterTransaction(mVo), new BusinnessListener.OnPersistListener() {
+
+            @Override
+            public void onSuccess(DTOAbs dto) {
+                mView.dismissDialog(null);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                mView.showError(e.getMessage());
+            }
+        });
     }
 }

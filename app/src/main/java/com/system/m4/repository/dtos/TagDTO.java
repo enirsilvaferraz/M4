@@ -1,13 +1,7 @@
 package com.system.m4.repository.dtos;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.reflect.TypeToken;
-import com.system.m4.views.vos.TagVO;
-
-import java.lang.reflect.Type;
-import java.util.Map;
 
 /**
  * Created by eferraz on 30/04/17.
@@ -26,11 +20,6 @@ public class TagDTO extends DTOAbs {
 
     public TagDTO() {
         // Nothing to do
-    }
-
-    public TagDTO(TagVO vo) {
-        this.key = vo.getKey();
-        this.name = vo.getName();
     }
 
     public TagDTO(String key) {
@@ -62,21 +51,12 @@ public class TagDTO extends DTOAbs {
 
         TagDTO tagDTO = (TagDTO) o;
 
-        return key.equals(tagDTO.key);
+        return key != null ? key.equals(tagDTO.key) : tagDTO.key == null;
 
     }
 
     @Override
     public int hashCode() {
-        return key.hashCode();
-    }
-
-    @Override
-    public Map<String, String> getMapUpdate() {
-        Gson gson = new Gson();
-
-        Type type = new TypeToken<Map<String, String>>() {
-        }.getType();
-        return gson.fromJson(gson.toJson(this), type);
+        return key != null ? key.hashCode() : 0;
     }
 }

@@ -72,6 +72,10 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
         return fragment;
     }
 
+    /*
+     * LIFECYLCE
+     */
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,10 +109,9 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
         unbinder.unbind();
     }
 
-    @Override
-    public void actionDone() {
-        presenter.save();
-    }
+   /*
+    * ACTIONS
+    */
 
     @OnClick(R.id.transaction_manager_action_payment_date)
     public void actionPaymentDate() {
@@ -212,7 +215,6 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
         tvContent.setText(value);
     }
 
-
     @Override
     public void showTagsDialog() {
         ListComponentDialog listComponentTagsDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new DialogListener() {
@@ -279,7 +281,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void dismissDialog(VOInterface vo) {
-       dismiss();
+        dismiss();
         dialogListener.onFinish(vo);
     }
 
@@ -301,5 +303,14 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     public void setDialogListener(DialogListener dialogListener) {
         this.dialogListener = dialogListener;
+    }
+
+    /*
+     * LISTENERS
+     */
+
+    @Override
+    public void onDoneClick() {
+        presenter.save();
     }
 }

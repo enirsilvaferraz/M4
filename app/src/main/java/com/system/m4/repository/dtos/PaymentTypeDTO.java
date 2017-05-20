@@ -1,9 +1,6 @@
 package com.system.m4.repository.dtos;
 
 import com.google.gson.annotations.Expose;
-import com.system.m4.views.vos.PaymentTypeVO;
-
-import java.util.Map;
 
 /**
  * Created by eferraz on 30/04/17.
@@ -22,13 +19,13 @@ public class PaymentTypeDTO extends DTOAbs {
 
         PaymentTypeDTO that = (PaymentTypeDTO) o;
 
-        return key.equals(that.key);
+        return key != null ? key.equals(that.key) : that.key == null;
 
     }
 
     @Override
     public int hashCode() {
-        return key.hashCode();
+        return key != null ? key.hashCode() : 0;
     }
 
     @Expose
@@ -40,13 +37,6 @@ public class PaymentTypeDTO extends DTOAbs {
 
     public PaymentTypeDTO(String key) {
         this.key = key;
-    }
-
-    public PaymentTypeDTO(PaymentTypeVO vo) {
-        if (vo != null) {
-            this.key = vo.getKey();
-            this.name = vo.getName();
-        }
     }
 
     public String getName() {
@@ -67,8 +57,4 @@ public class PaymentTypeDTO extends DTOAbs {
         this.key = key;
     }
 
-    @Override
-    public Map<String, String> getMapUpdate() {
-        return null;
-    }
 }

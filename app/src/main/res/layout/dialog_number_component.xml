@@ -24,6 +24,9 @@
         android:textSize="28sp"
         tools:text="R$ 1000,00" />
 
-    <include layout="@layout/base_tab_buttom_dialog" />
+    <com.system.m4.views.components.DialogFooter
+        android:id="@+id/base_dialog_container_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

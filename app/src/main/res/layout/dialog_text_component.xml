@@ -18,8 +18,12 @@
         android:inputType="textAutoCorrect|textCapSentences"
         android:minWidth="250dp"
         android:textSize="16sp"
+        android:hint="@string/system_empty_field"
         tools:text="Observações" />
 
-    <include layout="@layout/base_tab_buttom_dialog" />
+    <com.system.m4.views.components.DialogFooter
+        android:id="@+id/base_dialog_container_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

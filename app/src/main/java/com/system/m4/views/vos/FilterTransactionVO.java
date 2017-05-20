@@ -1,15 +1,14 @@
 package com.system.m4.views.vos;
 
 import android.os.Parcel;
-import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  */
-public class FilterTransactionVO implements Serializable, Parcelable {
+public class FilterTransactionVO implements VOInterface<FilterTransactionVO> {
 
     public static final Creator<FilterTransactionVO> CREATOR = new Creator<FilterTransactionVO>() {
         @Override
@@ -22,23 +21,19 @@ public class FilterTransactionVO implements Serializable, Parcelable {
             return new FilterTransactionVO[size];
         }
     };
+
+    private String key;
     private Date paymentDateStart;
     private Date paymentDateEnd;
     private TagVO tag;
     private PaymentTypeVO paymentType;
 
-    public FilterTransactionVO(Date paymentDateStart, Date paymentDateEnd, TagVO tag, PaymentTypeVO paymentType) {
-        this.paymentDateStart = paymentDateStart;
-        this.paymentDateEnd = paymentDateEnd;
-        this.tag = tag;
-        this.paymentType = paymentType;
-    }
-
     public FilterTransactionVO() {
 
     }
 
-    protected FilterTransactionVO(Parcel in) {
+    private FilterTransactionVO(Parcel in) {
+        this.key = in.readString();
         long tmpPaymentDateStart = in.readLong();
         this.paymentDateStart = tmpPaymentDateStart == -1 ? null : new Date(tmpPaymentDateStart);
         long tmpPaymentDateEnd = in.readLong();
@@ -80,12 +75,37 @@ public class FilterTransactionVO implements Serializable, Parcelable {
     }
 
     @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public void setName(String name) {
+
+    }
+
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    @Override
+    public int compareTo(@NonNull FilterTransactionVO vo) {
+        return 0;
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.key);
         dest.writeLong(this.paymentDateStart != null ? this.paymentDateStart.getTime() : -1);
         dest.writeLong(this.paymentDateEnd != null ? this.paymentDateEnd.getTime() : -1);
         dest.writeParcelable(this.tag, flags);
