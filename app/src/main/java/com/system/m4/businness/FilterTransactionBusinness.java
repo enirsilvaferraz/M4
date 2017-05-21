@@ -1,7 +1,6 @@
 package com.system.m4.businness;
 
 import com.system.m4.infrastructure.BusinnessListener;
-import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.FilterTransactionDTO;
@@ -57,12 +56,8 @@ public class FilterTransactionBusinness {
 
             @Override
             public void onSuccess(List<TagDTO> list) {
-                if (!list.isEmpty()) {
-                    listTag.addAll(list);
-                    configureList(dto, listTag, listPaymentType, listener);
-                } else {
-                    onError(new Exception(Constants.NOT_FOUND));
-                }
+                listTag.addAll(list);
+                configureList(dto, listTag, listPaymentType, listener);
             }
 
             @Override
@@ -75,12 +70,8 @@ public class FilterTransactionBusinness {
 
             @Override
             public void onSuccess(List<PaymentTypeDTO> list) {
-                if (!list.isEmpty()) {
-                    listPaymentType.addAll(list);
-                    configureList(dto, listTag, listPaymentType, listener);
-                } else {
-                    onError(new Exception(Constants.NOT_FOUND));
-                }
+                listPaymentType.addAll(list);
+                configureList(dto, listTag, listPaymentType, listener);
             }
 
             @Override

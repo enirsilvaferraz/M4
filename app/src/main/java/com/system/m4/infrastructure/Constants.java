@@ -12,5 +12,5 @@ public interface Constants {
 
     String BUNDLE_TRANSACTION_VO = "BUNDLE_TRANSACTION_VO";
     String BUNDLE_TAG_VO = "BUNDLE_TAG_VO";
-    String NOT_FOUND = "NOT_FOUND";
+    String FLAVOR_DEV = "dev";
 }

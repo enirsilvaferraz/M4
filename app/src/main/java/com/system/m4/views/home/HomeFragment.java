@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.system.m4.BuildConfig;
 import com.system.m4.R;
+import com.system.m4.infrastructure.Constants;
 import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListTagPresenter;
@@ -64,11 +66,8 @@ public class HomeFragment extends Fragment implements HomeContract.View {
             }
         });
 
-        mSwipeRefresh.setColorSchemeResources(R.color.accent,
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        mSwipeRefresh.setColorSchemeResources(R.color.accent);
+        mSwipeRefresh.setEnabled(BuildConfig.FLAVOR.equals(Constants.FLAVOR_DEV));
 
         this.presenter.requestListTransaction();
     }
@@ -88,7 +87,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     public void setListTransactions(List<TransactionVO> list) {
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerview.setAdapter( new TransactionAdapter(presenter, list));
+        mRecyclerview.setAdapter(new TransactionAdapter(presenter, list));
         mRecyclerview.getAdapter().notifyDataSetChanged();
     }
 

@@ -1,7 +1,6 @@
 package com.system.m4.businness;
 
 import com.system.m4.infrastructure.BusinnessListener;
-import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.FilterTransactionDTO;
@@ -86,17 +85,13 @@ public abstract class TransactionBusinness {
 
             @Override
             public void onFindAll(List<TransactionDTO> list) {
-                if (!list.isEmpty()) {
-                    for (TransactionDTO transactionDTO : list) {
-                        if ((JavaUtils.StringUtil.isEmpty(filterDTO.getTags()) || transactionDTO.getTag().equals(filterDTO.getTags())) &&
-                                (JavaUtils.StringUtil.isEmpty(filterDTO.getPaymentType()) || transactionDTO.getPaymentType().equals(filterDTO.getPaymentType()))) {
-                            listTransaction.add(transactionDTO);
-                        }
+                for (TransactionDTO transactionDTO : list) {
+                    if ((JavaUtils.StringUtil.isEmpty(filterDTO.getTags()) || transactionDTO.getTag().equals(filterDTO.getTags())) &&
+                            (JavaUtils.StringUtil.isEmpty(filterDTO.getPaymentType()) || transactionDTO.getPaymentType().equals(filterDTO.getPaymentType()))) {
+                        listTransaction.add(transactionDTO);
                     }
-                    configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
-                } else {
-                    onError(Constants.NOT_FOUND);
                 }
+                configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
             }
 
             @Override
@@ -109,12 +104,8 @@ public abstract class TransactionBusinness {
 
             @Override
             public void onSuccess(List<TagDTO> list) {
-                if (!list.isEmpty()) {
-                    listTag.addAll(list);
-                    configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
-                } else {
-                    onError(new Exception(Constants.NOT_FOUND));
-                }
+                listTag.addAll(list);
+                configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
             }
 
             @Override
@@ -127,12 +118,8 @@ public abstract class TransactionBusinness {
 
             @Override
             public void onSuccess(List<PaymentTypeDTO> list) {
-                if (!list.isEmpty()) {
-                    listPaymentType.addAll(list);
-                    configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
-                } else {
-                    onError(new Exception(Constants.NOT_FOUND));
-                }
+                listPaymentType.addAll(list);
+                configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
             }
 
             @Override
