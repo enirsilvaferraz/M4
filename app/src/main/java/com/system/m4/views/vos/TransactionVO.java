@@ -124,6 +124,17 @@ public class TransactionVO implements Parcelable, Comparable<TransactionVO> {
 
     @Override
     public int compareTo(@NonNull TransactionVO o) {
-        return paymentDate.compareTo(o.getPaymentDate());
+
+        int compareTo = paymentDate.compareTo(o.getPaymentDate());
+        if (compareTo != 0) {
+            return compareTo;
+        }
+
+        compareTo = paymentType.compareTo(o.paymentType);
+        if (compareTo != 0) {
+            return compareTo;
+        }
+
+        return tag.compareTo(o.tag);
     }
 }
