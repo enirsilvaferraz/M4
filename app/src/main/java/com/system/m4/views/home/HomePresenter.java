@@ -17,6 +17,7 @@ import java.util.List;
 class HomePresenter implements HomeContract.Presenter {
 
     private HomeContract.View mView;
+    private TransactionVO mSelectedItem;
 
     HomePresenter(HomeContract.View view) {
         this.mView = view;
@@ -49,12 +50,24 @@ class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public void requestTransactionDialog(TransactionVO vo) {
+    public void requestTransactionDialog(TagVO vo) {
         mView.showTransactionDialog(vo);
     }
 
     @Override
-    public void requestTransactionDialog(TagVO vo) {
+    public void selectItem(TransactionVO vo) {
         mView.showTransactionDialog(vo);
+    }
+
+    @Override
+    public void markItemOn(TransactionVO vo) {
+        this.mSelectedItem = vo;
+        //mView.configureEditMode();
+    }
+
+    @Override
+    public void markItemOff() {
+        this.mSelectedItem = null;
+        //mView.configureCreateMode();
     }
 }

@@ -43,8 +43,12 @@ class HomeContract {
 
         void requestTransactionManager();
 
-        void requestTransactionDialog(TransactionVO vo);
-
         void requestTransactionDialog(TagVO vo);
+
+        void selectItem(TransactionVO vo);
+
+        void markItemOn(TransactionVO item);
+
+        void markItemOff();
     }
 }

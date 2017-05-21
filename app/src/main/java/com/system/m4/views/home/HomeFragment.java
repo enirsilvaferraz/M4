@@ -86,17 +86,9 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
     @Override
     public void setListTransactions(List<TransactionVO> list) {
-
-        TransactionAdapter adapter = new TransactionAdapter(list, new TransactionAdapter.OnItemSelectedListener() {
-            @Override
-            public void onSelect(TransactionVO item) {
-                presenter.requestTransactionDialog(item);
-            }
-        });
-
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerview.setAdapter(adapter);
+        mRecyclerview.setAdapter( new TransactionAdapter(presenter, list));
         mRecyclerview.getAdapter().notifyDataSetChanged();
     }
 
