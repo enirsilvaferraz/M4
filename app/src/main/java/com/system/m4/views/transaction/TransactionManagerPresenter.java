@@ -52,6 +52,12 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     @Override
     public void init(TransactionVO transactionVO) {
         mVO = transactionVO;
+        if (TextUtils.isEmpty(mVO.getKey())) {
+            Date time = Calendar.getInstance().getTime();
+            mVO.setPaymentDate(time);
+            mVO.setPurchaseDate(time);
+        }
+
         mView.configureModel(transactionVO);
     }
 
