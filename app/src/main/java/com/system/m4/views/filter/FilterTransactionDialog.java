@@ -155,7 +155,6 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
         tvPaymentType.setText(value);
     }
 
-
     @Override
     public void showTagsDialog(List<TagVO> list) {
         ListComponentDialog listComponentTagsDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new DialogListener() {

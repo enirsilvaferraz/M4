@@ -56,10 +56,18 @@ public abstract class TransactionBusinness {
                     Date actualMaximum = JavaUtils.DateUtil.getActualMaximum(new Date());
 
                     filterDTO = new FilterTransactionDTO();
-                    filterDTO.setPaymentDateStart(JavaUtils.DateUtil.format(actualMinimum, JavaUtils.DateUtil.DD_MM_YYYY));
-                    filterDTO.setPaymentDateEnd(JavaUtils.DateUtil.format(actualMaximum, JavaUtils.DateUtil.DD_MM_YYYY));
+                    filterDTO.setPaymentDateStart(JavaUtils.DateUtil.format(actualMinimum, JavaUtils.DateUtil.YYYY_MM_DD));
+                    filterDTO.setPaymentDateEnd(JavaUtils.DateUtil.format(actualMaximum, JavaUtils.DateUtil.YYYY_MM_DD));
                 } else {
                     filterDTO = list.get(0);
+
+                    if (filterDTO.getPaymentDateStart()==null) {
+                        filterDTO.setPaymentDateStart("2015/01/01");
+                    }
+
+                    if (filterDTO.getPaymentDateEnd()==null) {
+                        filterDTO.setPaymentDateEnd("2025/01/01");
+                    }
                 }
 
                 findTransactions(filterDTO, multiResultListenner);

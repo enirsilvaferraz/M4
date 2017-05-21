@@ -1,5 +1,7 @@
 package com.system.m4.views.filter;
 
+import android.text.TextUtils;
+
 import com.system.m4.businness.FilterTransactionBusinness;
 import com.system.m4.businness.PaymentTypeBusinness;
 import com.system.m4.businness.TagBusinness;
@@ -165,19 +167,30 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
 
     @Override
     public void done() {
+        if (isSaveMode()) {
+            FilterTransactionBusinness.save(ConverterUtils.fromFilterTransaction(mVo), new BusinnessListener.OnPersistListener() {
 
-        FilterTransactionBusinness.save(ConverterUtils.fromFilterTransaction(mVo), new BusinnessListener.OnPersistListener() {
+                @Override
+                public void onSuccess(DTOAbs dto) {
+                    mView.dismissDialog(null);
+                }
 
-            @Override
-            public void onSuccess(DTOAbs dto) {
-                mView.dismissDialog(null);
-            }
+                @Override
+                public void onError(Exception e) {
+                    mView.showError(e.getMessage());
+                }
+            });
+        } else if(!TextUtils.isEmpty(mVo.getKey())){
+            delete();
+        } else {
+            mView.dismissDialog(null);
+        }
+    }
 
-            @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
-            }
-        });
+    private boolean isSaveMode() {
+        return mVo.getPaymentDateStart() != null || mVo.getPaymentDateEnd() != null ||
+                (mVo.getTag() != null && mVo.getTag().getKey() != null) ||
+                (mVo.getPaymentType() != null && mVo.getPaymentType().getKey() != null);
     }
 
     @Override
