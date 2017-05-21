@@ -145,7 +145,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @OnLongClick(R.id.transaction_manager_action_payment_date)
     public boolean clearPaymentDate() {
-        presenter.clearPaymentDateDialog();
+        presenter.clearPaymentDate();
         tvPaymentDate.setText(R.string.system_empty_field);
         return true;
     }

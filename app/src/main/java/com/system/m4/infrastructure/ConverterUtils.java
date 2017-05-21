@@ -28,7 +28,7 @@ public final class ConverterUtils {
         dto.setTag(vo.getTag().getKey());
         dto.setPaymentType(vo.getPaymentType().getKey());
         dto.setPaymentDate(JavaUtils.DateUtil.format(vo.getPaymentDate(), JavaUtils.DateUtil.YYYY_MM_DD));
-        dto.setPurchaseDate(JavaUtils.DateUtil.format(vo.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD));
+        dto.setPurchaseDate(vo.getPurchaseDate() != null ? JavaUtils.DateUtil.format(vo.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         dto.setContent(vo.getContent());
         dto.setPrice(JavaUtils.NumberUtil.removeFormat(vo.getPrice()));
         return dto;
@@ -44,7 +44,7 @@ public final class ConverterUtils {
         vo.setTag(fromTag(tagDTO));
         vo.setPaymentType(fromPaymentType(paymentTypeDTO));
         vo.setPaymentDate(JavaUtils.DateUtil.parse(mDTO.getPaymentDate(), JavaUtils.DateUtil.YYYY_MM_DD));
-        vo.setPurchaseDate(JavaUtils.DateUtil.parse(mDTO.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD));
+        vo.setPurchaseDate(mDTO.getPurchaseDate() != null ? JavaUtils.DateUtil.parse(mDTO.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         vo.setContent(mDTO.getContent());
         vo.setPrice(JavaUtils.NumberUtil.currencyFormat(mDTO.getPrice()));
         return vo;

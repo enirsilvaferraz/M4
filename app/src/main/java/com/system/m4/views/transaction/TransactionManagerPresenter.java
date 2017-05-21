@@ -53,9 +53,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     public void init(TransactionVO transactionVO) {
         mVO = transactionVO;
         if (TextUtils.isEmpty(mVO.getKey())) {
-            Date time = Calendar.getInstance().getTime();
-            mVO.setPaymentDate(time);
-            mVO.setPurchaseDate(time);
+            mVO.setPaymentDate(Calendar.getInstance().getTime());
         }
 
         mView.configureModel(transactionVO);
@@ -157,8 +155,8 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     }
 
     @Override
-    public void clearPaymentDateDialog() {
-        mVO.setContent(null);
+    public void clearPaymentDate() {
+        mVO.setPaymentDate(null);
     }
 
     @Override
@@ -170,8 +168,6 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
             mView.showError(R.string.system_error_required_field, R.string.transaction_payment_type);
         } else if (mVO.getPaymentDate() == null) {
             mView.showError(R.string.system_error_required_field, R.string.transaction_payment_date);
-        } else if (mVO.getPurchaseDate() == null) {
-            mView.showError(R.string.system_error_required_field, R.string.transaction_purchase_date);
         } else if (TextUtils.isEmpty(mVO.getPrice())) {
             mView.showError(R.string.system_error_required_field, R.string.transaction_price);
         } else {

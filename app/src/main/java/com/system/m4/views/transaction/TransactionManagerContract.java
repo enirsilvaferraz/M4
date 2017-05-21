@@ -87,7 +87,7 @@ interface TransactionManagerContract {
 
         void clearPurchaseDate();
 
-        void clearPaymentDateDialog();
+        void clearPaymentDate();
 
         void save();
 
