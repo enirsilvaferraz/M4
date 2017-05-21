@@ -1,5 +1,6 @@
 package com.system.m4.views.home;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.system.m4.BuildConfig;
 import com.system.m4.R;
 import com.system.m4.infrastructure.Constants;
+import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListTagPresenter;
@@ -37,9 +39,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @BindView(R.id.home_recyclerview)
     RecyclerView mRecyclerview;
 
-    @BindView(R.id.home_swipe_refresh)
-    SwipeRefreshLayout mSwipeRefresh;
-
     Unbinder unbinder;
 
     private HomeContract.Presenter presenter;
@@ -59,15 +58,9 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                presenter.requestListTransaction();
-            }
-        });
-
-        mSwipeRefresh.setColorSchemeResources(R.color.accent);
-        mSwipeRefresh.setEnabled(BuildConfig.FLAVOR.equals(Constants.FLAVOR_DEV));
+        mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerview.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerview.setAdapter(new TransactionAdapter(presenter));
 
         this.presenter.requestListTransaction();
     }
@@ -85,10 +78,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
     @Override
     public void setListTransactions(List<TransactionVO> list) {
-        mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerview.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerview.setAdapter(new TransactionAdapter(presenter, list));
-        mRecyclerview.getAdapter().notifyDataSetChanged();
+        ((TransactionAdapter) mRecyclerview.getAdapter()).addList(list);
     }
 
     @Override
@@ -103,6 +93,27 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
         listComponentDialog.setPresenter(new ListTagPresenter(listComponentDialog));
         listComponentDialog.show(getChildFragmentManager(), ListComponentDialog.class.getSimpleName());
+    }
+
+    @Override
+    public void requestDelete() {
+        JavaUtils.AndroidUtil.showAlertDialog(getContext(), R.string.system_message_request_delete,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        presenter.delete();
+                    }
+                });
+    }
+
+    @Override
+    public void configureReadMode() {
+        ((HomeActivity) getActivity()).configureReadMode();
+    }
+
+    @Override
+    public void configureEditMode() {
+        ((HomeActivity) getActivity()).configureEditMode();
     }
 
     @Override
@@ -125,13 +136,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void showError(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void refreshOff() {
-        if (mSwipeRefresh.isRefreshing()) {
-            mSwipeRefresh.setRefreshing(false);
-        }
     }
 
     @Override

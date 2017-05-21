@@ -61,11 +61,10 @@ public abstract class TransactionBusinness {
                 } else {
                     filterDTO = list.get(0);
 
-                    if (filterDTO.getPaymentDateStart()==null) {
+                    if (filterDTO.getPaymentDateStart() == null) {
                         filterDTO.setPaymentDateStart("2015/01/01");
                     }
-
-                    if (filterDTO.getPaymentDateEnd()==null) {
+                    if (filterDTO.getPaymentDateEnd() == null) {
                         filterDTO.setPaymentDateEnd("2025/01/01");
                     }
                 }
@@ -93,6 +92,11 @@ public abstract class TransactionBusinness {
 
             @Override
             public void onFindAll(List<TransactionDTO> list) {
+
+                if (list.isEmpty()) {
+                    multiResultListenner.onSuccess(new ArrayList<TransactionVO>());
+                }
+
                 for (TransactionDTO transactionDTO : list) {
                     if ((JavaUtils.StringUtil.isEmpty(filterDTO.getTags()) || transactionDTO.getTag().equals(filterDTO.getTags())) &&
                             (JavaUtils.StringUtil.isEmpty(filterDTO.getPaymentType()) || transactionDTO.getPaymentType().equals(filterDTO.getPaymentType()))) {
@@ -148,5 +152,21 @@ public abstract class TransactionBusinness {
 
             multiResultListenner.onSuccess(listVo);
         }
+    }
+
+    public static void delete(TransactionDTO dto, final BusinnessListener.OnPersistListener listener) {
+
+        new TransactionFirebaseRepository().delete(dto, new FirebaseRepository.FirebaseSingleReturnListener<TransactionDTO>() {
+
+            @Override
+            public void onFind(TransactionDTO dtoDeleted) {
+                listener.onSuccess(dtoDeleted);
+            }
+
+            @Override
+            public void onError(String error) {
+                listener.onError(new Exception(error));
+            }
+        });
     }
 }

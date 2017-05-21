@@ -13,6 +13,7 @@ import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.vos.TransactionVO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,9 +28,9 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
     private ViewHolder markedViewHolder;
     private List<TransactionVO> list;
 
-    TransactionAdapter(HomeContract.Presenter presenter, List<TransactionVO> list) {
-        this.presenter =presenter;
-        this.list = list;
+    TransactionAdapter(HomeContract.Presenter presenter) {
+        this.presenter = presenter;
+        this.list = new ArrayList<>();
     }
 
     @Override
@@ -46,6 +47,11 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    void addList(List<TransactionVO> list) {
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     /**
@@ -85,7 +91,7 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
             tvPrice.setText(JavaUtils.StringUtil.formatEmpty(item.getPrice()));
 
             itemView.setOnClickListener(this);
-          //  itemView.setOnLongClickListener(this); // TODO RECURSO DE MARCAR DESABILITADO
+            itemView.setOnLongClickListener(this);
         }
 
         @Override

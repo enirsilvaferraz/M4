@@ -2,6 +2,8 @@ package com.system.m4.views.home;
 
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
+import com.system.m4.infrastructure.ConverterUtils;
+import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 
@@ -32,14 +34,12 @@ class HomePresenter implements HomeContract.Presenter {
             public void onSuccess(List<TransactionVO> list) {
                 Collections.sort(list);
                 mView.setListTransactions(list);
-                mView.refreshOff();
             }
 
             @Override
             public void onError(Exception e) {
                 mView.setListTransactions(new ArrayList<TransactionVO>());
                 mView.showError(e.getMessage());
-                mView.refreshOff();
             }
         });
     }
@@ -62,12 +62,33 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void markItemOn(TransactionVO vo) {
         this.mSelectedItem = vo;
-        //mView.configureEditMode();
+        mView.configureEditMode();
     }
 
     @Override
     public void markItemOff() {
         this.mSelectedItem = null;
-        //mView.configureCreateMode();
+        mView.configureReadMode();
+    }
+
+    @Override
+    public void requestDelete() {
+        mView.requestDelete();
+    }
+
+    @Override
+    public void delete() {
+        TransactionBusinness.delete(ConverterUtils.fromTransaction(mSelectedItem), new BusinnessListener.OnPersistListener() {
+            @Override
+            public void onSuccess(DTOAbs dto) {
+                mView.configureReadMode();
+                requestListTransaction();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                mView.showError(e.getMessage());
+            }
+        });
     }
 }

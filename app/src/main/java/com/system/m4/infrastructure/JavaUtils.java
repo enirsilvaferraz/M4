@@ -2,12 +2,16 @@ package com.system.m4.infrastructure;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.annotation.StringRes;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.system.m4.R;
 import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.views.vos.VOInterface;
 
@@ -240,6 +244,11 @@ public final class JavaUtils {
             int day = c.get(Calendar.DAY_OF_MONTH);
 
             new DatePickerDialog(context, onDateSetListener, year, month, day).show();
+        }
+
+        public static void showAlertDialog(Context context, @StringRes int stringMessage, DialogInterface.OnClickListener onClickListener ) {
+            new AlertDialog.Builder(context).setMessage(stringMessage)
+                    .setPositiveButton(R.string.system_action_ok, onClickListener).create().show();
         }
     }
 

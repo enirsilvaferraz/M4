@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -59,8 +58,8 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_home, menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        menu.findItem(R.id.action_delete).setVisible(false);
         return true;
     }
 
@@ -68,6 +67,9 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_filter) {
             showFilter();
+            return true;
+        } if (item.getItemId() == R.id.action_delete) {
+           presenter.requestDelete();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -81,5 +83,15 @@ public class HomeActivity extends AppCompatActivity {
                 presenter.requestListTransaction();
             }
         }).show(getSupportFragmentManager(), FilterTransactionDialog.class.getSimpleName());
+    }
+
+    public void configureEditMode() {
+        toolbar.getMenu().findItem(R.id.action_filter).setVisible(false);
+        toolbar.getMenu().findItem(R.id.action_delete).setVisible(true);
+    }
+
+    public void configureReadMode() {
+        toolbar.getMenu().findItem(R.id.action_filter).setVisible(true);
+        toolbar.getMenu().findItem(R.id.action_delete).setVisible(false);
     }
 }

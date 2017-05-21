@@ -27,11 +27,15 @@ class HomeContract {
 
         void showError(String message);
 
-        void refreshOff();
-
         void showSuccessMessage(int template, int param);
 
         void requestTransactionManagerDialog();
+
+        void requestDelete();
+
+        void configureReadMode();
+
+        void configureEditMode();
     }
 
     /**
@@ -50,5 +54,9 @@ class HomeContract {
         void markItemOn(TransactionVO item);
 
         void markItemOff();
+
+        void requestDelete();
+
+        void delete();
     }
 }
