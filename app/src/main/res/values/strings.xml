@@ -25,5 +25,6 @@
     <string name="system_action_delete">Delete</string>
     <string name="system_action_ok">OK</string>
     <string name="system_message_request_delete">Are you sure you want to delete?</string>
+    <string name="system_action_copy">Copy</string>
 
 </resources>

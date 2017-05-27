@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,9 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.system.m4.BuildConfig;
 import com.system.m4.R;
-import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
@@ -114,6 +111,11 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void configureEditMode() {
         ((HomeActivity) getActivity()).configureEditMode();
+    }
+
+    @Override
+    public void markItemOff() {
+        ((TransactionAdapter) mRecyclerview.getAdapter()).markItemOff();
     }
 
     @Override

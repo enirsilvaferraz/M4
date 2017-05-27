@@ -54,6 +54,12 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
         notifyDataSetChanged();
     }
 
+    public void markItemOff() {
+        if (markedViewHolder != null) {
+            markedViewHolder.markItemOff();
+        }
+    }
+
     /**
      *
      */

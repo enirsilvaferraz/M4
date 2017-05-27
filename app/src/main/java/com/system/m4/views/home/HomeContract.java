@@ -36,6 +36,8 @@ class HomeContract {
         void configureReadMode();
 
         void configureEditMode();
+
+        void markItemOff();
     }
 
     /**
@@ -56,6 +58,8 @@ class HomeContract {
         void markItemOff();
 
         void requestDelete();
+
+        void requestCopy();
 
         void delete();
     }

@@ -69,11 +69,19 @@ class HomePresenter implements HomeContract.Presenter {
     public void markItemOff() {
         this.mSelectedItem = null;
         mView.configureReadMode();
+        mView.markItemOff();
     }
 
     @Override
     public void requestDelete() {
         mView.requestDelete();
+    }
+
+    @Override
+    public void requestCopy() {
+        mSelectedItem.setKey(null);
+        mView.showTransactionDialog(mSelectedItem);
+        mView.markItemOff();
     }
 
     @Override
