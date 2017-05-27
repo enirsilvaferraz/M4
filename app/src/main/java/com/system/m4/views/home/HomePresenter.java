@@ -81,7 +81,7 @@ class HomePresenter implements HomeContract.Presenter {
     public void requestCopy() {
         mSelectedItem.setKey(null);
         mView.showTransactionDialog(mSelectedItem);
-        mView.markItemOff();
+        markItemOff();
     }
 
     @Override
@@ -89,7 +89,7 @@ class HomePresenter implements HomeContract.Presenter {
         TransactionBusinness.delete(ConverterUtils.fromTransaction(mSelectedItem), new BusinnessListener.OnPersistListener() {
             @Override
             public void onSuccess(DTOAbs dto) {
-                mView.configureReadMode();
+                markItemOff();
                 requestListTransaction();
             }
 
