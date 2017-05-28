@@ -1,9 +1,8 @@
 package com.system.m4.views.home;
 
+import com.system.m4.views.vos.ListTransactionVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
-
-import java.util.List;
 
 /**
  * Created by eferraz on 29/04/17.
@@ -19,7 +18,7 @@ class HomeContract {
 
         void setPresenter(Presenter presenter);
 
-        void setListTransactions(List<TransactionVO> list);
+        void setListTransactions(ListTransactionVO vo);
 
         void showTransactionDialog(TagVO vo);
 

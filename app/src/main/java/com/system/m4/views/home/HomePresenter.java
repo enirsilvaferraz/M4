@@ -4,12 +4,11 @@ import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.repository.dtos.DTOAbs;
+import com.system.m4.views.vos.ListTransactionVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by eferraz on 29/04/17.
@@ -28,17 +27,20 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestListTransaction() {
 
-        TransactionBusinness.findByFilter(new BusinnessListener.OnMultiResultListenner<TransactionVO>() {
+        TransactionBusinness.findByFilter(new BusinnessListener.OnSingleResultListener<ListTransactionVO>() {
 
             @Override
-            public void onSuccess(List<TransactionVO> list) {
-                Collections.sort(list);
-                mView.setListTransactions(list);
+            public void onSuccess(ListTransactionVO vo) {
+
+                Collections.sort(vo.getCurrentList());
+                Collections.sort(vo.getFutureList());
+
+                mView.setListTransactions(vo);
             }
 
             @Override
             public void onError(Exception e) {
-                mView.setListTransactions(new ArrayList<TransactionVO>());
+                mView.setListTransactions(new ListTransactionVO());
                 mView.showError(e.getMessage());
             }
         });

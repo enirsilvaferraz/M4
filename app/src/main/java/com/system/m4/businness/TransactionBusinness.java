@@ -10,9 +10,11 @@ import com.system.m4.repository.dtos.TransactionDTO;
 import com.system.m4.repository.firebase.FilterTransactionRepository;
 import com.system.m4.repository.firebase.FirebaseRepository;
 import com.system.m4.repository.firebase.TransactionFirebaseRepository;
+import com.system.m4.views.vos.ListTransactionVO;
 import com.system.m4.views.vos.TransactionVO;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +45,7 @@ public abstract class TransactionBusinness {
         });
     }
 
-    public static void findByFilter(final BusinnessListener.OnMultiResultListenner<TransactionVO> multiResultListenner) {
+    public static void findByFilter(final BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
 
         new FilterTransactionRepository().findAll(new FirebaseRepository.FirebaseMultiReturnListener<FilterTransactionDTO>() {
 
@@ -69,17 +71,17 @@ public abstract class TransactionBusinness {
                     }
                 }
 
-                findTransactions(filterDTO, multiResultListenner);
+                findTransactions(filterDTO, listener);
             }
 
             @Override
             public void onError(String error) {
-                multiResultListenner.onError(new Exception(error));
+                listener.onError(new Exception(error));
             }
         });
     }
 
-    private static void findTransactions(final FilterTransactionDTO filterDTO, final BusinnessListener.OnMultiResultListenner<TransactionVO> multiResultListenner) {
+    private static void findTransactions(final FilterTransactionDTO filterDTO, final BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
 
         final List<TransactionDTO> listTransaction = new ArrayList<>();
         final List<TagDTO> listTag = new ArrayList<>();
@@ -94,7 +96,7 @@ public abstract class TransactionBusinness {
             public void onFindAll(List<TransactionDTO> list) {
 
                 if (list.isEmpty()) {
-                    multiResultListenner.onSuccess(new ArrayList<TransactionVO>());
+                    listener.onSuccess(new ListTransactionVO());
                 }
 
                 for (TransactionDTO transactionDTO : list) {
@@ -103,12 +105,12 @@ public abstract class TransactionBusinness {
                         listTransaction.add(transactionDTO);
                     }
                 }
-                configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
+                configureList(listTransaction, listTag, listPaymentType, listener);
             }
 
             @Override
             public void onError(String error) {
-                multiResultListenner.onError(new Exception(error));
+                listener.onError(new Exception(error));
             }
         });
 
@@ -117,12 +119,12 @@ public abstract class TransactionBusinness {
             @Override
             public void onSuccess(List<TagDTO> list) {
                 listTag.addAll(list);
-                configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
+                configureList(listTransaction, listTag, listPaymentType, listener);
             }
 
             @Override
             public void onError(Exception e) {
-                multiResultListenner.onError(e);
+                listener.onError(e);
             }
         });
 
@@ -131,17 +133,17 @@ public abstract class TransactionBusinness {
             @Override
             public void onSuccess(List<PaymentTypeDTO> list) {
                 listPaymentType.addAll(list);
-                configureList(listTransaction, listTag, listPaymentType, multiResultListenner);
+                configureList(listTransaction, listTag, listPaymentType, listener);
             }
 
             @Override
             public void onError(Exception e) {
-                multiResultListenner.onError(e);
+                listener.onError(e);
             }
         });
     }
 
-    private static void configureList(List<TransactionDTO> listTransaction, List<TagDTO> listTag, List<PaymentTypeDTO> listPaymentType, BusinnessListener.OnMultiResultListenner<TransactionVO> multiResultListenner) {
+    private static void configureList(List<TransactionDTO> listTransaction, List<TagDTO> listTag, List<PaymentTypeDTO> listPaymentType, BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
 
         if (!listTransaction.isEmpty() && !listTag.isEmpty() && !listPaymentType.isEmpty()) {
 
@@ -150,8 +152,23 @@ public abstract class TransactionBusinness {
                 listVo.add(ConverterUtils.fromTransaction(dto, listTag, listPaymentType));
             }
 
-            multiResultListenner.onSuccess(listVo);
+            classifyList(listVo, listener);
         }
+    }
+
+    private static void classifyList(List<TransactionVO> listVo, BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
+
+        ListTransactionVO vo = new ListTransactionVO();
+
+        for (TransactionVO transactionVO : listVo) {
+            if (transactionVO.getPaymentDate().before(Calendar.getInstance().getTime())) {
+                vo.getCurrentList().add(transactionVO);
+            } else {
+                vo.getFutureList().add(transactionVO);
+            }
+        }
+
+        listener.onSuccess(vo);
     }
 
     public static void delete(TransactionDTO dto, final BusinnessListener.OnPersistListener listener) {

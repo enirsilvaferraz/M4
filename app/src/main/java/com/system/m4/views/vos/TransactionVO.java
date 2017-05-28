@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  *
  */
-public class TransactionVO implements Parcelable, Comparable<TransactionVO> {
+public class TransactionVO implements VOItemListInterface, Parcelable, Comparable<TransactionVO> {
 
     public static final Creator<TransactionVO> CREATOR = new Creator<TransactionVO>() {
         @Override
@@ -32,6 +32,7 @@ public class TransactionVO implements Parcelable, Comparable<TransactionVO> {
     private String content;
 
     public TransactionVO() {
+        // Default constructor
     }
 
     public TransactionVO(TagVO tagVO) {
