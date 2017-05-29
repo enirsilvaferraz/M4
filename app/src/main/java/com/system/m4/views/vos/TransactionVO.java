@@ -11,18 +11,6 @@ import java.util.Date;
  */
 public class TransactionVO implements VOItemListInterface, Parcelable, Comparable<TransactionVO> {
 
-    public static final Creator<TransactionVO> CREATOR = new Creator<TransactionVO>() {
-        @Override
-        public TransactionVO createFromParcel(Parcel source) {
-            return new TransactionVO(source);
-        }
-
-        @Override
-        public TransactionVO[] newArray(int size) {
-            return new TransactionVO[size];
-        }
-    };
-
     private String key;
     private Date paymentDate;
     private Date purchaseDate;
@@ -30,6 +18,7 @@ public class TransactionVO implements VOItemListInterface, Parcelable, Comparabl
     private TagVO tag;
     private PaymentTypeVO paymentType;
     private String content;
+    private boolean pinned;
 
     public TransactionVO() {
         // Default constructor
@@ -37,18 +26,6 @@ public class TransactionVO implements VOItemListInterface, Parcelable, Comparabl
 
     public TransactionVO(TagVO tagVO) {
         this.tag = tagVO;
-    }
-
-    protected TransactionVO(Parcel in) {
-        this.key = in.readString();
-        long tmpPaymentDate = in.readLong();
-        this.paymentDate = tmpPaymentDate == -1 ? null : new Date(tmpPaymentDate);
-        long tmpPurchaseDate = in.readLong();
-        this.purchaseDate = tmpPurchaseDate == -1 ? null : new Date(tmpPurchaseDate);
-        this.price = in.readString();
-        this.tag = in.readParcelable(TagVO.class.getClassLoader());
-        this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
-        this.content = in.readString();
     }
 
     public Date getPaymentDate() {
@@ -108,22 +85,6 @@ public class TransactionVO implements VOItemListInterface, Parcelable, Comparabl
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.key);
-        dest.writeLong(this.paymentDate != null ? this.paymentDate.getTime() : -1);
-        dest.writeLong(this.purchaseDate != null ? this.purchaseDate.getTime() : -1);
-        dest.writeString(this.price);
-        dest.writeParcelable(this.tag, flags);
-        dest.writeParcelable(this.paymentType, flags);
-        dest.writeString(this.content);
-    }
-
-    @Override
     public int compareTo(@NonNull TransactionVO o) {
 
         int compareTo = paymentDate.compareTo(o.getPaymentDate());
@@ -138,4 +99,54 @@ public class TransactionVO implements VOItemListInterface, Parcelable, Comparabl
 
         return tag.compareTo(o.tag);
     }
+
+    public boolean isPinned() {
+        return pinned;
+    }
+
+    public void setPinned(boolean pinned) {
+        this.pinned = pinned;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.key);
+        dest.writeLong(this.paymentDate != null ? this.paymentDate.getTime() : -1);
+        dest.writeLong(this.purchaseDate != null ? this.purchaseDate.getTime() : -1);
+        dest.writeString(this.price);
+        dest.writeParcelable(this.tag, flags);
+        dest.writeParcelable(this.paymentType, flags);
+        dest.writeString(this.content);
+        dest.writeByte(this.pinned ? (byte) 1 : (byte) 0);
+    }
+
+    protected TransactionVO(Parcel in) {
+        this.key = in.readString();
+        long tmpPaymentDate = in.readLong();
+        this.paymentDate = tmpPaymentDate == -1 ? null : new Date(tmpPaymentDate);
+        long tmpPurchaseDate = in.readLong();
+        this.purchaseDate = tmpPurchaseDate == -1 ? null : new Date(tmpPurchaseDate);
+        this.price = in.readString();
+        this.tag = in.readParcelable(TagVO.class.getClassLoader());
+        this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
+        this.content = in.readString();
+        this.pinned = in.readByte() != 0;
+    }
+
+    public static final Creator<TransactionVO> CREATOR = new Creator<TransactionVO>() {
+        @Override
+        public TransactionVO createFromParcel(Parcel source) {
+            return new TransactionVO(source);
+        }
+
+        @Override
+        public TransactionVO[] newArray(int size) {
+            return new TransactionVO[size];
+        }
+    };
 }

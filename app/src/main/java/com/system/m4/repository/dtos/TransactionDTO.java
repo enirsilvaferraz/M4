@@ -24,6 +24,7 @@ public class TransactionDTO extends DTOAbs {
 
     @Expose
     private String content;
+    private boolean pinned;
 
     public TransactionDTO() {
     }
@@ -86,4 +87,11 @@ public class TransactionDTO extends DTOAbs {
         this.key = key;
     }
 
+    public boolean isPinned() {
+        return pinned;
+    }
+
+    public void setPinned(boolean pinned) {
+        this.pinned = pinned;
+    }
 }

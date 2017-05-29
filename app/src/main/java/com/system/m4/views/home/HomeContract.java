@@ -34,7 +34,7 @@ class HomeContract {
 
         void configureReadMode();
 
-        void configureEditMode();
+        void configureEditMode(boolean canPin);
 
         void markItemOff();
     }
@@ -61,5 +61,7 @@ class HomeContract {
         void requestCopy();
 
         void delete();
+
+        void pinTransaction(boolean pin);
     }
 }

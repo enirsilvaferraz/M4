@@ -31,6 +31,7 @@ public final class ConverterUtils {
         dto.setPurchaseDate(vo.getPurchaseDate() != null ? JavaUtils.DateUtil.format(vo.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         dto.setContent(vo.getContent());
         dto.setPrice(JavaUtils.NumberUtil.removeFormat(vo.getPrice()));
+        dto.setPinned(vo.isPinned());
         return dto;
     }
 
@@ -47,6 +48,7 @@ public final class ConverterUtils {
         vo.setPurchaseDate(mDTO.getPurchaseDate() != null ? JavaUtils.DateUtil.parse(mDTO.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         vo.setContent(mDTO.getContent());
         vo.setPrice(JavaUtils.NumberUtil.currencyFormat(mDTO.getPrice()));
+        vo.setPinned(mDTO.isPinned());
         return vo;
     }
 

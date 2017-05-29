@@ -111,8 +111,8 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void configureEditMode() {
-        ((HomeActivity) getActivity()).configureEditMode();
+    public void configureEditMode(boolean canPin) {
+        ((HomeActivity) getActivity()).configureEditMode(canPin);
     }
 
     @Override

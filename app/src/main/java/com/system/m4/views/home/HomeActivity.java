@@ -59,6 +59,8 @@ public class HomeActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_home, menu);
         menu.findItem(R.id.action_delete).setVisible(false);
         menu.findItem(R.id.action_copy).setVisible(false);
+        menu.findItem(R.id.action_pin).setVisible(false);
+        menu.findItem(R.id.action_unpin).setVisible(false);
         return true;
     }
 
@@ -75,7 +77,16 @@ public class HomeActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_copy) {
             presenter.requestCopy();
             return true;
-        } else {
+        }
+        if (item.getItemId() == R.id.action_pin) {
+            presenter.pinTransaction(true);
+            return true;
+        }
+        if (item.getItemId() == R.id.action_unpin) {
+            presenter.pinTransaction(false);
+            return true;
+        }
+        else {
             return super.onOptionsItemSelected(item);
         }
     }
@@ -89,15 +100,19 @@ public class HomeActivity extends AppCompatActivity {
         }).show(getSupportFragmentManager(), FilterTransactionDialog.class.getSimpleName());
     }
 
-    public void configureEditMode() {
+    public void configureEditMode(boolean canPin) {
         toolbar.getMenu().findItem(R.id.action_filter).setVisible(false);
         toolbar.getMenu().findItem(R.id.action_delete).setVisible(true);
         toolbar.getMenu().findItem(R.id.action_copy).setVisible(true);
+        toolbar.getMenu().findItem(R.id.action_pin).setVisible(canPin);
+        toolbar.getMenu().findItem(R.id.action_unpin).setVisible(!canPin);
     }
 
     public void configureReadMode() {
         toolbar.getMenu().findItem(R.id.action_filter).setVisible(true);
         toolbar.getMenu().findItem(R.id.action_delete).setVisible(false);
         toolbar.getMenu().findItem(R.id.action_copy).setVisible(false);
+        toolbar.getMenu().findItem(R.id.action_pin).setVisible(false);
+        toolbar.getMenu().findItem(R.id.action_unpin).setVisible(false);
     }
 }

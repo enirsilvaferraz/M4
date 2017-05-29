@@ -28,5 +28,7 @@
     <string name="system_action_copy">Copy</string>
     <string name="home_future_transactions">Future Transactions</string>
     <string name="home_current_transactions">Transactions</string>
+    <string name="system_action_pin">Pin</string>
+    <string name="system_action_unpin">Unpin</string>
 
 </resources>

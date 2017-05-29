@@ -64,7 +64,7 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void markItemOn(TransactionVO vo) {
         this.mSelectedItem = vo;
-        mView.configureEditMode();
+        mView.configureEditMode(!vo.isPinned());
     }
 
     @Override
@@ -89,6 +89,25 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void delete() {
         TransactionBusinness.delete(ConverterUtils.fromTransaction(mSelectedItem), new BusinnessListener.OnPersistListener() {
+            @Override
+            public void onSuccess(DTOAbs dto) {
+                markItemOff();
+                requestListTransaction();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                mView.showError(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void pinTransaction(boolean pin) {
+
+        mSelectedItem.setPinned(pin);
+        TransactionBusinness.save(mSelectedItem, new BusinnessListener.OnPersistListener() {
+
             @Override
             public void onSuccess(DTOAbs dto) {
                 markItemOff();
