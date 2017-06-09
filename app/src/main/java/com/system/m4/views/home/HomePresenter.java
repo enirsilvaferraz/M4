@@ -5,6 +5,7 @@ import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.views.vos.TagVO;
+import com.system.m4.views.vos.TitleVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
 
@@ -48,16 +49,9 @@ class HomePresenter implements HomeContract.Presenter {
         Collections.sort(list);
 
         List<VOItemListInterface> listInterface = new ArrayList<>();
-        for (TransactionVO vo : list) {
-
-//            TitleVO titleVO = new TitleVO(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(vo.getPaymentDate(), JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)));
-//            if (!listInterface.contains(titleVO)) {
-//                listInterface.add(titleVO);
-//            }
-
-            listInterface.add(vo);
-        }
-
+        listInterface.add(new TitleVO("Transactions"));
+        listInterface.addAll(list);
+        
         mView.setListTransactions(listInterface);
     }
 

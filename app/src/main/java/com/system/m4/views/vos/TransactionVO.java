@@ -149,4 +149,6 @@ public class TransactionVO implements VOItemListInterface, Parcelable, Comparabl
             return new TransactionVO[size];
         }
     };
+
+
 }

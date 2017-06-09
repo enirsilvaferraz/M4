@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.system.m4.R;
@@ -97,7 +96,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class ViewHolderTransaction extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         @BindView(R.id.list_item_container)
-        RelativeLayout container;
+        ViewGroup container;
 
         @BindView(R.id.item_transaction_tag)
         TextView tvTag;
