@@ -12,6 +12,20 @@ public class PaymentTypeDTO extends DTOAbs {
     @Expose
     private String key;
 
+    @Expose
+    private String name;
+
+    @Expose
+    private String color;
+
+    public PaymentTypeDTO() {
+        // Nothing to do
+    }
+
+    public PaymentTypeDTO(String key) {
+        this.key = key;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -26,17 +40,6 @@ public class PaymentTypeDTO extends DTOAbs {
     @Override
     public int hashCode() {
         return key != null ? key.hashCode() : 0;
-    }
-
-    @Expose
-    private String name;
-
-    public PaymentTypeDTO() {
-        // Nothing to do
-    }
-
-    public PaymentTypeDTO(String key) {
-        this.key = key;
     }
 
     public String getName() {
@@ -55,6 +58,14 @@ public class PaymentTypeDTO extends DTOAbs {
     @Override
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
 }

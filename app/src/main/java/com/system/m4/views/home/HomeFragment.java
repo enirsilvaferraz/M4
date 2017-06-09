@@ -18,10 +18,12 @@ import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListTagPresenter;
 import com.system.m4.views.transaction.TransactionManagerDialog;
-import com.system.m4.views.vos.ListTransactionVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOInterface;
+import com.system.m4.views.vos.VOItemListInterface;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,11 +75,10 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void setListTransactions(ListTransactionVO vo) {
+    public void setListTransactions(List<VOItemListInterface> listVo) {
         TransactionAdapter adapter = (TransactionAdapter) mRecyclerview.getAdapter();
         adapter.clearList();
-        adapter.addFutureList(vo.getFutureList());
-        adapter.addCurrentList(vo.getCurrentList());
+        adapter.addCurrentList(listVo);
     }
 
     @Override

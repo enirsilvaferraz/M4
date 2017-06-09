@@ -29,6 +29,7 @@ public class PaymentTypeVO implements VOInterface<PaymentTypeVO> {
 
     private String key;
     private String name;
+    private String color;
 
     public PaymentTypeVO() {
     }
@@ -66,6 +67,14 @@ public class PaymentTypeVO implements VOInterface<PaymentTypeVO> {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     @Override

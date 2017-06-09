@@ -1,5 +1,6 @@
 package com.system.m4.views.home;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -43,7 +44,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (TYPE_TITLE == viewType) {
             return new ViewHolderTitle(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_title, parent, false));
         } else if (TYPE_TRANSACTION == viewType) {
-            return new ViewHolderTransaction(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false));
+            return new ViewHolderTransaction(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction_dense, parent, false));
         }
         return null;
     }
@@ -80,18 +81,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    void addFutureList(List<TransactionVO> list) {
-        if (!list.isEmpty()) {
-            this.list.add(new TitleVO(R.string.home_future_transactions));
-        }
-        this.list.addAll(list);
-        notifyDataSetChanged();
-    }
-
-    void addCurrentList(List<TransactionVO> list) {
-        if (!list.isEmpty()) {
-            this.list.add(new TitleVO(R.string.home_current_transactions));
-        }
+    void addCurrentList(List<VOItemListInterface> list) {
         this.list.addAll(list);
         notifyDataSetChanged();
     }
@@ -134,7 +124,8 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             tvTag.setText(JavaUtils.StringUtil.formatEmpty(item.getTag().getName()));
             tvPaymentType.setText(JavaUtils.StringUtil.formatEmpty(item.getPaymentType().getName()));
-            tvPaymentDate.setText(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(item.getPaymentDate(), JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)));
+            tvPaymentDate.setText(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(item.getPaymentDate(), JavaUtils.DateUtil.DD)));
+            tvPaymentDate.setTextColor(Color.parseColor(item.getPaymentType().getColor()));
             tvPrice.setText(JavaUtils.StringUtil.formatEmpty(item.getPrice()));
 
             itemView.setOnClickListener(this);

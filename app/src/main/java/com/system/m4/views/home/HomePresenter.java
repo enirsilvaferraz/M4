@@ -4,11 +4,13 @@ import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.repository.dtos.DTOAbs;
-import com.system.m4.views.vos.ListTransactionVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.VOItemListInterface;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by eferraz on 29/04/17.
@@ -27,23 +29,36 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestListTransaction() {
 
-        TransactionBusinness.findByFilter(new BusinnessListener.OnSingleResultListener<ListTransactionVO>() {
+        TransactionBusinness.findByFilter(new BusinnessListener.OnMultiResultListenner<TransactionVO>() {
 
             @Override
-            public void onSuccess(ListTransactionVO vo) {
-
-                Collections.sort(vo.getCurrentList());
-                Collections.sort(vo.getFutureList());
-
-                mView.setListTransactions(vo);
+            public void onSuccess(List<TransactionVO> list) {
+                configureHeaderList(list);
             }
 
             @Override
             public void onError(Exception e) {
-                mView.setListTransactions(new ListTransactionVO());
+                mView.setListTransactions(new ArrayList<VOItemListInterface>());
                 mView.showError(e.getMessage());
             }
         });
+    }
+
+    private void configureHeaderList(List<TransactionVO> list) {
+        Collections.sort(list);
+
+        List<VOItemListInterface> listInterface = new ArrayList<>();
+        for (TransactionVO vo : list) {
+
+//            TitleVO titleVO = new TitleVO(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(vo.getPaymentDate(), JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)));
+//            if (!listInterface.contains(titleVO)) {
+//                listInterface.add(titleVO);
+//            }
+
+            listInterface.add(vo);
+        }
+
+        mView.setListTransactions(listInterface);
     }
 
     @Override

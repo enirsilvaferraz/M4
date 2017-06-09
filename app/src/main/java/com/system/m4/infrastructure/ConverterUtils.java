@@ -56,6 +56,7 @@ public final class ConverterUtils {
         PaymentTypeVO vo = new PaymentTypeVO();
         vo.setKey(dto.getKey());
         vo.setName(dto.getName());
+        vo.setColor(dto.getColor());
         return vo;
     }
 
@@ -63,6 +64,7 @@ public final class ConverterUtils {
         PaymentTypeDTO dto = new PaymentTypeDTO();
         dto.setKey(vo.getKey());
         dto.setName(vo.getName());
+        dto.setColor(vo.getColor());
         return dto;
     }
 

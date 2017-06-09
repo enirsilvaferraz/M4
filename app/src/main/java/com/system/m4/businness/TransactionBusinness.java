@@ -45,7 +45,7 @@ public abstract class TransactionBusinness {
         });
     }
 
-    public static void findByFilter(final BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
+    public static void findByFilter(final BusinnessListener.OnMultiResultListenner<TransactionVO> listener) {
 
         new FilterTransactionRepository().findAll(new FirebaseRepository.FirebaseMultiReturnListener<FilterTransactionDTO>() {
 
@@ -81,7 +81,7 @@ public abstract class TransactionBusinness {
         });
     }
 
-    private static void findTransactions(final FilterTransactionDTO filterDTO, final BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
+    private static void findTransactions(final FilterTransactionDTO filterDTO, final BusinnessListener.OnMultiResultListenner<TransactionVO> listener) {
 
         final List<TransactionDTO> listTransaction = new ArrayList<>();
         final List<TagDTO> listTag = new ArrayList<>();
@@ -96,7 +96,7 @@ public abstract class TransactionBusinness {
             public void onFindAll(List<TransactionDTO> list) {
 
                 if (list.isEmpty()) {
-                    listener.onSuccess(new ListTransactionVO());
+                    listener.onSuccess(new ArrayList<TransactionVO>());
                 }
 
                 for (TransactionDTO transactionDTO : list) {
@@ -143,7 +143,7 @@ public abstract class TransactionBusinness {
         });
     }
 
-    private static void configureList(List<TransactionDTO> listTransaction, List<TagDTO> listTag, List<PaymentTypeDTO> listPaymentType, BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
+    private static void configureList(List<TransactionDTO> listTransaction, List<TagDTO> listTag, List<PaymentTypeDTO> listPaymentType, BusinnessListener.OnMultiResultListenner<TransactionVO> listener) {
 
         if (!listTransaction.isEmpty() && !listTag.isEmpty() && !listPaymentType.isEmpty()) {
 
@@ -152,7 +152,7 @@ public abstract class TransactionBusinness {
                 listVo.add(ConverterUtils.fromTransaction(dto, listTag, listPaymentType));
             }
 
-            classifyList(listVo, listener);
+            listener.onSuccess(listVo);
         }
     }
 

@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/AppTheme.Card"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_vertical">
+
+    <View
+        android:id="@+id/item_transaction_payment_type_color"
+        android:layout_width="5dp"
+        android:layout_height="match_parent"
+        tools:background="@color/md_purple_300" />
 
     <RelativeLayout
         android:id="@+id/list_item_container"

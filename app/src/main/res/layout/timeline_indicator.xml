@@ -11,7 +11,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/timeline_indicator_icon"
         android:layout_centerHorizontal="true"
-        android:background="@color/divider2" />
+        android:background="@color/divider2"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/timeline_indicator_icon"
@@ -28,6 +29,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/timeline_indicator_icon"
         android:layout_centerHorizontal="true"
-        android:background="@color/divider2" />
+        android:background="@color/divider2"
+        android:visibility="gone" />
 
 </RelativeLayout>

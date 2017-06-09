@@ -48,6 +48,8 @@ public final class JavaUtils {
 
         public static final String DD_DE_MMMM_DE_YYYY = "dd 'de' MMMM 'de' yyyy";
 
+        public static final String DD = "dd";
+
         public static Date parse(String date) {
             return parse(date, DD_DE_MMMM_DE_YYYY);
         }
