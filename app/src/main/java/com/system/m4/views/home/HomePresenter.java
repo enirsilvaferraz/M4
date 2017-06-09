@@ -4,6 +4,9 @@ import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.repository.dtos.DTOAbs;
+import com.system.m4.views.vos.ListTransactionVO;
+import com.system.m4.views.vos.PaymentTypeVO;
+import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TitleVO;
 import com.system.m4.views.vos.TransactionVO;
@@ -30,11 +33,11 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestListTransaction() {
 
-        TransactionBusinness.findByFilter(new BusinnessListener.OnMultiResultListenner<TransactionVO>() {
+        TransactionBusinness.findByFilter(new BusinnessListener.OnSingleResultListener<ListTransactionVO>() {
 
             @Override
-            public void onSuccess(List<TransactionVO> list) {
-                configureHeaderList(list);
+            public void onSuccess(ListTransactionVO item) {
+                configureHeaderList(item);
             }
 
             @Override
@@ -45,13 +48,38 @@ class HomePresenter implements HomeContract.Presenter {
         });
     }
 
-    private void configureHeaderList(List<TransactionVO> list) {
-        Collections.sort(list);
+    private void configureHeaderList(ListTransactionVO item) {
+        Collections.sort(item.getTransactions());
 
         List<VOItemListInterface> listInterface = new ArrayList<>();
+
         listInterface.add(new TitleVO("Transactions"));
-        listInterface.addAll(list);
-        
+        for (TransactionVO transactionVO : item.getTransactions()) {
+            if (!item.getGroup().getPaymentTypeList().contains(transactionVO.getPaymentType())) {
+                listInterface.add(transactionVO);
+            }
+        }
+
+        listInterface.add(new SpaceVO());
+
+        for (PaymentTypeVO typeVO : item.getGroup().getPaymentTypeList()) {
+
+            List<VOItemListInterface> listParcial = new ArrayList<>();
+            listParcial.add(new TitleVO(typeVO.getName()));
+
+            for (TransactionVO transactionVO : item.getTransactions()) {
+                if (transactionVO.getPaymentType().equals(typeVO)) {
+                    listParcial.add(transactionVO);
+                }
+            }
+
+            listParcial.add(new SpaceVO());
+
+            if (listParcial.size() > 2) {
+                listInterface.addAll(listParcial);
+            }
+        }
+
         mView.setListTransactions(listInterface);
     }
 

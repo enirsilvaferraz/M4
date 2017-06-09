@@ -8,10 +8,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.TitleVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -27,8 +29,9 @@ import butterknife.ButterKnife;
  */
 class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int TYPE_TRANSACTION = 1;
     private static final int TYPE_TITLE = 0;
+    private static final int TYPE_TRANSACTION = 1;
+    private static final int TYPE_SPACE = 2;
 
     private final HomeContract.Presenter presenter;
     private ViewHolderTransaction markedViewHolder;
@@ -45,6 +48,8 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return new ViewHolderTitle(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_title, parent, false));
         } else if (TYPE_TRANSACTION == viewType) {
             return new ViewHolderTransaction(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction_dense, parent, false));
+        } else if (TYPE_SPACE == viewType) {
+            return new ViewHolderSpace(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_space, parent, false));
         }
         return null;
     }
@@ -52,10 +57,12 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         VOItemListInterface item = list.get(position);
-        if (item instanceof TransactionVO) {
-            return TYPE_TRANSACTION;
-        } else if (item instanceof TitleVO) {
+        if (item instanceof TitleVO) {
             return TYPE_TITLE;
+        } else if (item instanceof TransactionVO) {
+            return TYPE_TRANSACTION;
+        } else if (item instanceof SpaceVO) {
+            return TYPE_SPACE;
         }
         return super.getItemViewType(position);
     }
@@ -67,6 +74,8 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((ViewHolderTitle) holder).bind(((TitleVO) list.get(position)));
         } else if (TYPE_TRANSACTION == type) {
             ((ViewHolderTransaction) holder).bind(((TransactionVO) list.get(position)));
+        }else if (TYPE_SPACE == type) {
+            ((ViewHolderSpace) holder).bind(((SpaceVO) list.get(position)));
         }
     }
 
@@ -97,7 +106,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class ViewHolderTransaction extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         @BindView(R.id.list_item_container)
-        ViewGroup container;
+        LinearLayout container;
 
         @BindView(R.id.item_transaction_tag)
         TextView tvTag;
@@ -127,8 +136,8 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 tvPaymentDate.setTextColor(Color.parseColor(item.getPaymentType().getColor()));
             }
 
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
+            container.setOnClickListener(this);
+            container.setOnLongClickListener(this);
         }
 
         @Override
@@ -186,6 +195,17 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bind(final TitleVO item) {
             mTitle.setText(item.getTitleRes());
+        }
+    }
+
+    class ViewHolderSpace extends RecyclerView.ViewHolder {
+
+        ViewHolderSpace(View itemView) {
+            super(itemView);
+        }
+
+        public void bind(final SpaceVO item) {
+
         }
     }
 }

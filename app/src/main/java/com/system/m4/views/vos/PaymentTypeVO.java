@@ -92,4 +92,23 @@ public class PaymentTypeVO implements VOInterface<PaymentTypeVO> {
     public int compareTo(@NonNull PaymentTypeVO o) {
         return this.name.compareTo(o.getName());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PaymentTypeVO vo = (PaymentTypeVO) o;
+
+        if (!key.equals(vo.key)) return false;
+        return name.equals(vo.name);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = key.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
+    }
 }

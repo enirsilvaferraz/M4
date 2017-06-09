@@ -1,14 +1,17 @@
 package com.system.m4.infrastructure;
 
 import com.system.m4.repository.dtos.FilterTransactionDTO;
+import com.system.m4.repository.dtos.GroupTransactionDTO;
 import com.system.m4.repository.dtos.PaymentTypeDTO;
 import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.repository.dtos.TransactionDTO;
 import com.system.m4.views.vos.FilterTransactionVO;
+import com.system.m4.views.vos.GroupTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TransactionVO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -105,6 +108,16 @@ public final class ConverterUtils {
         vo.setPaymentDateStart(dto.getPaymentDateStart() != null ? JavaUtils.DateUtil.parse(dto.getPaymentDateStart(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         vo.setPaymentDateEnd(dto.getPaymentDateEnd() != null ? JavaUtils.DateUtil.parse(dto.getPaymentDateEnd(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         vo.setTag(fromTag(tagDTO));
+        return vo;
+    }
+
+    public static GroupTransactionVO fromGroupTransaction(GroupTransactionDTO dto, List<PaymentTypeDTO> paymentTypes) {
+        GroupTransactionVO vo = new GroupTransactionVO();
+        vo.setPaymentTypeList(new ArrayList<PaymentTypeVO>());
+        for (String key : dto.getListPaymentType()) {
+            PaymentTypeDTO paymentTypeDTO = paymentTypes.get(paymentTypes.indexOf(new PaymentTypeDTO(key)));
+            vo.getPaymentTypeList().add(fromPaymentType(paymentTypeDTO));
+        }
         return vo;
     }
 }

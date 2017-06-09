@@ -1,6 +1,5 @@
 package com.system.m4.views.vos;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,20 +9,22 @@ import java.util.List;
 
 public class ListTransactionVO {
 
-    private List<TransactionVO> currentList;
+    private List<TransactionVO> transactions;
+    private GroupTransactionVO group;
 
-    private List<TransactionVO> futureList;
-
-    public ListTransactionVO() {
-        currentList = new ArrayList<>();
-        futureList = new ArrayList<>();
+    public List<TransactionVO> getTransactions() {
+        return transactions;
     }
 
-    public List<TransactionVO> getCurrentList() {
-        return currentList;
+    public GroupTransactionVO getGroup() {
+        return group;
     }
 
-    public List<TransactionVO> getFutureList() {
-        return futureList;
+    public void setTransactions(List<TransactionVO> transactions) {
+        this.transactions = transactions;
+    }
+
+    public void setGroup(GroupTransactionVO group) {
+        this.group = group;
     }
 }
