@@ -49,30 +49,32 @@ class HomePresenter implements HomeContract.Presenter {
     }
 
     private void configureHeaderList(ListTransactionVO item) {
-        Collections.sort(item.getTransactions());
 
+        Collections.sort(item.getTransactions());
         List<VOItemListInterface> listInterface = new ArrayList<>();
 
-        listInterface.add(new TitleVO("Transactions"));
+        List<VOItemListInterface> listParcial = new ArrayList<>();
+        listParcial.add(new TitleVO("Transactions"));
         for (TransactionVO transactionVO : item.getTransactions()) {
             if (!item.getGroup().getPaymentTypeList().contains(transactionVO.getPaymentType())) {
-                listInterface.add(transactionVO);
+                listParcial.add(transactionVO);
             }
         }
+        listParcial.add(new SpaceVO());
 
-        listInterface.add(new SpaceVO());
+        if (listParcial.size() > 2) {
+            listInterface.addAll(listParcial);
+        }
 
         for (PaymentTypeVO typeVO : item.getGroup().getPaymentTypeList()) {
 
-            List<VOItemListInterface> listParcial = new ArrayList<>();
+            listParcial = new ArrayList<>();
             listParcial.add(new TitleVO(typeVO.getName()));
-
             for (TransactionVO transactionVO : item.getTransactions()) {
                 if (transactionVO.getPaymentType().equals(typeVO)) {
                     listParcial.add(transactionVO);
                 }
             }
-
             listParcial.add(new SpaceVO());
 
             if (listParcial.size() > 2) {
