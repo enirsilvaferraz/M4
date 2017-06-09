@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,9 +102,6 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.item_transaction_tag)
         TextView tvTag;
 
-        @BindView(R.id.item_transaction_payment_type)
-        TextView tvPaymentType;
-
         @BindView(R.id.item_transaction_payment_date)
         TextView tvPaymentDate;
 
@@ -122,10 +120,12 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             this.item = item;
 
             tvTag.setText(JavaUtils.StringUtil.formatEmpty(item.getTag().getName()));
-            tvPaymentType.setText(JavaUtils.StringUtil.formatEmpty(item.getPaymentType().getName()));
             tvPaymentDate.setText(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(item.getPaymentDate(), JavaUtils.DateUtil.DD)));
-            tvPaymentDate.setTextColor(Color.parseColor(item.getPaymentType().getColor()));
             tvPrice.setText(JavaUtils.StringUtil.formatEmpty(item.getPrice()));
+
+            if (!TextUtils.isEmpty(item.getPaymentType().getColor())) {
+                tvPaymentDate.setTextColor(Color.parseColor(item.getPaymentType().getColor()));
+            }
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
@@ -160,7 +160,6 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private void markItemOff() {
             container.setBackground(itemView.getContext().getDrawable(R.drawable.ripple));
             tvTag.setTypeface(Typeface.DEFAULT);
-            tvPaymentType.setTypeface(Typeface.DEFAULT);
             tvPaymentDate.setTypeface(Typeface.DEFAULT);
             tvPrice.setTypeface(Typeface.DEFAULT);
             markedViewHolder = null;
@@ -169,7 +168,6 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private void markItemOn() {
             container.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.item_marcked));
             tvTag.setTypeface(Typeface.DEFAULT_BOLD);
-            tvPaymentType.setTypeface(Typeface.DEFAULT_BOLD);
             tvPaymentDate.setTypeface(Typeface.DEFAULT_BOLD);
             tvPrice.setTypeface(Typeface.DEFAULT_BOLD);
             markedViewHolder = this;
