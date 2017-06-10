@@ -9,22 +9,22 @@ import java.util.Date;
 /**
  *
  */
-public class TransactionVO implements VOItemListInterface, Parcelable, Comparable<TransactionVO> {
+public class Transaction implements VOItemListInterface, Parcelable, Comparable<Transaction> {
 
     private String key;
     private Date paymentDate;
     private Date purchaseDate;
-    private String price;
+    private Double price;
     private TagVO tag;
     private PaymentTypeVO paymentType;
     private String content;
     private boolean pinned;
 
-    public TransactionVO() {
+    public Transaction() {
         // Default constructor
     }
 
-    public TransactionVO(TagVO tagVO) {
+    public Transaction(TagVO tagVO) {
         this.tag = tagVO;
     }
 
@@ -44,11 +44,11 @@ public class TransactionVO implements VOItemListInterface, Parcelable, Comparabl
         this.purchaseDate = purchaseDate;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -85,7 +85,7 @@ public class TransactionVO implements VOItemListInterface, Parcelable, Comparabl
     }
 
     @Override
-    public int compareTo(@NonNull TransactionVO o) {
+    public int compareTo(@NonNull Transaction o) {
 
         int compareTo = paymentDate.compareTo(o.getPaymentDate());
         if (compareTo != 0) {
@@ -118,35 +118,35 @@ public class TransactionVO implements VOItemListInterface, Parcelable, Comparabl
         dest.writeString(this.key);
         dest.writeLong(this.paymentDate != null ? this.paymentDate.getTime() : -1);
         dest.writeLong(this.purchaseDate != null ? this.purchaseDate.getTime() : -1);
-        dest.writeString(this.price);
+        dest.writeDouble(this.price);
         dest.writeParcelable(this.tag, flags);
         dest.writeParcelable(this.paymentType, flags);
         dest.writeString(this.content);
         dest.writeByte(this.pinned ? (byte) 1 : (byte) 0);
     }
 
-    protected TransactionVO(Parcel in) {
+    protected Transaction(Parcel in) {
         this.key = in.readString();
         long tmpPaymentDate = in.readLong();
         this.paymentDate = tmpPaymentDate == -1 ? null : new Date(tmpPaymentDate);
         long tmpPurchaseDate = in.readLong();
         this.purchaseDate = tmpPurchaseDate == -1 ? null : new Date(tmpPurchaseDate);
-        this.price = in.readString();
+        this.price = in.readDouble();
         this.tag = in.readParcelable(TagVO.class.getClassLoader());
         this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
         this.content = in.readString();
         this.pinned = in.readByte() != 0;
     }
 
-    public static final Creator<TransactionVO> CREATOR = new Creator<TransactionVO>() {
+    public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
         @Override
-        public TransactionVO createFromParcel(Parcel source) {
-            return new TransactionVO(source);
+        public Transaction createFromParcel(Parcel source) {
+            return new Transaction(source);
         }
 
         @Override
-        public TransactionVO[] newArray(int size) {
-            return new TransactionVO[size];
+        public Transaction[] newArray(int size) {
+            return new Transaction[size];
         }
     };
 

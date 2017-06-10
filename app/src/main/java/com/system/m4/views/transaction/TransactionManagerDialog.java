@@ -21,7 +21,7 @@ import com.system.m4.views.components.dialogs.list.ListPaymentTypePresenter;
 import com.system.m4.views.components.dialogs.list.ListTagPresenter;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
-import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOInterface;
 
 import java.util.Date;
@@ -63,9 +63,9 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     private DialogListener dialogListener;
 
-    public static TransactionManagerDialog newInstance(TransactionVO transactionVO) {
+    public static TransactionManagerDialog newInstance(Transaction transaction) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.BUNDLE_TRANSACTION_VO, transactionVO);
+        bundle.putParcelable(Constants.BUNDLE_TRANSACTION_VO, transaction);
 
         TransactionManagerDialog fragment = new TransactionManagerDialog();
         fragment.setArguments(bundle);
@@ -88,19 +88,19 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TransactionVO transactionVO = getArguments().getParcelable(Constants.BUNDLE_TRANSACTION_VO);
-        presenter.init(transactionVO);
+        Transaction transaction = getArguments().getParcelable(Constants.BUNDLE_TRANSACTION_VO);
+        presenter.init(transaction);
     }
 
     @Override
-    public void configureModel(TransactionVO transactionVO) {
-        setTitle(transactionVO.getTag().getName());
-        presenter.setTags(transactionVO.getTag());
-        presenter.setContent(transactionVO.getContent());
-        presenter.setPaymentDate(transactionVO.getPaymentDate());
-        presenter.setPurchaseDate(transactionVO.getPurchaseDate());
-        presenter.setPaymentType(transactionVO.getPaymentType());
-        presenter.setValue(transactionVO.getPrice());
+    public void configureModel(Transaction transaction) {
+        setTitle(transaction.getTag().getName());
+        presenter.setTags(transaction.getTag());
+        presenter.setContent(transaction.getContent());
+        presenter.setPaymentDate(transaction.getPaymentDate());
+        presenter.setPurchaseDate(transaction.getPurchaseDate());
+        presenter.setPaymentType(transaction.getPaymentType());
+        presenter.setValue(transaction.getPrice());
     }
 
     @Override
@@ -244,7 +244,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
         NumberComponentDialog.newInstance(R.string.transaction_price, value, new OnFinishListener() {
             @Override
             public void onFinish(String value) {
-                presenter.setValue(value);
+                presenter.setValue(JavaUtils.NumberUtil.removeFormat(value));
             }
         }).show(getChildFragmentManager());
     }

@@ -12,7 +12,7 @@ import com.system.m4.repository.firebase.FilterTransactionRepository;
 import com.system.m4.repository.firebase.FirebaseRepository;
 import com.system.m4.repository.firebase.TransactionFirebaseRepository;
 import com.system.m4.views.vos.ListTransactionVO;
-import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.Transaction;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +29,7 @@ public abstract class TransactionBusinness {
         // Nothing to do
     }
 
-    public static void save(TransactionVO vo, final BusinnessListener.OnPersistListener persistListener) {
+    public static void save(Transaction vo, final BusinnessListener.OnPersistListener persistListener) {
         TransactionDTO dto = ConverterUtils.fromTransaction(vo);
         new TransactionFirebaseRepository().save(dto, new FirebaseRepository.FirebaseSingleReturnListener<TransactionDTO>() {
 
@@ -170,7 +170,7 @@ public abstract class TransactionBusinness {
 
         if (!listTransaction.isEmpty() && !listTag.isEmpty() && !listPaymentType.isEmpty() && groupDTO.getKey() != null && !groupDTO.getKey().isEmpty()) {
 
-            List<TransactionVO> listVo = new ArrayList<>();
+            List<Transaction> listVo = new ArrayList<>();
             for (TransactionDTO dto : listTransaction) {
                 listVo.add(ConverterUtils.fromTransaction(dto, listTag, listPaymentType));
             }

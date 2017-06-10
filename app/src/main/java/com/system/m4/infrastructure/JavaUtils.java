@@ -170,10 +170,12 @@ public final class JavaUtils {
         }
 
         public static String currencyFormat(Double value) {
-            final NumberFormat instance = NumberFormat.getInstance(Locale.getDefault());
-            instance.setMinimumFractionDigits(2);
-            instance.setMinimumIntegerDigits(1);
-            return "R$ " + instance.format(value);
+            if (value != null) {
+                final NumberFormat instance = NumberFormat.getInstance(Locale.getDefault());
+                instance.setMinimumFractionDigits(2);
+                instance.setMinimumIntegerDigits(1);
+                return "R$ " + instance.format(value);
+            } else return null;
         }
 
         public static String percentFormat(Double percentValue) {
@@ -220,6 +222,14 @@ public final class JavaUtils {
                 return s;
             }
         }
+
+        public static String formatEmpty(Double s) {
+            if (s == null) {
+                return Constants.EMPTY_FIELD;
+            } else {
+                return JavaUtils.NumberUtil.currencyFormat(s);
+            }
+        }
     }
 
     /**
@@ -248,7 +258,7 @@ public final class JavaUtils {
             new DatePickerDialog(context, onDateSetListener, year, month, day).show();
         }
 
-        public static void showAlertDialog(Context context, @StringRes int stringMessage, DialogInterface.OnClickListener onClickListener ) {
+        public static void showAlertDialog(Context context, @StringRes int stringMessage, DialogInterface.OnClickListener onClickListener) {
             new AlertDialog.Builder(context).setMessage(stringMessage)
                     .setPositiveButton(R.string.system_action_ok, onClickListener).create().show();
         }

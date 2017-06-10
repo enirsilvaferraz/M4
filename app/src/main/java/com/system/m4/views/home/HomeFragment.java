@@ -19,7 +19,7 @@ import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListTagPresenter;
 import com.system.m4.views.transaction.TransactionManagerDialog;
 import com.system.m4.views.vos.TagVO;
-import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOInterface;
 import com.system.m4.views.vos.VOItemListInterface;
 
@@ -123,11 +123,11 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
     @Override
     public void showTransactionDialog(TagVO vo) {
-        showTransactionDialog(new TransactionVO(vo));
+        showTransactionDialog(new Transaction(vo));
     }
 
     @Override
-    public void showTransactionDialog(TransactionVO vo) {
+    public void showTransactionDialog(Transaction vo) {
         TransactionManagerDialog dialogFragment = TransactionManagerDialog.newInstance(vo);
         dialogFragment.setDialogListener(new BaseDialogFragment.DialogListener() {
             @Override

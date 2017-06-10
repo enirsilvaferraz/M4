@@ -10,7 +10,7 @@ import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
-import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.Transaction;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -24,11 +24,11 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
 
     private final TransactionManagerContract.View mView;
 
-    private TransactionVO mVO;
+    private Transaction mVO;
 
     TransactionManagerPresenter(TransactionManagerContract.View mView) {
         this.mView = mView;
-        this.mVO = new TransactionVO();
+        this.mVO = new Transaction();
     }
 
     @Override
@@ -44,19 +44,19 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     }
 
     @Override
-    public void setValue(String value) {
+    public void setValue(Double value) {
         mVO.setPrice(value);
         mView.setValue(JavaUtils.StringUtil.formatEmpty(JavaUtils.NumberUtil.currencyFormat(value)));
     }
 
     @Override
-    public void init(TransactionVO transactionVO) {
-        mVO = transactionVO;
+    public void init(Transaction transaction) {
+        mVO = transaction;
         if (TextUtils.isEmpty(mVO.getKey())) {
             mVO.setPaymentDate(Calendar.getInstance().getTime());
         }
 
-        mView.configureModel(transactionVO);
+        mView.configureModel(transaction);
     }
 
     @Override
@@ -168,7 +168,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
             mView.showError(R.string.system_error_required_field, R.string.transaction_payment_type);
         } else if (mVO.getPaymentDate() == null) {
             mView.showError(R.string.system_error_required_field, R.string.transaction_payment_date);
-        } else if (TextUtils.isEmpty(mVO.getPrice())) {
+        } else if (mVO.getPrice() == null) {
             mView.showError(R.string.system_error_required_field, R.string.transaction_price);
         } else {
 

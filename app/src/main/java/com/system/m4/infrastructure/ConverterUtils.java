@@ -9,7 +9,7 @@ import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.GroupTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
-import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public final class ConverterUtils {
         // Do nothing
     }
 
-    public static TransactionDTO fromTransaction(TransactionVO vo) {
+    public static TransactionDTO fromTransaction(Transaction vo) {
         TransactionDTO dto = new TransactionDTO();
         dto.setKey(vo.getKey());
         dto.setTag(vo.getTag().getKey());
@@ -33,24 +33,24 @@ public final class ConverterUtils {
         dto.setPaymentDate(JavaUtils.DateUtil.format(vo.getPaymentDate(), JavaUtils.DateUtil.YYYY_MM_DD));
         dto.setPurchaseDate(vo.getPurchaseDate() != null ? JavaUtils.DateUtil.format(vo.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         dto.setContent(vo.getContent());
-        dto.setPrice(JavaUtils.NumberUtil.removeFormat(vo.getPrice()));
+        dto.setPrice(vo.getPrice());
         dto.setPinned(vo.isPinned());
         return dto;
     }
 
-    public static TransactionVO fromTransaction(TransactionDTO mDTO, List<TagDTO> tags, List<PaymentTypeDTO> paymentTypes) {
+    public static Transaction fromTransaction(TransactionDTO mDTO, List<TagDTO> tags, List<PaymentTypeDTO> paymentTypes) {
 
         TagDTO tagDTO = tags.get(tags.indexOf(new TagDTO(mDTO.getTag())));
         PaymentTypeDTO paymentTypeDTO = paymentTypes.get(paymentTypes.indexOf(new PaymentTypeDTO(mDTO.getPaymentType())));
 
-        TransactionVO vo = new TransactionVO();
+        Transaction vo = new Transaction();
         vo.setKey(mDTO.getKey());
         vo.setTag(fromTag(tagDTO));
         vo.setPaymentType(fromPaymentType(paymentTypeDTO));
         vo.setPaymentDate(JavaUtils.DateUtil.parse(mDTO.getPaymentDate(), JavaUtils.DateUtil.YYYY_MM_DD));
         vo.setPurchaseDate(mDTO.getPurchaseDate() != null ? JavaUtils.DateUtil.parse(mDTO.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         vo.setContent(mDTO.getContent());
-        vo.setPrice(JavaUtils.NumberUtil.currencyFormat(mDTO.getPrice()));
+        vo.setPrice(mDTO.getPrice());
         vo.setPinned(mDTO.isPinned());
         return vo;
     }

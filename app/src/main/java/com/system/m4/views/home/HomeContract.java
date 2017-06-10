@@ -1,7 +1,7 @@
 package com.system.m4.views.home;
 
 import com.system.m4.views.vos.TagVO;
-import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
 
 import java.util.List;
@@ -24,7 +24,7 @@ class HomeContract {
 
         void showTransactionDialog(TagVO vo);
 
-        void showTransactionDialog(TransactionVO vo);
+        void showTransactionDialog(Transaction vo);
 
         void showError(String message);
 
@@ -52,9 +52,9 @@ class HomeContract {
 
         void requestTransactionDialog(TagVO vo);
 
-        void selectItem(TransactionVO vo);
+        void selectItem(Transaction vo);
 
-        void markItemOn(TransactionVO item);
+        void markItemOn(Transaction item);
 
         void markItemOff();
 

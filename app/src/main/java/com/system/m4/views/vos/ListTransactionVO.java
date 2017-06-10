@@ -9,10 +9,10 @@ import java.util.List;
 
 public class ListTransactionVO {
 
-    private List<TransactionVO> transactions;
+    private List<Transaction> transactions;
     private GroupTransactionVO group;
 
-    public List<TransactionVO> getTransactions() {
+    public List<Transaction> getTransactions() {
         return transactions;
     }
 
@@ -20,7 +20,7 @@ public class ListTransactionVO {
         return group;
     }
 
-    public void setTransactions(List<TransactionVO> transactions) {
+    public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
 

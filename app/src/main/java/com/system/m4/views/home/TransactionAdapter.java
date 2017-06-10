@@ -15,7 +15,7 @@ import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.TitleVO;
-import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         VOItemListInterface item = list.get(position);
         if (item instanceof TitleVO) {
             return TYPE_TITLE;
-        } else if (item instanceof TransactionVO) {
+        } else if (item instanceof Transaction) {
             return TYPE_TRANSACTION;
         } else if (item instanceof SpaceVO) {
             return TYPE_SPACE;
@@ -73,7 +73,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (TYPE_TITLE == type) {
             ((ViewHolderTitle) holder).bind(((TitleVO) list.get(position)));
         } else if (TYPE_TRANSACTION == type) {
-            ((ViewHolderTransaction) holder).bind(((TransactionVO) list.get(position)));
+            ((ViewHolderTransaction) holder).bind(((Transaction) list.get(position)));
         }else if (TYPE_SPACE == type) {
             ((ViewHolderSpace) holder).bind(((SpaceVO) list.get(position)));
         }
@@ -117,18 +117,20 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.item_transaction_price)
         TextView tvPrice;
 
-        private TransactionVO item;
+        private Transaction item;
 
         ViewHolderTransaction(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(final TransactionVO item) {
+        public void bind(final Transaction item) {
 
             this.item = item;
 
-            tvTag.setText(JavaUtils.StringUtil.formatEmpty(item.getTag().getName()));
+            String name = item.getTag() != null ? item.getTag().getName() : item.getPaymentType().getName();
+
+            tvTag.setText(JavaUtils.StringUtil.formatEmpty(name));
             tvPaymentDate.setText(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(item.getPaymentDate(), JavaUtils.DateUtil.DD)));
             tvPrice.setText(JavaUtils.StringUtil.formatEmpty(item.getPrice()));
 

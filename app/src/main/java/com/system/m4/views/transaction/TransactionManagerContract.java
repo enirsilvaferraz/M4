@@ -2,7 +2,7 @@ package com.system.m4.views.transaction;
 
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
-import com.system.m4.views.vos.TransactionVO;
+import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOInterface;
 
 import java.util.Date;
@@ -16,7 +16,7 @@ interface TransactionManagerContract {
 
     interface View {
 
-        void configureModel(TransactionVO transactionVO);
+        void configureModel(Transaction transaction);
 
         void setPaymentDate(String value);
 
@@ -57,7 +57,7 @@ interface TransactionManagerContract {
 
         void setPurchaseDate(Date date);
 
-        void setValue(String value);
+        void setValue(Double value);
 
         void setTags(TagVO tagVO);
 
@@ -91,6 +91,6 @@ interface TransactionManagerContract {
 
         void save();
 
-        void init(TransactionVO transactionVO);
+        void init(Transaction transaction);
     }
 }
