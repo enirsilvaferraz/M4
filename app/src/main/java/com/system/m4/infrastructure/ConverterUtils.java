@@ -38,20 +38,24 @@ public final class ConverterUtils {
         return dto;
     }
 
-    public static Transaction fromTransaction(TransactionDTO mDTO, List<TagDTO> tags, List<PaymentTypeDTO> paymentTypes) {
-
-        TagDTO tagDTO = tags.get(tags.indexOf(new TagDTO(mDTO.getTag())));
-        PaymentTypeDTO paymentTypeDTO = paymentTypes.get(paymentTypes.indexOf(new PaymentTypeDTO(mDTO.getPaymentType())));
-
+    public static Transaction fromTransaction(TransactionDTO mDTO) {
         Transaction vo = new Transaction();
         vo.setKey(mDTO.getKey());
-        vo.setTag(fromTag(tagDTO));
-        vo.setPaymentType(fromPaymentType(paymentTypeDTO));
+        vo.setTag(new TagVO());
+        vo.getTag().setKey(mDTO.getTag());
+        vo.setPaymentType(new PaymentTypeVO());
+        vo.getPaymentType().setKey(mDTO.getPaymentType());
         vo.setPaymentDate(JavaUtils.DateUtil.parse(mDTO.getPaymentDate(), JavaUtils.DateUtil.YYYY_MM_DD));
         vo.setPurchaseDate(mDTO.getPurchaseDate() != null ? JavaUtils.DateUtil.parse(mDTO.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         vo.setContent(mDTO.getContent());
         vo.setPrice(mDTO.getPrice());
         vo.setPinned(mDTO.isPinned());
+        return vo;
+    }
+
+    public static Transaction fillTransaction(Transaction vo, List<TagVO> tags, List<PaymentTypeVO> paymentTypes) {
+        vo.setTag(tags.get(tags.indexOf(vo.getTag())));
+        vo.setPaymentType(paymentTypes.get(paymentTypes.indexOf(vo.getPaymentType())));
         return vo;
     }
 
@@ -89,34 +93,51 @@ public final class ConverterUtils {
         FilterTransactionDTO dto = new FilterTransactionDTO();
         dto.setKey(vo.getKey());
         dto.setPaymentType(vo.getPaymentType() != null ? vo.getPaymentType().getKey() : null);
-        dto.setTags(vo.getTag() != null ? vo.getTag().getKey() : null);
+        dto.setTag(vo.getTag() != null ? vo.getTag().getKey() : null);
         dto.setPaymentDateStart(vo.getPaymentDateStart() != null ? JavaUtils.DateUtil.format(vo.getPaymentDateStart(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         dto.setPaymentDateEnd(vo.getPaymentDateEnd() != null ? JavaUtils.DateUtil.format(vo.getPaymentDateEnd(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         return dto;
     }
 
     public static FilterTransactionVO fromFilterTransaction(FilterTransactionDTO dto, List<TagDTO> tags, List<PaymentTypeDTO> paymentTypes) {
-        int indexOf = tags.indexOf(new TagDTO(dto.getTags()));
-        TagDTO tagDTO = indexOf != -1 ? tags.get(indexOf) : new TagDTO();
-
-        indexOf = paymentTypes.indexOf(new PaymentTypeDTO(dto.getPaymentType()));
-        PaymentTypeDTO paymentTypeDTO = indexOf != -1 ? paymentTypes.get(indexOf) : new PaymentTypeDTO();
-
         FilterTransactionVO vo = new FilterTransactionVO();
         vo.setKey(dto.getKey());
-        vo.setPaymentType(fromPaymentType(paymentTypeDTO));
+        vo.setTag(new TagVO());
+        vo.getTag().setKey(dto.getTag());
+        vo.setPaymentType(new PaymentTypeVO());
+        vo.getPaymentType().setKey(dto.getPaymentType());
         vo.setPaymentDateStart(dto.getPaymentDateStart() != null ? JavaUtils.DateUtil.parse(dto.getPaymentDateStart(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         vo.setPaymentDateEnd(dto.getPaymentDateEnd() != null ? JavaUtils.DateUtil.parse(dto.getPaymentDateEnd(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
-        vo.setTag(fromTag(tagDTO));
         return vo;
     }
 
-    public static GroupTransactionVO fromGroupTransaction(GroupTransactionDTO dto, List<PaymentTypeDTO> paymentTypes) {
+    public static GroupTransactionVO fromGroupTransaction(GroupTransactionDTO dto) {
         GroupTransactionVO vo = new GroupTransactionVO();
         vo.setPaymentTypeList(new ArrayList<PaymentTypeVO>());
+        vo.setKey(dto.getKey());
         for (String key : dto.getListPaymentType()) {
-            PaymentTypeDTO paymentTypeDTO = paymentTypes.get(paymentTypes.indexOf(new PaymentTypeDTO(key)));
-            vo.getPaymentTypeList().add(fromPaymentType(paymentTypeDTO));
+            PaymentTypeVO paymentTypeVO = new PaymentTypeVO();
+            paymentTypeVO.setKey(key);
+            vo.getPaymentTypeList().add(paymentTypeVO);
+        }
+        return vo;
+    }
+
+    public static GroupTransactionVO fillGroupTransaction(GroupTransactionVO group, List<PaymentTypeVO> listPaymentType) {
+        for (PaymentTypeVO typeVO : group.getPaymentTypeList()) {
+            typeVO.setName(listPaymentType.get(listPaymentType.indexOf(typeVO)).getName());
+        }
+        return group;
+    }
+
+    public static FilterTransactionVO fillFilterTransaction(FilterTransactionVO vo, List<TagVO> tags, List<PaymentTypeVO> paymentTypes) {
+
+        if (vo.getTag().getKey() != null) {
+            vo.setTag(tags.get(tags.indexOf(vo.getTag())));
+        }
+
+        if (vo.getPaymentType().getKey() != null) {
+            vo.setPaymentType(paymentTypes.get(paymentTypes.indexOf(vo.getPaymentType())));
         }
         return vo;
     }

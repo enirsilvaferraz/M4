@@ -26,13 +26,13 @@ public class ListTagPresenter extends ListComponentPresenterAbs {
     @Override
     public void requestList() {
 
-        TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
+        TagBusinness.findAll(new BusinnessListener.OnMultiResultListenner<TagVO>() {
 
             @Override
-            public void onSuccess(List<TagDTO> list) {
+            public void onSuccess(List<TagVO> list, int call) {
                 List<VOInterface> voList = new ArrayList<>();
-                for (TagDTO dto : list) {
-                    voList.add(ConverterUtils.fromTag(dto));
+                for (TagVO vo : list) {
+                    voList.add(vo);
                 }
                 Collections.sort(voList);
                 getView().renderList(voList);

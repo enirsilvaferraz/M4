@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  *
  */
-public class Transaction implements VOItemListInterface, Parcelable, Comparable<Transaction> {
+public class Transaction implements VOInterface<Transaction>, VOItemListInterface, Parcelable, Comparable<Transaction> {
 
     private String key;
     private Date paymentDate;
@@ -74,6 +74,16 @@ public class Transaction implements VOItemListInterface, Parcelable, Comparable<
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public void setName(String name) {
+
     }
 
     public String getKey() {

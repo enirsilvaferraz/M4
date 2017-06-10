@@ -28,6 +28,7 @@ public abstract class FirebaseRepository<T extends DTOAbs> {
         databaseRef = FirebaseDatabase.getInstance().getReference(BuildConfig.FLAVOR + "/" + databaseName);
     }
 
+
     public void save(T dto, FirebaseSingleReturnListener<T> listener) {
 
         if (JavaUtils.StringUtil.isEmpty(dto.getKey())) {

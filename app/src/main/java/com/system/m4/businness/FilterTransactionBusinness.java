@@ -4,13 +4,16 @@ import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.FilterTransactionDTO;
-import com.system.m4.repository.dtos.PaymentTypeDTO;
-import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.repository.firebase.FilterTransactionRepository;
 import com.system.m4.repository.firebase.FirebaseRepository;
+import com.system.m4.views.vos.FilterTransactionVO;
+import com.system.m4.views.vos.PaymentTypeVO;
+import com.system.m4.views.vos.TagVO;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
 
 /**
  * Created by Enir on 20/05/2017.
@@ -23,11 +26,11 @@ public class FilterTransactionBusinness {
 
     }
 
-    public static void get(final BusinnessListener.OnSingleResultListener listener) {
+    public static void find(final BusinnessListener.OnSingleResultListener<FilterTransactionVO> listener) {
 
         final FilterTransactionDTO dto = new FilterTransactionDTO();
-        final List<TagDTO> listTag = new ArrayList<>();
-        final List<PaymentTypeDTO> listPaymentType = new ArrayList<>();
+        final List<TagVO> listTag = new ArrayList<>();
+        final List<PaymentTypeVO> listPaymentType = new ArrayList<>();
 
         new FilterTransactionRepository().findAll(new FirebaseRepository.FirebaseMultiReturnListener<FilterTransactionDTO>() {
 
@@ -38,11 +41,14 @@ public class FilterTransactionBusinness {
                     dto.setKey(localdto.getKey());
                     dto.setPaymentDateStart(localdto.getPaymentDateStart());
                     dto.setPaymentDateEnd(localdto.getPaymentDateEnd());
-                    dto.setTags(localdto.getTags());
+                    dto.setTag(localdto.getTag());
                     dto.setPaymentType(localdto.getPaymentType());
                     configureList(dto, listTag, listPaymentType, listener);
                 } else {
-                    listener.onSuccess(null);
+                    FilterTransactionVO vo = new FilterTransactionVO();
+                    vo.setPaymentDateStart(JavaUtils.DateUtil.getActualMinimum(Calendar.getInstance().getTime()));
+                    vo.setPaymentDateEnd(JavaUtils.DateUtil.getActualMaximum(Calendar.getInstance().getTime()));
+                    listener.onSuccess(vo);
                 }
             }
 
@@ -52,10 +58,10 @@ public class FilterTransactionBusinness {
             }
         });
 
-        TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
+        TagBusinness.findAll(new BusinnessListener.OnMultiResultListenner<TagVO>() {
 
             @Override
-            public void onSuccess(List<TagDTO> list) {
+            public void onSuccess(List<TagVO> list, int call) {
                 listTag.addAll(list);
                 configureList(dto, listTag, listPaymentType, listener);
             }
@@ -66,10 +72,10 @@ public class FilterTransactionBusinness {
             }
         });
 
-        PaymentTypeBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner<PaymentTypeDTO>() {
+        PaymentTypeBusinness.findAll(new BusinnessListener.OnMultiResultListenner<PaymentTypeVO>() {
 
             @Override
-            public void onSuccess(List<PaymentTypeDTO> list) {
+            public void onSuccess(List<PaymentTypeVO> list, int call) {
                 listPaymentType.addAll(list);
                 configureList(dto, listTag, listPaymentType, listener);
             }
@@ -81,9 +87,18 @@ public class FilterTransactionBusinness {
         });
     }
 
-    private static void configureList(FilterTransactionDTO dto, List<TagDTO> listTag, List<PaymentTypeDTO> listPaymentType, BusinnessListener.OnSingleResultListener listener) {
+    private static void configureList(FilterTransactionDTO dto, List<TagVO> listTag, List<PaymentTypeVO> listPaymentType, BusinnessListener.OnSingleResultListener<FilterTransactionVO> listener) {
         if (!JavaUtils.StringUtil.isEmpty(dto.getKey()) && !listTag.isEmpty() && !listPaymentType.isEmpty()) {
-            listener.onSuccess(ConverterUtils.fromFilterTransaction(dto, listTag, listPaymentType));
+
+            FilterTransactionVO filter = ConverterUtils.fromFilterTransaction(dto, null, null);
+            if (filter.getPaymentDateStart() == null) {
+                filter.setPaymentDateStart(JavaUtils.DateUtil.getDate(2015, 01, 01));
+            }
+            if (filter.getPaymentDateEnd() == null) {
+                filter.setPaymentDateEnd(JavaUtils.DateUtil.getDate(2025, 01, 01));
+            }
+
+            listener.onSuccess(ConverterUtils.fillFilterTransaction(filter, listTag, listPaymentType));
         }
     }
 

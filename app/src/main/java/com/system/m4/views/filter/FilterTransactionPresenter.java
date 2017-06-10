@@ -10,8 +10,6 @@ import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.DTOAbs;
-import com.system.m4.repository.dtos.PaymentTypeDTO;
-import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
@@ -39,7 +37,7 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     @Override
     public void init() {
 
-        FilterTransactionBusinness.get(new BusinnessListener.OnSingleResultListener<FilterTransactionVO>() {
+        FilterTransactionBusinness.find(new BusinnessListener.OnSingleResultListener<FilterTransactionVO>() {
 
             @Override
             public void onSuccess(FilterTransactionVO vo) {
@@ -62,11 +60,11 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     @Override
     public void requestTagDialog() {
 
-        TagBusinness.requestTagList(new BusinnessListener.OnMultiResultListenner<TagDTO>() {
+        TagBusinness.findAll(new BusinnessListener.OnMultiResultListenner<TagVO>() {
 
             @Override
-            public void onSuccess(List<TagDTO> list) {
-                mView.showTagsDialog(TagVO.asList(list));
+            public void onSuccess(List<TagVO> list, int call) {
+                mView.showTagsDialog(list);
             }
 
             @Override
@@ -105,11 +103,11 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     @Override
     public void requestPaymentTypeDialog() {
 
-        PaymentTypeBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner<PaymentTypeDTO>() {
+        PaymentTypeBusinness.findAll(new BusinnessListener.OnMultiResultListenner<PaymentTypeVO>() {
 
             @Override
-            public void onSuccess(List<PaymentTypeDTO> list) {
-                mView.showPaymentTypeDialog(PaymentTypeVO.asList(list));
+            public void onSuccess(List<PaymentTypeVO> list, int call) {
+                mView.showPaymentTypeDialog(list);
             }
 
             @Override

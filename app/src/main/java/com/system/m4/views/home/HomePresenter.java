@@ -1,5 +1,6 @@
 package com.system.m4.views.home;
 
+import com.system.m4.businness.HomeBusinness;
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.ConverterUtils;
@@ -35,7 +36,7 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestListTransaction() {
 
-        TransactionBusinness.findByFilter(new BusinnessListener.OnSingleResultListener<ListTransactionVO>() {
+        HomeBusinness.findTransactions(new BusinnessListener.OnSingleResultListener<ListTransactionVO>() {
 
             @Override
             public void onSuccess(ListTransactionVO item) {
@@ -173,7 +174,7 @@ class HomePresenter implements HomeContract.Presenter {
     public void pinTransaction(boolean pin) {
 
         mSelectedItem.setPinned(pin);
-        TransactionBusinness.save(mSelectedItem, new BusinnessListener.OnPersistListener() {
+        TransactionBusinness.pin(mSelectedItem, new BusinnessListener.OnPersistListener() {
 
             @Override
             public void onSuccess(DTOAbs dto) {

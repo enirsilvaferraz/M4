@@ -5,9 +5,6 @@ import android.support.annotation.NonNull;
 
 import com.system.m4.repository.dtos.TagDTO;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by eferraz on 30/04/17.
  * For M4
@@ -40,14 +37,6 @@ public class TagVO implements VOInterface<TagVO>{
 
     protected TagVO(Parcel in) {
         this.name = in.readString();
-    }
-
-    public static List<TagVO> asList(List<TagDTO> dtolist) {
-        List<TagVO> volist = new ArrayList<>();
-        for (TagDTO dto : dtolist) {
-            volist.add(new TagVO(dto));
-        }
-        return volist;
     }
 
     public String getName() {

@@ -15,8 +15,8 @@ public interface BusinnessListener {
      *
      */
     interface OnMultiResultListenner<T> {
-
-        void onSuccess(List<T> list);
+        
+        void onSuccess(List<T> list, int call);
 
         void onError(Exception e);
     }

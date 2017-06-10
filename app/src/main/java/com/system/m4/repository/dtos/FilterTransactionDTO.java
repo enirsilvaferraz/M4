@@ -8,7 +8,7 @@ public class FilterTransactionDTO extends DTOAbs {
     private String key;
     private String paymentDateStart;
     private String paymentDateEnd;
-    private String tags;
+    private String tag;
     private String paymentType;
     
     public String getPaymentDateStart() {
@@ -27,12 +27,12 @@ public class FilterTransactionDTO extends DTOAbs {
         this.paymentDateEnd = paymentDateEnd;
     }
 
-    public String getTags() {
-        return tags;
+    public String getTag() {
+        return tag;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public String getPaymentType() {

@@ -98,17 +98,14 @@ public class PaymentTypeVO implements VOInterface<PaymentTypeVO> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PaymentTypeVO vo = (PaymentTypeVO) o;
+        PaymentTypeVO typeVO = (PaymentTypeVO) o;
 
-        if (!key.equals(vo.key)) return false;
-        return name.equals(vo.name);
+        return key != null ? key.equals(typeVO.key) : typeVO.key == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = key.hashCode();
-        result = 31 * result + name.hashCode();
-        return result;
+        return key != null ? key.hashCode() : 0;
     }
 }

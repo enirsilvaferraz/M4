@@ -25,13 +25,13 @@ public class ListPaymentTypePresenter extends ListComponentPresenterAbs {
     @Override
     public void requestList() {
 
-        PaymentTypeBusinness.requestPaymentTypeList(new BusinnessListener.OnMultiResultListenner<PaymentTypeDTO>() {
+        PaymentTypeBusinness.findAll(new BusinnessListener.OnMultiResultListenner<PaymentTypeVO>() {
 
             @Override
-            public void onSuccess(List<PaymentTypeDTO> list) {
+            public void onSuccess(List<PaymentTypeVO> list, int call) {
                 List<VOInterface> voList = new ArrayList<>();
-                for (PaymentTypeDTO dto : list) {
-                    voList.add(ConverterUtils.fromPaymentType(dto));
+                for (PaymentTypeVO vo : list) {
+                    voList.add(vo);
                 }
                 getView().renderList(voList);
             }

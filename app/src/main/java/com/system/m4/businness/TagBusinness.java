@@ -1,10 +1,14 @@
 package com.system.m4.businness;
 
 import com.system.m4.infrastructure.BusinnessListener;
+import com.system.m4.infrastructure.Constants;
+import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.repository.firebase.FirebaseRepository;
 import com.system.m4.repository.firebase.TagFirebaseRepository;
+import com.system.m4.views.vos.TagVO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TagBusinness {
@@ -13,13 +17,17 @@ public abstract class TagBusinness {
         // Nothing to do
     }
 
-    public static void requestTagList(final BusinnessListener.OnMultiResultListenner<TagDTO> onMultiResultListenner) {
+    public static void findAll(final BusinnessListener.OnMultiResultListenner<TagVO> onMultiResultListenner) {
 
         new TagFirebaseRepository().findAll(new FirebaseRepository.FirebaseMultiReturnListener<TagDTO>() {
 
             @Override
             public void onFindAll(List<TagDTO> list) {
-                onMultiResultListenner.onSuccess(list);
+                List<TagVO> listVO = new ArrayList<>();
+                for (TagDTO dto : list) {
+                    listVO.add(ConverterUtils.fromTag(dto));
+                }
+                onMultiResultListenner.onSuccess(listVO, Constants.CALL_TAG_FINDALL);
             }
 
             @Override
