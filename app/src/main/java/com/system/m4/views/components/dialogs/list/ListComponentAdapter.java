@@ -24,6 +24,7 @@ class ListComponentAdapter extends RecyclerView.Adapter<ListComponentAdapter.Ite
     private final ListComponentContract.Presenter presenter;
     private List<VOInterface> list;
     private ListComponentAdapter.ItemViewHolder markedViewHolder;
+    private boolean noActionMode;
 
     ListComponentAdapter(List<VOInterface> list, ListComponentContract.Presenter presenter) {
         this.list = list;
@@ -75,6 +76,10 @@ class ListComponentAdapter extends RecyclerView.Adapter<ListComponentAdapter.Ite
         }
     }
 
+    public void configureNoActionMode() {
+        this.noActionMode = true;
+    }
+
     /**
      *
      */
@@ -92,7 +97,10 @@ class ListComponentAdapter extends RecyclerView.Adapter<ListComponentAdapter.Ite
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
+
+            if (!noActionMode) {
+                itemView.setOnLongClickListener(this);
+            }
         }
 
         private void bind(final VOInterface item) {

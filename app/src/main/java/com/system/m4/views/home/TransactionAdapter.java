@@ -128,11 +128,9 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             this.item = item;
 
-            String name = item.getTag() != null ? item.getTag().getName() : item.getPaymentType().getName();
-
-            tvTag.setText(JavaUtils.StringUtil.formatEmpty(name));
-            tvPaymentDate.setText(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(item.getPaymentDate(), JavaUtils.DateUtil.DD)));
-            tvPrice.setText(JavaUtils.StringUtil.formatEmpty(item.getPrice()));
+            tvTag.setText(item.getTag() != null ? item.getTag().getName() : item.getPaymentType().getName());
+            tvPaymentDate.setText(JavaUtils.DateUtil.format(item.getPaymentDate(), JavaUtils.DateUtil.DD));
+            tvPrice.setText(JavaUtils.NumberUtil.currencyFormat(item.getPrice()));
 
             if (!TextUtils.isEmpty(item.getPaymentType().getColor())) {
                 tvPaymentDate.setTextColor(Color.parseColor(item.getPaymentType().getColor()));

@@ -12,16 +12,16 @@ import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.views.BaseDialogFragment;
-import com.system.m4.views.components.dialogs.TextComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
+import com.system.m4.views.components.dialogs.list.ListMonthPresenter;
 import com.system.m4.views.components.dialogs.list.ListPaymentTypePresenter;
 import com.system.m4.views.components.dialogs.list.ListTagPresenter;
+import com.system.m4.views.components.dialogs.list.ListYearPresenter;
 import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
+import com.system.m4.views.vos.SimpleItemListVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.VOInterface;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,22 +86,50 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
 
     @OnClick(R.id.transaction_manager_action_tag)
     public void showTagDialog() {
-        presenter.requestTagDialog();
+        ListComponentDialog listComponentTagsDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new DialogListener() {
+            @Override
+            public void onFinish(VOInterface vo) {
+                presenter.setTag((TagVO) vo);
+            }
+        });
+        listComponentTagsDialog.setPresenter(new ListTagPresenter(listComponentTagsDialog));
+        listComponentTagsDialog.show(getChildFragmentManager());
     }
 
     @OnClick(R.id.transaction_manager_action_payment_type)
     public void showPaymentTypeDialog() {
-        presenter.requestPaymentTypeDialog();
+        ListComponentDialog listComponentPaymentTypeDialog = ListComponentDialog.newInstance(R.string.transaction_payment_type, new DialogListener() {
+            @Override
+            public void onFinish(VOInterface vo) {
+                presenter.setPaymentType(((PaymentTypeVO) vo));
+            }
+        });
+        listComponentPaymentTypeDialog.setPresenter(new ListPaymentTypePresenter(listComponentPaymentTypeDialog));
+        listComponentPaymentTypeDialog.show(getChildFragmentManager());
     }
 
     @OnClick(R.id.transaction_manager_action_payment_date_start)
     public void showYearDialog() {
-        presenter.requestYearDialog(tvYear.getText().toString());
+        ListComponentDialog listDialog = ListComponentDialog.newInstance(R.string.transaction_year, new DialogListener() {
+            @Override
+            public void onFinish(VOInterface vo) {
+                presenter.setYear(((SimpleItemListVO) vo));
+            }
+        });
+        listDialog.setPresenter(new ListYearPresenter(listDialog));
+        listDialog.show(getChildFragmentManager());
     }
 
     @OnClick(R.id.transaction_manager_action_payment_date_end)
     public void showMonthDialog() {
-        presenter.requestMonthDialog(tvMonth.getText().toString());
+        ListComponentDialog listDialog = ListComponentDialog.newInstance(R.string.transaction_month, new DialogListener() {
+            @Override
+            public void onFinish(VOInterface vo) {
+                presenter.setMonth(((SimpleItemListVO) vo));
+            }
+        });
+        listDialog.setPresenter(new ListMonthPresenter(listDialog));
+        listDialog.show(getChildFragmentManager());
     }
 
     @OnLongClick(R.id.transaction_manager_action_tag)
@@ -153,55 +181,13 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
     }
 
     @Override
-    public void showTagsDialog(List<TagVO> list) {
-        ListComponentDialog listComponentTagsDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new DialogListener() {
-            @Override
-            public void onFinish(VOInterface vo) {
-                presenter.setTag((TagVO) vo);
-            }
-        });
-        listComponentTagsDialog.setPresenter(new ListTagPresenter(listComponentTagsDialog));
-        listComponentTagsDialog.show(getChildFragmentManager());
-    }
-
-    @Override
-    public void showPaymentTypeDialog(List<PaymentTypeVO> list) {
-        ListComponentDialog listComponentPaymentTypeDialog = ListComponentDialog.newInstance(R.string.transaction_payment_type, new DialogListener() {
-            @Override
-            public void onFinish(VOInterface vo) {
-                presenter.setPaymentType(((PaymentTypeVO) vo));
-            }
-        });
-        listComponentPaymentTypeDialog.setPresenter(new ListPaymentTypePresenter(listComponentPaymentTypeDialog));
-        listComponentPaymentTypeDialog.show(getChildFragmentManager());
-    }
-
-
-    @Override
-    public void showYearDialog(Integer year) {
-        String value = year != null ? String.valueOf(year) : null;
-        TextComponentDialog.newInstance(R.string.transaction_content, value, new OnFinishListener() {
-            @Override
-            public void onFinish(String value) {
-                presenter.setYear(Integer.parseInt(value));
-            }
-        }).show(getChildFragmentManager());
-    }
-
-    @Override
-    public void showMonthDialog(Integer month) {
-        String value = month != null ? String.valueOf(month) : null;
-        TextComponentDialog.newInstance(R.string.transaction_content, value, new OnFinishListener() {
-            @Override
-            public void onFinish(String value) {
-                presenter.setMonth(Integer.parseInt(value));
-            }
-        }).show(getChildFragmentManager());
-    }
-
-    @Override
     public void showError(String error) {
         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public String[] getStringArray(int months) {
+        return getResources().getStringArray(months);
     }
 
     @Override

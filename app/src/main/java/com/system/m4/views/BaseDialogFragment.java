@@ -89,7 +89,6 @@ public abstract class BaseDialogFragment extends DialogFragment implements Dialo
     @Override
     public void onDeleteClick() {
         Toast.makeText(getContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override

@@ -33,4 +33,25 @@
     <string name="transaction_month">Month</string>
     <string name="transaction_year">Year</string>
 
+    <array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </array>
+
+    <array name="years">
+        <item>2016</item>
+        <item>2017</item>
+        <item>2018</item>
+    </array>
+
 </resources>

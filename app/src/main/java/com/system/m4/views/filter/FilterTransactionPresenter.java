@@ -2,19 +2,16 @@ package com.system.m4.views.filter;
 
 import android.text.TextUtils;
 
+import com.system.m4.R;
 import com.system.m4.businness.FilterTransactionBusinness;
-import com.system.m4.businness.PaymentTypeBusinness;
-import com.system.m4.businness.TagBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
-import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
+import com.system.m4.views.vos.SimpleItemListVO;
 import com.system.m4.views.vos.TagVO;
-
-import java.util.List;
 
 /**
  * Created by eferraz on 29/04/17.
@@ -42,70 +39,10 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
                 if (vo != null) {
                     mVo = vo;
                     mView.setYear(JavaUtils.StringUtil.formatEmpty(vo.getYear()));
-                    mView.setMonth(JavaUtils.StringUtil.formatEmpty(vo.getMonth()));
+                    mView.setMonth(JavaUtils.StringUtil.formatEmpty(mView.getStringArray(R.array.months)[vo.getMonth()]));
                     mView.setTag(JavaUtils.StringUtil.formatEmpty(vo.getTag() != null ? vo.getTag().getName() : null));
                     mView.setPaymentType(JavaUtils.StringUtil.formatEmpty(vo.getPaymentType() != null ? vo.getPaymentType().getName() : null));
                 }
-            }
-
-            @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
-            }
-        });
-    }
-
-    @Override
-    public void requestTagDialog() {
-
-        TagBusinness.findAll(new BusinnessListener.OnMultiResultListenner<TagVO>() {
-
-            @Override
-            public void onSuccess(List<TagVO> list, int call) {
-                mView.showTagsDialog(list);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
-            }
-        });
-    }
-
-    @Override
-    public void requestMonthDialog(String text) {
-
-        Integer date;
-        if (TextUtils.isEmpty(text) || text.equals(Constants.EMPTY_FIELD)) {
-            date = null;
-        } else {
-            date = Integer.parseInt(text);
-        }
-
-        mView.showMonthDialog(date);
-    }
-
-    @Override
-    public void requestYearDialog(String text) {
-
-        Integer date;
-        if (TextUtils.isEmpty(text) || text.equals(Constants.EMPTY_FIELD)) {
-            date = null;
-        } else {
-            date = Integer.parseInt(text);
-        }
-
-        mView.showYearDialog(date);
-    }
-
-    @Override
-    public void requestPaymentTypeDialog() {
-
-        PaymentTypeBusinness.findAll(new BusinnessListener.OnMultiResultListenner<PaymentTypeVO>() {
-
-            @Override
-            public void onSuccess(List<PaymentTypeVO> list, int call) {
-                mView.showPaymentTypeDialog(list);
             }
 
             @Override
@@ -136,15 +73,15 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     }
 
     @Override
-    public void setMonth(Integer month) {
-        mVo.setMonth(month);
-        mView.setMonth(String.valueOf(month));
+    public void setMonth(SimpleItemListVO month) {
+        mVo.setMonth(Integer.valueOf(month.getKey()));
+        mView.setMonth(month.getName());
     }
 
     @Override
-    public void setYear(Integer year) {
-        mVo.setYear(year);
-        mView.setYear(String.valueOf(year));
+    public void setYear(SimpleItemListVO year) {
+        mVo.setYear(Integer.valueOf(year.getKey()));
+        mView.setYear(year.getName());
     }
 
     @Override

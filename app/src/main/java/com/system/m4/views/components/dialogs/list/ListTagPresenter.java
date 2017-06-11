@@ -24,7 +24,7 @@ public class ListTagPresenter extends ListComponentPresenterAbs {
     }
 
     @Override
-    public void requestList() {
+    public void init() {
 
         TagBusinness.findAll(new BusinnessListener.OnMultiResultListenner<TagVO>() {
 

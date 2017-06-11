@@ -74,7 +74,7 @@ public class ListComponentDialog extends BaseDialogFragment implements ListCompo
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(mAdapter);
 
-        presenter.requestList();
+        presenter.init();
     }
 
     @Override
@@ -138,6 +138,11 @@ public class ListComponentDialog extends BaseDialogFragment implements ListCompo
     }
 
     @Override
+    public String[] getStringArray(int months) {
+        return getResources().getStringArray(months);
+    }
+
+    @Override
     public void onAddClick() {
         presenter.requestAdd();
     }
@@ -167,5 +172,11 @@ public class ListComponentDialog extends BaseDialogFragment implements ListCompo
     @Override
     public void onCancelClick() {
         dismiss();
+    }
+
+    @Override
+    public void configureNoActionMode() {
+        mToolbar.configureNoActionMode();
+        mAdapter.configureNoActionMode();
     }
 }

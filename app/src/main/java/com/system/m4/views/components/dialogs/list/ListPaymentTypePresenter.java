@@ -23,7 +23,7 @@ public class ListPaymentTypePresenter extends ListComponentPresenterAbs {
     }
 
     @Override
-    public void requestList() {
+    public void init() {
 
         PaymentTypeBusinness.findAll(new BusinnessListener.OnMultiResultListenner<PaymentTypeVO>() {
 
