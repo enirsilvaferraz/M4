@@ -157,24 +157,4 @@ public abstract class TransactionBusinness implements BusinnessInterface<Transac
     public static void pin(Transaction transaction, BusinnessListener.OnPersistListener persistListener) {
         persistListener.onError(new Exception("Pin not implementede yet"));
     }
-
-    @Deprecated
-    public static void findAll(final BusinnessListener.OnMultiResultListenner<Transaction> onMultiResultListenner) {
-
-        new TransactionFirebaseRepository("Transaction").findAll(new FirebaseRepository.FirebaseMultiReturnListener<TransactionDTO>() {
-            @Override
-            public void onFindAll(List<TransactionDTO> list) {
-                List<Transaction> voList = new ArrayList<Transaction>();
-                for (TransactionDTO dto : list) {
-                    voList.add(ConverterUtils.fromTransaction(dto));
-                }
-                onMultiResultListenner.onSuccess(voList, 0);
-            }
-
-            @Override
-            public void onError(String error) {
-
-            }
-        });
-    }
 }
