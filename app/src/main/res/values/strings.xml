@@ -30,5 +30,7 @@
     <string name="home_current_transactions">Transactions</string>
     <string name="system_action_pin">Pin</string>
     <string name="system_action_unpin">Unpin</string>
+    <string name="transaction_month">Month</string>
+    <string name="transaction_year">Year</string>
 
 </resources>

@@ -3,8 +3,6 @@ package com.system.m4.views.vos;
 import android.os.Parcel;
 import android.support.annotation.NonNull;
 
-import java.util.Date;
-
 /**
  *
  */
@@ -21,57 +19,21 @@ public class FilterTransactionVO implements VOInterface<FilterTransactionVO> {
             return new FilterTransactionVO[size];
         }
     };
-
     private String key;
-    private Date paymentDateStart;
-    private Date paymentDateEnd;
+    private Integer year;
+    private Integer month;
     private TagVO tag;
     private PaymentTypeVO paymentType;
 
     public FilterTransactionVO() {
-
     }
 
-    private FilterTransactionVO(Parcel in) {
+    protected FilterTransactionVO(Parcel in) {
         this.key = in.readString();
-        long tmpPaymentDateStart = in.readLong();
-        this.paymentDateStart = tmpPaymentDateStart == -1 ? null : new Date(tmpPaymentDateStart);
-        long tmpPaymentDateEnd = in.readLong();
-        this.paymentDateEnd = tmpPaymentDateEnd == -1 ? null : new Date(tmpPaymentDateEnd);
+        this.year = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.month = (Integer) in.readValue(Integer.class.getClassLoader());
         this.tag = in.readParcelable(TagVO.class.getClassLoader());
         this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
-    }
-
-    public Date getPaymentDateStart() {
-        return paymentDateStart;
-    }
-
-    public void setPaymentDateStart(Date paymentDateStart) {
-        this.paymentDateStart = paymentDateStart;
-    }
-
-    public Date getPaymentDateEnd() {
-        return paymentDateEnd;
-    }
-
-    public void setPaymentDateEnd(Date paymentDateEnd) {
-        this.paymentDateEnd = paymentDateEnd;
-    }
-
-    public TagVO getTag() {
-        return tag;
-    }
-
-    public void setTag(TagVO tags) {
-        this.tag = tags;
-    }
-
-    public PaymentTypeVO getPaymentType() {
-        return paymentType;
-    }
-
-    public void setPaymentType(PaymentTypeVO paymentType) {
-        this.paymentType = paymentType;
     }
 
     @Override
@@ -84,7 +46,6 @@ public class FilterTransactionVO implements VOInterface<FilterTransactionVO> {
 
     }
 
-    @Override
     public String getKey() {
         return key;
     }
@@ -93,8 +54,40 @@ public class FilterTransactionVO implements VOInterface<FilterTransactionVO> {
         this.key = key;
     }
 
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public TagVO getTag() {
+        return tag;
+    }
+
+    public void setTag(TagVO tag) {
+        this.tag = tag;
+    }
+
+    public PaymentTypeVO getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(PaymentTypeVO paymentType) {
+        this.paymentType = paymentType;
+    }
+
     @Override
-    public int compareTo(@NonNull FilterTransactionVO vo) {
+    public int compareTo(@NonNull FilterTransactionVO o) {
         return 0;
     }
 
@@ -106,8 +99,8 @@ public class FilterTransactionVO implements VOInterface<FilterTransactionVO> {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.key);
-        dest.writeLong(this.paymentDateStart != null ? this.paymentDateStart.getTime() : -1);
-        dest.writeLong(this.paymentDateEnd != null ? this.paymentDateEnd.getTime() : -1);
+        dest.writeValue(this.year);
+        dest.writeValue(this.month);
         dest.writeParcelable(this.tag, flags);
         dest.writeParcelable(this.paymentType, flags);
     }

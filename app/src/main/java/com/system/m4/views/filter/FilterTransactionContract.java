@@ -6,7 +6,6 @@ import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,9 +17,9 @@ interface FilterTransactionContract {
 
     interface View {
 
-        void setPaymentDateEnd(String value);
+        void setMonth(String value);
 
-        void setPaymentDateStart(String value);
+        void setYear(String value);
 
         void setPaymentType(String value);
 
@@ -30,9 +29,9 @@ interface FilterTransactionContract {
 
         void showPaymentTypeDialog(List<PaymentTypeVO> list);
 
-        void showPaymentDateStartDialog(Date date);
+        void showYearDialog(Integer year);
 
-        void showPaymentDateEndDialog(Date date);
+        void showMonthDialog(Integer month);
 
         void showError(String error);
 
@@ -47,23 +46,23 @@ interface FilterTransactionContract {
 
         void requestTagDialog();
 
-        void requestPaymentDateEndDialog(String text);
+        void requestMonthDialog(String text);
 
-        void requestPaymentDateStartDialog(String text);
+        void requestYearDialog(String text);
 
         void requestPaymentTypeDialog();
 
-        void clearPaymentDateEnd();
+        void clearMonth();
 
-        void clearPaymentDateStart();
+        void clearYear();
 
         void clearPaymentType();
 
         void clearTag();
 
-        void setPaymentDateEnd(int year, int month, int dayOfMonth);
+        void setMonth(Integer month);
 
-        void setPaymentDateStart(int year, int month, int dayOfMonth);
+        void setYear(Integer year);
 
         void setPaymentType(PaymentTypeVO vo);
 

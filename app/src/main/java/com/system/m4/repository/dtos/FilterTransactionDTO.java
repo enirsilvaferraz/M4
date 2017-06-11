@@ -6,25 +6,25 @@ package com.system.m4.repository.dtos;
 public class FilterTransactionDTO extends DTOAbs {
 
     private String key;
-    private String paymentDateStart;
-    private String paymentDateEnd;
+    private Integer year;
+    private Integer month;
     private String tag;
     private String paymentType;
     
-    public String getPaymentDateStart() {
-        return paymentDateStart;
+    public Integer getYear() {
+        return year;
     }
 
-    public void setPaymentDateStart(String paymentDateStart) {
-        this.paymentDateStart = paymentDateStart;
+    public void setYear(Integer year) {
+        this.year = year;
     }
 
-    public String getPaymentDateEnd() {
-        return paymentDateEnd;
+    public Integer getMonth() {
+        return month;
     }
 
-    public void setPaymentDateEnd(String paymentDateEnd) {
-        this.paymentDateEnd = paymentDateEnd;
+    public void setMonth(Integer month) {
+        this.month = month;
     }
 
     public String getTag() {

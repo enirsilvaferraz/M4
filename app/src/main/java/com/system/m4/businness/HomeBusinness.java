@@ -13,7 +13,7 @@ import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -29,6 +29,11 @@ public class HomeBusinness {
 
             @Override
             public void onSuccess(FilterTransactionVO vo) {
+                if (vo == null) {
+                    vo = new FilterTransactionVO();
+                    vo.setYear(Calendar.getInstance().get(Calendar.YEAR));
+                    vo.setMonth(Calendar.getInstance().get(Calendar.MONTH));
+                }
                 findTransactions(vo, listener);
             }
 
@@ -41,12 +46,9 @@ public class HomeBusinness {
 
     private static void findTransactions(final FilterTransactionVO filter, final BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
 
-        Date paymentDateStart = filter.getPaymentDateStart() != null ? filter.getPaymentDateStart() : null;
-        Date paymentDateEnd = filter.getPaymentDateEnd() != null ? filter.getPaymentDateEnd() : null; //JavaUtils.DateUtil.parse(filter.getPaymentDateEnd(), JavaUtils.DateUtil.YYYY_MM_DD)
-
         BusinnessObserver observer = new BusinnessObserver(filter, listener);
 
-        TransactionBusinness.findByFilter(paymentDateStart, paymentDateEnd, observer);
+        TransactionBusinness.findByFilter(filter.getYear(), filter.getMonth(), observer);
         TransactionBusinness.findFixed(observer);
         TagBusinness.findAll(observer);
         PaymentTypeBusinness.findAll(observer);
@@ -76,7 +78,7 @@ public class HomeBusinness {
                 if (!list.isEmpty()) {
                     listTransaction = list;
                 } else {
-                    listener.onSuccess(new ListTransactionVO());
+                    listener.onSuccess(null);
                 }
 
             } else if (call == Constants.CALL_TRANSACTION_FIXED) {

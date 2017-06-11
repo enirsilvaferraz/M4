@@ -3,7 +3,6 @@ package com.system.m4.views.home;
 import com.system.m4.businness.HomeBusinness;
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
-import com.system.m4.infrastructure.ConverterUtils;
 import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.views.vos.ListTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
@@ -53,65 +52,68 @@ class HomePresenter implements HomeContract.Presenter {
 
     private void configureHeaderList(ListTransactionVO item) {
 
-        Collections.sort(item.getTransactions());
+        if (item != null) {
 
-        List<Transaction> listTransaction = new ArrayList<>();
-        List<Transaction> listGroup = new ArrayList<>();
+            Collections.sort(item.getTransactions());
 
-        for (Transaction transaction : item.getTransactions()) {
-            if (!item.getGroup().getPaymentTypeList().contains(transaction.getPaymentType())) {
-                listTransaction.add(transaction);
-            } else {
-                listGroup.add(transaction);
-            }
-        }
+            List<Transaction> listTransaction = new ArrayList<>();
+            List<Transaction> listGroup = new ArrayList<>();
 
-        Map<PaymentTypeVO, List<Transaction>> map = new HashMap<>();
-
-        for (Transaction itemGroup : listGroup) {
-
-            if (!map.containsKey(itemGroup.getPaymentType())) {
-                map.put(itemGroup.getPaymentType(), new ArrayList<Transaction>());
-            }
-
-            for (PaymentTypeVO key : map.keySet()){
-                if (key.equals(itemGroup.getPaymentType())) {
-                    map.get(key).add(itemGroup);
+            for (Transaction transaction : item.getTransactions()) {
+                if (!item.getGroup().getPaymentTypeList().contains(transaction.getPaymentType())) {
+                    listTransaction.add(transaction);
+                } else {
+                    listGroup.add(transaction);
                 }
             }
-        }
 
-        for (PaymentTypeVO key : map.keySet()){
+            Map<PaymentTypeVO, List<Transaction>> map = new HashMap<>();
 
-            Transaction transaction = new Transaction();
-            transaction.setPaymentType(key);
+            for (Transaction itemGroup : listGroup) {
 
-            for (Transaction itemList : map.get(key)) {
-                Double price = transaction.getPrice() != null ? transaction.getPrice() : 0D;
-                transaction.setPrice(price + itemList.getPrice());
-                transaction.setPaymentDate(itemList.getPaymentDate());
+                if (!map.containsKey(itemGroup.getPaymentType())) {
+                    map.put(itemGroup.getPaymentType(), new ArrayList<Transaction>());
+                }
+
+                for (PaymentTypeVO key : map.keySet()) {
+                    if (key.equals(itemGroup.getPaymentType())) {
+                        map.get(key).add(itemGroup);
+                    }
+                }
             }
 
-            listTransaction.add(transaction);
+            for (PaymentTypeVO key : map.keySet()) {
+
+                Transaction transaction = new Transaction();
+                transaction.setPaymentType(key);
+
+                for (Transaction itemList : map.get(key)) {
+                    Double price = transaction.getPrice() != null ? transaction.getPrice() : 0D;
+                    transaction.setPrice(price + itemList.getPrice());
+                    transaction.setPaymentDate(itemList.getPaymentDate());
+                }
+
+                listTransaction.add(transaction);
+            }
+
+            Collections.sort(listTransaction);
+
+            List<VOItemListInterface> listVO = new ArrayList<>();
+
+            if (!listTransaction.isEmpty()) {
+                listVO.add(new TitleVO("Transactions"));
+                listVO.addAll(listTransaction);
+                listVO.add(new SpaceVO());
+            }
+
+            for (PaymentTypeVO key : map.keySet()) {
+                listVO.add(new TitleVO(key.getName()));
+                listVO.addAll(map.get(key));
+                listVO.add(new SpaceVO());
+            }
+
+            mView.setListTransactions(listVO);
         }
-
-        Collections.sort(listTransaction);
-
-        List<VOItemListInterface> listVO = new ArrayList<>();
-
-        if (!listTransaction.isEmpty()) {
-            listVO.add(new TitleVO("Transactions"));
-            listVO.addAll(listTransaction);
-            listVO.add(new SpaceVO());
-        }
-
-        for (PaymentTypeVO key : map.keySet()) {
-            listVO.add(new TitleVO(key.getName()));
-            listVO.addAll(map.get(key));
-            listVO.add(new SpaceVO());
-        }
-
-        mView.setListTransactions(listVO);
     }
 
     @Override
@@ -156,7 +158,7 @@ class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void delete() {
-        TransactionBusinness.delete(ConverterUtils.fromTransaction(mSelectedItem), new BusinnessListener.OnPersistListener() {
+        TransactionBusinness.delete(mSelectedItem, new BusinnessListener.OnPersistListener() {
             @Override
             public void onSuccess(DTOAbs dto) {
                 markItemOff();

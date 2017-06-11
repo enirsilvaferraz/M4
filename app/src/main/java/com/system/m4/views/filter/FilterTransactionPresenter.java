@@ -14,8 +14,6 @@ import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,10 +41,10 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
             public void onSuccess(FilterTransactionVO vo) {
                 if (vo != null) {
                     mVo = vo;
-                    mView.setTag(JavaUtils.StringUtil.formatEmpty(vo.getTag().getName()));
-                    mView.setPaymentType(JavaUtils.StringUtil.formatEmpty(vo.getPaymentType().getName()));
-                    mView.setPaymentDateStart(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(vo.getPaymentDateStart())));
-                    mView.setPaymentDateEnd(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(vo.getPaymentDateEnd())));
+                    mView.setYear(JavaUtils.StringUtil.formatEmpty(vo.getYear()));
+                    mView.setMonth(JavaUtils.StringUtil.formatEmpty(vo.getMonth()));
+                    mView.setTag(JavaUtils.StringUtil.formatEmpty(vo.getTag() != null ? vo.getTag().getName() : null));
+                    mView.setPaymentType(JavaUtils.StringUtil.formatEmpty(vo.getPaymentType() != null ? vo.getPaymentType().getName() : null));
                 }
             }
 
@@ -75,29 +73,29 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     }
 
     @Override
-    public void requestPaymentDateEndDialog(String text) {
+    public void requestMonthDialog(String text) {
 
-        Date date;
-        if (text.isEmpty() || text.equals(Constants.EMPTY_FIELD)) {
-            date = Calendar.getInstance().getTime();
+        Integer date;
+        if (TextUtils.isEmpty(text) || text.equals(Constants.EMPTY_FIELD)) {
+            date = null;
         } else {
-            date = JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY);
+            date = Integer.parseInt(text);
         }
 
-        mView.showPaymentDateEndDialog(date);
+        mView.showMonthDialog(date);
     }
 
     @Override
-    public void requestPaymentDateStartDialog(String text) {
+    public void requestYearDialog(String text) {
 
-        Date date;
-        if (text.isEmpty() || text.equals(Constants.EMPTY_FIELD)) {
-            date = Calendar.getInstance().getTime();
+        Integer date;
+        if (TextUtils.isEmpty(text) || text.equals(Constants.EMPTY_FIELD)) {
+            date = null;
         } else {
-            date = JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY);
+            date = Integer.parseInt(text);
         }
 
-        mView.showPaymentDateStartDialog(date);
+        mView.showYearDialog(date);
     }
 
     @Override
@@ -118,13 +116,13 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     }
 
     @Override
-    public void clearPaymentDateEnd() {
-        mVo.setPaymentDateEnd(null);
+    public void clearMonth() {
+        mVo.setMonth(null);
     }
 
     @Override
-    public void clearPaymentDateStart() {
-        mVo.setPaymentDateStart(null);
+    public void clearYear() {
+        mVo.setYear(null);
     }
 
     @Override
@@ -138,17 +136,15 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     }
 
     @Override
-    public void setPaymentDateEnd(int year, int month, int dayOfMonth) {
-        Date date = JavaUtils.DateUtil.getDate(year, month, dayOfMonth);
-        mVo.setPaymentDateEnd(date);
-        mView.setPaymentDateEnd(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY));
+    public void setMonth(Integer month) {
+        mVo.setMonth(month);
+        mView.setMonth(String.valueOf(month));
     }
 
     @Override
-    public void setPaymentDateStart(int year, int month, int dayOfMonth) {
-        Date date = JavaUtils.DateUtil.getDate(year, month, dayOfMonth);
-        mVo.setPaymentDateStart(date);
-        mView.setPaymentDateStart(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY));
+    public void setYear(Integer year) {
+        mVo.setYear(year);
+        mView.setYear(String.valueOf(year));
     }
 
     @Override
@@ -178,7 +174,7 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
                     mView.showError(e.getMessage());
                 }
             });
-        } else if(!TextUtils.isEmpty(mVo.getKey())){
+        } else if (!TextUtils.isEmpty(mVo.getKey())) {
             delete();
         } else {
             mView.dismissDialog(null);
@@ -186,7 +182,7 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     }
 
     private boolean isSaveMode() {
-        return mVo.getPaymentDateStart() != null || mVo.getPaymentDateEnd() != null ||
+        return mVo.getYear() != null || mVo.getMonth() != null ||
                 (mVo.getTag() != null && mVo.getTag().getKey() != null) ||
                 (mVo.getPaymentType() != null && mVo.getPaymentType().getKey() != null);
     }

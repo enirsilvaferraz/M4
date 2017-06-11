@@ -50,6 +50,10 @@ public final class JavaUtils {
 
         public static final String DD = "dd";
 
+        public static final String MMMM = "MMMM";
+        
+        public static final String YYYY = "yyyy";
+
         public static Date parse(String date) {
             return parse(date, DD_DE_MMMM_DE_YYYY);
         }
@@ -224,11 +228,11 @@ public final class JavaUtils {
         }
 
         public static String formatEmpty(Double s) {
-            if (s == null) {
-                return Constants.EMPTY_FIELD;
-            } else {
-                return JavaUtils.NumberUtil.currencyFormat(s);
-            }
+            return formatEmpty(s != null ? s.toString() : null);
+        }
+
+        public static String formatEmpty(Integer s) {
+            return formatEmpty(s != null ? s.toString() : null);
         }
     }
 

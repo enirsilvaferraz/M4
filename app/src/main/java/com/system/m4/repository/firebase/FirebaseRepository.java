@@ -24,7 +24,7 @@ public abstract class FirebaseRepository<T extends DTOAbs> {
 
     private DatabaseReference databaseRef;
 
-    FirebaseRepository(String databaseName) {
+    public FirebaseRepository(String databaseName) {
         databaseRef = FirebaseDatabase.getInstance().getReference(BuildConfig.FLAVOR + "/" + databaseName);
     }
 

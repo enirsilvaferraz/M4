@@ -1,6 +1,5 @@
 package com.system.m4.views.filter;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -8,13 +7,12 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.system.m4.R;
-import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
+import com.system.m4.views.components.dialogs.TextComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListPaymentTypePresenter;
 import com.system.m4.views.components.dialogs.list.ListTagPresenter;
@@ -23,7 +21,6 @@ import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.VOInterface;
 
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,10 +43,10 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
     TextView tvPaymentType;
 
     @BindView(R.id.transaction_manager_textview_payment_date_start)
-    TextView tvPaymentDateStart;
+    TextView tvYear;
 
     @BindView(R.id.transaction_manager_textview_payment_date_end)
-    TextView tvPaymentDateEnd;
+    TextView tvMonth;
 
     Unbinder unbinder;
 
@@ -98,13 +95,13 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
     }
 
     @OnClick(R.id.transaction_manager_action_payment_date_start)
-    public void showPaymentDateStartDialog() {
-        presenter.requestPaymentDateStartDialog(tvPaymentDateStart.getText().toString());
+    public void showYearDialog() {
+        presenter.requestYearDialog(tvYear.getText().toString());
     }
 
     @OnClick(R.id.transaction_manager_action_payment_date_end)
-    public void showPaymentDateEndDialog() {
-        presenter.requestPaymentDateEndDialog(tvPaymentDateEnd.getText().toString());
+    public void showMonthDialog() {
+        presenter.requestMonthDialog(tvMonth.getText().toString());
     }
 
     @OnLongClick(R.id.transaction_manager_action_tag)
@@ -122,27 +119,27 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
     }
 
     @OnLongClick(R.id.transaction_manager_action_payment_date_start)
-    public boolean clearPaymentDateStartDialog() {
-        presenter.clearPaymentDateStart();
-        tvPaymentDateStart.setText(R.string.system_empty_field);
+    public boolean clearYear() {
+        presenter.clearYear();
+        tvYear.setText(R.string.system_empty_field);
         return true;
     }
 
     @OnLongClick(R.id.transaction_manager_action_payment_date_end)
-    public boolean clearPaymentDateEndDialog() {
-        presenter.clearPaymentDateEnd();
-        tvPaymentDateEnd.setText(R.string.system_empty_field);
+    public boolean clearMonth() {
+        presenter.clearMonth();
+        tvMonth.setText(R.string.system_empty_field);
         return true;
     }
 
     @Override
-    public void setPaymentDateStart(String value) {
-        tvPaymentDateStart.setText(value);
+    public void setYear(String value) {
+        tvYear.setText(value);
     }
 
     @Override
-    public void setPaymentDateEnd(String value) {
-        tvPaymentDateEnd.setText(value);
+    public void setMonth(String value) {
+        tvMonth.setText(value);
     }
 
     @Override
@@ -181,23 +178,25 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
 
 
     @Override
-    public void showPaymentDateStartDialog(Date date) {
-        JavaUtils.AndroidUtil.showDatePicker(getContext(), date, new DatePickerDialog.OnDateSetListener() {
+    public void showYearDialog(Integer year) {
+        String value = year != null ? String.valueOf(year) : null;
+        TextComponentDialog.newInstance(R.string.transaction_content, value, new OnFinishListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                presenter.setPaymentDateStart(year, month, dayOfMonth);
+            public void onFinish(String value) {
+                presenter.setYear(Integer.parseInt(value));
             }
-        });
+        }).show(getChildFragmentManager());
     }
 
     @Override
-    public void showPaymentDateEndDialog(Date date) {
-        JavaUtils.AndroidUtil.showDatePicker(getContext(), date, new DatePickerDialog.OnDateSetListener() {
+    public void showMonthDialog(Integer month) {
+        String value = month != null ? String.valueOf(month) : null;
+        TextComponentDialog.newInstance(R.string.transaction_content, value, new OnFinishListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                presenter.setPaymentDateEnd(year, month, dayOfMonth);
+            public void onFinish(String value) {
+                presenter.setMonth(Integer.parseInt(value));
             }
-        });
+        }).show(getChildFragmentManager());
     }
 
     @Override
@@ -227,11 +226,11 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
 
     @Override
     public void onCancelClick() {
-dismiss();
+        dismiss();
     }
 
     @Override
     public void onDeleteClick() {
-presenter.delete();
+        presenter.delete();
     }
 }

@@ -24,6 +24,7 @@ public class TransactionDTO extends DTOAbs {
 
     @Expose
     private String content;
+
     private boolean pinned;
 
     public TransactionDTO() {

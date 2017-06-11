@@ -13,6 +13,7 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
 
     private String key;
     private Date paymentDate;
+    private Date paymentDateOrigin;
     private Date purchaseDate;
     private Double price;
     private TagVO tag;
@@ -161,4 +162,11 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
     };
 
 
+    public void setPaymentDateOrigin(Date paymentDateOrigin) {
+        this.paymentDateOrigin = paymentDateOrigin;
+    }
+
+    public Date getPaymentDateOrigin() {
+        return paymentDateOrigin;
+    }
 }

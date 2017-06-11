@@ -47,7 +47,7 @@
 
             <LinearLayout
                 android:id="@+id/transaction_manager_action_payment_type"
-                style="@style/AppTheme.Form.Section.Start"
+                style="@style/AppTheme.Form.Section.End"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -89,7 +89,7 @@
                     style="@style/AppTheme.Form.TextView.Primary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/transaction_payment_date" />
+                    android:text="@string/transaction_year" />
 
                 <TextView
                     android:id="@+id/transaction_manager_textview_payment_date_start"
@@ -97,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/system_empty_field"
-                    tools:text="25 de março de 2017" />
+                    tools:text="2017" />
 
             </LinearLayout>
 
@@ -113,7 +113,7 @@
                     style="@style/AppTheme.Form.TextView.Primary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text="@string/transaction_month" />
 
                 <TextView
                     android:id="@+id/transaction_manager_textview_payment_date_end"
@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/system_empty_field"
-                    tools:text="1 de março de 2017" />
+                    tools:text="May" />
 
             </LinearLayout>
 

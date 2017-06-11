@@ -39,16 +39,13 @@ public class FilterTransactionBusinness {
                 if (!list.isEmpty()) {
                     FilterTransactionDTO localdto = list.get(0);
                     dto.setKey(localdto.getKey());
-                    dto.setPaymentDateStart(localdto.getPaymentDateStart());
-                    dto.setPaymentDateEnd(localdto.getPaymentDateEnd());
+                    dto.setYear(localdto.getYear());
+                    dto.setMonth(localdto.getMonth());
                     dto.setTag(localdto.getTag());
                     dto.setPaymentType(localdto.getPaymentType());
                     configureList(dto, listTag, listPaymentType, listener);
                 } else {
-                    FilterTransactionVO vo = new FilterTransactionVO();
-                    vo.setPaymentDateStart(JavaUtils.DateUtil.getActualMinimum(Calendar.getInstance().getTime()));
-                    vo.setPaymentDateEnd(JavaUtils.DateUtil.getActualMaximum(Calendar.getInstance().getTime()));
-                    listener.onSuccess(vo);
+                    listener.onSuccess(null);
                 }
             }
 
@@ -90,12 +87,12 @@ public class FilterTransactionBusinness {
     private static void configureList(FilterTransactionDTO dto, List<TagVO> listTag, List<PaymentTypeVO> listPaymentType, BusinnessListener.OnSingleResultListener<FilterTransactionVO> listener) {
         if (!JavaUtils.StringUtil.isEmpty(dto.getKey()) && !listTag.isEmpty() && !listPaymentType.isEmpty()) {
 
-            FilterTransactionVO filter = ConverterUtils.fromFilterTransaction(dto, null, null);
-            if (filter.getPaymentDateStart() == null) {
-                filter.setPaymentDateStart(JavaUtils.DateUtil.getDate(2015, 01, 01));
+            FilterTransactionVO filter = ConverterUtils.fromFilterTransaction(dto);
+            if (filter.getYear() == null) {
+                filter.setYear(Calendar.getInstance().get(Calendar.YEAR));
             }
-            if (filter.getPaymentDateEnd() == null) {
-                filter.setPaymentDateEnd(JavaUtils.DateUtil.getDate(2025, 01, 01));
+            if (filter.getMonth() == null) {
+                filter.setMonth(Calendar.getInstance().get(Calendar.MONTH));
             }
 
             listener.onSuccess(ConverterUtils.fillFilterTransaction(filter, listTag, listPaymentType));

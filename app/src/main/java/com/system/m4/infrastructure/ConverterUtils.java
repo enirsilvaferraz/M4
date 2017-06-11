@@ -38,18 +38,21 @@ public final class ConverterUtils {
         return dto;
     }
 
-    public static Transaction fromTransaction(TransactionDTO mDTO) {
+    public static Transaction fromTransaction(TransactionDTO dto) {
         Transaction vo = new Transaction();
-        vo.setKey(mDTO.getKey());
+        vo.setKey(dto.getKey());
         vo.setTag(new TagVO());
-        vo.getTag().setKey(mDTO.getTag());
+        vo.getTag().setKey(dto.getTag());
         vo.setPaymentType(new PaymentTypeVO());
-        vo.getPaymentType().setKey(mDTO.getPaymentType());
-        vo.setPaymentDate(JavaUtils.DateUtil.parse(mDTO.getPaymentDate(), JavaUtils.DateUtil.YYYY_MM_DD));
-        vo.setPurchaseDate(mDTO.getPurchaseDate() != null ? JavaUtils.DateUtil.parse(mDTO.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
-        vo.setContent(mDTO.getContent());
-        vo.setPrice(mDTO.getPrice());
-        vo.setPinned(mDTO.isPinned());
+        vo.getPaymentType().setKey(dto.getPaymentType());
+        vo.setPaymentDate(JavaUtils.DateUtil.parse(dto.getPaymentDate(), JavaUtils.DateUtil.YYYY_MM_DD));
+        vo.setPurchaseDate(dto.getPurchaseDate() != null ? JavaUtils.DateUtil.parse(dto.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
+        vo.setContent(dto.getContent());
+        vo.setPrice(dto.getPrice());
+        vo.setPinned(dto.isPinned());
+
+        // Usado para saber onde é o path, não é armazenado no Firebase
+        vo.setPaymentDateOrigin(vo.getPaymentDate());
         return vo;
     }
 
@@ -94,20 +97,27 @@ public final class ConverterUtils {
         dto.setKey(vo.getKey());
         dto.setPaymentType(vo.getPaymentType() != null ? vo.getPaymentType().getKey() : null);
         dto.setTag(vo.getTag() != null ? vo.getTag().getKey() : null);
-        dto.setPaymentDateStart(vo.getPaymentDateStart() != null ? JavaUtils.DateUtil.format(vo.getPaymentDateStart(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
-        dto.setPaymentDateEnd(vo.getPaymentDateEnd() != null ? JavaUtils.DateUtil.format(vo.getPaymentDateEnd(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
+        dto.setYear(vo.getYear());
+        dto.setMonth(vo.getMonth());
         return dto;
     }
 
-    public static FilterTransactionVO fromFilterTransaction(FilterTransactionDTO dto, List<TagDTO> tags, List<PaymentTypeDTO> paymentTypes) {
+    public static FilterTransactionVO fromFilterTransaction(FilterTransactionDTO dto) {
         FilterTransactionVO vo = new FilterTransactionVO();
         vo.setKey(dto.getKey());
-        vo.setTag(new TagVO());
-        vo.getTag().setKey(dto.getTag());
-        vo.setPaymentType(new PaymentTypeVO());
-        vo.getPaymentType().setKey(dto.getPaymentType());
-        vo.setPaymentDateStart(dto.getPaymentDateStart() != null ? JavaUtils.DateUtil.parse(dto.getPaymentDateStart(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
-        vo.setPaymentDateEnd(dto.getPaymentDateEnd() != null ? JavaUtils.DateUtil.parse(dto.getPaymentDateEnd(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
+        vo.setYear(dto.getYear());
+        vo.setMonth(dto.getMonth());
+
+        if (dto.getTag() != null) {
+            vo.setTag(new TagVO());
+            vo.getTag().setKey(dto.getTag());
+        }
+
+        if (dto.getPaymentType() != null) {
+            vo.setPaymentType(new PaymentTypeVO());
+            vo.getPaymentType().setKey(dto.getPaymentType());
+        }
+
         return vo;
     }
 
@@ -132,11 +142,11 @@ public final class ConverterUtils {
 
     public static FilterTransactionVO fillFilterTransaction(FilterTransactionVO vo, List<TagVO> tags, List<PaymentTypeVO> paymentTypes) {
 
-        if (vo.getTag().getKey() != null) {
+        if (vo.getTag() != null) {
             vo.setTag(tags.get(tags.indexOf(vo.getTag())));
         }
 
-        if (vo.getPaymentType().getKey() != null) {
+        if (vo.getPaymentType() != null) {
             vo.setPaymentType(paymentTypes.get(paymentTypes.indexOf(vo.getPaymentType())));
         }
         return vo;

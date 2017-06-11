@@ -41,6 +41,8 @@ public class HomeActivity extends AppCompatActivity {
                 presenter.requestTransactionManager();
             }
         });
+
+        //new M4Service().moveTransaction();
     }
 
     @Override
