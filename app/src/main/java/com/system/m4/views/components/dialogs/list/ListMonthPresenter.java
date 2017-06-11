@@ -24,7 +24,7 @@ public class ListMonthPresenter extends ListComponentPresenterAbs {
 
         getView().configureNoActionMode();
 
-        String [] arrayMonth = getView().getStringArray(R.array.months);
+        String [] arrayMonth = getView().getResources().getStringArray(R.array.months);
         List<VOInterface> voList = new ArrayList<>();
         for (int index = 0; index < arrayMonth.length; index++) {
             voList.add(new SimpleItemListVO(String.valueOf(index), arrayMonth[index]));

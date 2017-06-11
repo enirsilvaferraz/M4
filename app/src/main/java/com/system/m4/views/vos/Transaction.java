@@ -31,6 +31,7 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
     private PaymentTypeVO paymentType;
     private String content;
     private boolean pinned;
+    private boolean clickable = true;
 
     public Transaction() {
         // Default constructor
@@ -169,5 +170,13 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
         dest.writeParcelable(this.paymentType, flags);
         dest.writeString(this.content);
         dest.writeByte(this.pinned ? (byte) 1 : (byte) 0);
+    }
+
+    public void setClickable(boolean clickable) {
+        this.clickable = clickable;
+    }
+
+    public boolean isClickable() {
+        return clickable;
     }
 }

@@ -136,8 +136,10 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 tvPaymentDate.setTextColor(Color.parseColor(item.getPaymentType().getColor()));
             }
 
-            container.setOnClickListener(this);
-            container.setOnLongClickListener(this);
+            if (item.isClickable()) {
+                container.setOnClickListener(this);
+                container.setOnLongClickListener(this);
+            }
         }
 
         @Override

@@ -1,6 +1,6 @@
 package com.system.m4.views.components.dialogs.list;
 
-import android.support.annotation.ArrayRes;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
 import com.system.m4.views.components.DialogToolbar;
@@ -39,7 +39,7 @@ interface ListComponentContract {
 
         void configureEditMode();
 
-        String[] getStringArray(@ArrayRes int months);
+        Resources getResources();
 
         void configureNoActionMode();
     }

@@ -24,10 +24,10 @@ public class ListYearPresenter extends ListComponentPresenterAbs {
 
         getView().configureNoActionMode();
 
-        String[] array = getView().getStringArray(R.array.years);
+        int[] array = getView().getResources().getIntArray(R.array.filter_years);
         List<VOInterface> voList = new ArrayList<>();
         for (int index = 0; index < array.length; index++) {
-            voList.add(new SimpleItemListVO(String.valueOf(index), array[index]));
+            voList.add(new SimpleItemListVO(String.valueOf(index), Integer.valueOf(array[index]).toString()));
         }
 
         getView().renderList(voList);

@@ -91,6 +91,7 @@ class HomePresenter implements HomeContract.Presenter {
                     Double price = transaction.getPrice() != null ? transaction.getPrice() : 0D;
                     transaction.setPrice(price + itemList.getPrice());
                     transaction.setPaymentDate(itemList.getPaymentDate());
+                    transaction.setClickable(false);
                 }
 
                 listTransaction.add(transaction);

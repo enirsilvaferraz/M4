@@ -1,6 +1,7 @@
 package com.system.m4.views.components.dialogs.list;
 
 import android.os.Bundle;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -135,11 +136,6 @@ public class ListComponentDialog extends BaseDialogFragment implements ListCompo
     @Override
     public void configureEditMode() {
         mToolbar.configureEditMode();
-    }
-
-    @Override
-    public String[] getStringArray(int months) {
-        return getResources().getStringArray(months);
     }
 
     @Override
