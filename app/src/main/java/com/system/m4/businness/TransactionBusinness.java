@@ -32,7 +32,7 @@ public abstract class TransactionBusinness implements BusinnessInterface<Transac
 
         TransactionDTO dto = ConverterUtils.fromTransaction(vo);
 
-        if (isInPath(vo)) {
+        if (dto.getKey() == null || isInPath(vo)) {
 
             new TransactionFirebaseRepository(year, month).save(dto, new FirebaseRepository.FirebaseSingleReturnListener<TransactionDTO>() {
 

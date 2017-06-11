@@ -11,6 +11,17 @@ import java.util.Date;
  */
 public class Transaction implements VOInterface<Transaction>, VOItemListInterface, Parcelable, Comparable<Transaction> {
 
+    public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
+        @Override
+        public Transaction createFromParcel(Parcel source) {
+            return new Transaction(source);
+        }
+
+        @Override
+        public Transaction[] newArray(int size) {
+            return new Transaction[size];
+        }
+    };
     private String key;
     private Date paymentDate;
     private Date paymentDateOrigin;
@@ -27,6 +38,21 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
 
     public Transaction(TagVO tagVO) {
         this.tag = tagVO;
+    }
+
+    protected Transaction(Parcel in) {
+        this.key = in.readString();
+        long tmpPaymentDate = in.readLong();
+        this.paymentDate = tmpPaymentDate == -1 ? null : new Date(tmpPaymentDate);
+        long tmpPaymentDateOrigin = in.readLong();
+        this.paymentDateOrigin = tmpPaymentDateOrigin == -1 ? null : new Date(tmpPaymentDateOrigin);
+        long tmpPurchaseDate = in.readLong();
+        this.purchaseDate = tmpPurchaseDate == -1 ? null : new Date(tmpPurchaseDate);
+        this.price = (Double) in.readValue(Double.class.getClassLoader());
+        this.tag = in.readParcelable(TagVO.class.getClassLoader());
+        this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
+        this.content = in.readString();
+        this.pinned = in.readByte() != 0;
     }
 
     public Date getPaymentDate() {
@@ -119,6 +145,14 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
         this.pinned = pinned;
     }
 
+    public Date getPaymentDateOrigin() {
+        return paymentDateOrigin;
+    }
+
+    public void setPaymentDateOrigin(Date paymentDateOrigin) {
+        this.paymentDateOrigin = paymentDateOrigin;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -128,45 +162,12 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.key);
         dest.writeLong(this.paymentDate != null ? this.paymentDate.getTime() : -1);
+        dest.writeLong(this.paymentDateOrigin != null ? this.paymentDateOrigin.getTime() : -1);
         dest.writeLong(this.purchaseDate != null ? this.purchaseDate.getTime() : -1);
-        dest.writeDouble(this.price);
+        dest.writeValue(this.price);
         dest.writeParcelable(this.tag, flags);
         dest.writeParcelable(this.paymentType, flags);
         dest.writeString(this.content);
         dest.writeByte(this.pinned ? (byte) 1 : (byte) 0);
-    }
-
-    protected Transaction(Parcel in) {
-        this.key = in.readString();
-        long tmpPaymentDate = in.readLong();
-        this.paymentDate = tmpPaymentDate == -1 ? null : new Date(tmpPaymentDate);
-        long tmpPurchaseDate = in.readLong();
-        this.purchaseDate = tmpPurchaseDate == -1 ? null : new Date(tmpPurchaseDate);
-        this.price = in.readDouble();
-        this.tag = in.readParcelable(TagVO.class.getClassLoader());
-        this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
-        this.content = in.readString();
-        this.pinned = in.readByte() != 0;
-    }
-
-    public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
-        @Override
-        public Transaction createFromParcel(Parcel source) {
-            return new Transaction(source);
-        }
-
-        @Override
-        public Transaction[] newArray(int size) {
-            return new Transaction[size];
-        }
-    };
-
-
-    public void setPaymentDateOrigin(Date paymentDateOrigin) {
-        this.paymentDateOrigin = paymentDateOrigin;
-    }
-
-    public Date getPaymentDateOrigin() {
-        return paymentDateOrigin;
     }
 }
