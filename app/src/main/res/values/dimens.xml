@@ -9,5 +9,6 @@
 
 
     <dimen name="card_horizontal_margin">8dp</dimen>
+    <dimen name="fragment_horizontal_margin">0dp</dimen>
 
 </resources>
