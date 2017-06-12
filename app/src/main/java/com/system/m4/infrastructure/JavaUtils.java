@@ -54,6 +54,8 @@ public final class JavaUtils {
         
         public static final String YYYY = "yyyy";
 
+        public static final String DD_MM_YYYY_HH_MM_SS = "dd/MM/yyyy hh:mm:ss";
+
         public static Date parse(String date) {
             return parse(date, DD_DE_MMMM_DE_YYYY);
         }

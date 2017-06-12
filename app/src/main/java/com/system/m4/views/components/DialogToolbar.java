@@ -77,6 +77,13 @@ public class DialogToolbar extends RelativeLayout {
         mTitle.setText(titleRes);
     }
 
+    @OnClick(R.id.dialog_title)
+    public void onClickTitle() {
+        if (listener != null) {
+            listener.onTitleClick();
+        }
+    }
+
     @OnClick(R.id.dialog_add_item)
     public void onClickAdd() {
         if (listener != null) {
@@ -102,6 +109,8 @@ public class DialogToolbar extends RelativeLayout {
      * Listenner
      */
     public interface OnClickListener {
+
+        void onTitleClick();
 
         void onAddClick();
 

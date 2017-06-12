@@ -82,4 +82,9 @@ public class TextComponentDialog extends BaseDialogFragment {
         dismiss();
         getOnFinishListener().onFinish(etText.getText().toString());
     }
+
+    @Override
+    public void onTitleClick() {
+        // DO NOTHING
+    }
 }

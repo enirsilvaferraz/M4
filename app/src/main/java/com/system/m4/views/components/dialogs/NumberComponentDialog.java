@@ -79,4 +79,9 @@ public class NumberComponentDialog extends BaseDialogFragment {
         dismiss();
         getOnFinishListener().onFinish(etNumber.getText().toString());
     }
+
+    @Override
+    public void onTitleClick() {
+        // DO NOTHING
+    }
 }

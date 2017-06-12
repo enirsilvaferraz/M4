@@ -50,9 +50,6 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @BindView(R.id.transaction_manager_textview_value)
     TextView tvValue;
 
-    @BindView(R.id.transaction_manager_textview_tags)
-    TextView tvTags;
-
     @BindView(R.id.transaction_manager_textview_payment_type)
     TextView tvPaymentType;
 
@@ -128,14 +125,16 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
         presenter.requestValueDialog(tvValue.getText().toString());
     }
 
-    @OnClick(R.id.transaction_manager_action_tags)
-    public void actionTags() {
-        presenter.requestTagDialog();
-    }
-
     @OnClick(R.id.transaction_manager_action_payment_type)
     public void actionPaymentType() {
-        presenter.requestPaymentTypeDialog();
+        ListComponentDialog listComponentPaymentTypeDialog = ListComponentDialog.newInstance(R.string.transaction_payment_type, new DialogListener() {
+            @Override
+            public void onFinish(VOInterface vo) {
+                TransactionManagerDialog.this.presenter.setPaymentType(((PaymentTypeVO) vo));
+            }
+        });
+        listComponentPaymentTypeDialog.setPresenter(new ListPaymentTypePresenter(listComponentPaymentTypeDialog));
+        listComponentPaymentTypeDialog.show(getChildFragmentManager());
     }
 
     @OnClick(R.id.transaction_manager_action_content)
@@ -161,13 +160,6 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     public boolean clearValue() {
         presenter.clearPrice();
         tvValue.setText(R.string.system_empty_field);
-        return true;
-    }
-
-    @OnLongClick(R.id.transaction_manager_action_tags)
-    public boolean clearTags() {
-        presenter.clearTag();
-        tvTags.setText(R.string.system_empty_field);
         return true;
     }
 
@@ -202,7 +194,7 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void setTags(String value) {
-        tvTags.setText(value);
+        mToolbar.setTitle(value);
     }
 
     @Override
@@ -213,30 +205,6 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @Override
     public void setContent(String value) {
         tvContent.setText(value);
-    }
-
-    @Override
-    public void showTagsDialog() {
-        ListComponentDialog listComponentTagsDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new DialogListener() {
-            @Override
-            public void onFinish(VOInterface vo) {
-                TransactionManagerDialog.this.presenter.setTags((TagVO) vo);
-            }
-        });
-        listComponentTagsDialog.setPresenter(new ListTagPresenter(listComponentTagsDialog));
-        listComponentTagsDialog.show(getChildFragmentManager());
-    }
-
-    @Override
-    public void showPaymentTypeDialog() {
-        ListComponentDialog listComponentPaymentTypeDialog = ListComponentDialog.newInstance(R.string.transaction_payment_type, new DialogListener() {
-            @Override
-            public void onFinish(VOInterface vo) {
-                TransactionManagerDialog.this.presenter.setPaymentType(((PaymentTypeVO) vo));
-            }
-        });
-        listComponentPaymentTypeDialog.setPresenter(new ListPaymentTypePresenter(listComponentPaymentTypeDialog));
-        listComponentPaymentTypeDialog.show(getChildFragmentManager());
     }
 
     @Override
@@ -312,5 +280,17 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
     @Override
     public void onDoneClick() {
         presenter.save();
+    }
+
+    @Override
+    public void onTitleClick() {
+        ListComponentDialog listComponentTagsDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new DialogListener() {
+            @Override
+            public void onFinish(VOInterface vo) {
+                TransactionManagerDialog.this.presenter.setTags((TagVO) vo);
+            }
+        });
+        listComponentTagsDialog.setPresenter(new ListTagPresenter(listComponentTagsDialog));
+        listComponentTagsDialog.show(getChildFragmentManager());
     }
 }

@@ -54,4 +54,7 @@
         <item>2018</item>
     </array>
 
+    <string name="paymenttype_debito_key">-KkgOxzck3cnJjQqum-S</string>
+    <string name="tag_debito_key">-KmOeEFCprnjvwY3yS_Y</string>
+
 </resources>

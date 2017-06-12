@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">M4.2 DEV</string>
+    <string name="paymenttype_debito_key">-KjoAaxmy7KhIFurAxMO</string>
+    <string name="tag_debito_key">-KmOdzQQ6jEs3Pz0xk7R</string>
+
 </resources>

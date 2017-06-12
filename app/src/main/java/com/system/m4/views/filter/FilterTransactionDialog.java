@@ -216,6 +216,11 @@ public class FilterTransactionDialog extends BaseDialogFragment implements Filte
     }
 
     @Override
+    public void onTitleClick() {
+        // DO NOTHING
+    }
+
+    @Override
     public void onDeleteClick() {
         presenter.delete();
     }

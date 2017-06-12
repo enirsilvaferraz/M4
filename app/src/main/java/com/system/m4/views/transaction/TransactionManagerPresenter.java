@@ -80,16 +80,6 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     }
 
     @Override
-    public void requestTagDialog() {
-        mView.showTagsDialog();
-    }
-
-    @Override
-    public void requestPaymentTypeDialog() {
-        mView.showPaymentTypeDialog();
-    }
-
-    @Override
     public void requestValueDialog(String text) {
         Double value = text.isEmpty() || text.equals(Constants.EMPTY_FIELD) ? null : JavaUtils.NumberUtil.removeFormat(text);
         mView.showValueDialog(value);
@@ -137,11 +127,6 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
     @Override
     public void clearPaymentType() {
         mVO.setPaymentType(null);
-    }
-
-    @Override
-    public void clearTag() {
-        mVO.setTag(null);
     }
 
     @Override

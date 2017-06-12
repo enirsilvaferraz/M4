@@ -30,10 +30,6 @@ interface TransactionManagerContract {
 
         void setContent(String value);
 
-        void showTagsDialog();
-
-        void showPaymentTypeDialog();
-
         void showValueDialog(Double value);
 
         void showContentDialog(String value);
@@ -65,10 +61,6 @@ interface TransactionManagerContract {
 
         void setContent(String content);
 
-        void requestTagDialog();
-
-        void requestPaymentTypeDialog();
-
         void requestValueDialog(String text);
 
         void requestContentDialog(String text);
@@ -80,8 +72,6 @@ interface TransactionManagerContract {
         void clearContent();
 
         void clearPaymentType();
-
-        void clearTag();
 
         void clearPrice();
 
