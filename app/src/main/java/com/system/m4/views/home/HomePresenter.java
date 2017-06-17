@@ -7,12 +7,14 @@ import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.views.vos.ListTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.SpaceVO;
+import com.system.m4.views.vos.SummaryVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TitleVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -101,6 +103,8 @@ class HomePresenter implements HomeContract.Presenter {
 
             List<VOItemListInterface> listVO = new ArrayList<>();
 
+            configSummary(listVO, listTransaction);
+
             if (!listTransaction.isEmpty()) {
                 listVO.add(new TitleVO("Transactions"));
                 listVO.addAll(listTransaction);
@@ -115,6 +119,31 @@ class HomePresenter implements HomeContract.Presenter {
 
             mView.setListTransactions(listVO);
         }
+    }
+
+    private void configSummary(List<VOItemListInterface> listVO, List<Transaction> listTransaction) {
+
+        Double actual = 0D;
+        Double expected = 0D;
+        Double future = 0D;
+
+        for (Transaction transaction : listTransaction) {
+
+            if (!transaction.isApproved()) {
+                expected += transaction.getPrice();
+            } else if (transaction.getPaymentDate().compareTo(Calendar.getInstance().getTime()) <= 0) {
+                actual += transaction.getPrice();
+            } else {
+                future += transaction.getPrice();
+            }
+        }
+
+        listVO.add(new TitleVO("Summary"));
+        listVO.add(new SummaryVO("Actual spending", actual));
+        listVO.add(new SummaryVO("Confirmed spending", actual + future));
+        listVO.add(new SummaryVO("Expected spending", expected));
+        listVO.add(new SummaryVO("Total spending", actual + future + expected));
+        listVO.add(new SpaceVO());
     }
 
     @Override

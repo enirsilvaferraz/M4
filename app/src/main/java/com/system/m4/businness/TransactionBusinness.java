@@ -153,6 +153,7 @@ public abstract class TransactionBusinness implements BusinnessInterface<Transac
                 for (TransactionDTO dto : list) {
                     Transaction transaction = ConverterUtils.fromTransaction(dto);
                     transaction.setPinned(true);
+                    transaction.setApproved(false);
                     listVo.add(transaction);
                 }
                 listenner.onSuccess(listVo, Constants.CALL_TRANSACTION_FIXED);

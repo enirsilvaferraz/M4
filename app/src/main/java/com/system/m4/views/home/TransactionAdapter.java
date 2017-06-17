@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.vos.SpaceVO;
+import com.system.m4.views.vos.SummaryVO;
 import com.system.m4.views.vos.TitleVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -32,6 +33,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_TITLE = 0;
     private static final int TYPE_TRANSACTION = 1;
     private static final int TYPE_SPACE = 2;
+    private static final int TYPE_SUMMARY = 3;
 
     private final HomeContract.Presenter presenter;
     private ViewHolderTransaction markedViewHolder;
@@ -50,6 +52,8 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return new ViewHolderTransaction(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction_dense, parent, false));
         } else if (TYPE_SPACE == viewType) {
             return new ViewHolderSpace(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_space, parent, false));
+        } else if (TYPE_SUMMARY == viewType) {
+            return new ViewHolderSummary(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_summary, parent, false));
         }
         return null;
     }
@@ -63,6 +67,8 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return TYPE_TRANSACTION;
         } else if (item instanceof SpaceVO) {
             return TYPE_SPACE;
+        } else if (item instanceof SummaryVO) {
+            return TYPE_SUMMARY;
         }
         return super.getItemViewType(position);
     }
@@ -76,6 +82,8 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((ViewHolderTransaction) holder).bind(((Transaction) list.get(position)));
         } else if (TYPE_SPACE == type) {
             ((ViewHolderSpace) holder).bind(((SpaceVO) list.get(position)));
+        } else if (TYPE_SUMMARY == type) {
+            ((ViewHolderSummary) holder).bind(((SummaryVO) list.get(position)));
         }
     }
 
@@ -136,7 +144,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 tvPaymentDate.setTextColor(Color.parseColor(item.getPaymentType().getColor()));
             }
 
-            int itemColor = item.isPinned() && !item.isApproved() ? R.color.item_pinned : R.color.item_default;
+            int itemColor = item.isApproved() ? R.color.item_default : R.color.item_pinned;
             tvTag.setTextColor(itemView.getContext().getColor(itemColor));
 
             if (item.isClickable()) {
@@ -200,6 +208,25 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bind(final TitleVO item) {
             mTitle.setText(item.getTitleRes());
+        }
+    }
+
+    class ViewHolderSummary extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.item_summary_title)
+        TextView mLabel;
+
+        @BindView(R.id.item_summary_value)
+        TextView mValue;
+
+        ViewHolderSummary(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void bind(final SummaryVO item) {
+            mLabel.setText(item.getTitle());
+            mValue.setText(JavaUtils.NumberUtil.currencyFormat(item.getSummaryValue()));
         }
     }
 

@@ -32,7 +32,7 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
     private String content;
     private boolean pinned;
     private boolean clickable = true;
-    private boolean approved;
+    private boolean approved = true;
 
     public Transaction() {
         // Default constructor
