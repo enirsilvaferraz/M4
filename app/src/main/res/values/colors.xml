@@ -11,6 +11,8 @@
     <color name="divider2">#b7b7b7</color>
 
     <color name="item_marcked">#dcdada</color>
+    <color name="item_pinned">#c10d0d</color>
+    <color name="item_default">#000000</color>
 
 </resources>
 

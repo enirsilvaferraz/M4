@@ -75,18 +75,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
                 String date = message.substring(dateIndex + STR_COMPRA_APROVADA.length(), currencyIndex).trim().replace(" ", "/" + year + " ");
                 vo.setPaymentDate(JavaUtils.DateUtil.parse(date, JavaUtils.DateUtil.DD_MM_YYYY_HH_MM_SS));
 
-                TransactionBusinness.save(vo, new BusinnessListener.OnPersistListener() {
-
-                    @Override
-                    public void onSuccess(DTOAbs dto) {
-
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-
-                    }
-                });
+                TransactionBusinness.save(vo, null);
             }
 
             //Toast.makeText(context, message, Toast.LENGTH_LONG).show();

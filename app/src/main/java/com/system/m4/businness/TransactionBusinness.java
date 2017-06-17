@@ -38,12 +38,16 @@ public abstract class TransactionBusinness implements BusinnessInterface<Transac
 
                 @Override
                 public void onFind(TransactionDTO dto) {
-                    persistListener.onSuccess(dto);
+                    if (persistListener != null) {
+                        persistListener.onSuccess(dto);
+                    }
                 }
 
                 @Override
                 public void onError(String error) {
-                    persistListener.onError(new Exception(error));
+                    if (persistListener != null) {
+                        persistListener.onError(new Exception(error));
+                    }
                 }
             });
 
@@ -62,19 +66,25 @@ public abstract class TransactionBusinness implements BusinnessInterface<Transac
 
                         @Override
                         public void onFind(TransactionDTO dto) {
-                            persistListener.onSuccess(dto);
+                            if (persistListener != null) {
+                                persistListener.onSuccess(dto);
+                            }
                         }
 
                         @Override
                         public void onError(String error) {
-                            persistListener.onError(new Exception(error));
+                            if (persistListener != null) {
+                                persistListener.onError(new Exception(error));
+                            }
                         }
                     });
                 }
 
                 @Override
                 public void onError(String error) {
-                    persistListener.onError(new Exception(error));
+                    if (persistListener != null) {
+                        persistListener.onError(new Exception(error));
+                    }
                 }
             });
         }
@@ -141,7 +151,9 @@ public abstract class TransactionBusinness implements BusinnessInterface<Transac
             public void onFindAll(List<TransactionDTO> list) {
                 List<Transaction> listVo = new ArrayList<>();
                 for (TransactionDTO dto : list) {
-                    listVo.add(ConverterUtils.fromTransaction(dto));
+                    Transaction transaction = ConverterUtils.fromTransaction(dto);
+                    transaction.setPinned(true);
+                    listVo.add(transaction);
                 }
                 listenner.onSuccess(listVo, Constants.CALL_TRANSACTION_FIXED);
             }
@@ -154,7 +166,35 @@ public abstract class TransactionBusinness implements BusinnessInterface<Transac
 
     }
 
-    public static void pin(Transaction transaction, BusinnessListener.OnPersistListener persistListener) {
-        persistListener.onError(new Exception("Pin not implementede yet"));
+    public static void pin(Transaction transaction, final BusinnessListener.OnPersistListener<Transaction> persistListener) {
+
+        new FixedTransactionFirebaseRepository().save(ConverterUtils.fromTransaction(transaction), new FirebaseRepository.FirebaseSingleReturnListener<TransactionDTO>() {
+
+            @Override
+            public void onFind(TransactionDTO dto) {
+                persistListener.onSuccess(ConverterUtils.fromTransaction(dto));
+            }
+
+            @Override
+            public void onError(String error) {
+                persistListener.onError(new Exception(error));
+            }
+        });
+    }
+
+    public static void unpin(Transaction transaction, final BusinnessListener.OnPersistListener<Transaction> persistListener) {
+
+        new FixedTransactionFirebaseRepository().delete(ConverterUtils.fromTransaction(transaction), new FirebaseRepository.FirebaseSingleReturnListener<TransactionDTO>() {
+
+            @Override
+            public void onFind(TransactionDTO dto) {
+                persistListener.onSuccess(ConverterUtils.fromTransaction(dto));
+            }
+
+            @Override
+            public void onError(String error) {
+                persistListener.onError(new Exception(error));
+            }
+        });
     }
 }

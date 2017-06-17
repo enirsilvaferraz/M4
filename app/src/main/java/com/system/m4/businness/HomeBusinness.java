@@ -49,10 +49,15 @@ public class HomeBusinness {
         BusinnessObserver observer = new BusinnessObserver(filter, listener);
 
         TransactionBusinness.findByFilter(filter.getYear(), filter.getMonth(), observer);
-        TransactionBusinness.findFixed(observer);
         TagBusinness.findAll(observer);
         PaymentTypeBusinness.findAll(observer);
         GroupTransactionBusinness.findAll(observer);
+
+        if ((filter.getYear() == Calendar.getInstance().get(Calendar.YEAR) && filter.getMonth() >= Calendar.getInstance().get(Calendar.MONTH))
+                || (filter.getYear() > Calendar.getInstance().get(Calendar.YEAR))) {
+
+            TransactionBusinness.findFixed(observer);
+        }
     }
 
     private static class BusinnessObserver implements BusinnessListener.OnMultiResultListenner {
@@ -75,11 +80,7 @@ public class HomeBusinness {
         public void onSuccess(List list, int call) {
 
             if (call == Constants.CALL_TRANSACTION_BY_FILTER) {
-                if (!list.isEmpty()) {
-                    listTransaction = list;
-                } else {
-                    listener.onSuccess(null);
-                }
+                listTransaction = list;
 
             } else if (call == Constants.CALL_TRANSACTION_FIXED) {
                 listFixedTransaction = list;
@@ -108,7 +109,23 @@ public class HomeBusinness {
             if (listTransaction != null && listTag != null && listPaymentType != null && listGroup != null) {
 
                 if (listFixedTransaction != null) {
-                    listTransaction.addAll(listFixedTransaction);
+                    for (Transaction fixed : listFixedTransaction) {
+                        if (!listTransaction.contains(fixed)) {
+
+                            Calendar instance = Calendar.getInstance();
+                            instance.setTime(fixed.getPaymentDate());
+                            instance.set(Calendar.MONTH, filter.getMonth());
+                            instance.set(Calendar.YEAR, filter.getYear());
+                            fixed.setPaymentDate(instance.getTime());
+
+                            listTransaction.add(fixed);
+
+                        } else {
+                            Transaction transaction = listTransaction.get(listTransaction.indexOf(fixed));
+                            transaction.setPinned(true);
+                            transaction.setApproved(true);
+                        }
+                    }
                 }
 
                 List<Transaction> listVo = filterTransaction(listTransaction, listTag, listPaymentType);

@@ -34,7 +34,6 @@ public final class ConverterUtils {
         dto.setPurchaseDate(vo.getPurchaseDate() != null ? JavaUtils.DateUtil.format(vo.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         dto.setContent(vo.getContent());
         dto.setPrice(vo.getPrice());
-        dto.setPinned(vo.isPinned());
         return dto;
     }
 
@@ -49,7 +48,6 @@ public final class ConverterUtils {
         vo.setPurchaseDate(dto.getPurchaseDate() != null ? JavaUtils.DateUtil.parse(dto.getPurchaseDate(), JavaUtils.DateUtil.YYYY_MM_DD) : null);
         vo.setContent(dto.getContent());
         vo.setPrice(dto.getPrice());
-        vo.setPinned(dto.isPinned());
 
         // Usado para saber onde é o path, não é armazenado no Firebase
         vo.setPaymentDateOrigin(vo.getPaymentDate());

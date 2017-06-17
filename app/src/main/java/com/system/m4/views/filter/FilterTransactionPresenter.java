@@ -99,7 +99,7 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     @Override
     public void done() {
         if (isSaveMode()) {
-            FilterTransactionBusinness.save(ConverterUtils.fromFilterTransaction(mVo), new BusinnessListener.OnPersistListener() {
+            FilterTransactionBusinness.save(ConverterUtils.fromFilterTransaction(mVo), new BusinnessListener.OnPersistListener<DTOAbs>() {
 
                 @Override
                 public void onSuccess(DTOAbs dto) {
@@ -127,7 +127,7 @@ class FilterTransactionPresenter implements FilterTransactionContract.Presenter 
     @Override
     public void delete() {
 
-        FilterTransactionBusinness.delete(ConverterUtils.fromFilterTransaction(mVo), new BusinnessListener.OnPersistListener() {
+        FilterTransactionBusinness.delete(ConverterUtils.fromFilterTransaction(mVo), new BusinnessListener.OnPersistListener<DTOAbs>() {
 
             @Override
             public void onSuccess(DTOAbs dto) {

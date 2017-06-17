@@ -46,7 +46,7 @@ public class ListPaymentTypePresenter extends ListComponentPresenterAbs {
     @Override
     public void requestDelete() {
 
-        PaymentTypeBusinness.delete(ConverterUtils.fromPaymentType((PaymentTypeVO) getSelectedItem()), new BusinnessListener.OnPersistListener() {
+        PaymentTypeBusinness.delete(ConverterUtils.fromPaymentType((PaymentTypeVO) getSelectedItem()), new BusinnessListener.OnPersistListener<DTOAbs>() {
 
             @Override
             public void onSuccess(DTOAbs dto) {
@@ -65,7 +65,7 @@ public class ListPaymentTypePresenter extends ListComponentPresenterAbs {
     public void save(String value, final VOInterface vo) {
 
         vo.setName(value);
-        PaymentTypeBusinness.save(ConverterUtils.fromPaymentType((PaymentTypeVO) vo), new BusinnessListener.OnPersistListener() {
+        PaymentTypeBusinness.save(ConverterUtils.fromPaymentType((PaymentTypeVO) vo), new BusinnessListener.OnPersistListener<DTOAbs>() {
 
             @Override
             public void onSuccess(DTOAbs dto) {

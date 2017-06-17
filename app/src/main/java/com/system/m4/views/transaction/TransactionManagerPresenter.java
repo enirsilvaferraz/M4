@@ -157,7 +157,7 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
             mView.showError(R.string.system_error_required_field, R.string.transaction_price);
         } else {
 
-            TransactionBusinness.save(mVO, new BusinnessListener.OnPersistListener() {
+            TransactionBusinness.save(mVO, new BusinnessListener.OnPersistListener<DTOAbs>() {
 
                 @Override
                 public void onSuccess(DTOAbs dto) {

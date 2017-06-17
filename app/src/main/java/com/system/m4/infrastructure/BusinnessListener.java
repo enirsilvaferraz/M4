@@ -34,9 +34,9 @@ public interface BusinnessListener {
     /**
      *
      */
-    interface OnPersistListener {
+    interface OnPersistListener<T> {
 
-        void onSuccess(DTOAbs dto);
+        void onSuccess(T dto);
 
         void onError(Exception e);
     }

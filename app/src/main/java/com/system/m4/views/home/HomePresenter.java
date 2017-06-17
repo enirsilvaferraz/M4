@@ -159,7 +159,7 @@ class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void delete() {
-        TransactionBusinness.delete(mSelectedItem, new BusinnessListener.OnPersistListener() {
+        TransactionBusinness.delete(mSelectedItem, new BusinnessListener.OnPersistListener<DTOAbs>() {
             @Override
             public void onSuccess(DTOAbs dto) {
                 markItemOff();
@@ -176,19 +176,37 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void pinTransaction(boolean pin) {
 
-        mSelectedItem.setPinned(pin);
-        TransactionBusinness.pin(mSelectedItem, new BusinnessListener.OnPersistListener() {
+        if (pin) {
 
-            @Override
-            public void onSuccess(DTOAbs dto) {
-                markItemOff();
-                requestListTransaction();
-            }
+            TransactionBusinness.pin(mSelectedItem, new BusinnessListener.OnPersistListener<Transaction>() {
 
-            @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
-            }
-        });
+                @Override
+                public void onSuccess(Transaction dto) {
+                    markItemOff();
+                    requestListTransaction();
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    mView.showError(e.getMessage());
+                }
+            });
+
+        } else {
+
+            TransactionBusinness.unpin(mSelectedItem, new BusinnessListener.OnPersistListener<Transaction>() {
+
+                @Override
+                public void onSuccess(Transaction dto) {
+                    markItemOff();
+                    requestListTransaction();
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    mView.showError(e.getMessage());
+                }
+            });
+        }
     }
 }

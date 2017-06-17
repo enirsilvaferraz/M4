@@ -48,7 +48,7 @@ public class ListTagPresenter extends ListComponentPresenterAbs {
     @Override
     public void requestDelete() {
 
-        TagBusinness.delete(ConverterUtils.fromTag((TagVO) getSelectedItem()), new BusinnessListener.OnPersistListener() {
+        TagBusinness.delete(ConverterUtils.fromTag((TagVO) getSelectedItem()), new BusinnessListener.OnPersistListener<DTOAbs>() {
 
             @Override
             public void onSuccess(DTOAbs dto) {
@@ -67,7 +67,7 @@ public class ListTagPresenter extends ListComponentPresenterAbs {
     public void save(String value, final VOInterface vo) {
 
         vo.setName(value);
-        TagBusinness.save(ConverterUtils.fromTag((TagVO) vo), new BusinnessListener.OnPersistListener() {
+        TagBusinness.save(ConverterUtils.fromTag((TagVO) vo), new BusinnessListener.OnPersistListener<DTOAbs>() {
 
             @Override
             public void onSuccess(DTOAbs dto) {

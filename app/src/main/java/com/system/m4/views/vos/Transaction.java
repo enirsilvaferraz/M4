@@ -32,6 +32,7 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
     private String content;
     private boolean pinned;
     private boolean clickable = true;
+    private boolean approved;
 
     public Transaction() {
         // Default constructor
@@ -110,6 +111,22 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Transaction that = (Transaction) o;
+
+        return key != null ? key.equals(that.key) : that.key == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return key != null ? key.hashCode() : 0;
+    }
+
+    @Override
     public void setName(String name) {
 
     }
@@ -178,5 +195,13 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
 
     public boolean isClickable() {
         return clickable;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+
+    public boolean isApproved() {
+        return approved;
     }
 }

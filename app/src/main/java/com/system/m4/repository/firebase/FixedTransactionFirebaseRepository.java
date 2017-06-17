@@ -15,6 +15,6 @@ public class FixedTransactionFirebaseRepository extends FirebaseRepository<Trans
 
     @Override
     protected Class<TransactionDTO> getTClass() {
-        return null;
+        return TransactionDTO.class;
     }
 }

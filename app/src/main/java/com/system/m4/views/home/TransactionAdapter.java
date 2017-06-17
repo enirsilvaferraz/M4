@@ -74,7 +74,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((ViewHolderTitle) holder).bind(((TitleVO) list.get(position)));
         } else if (TYPE_TRANSACTION == type) {
             ((ViewHolderTransaction) holder).bind(((Transaction) list.get(position)));
-        }else if (TYPE_SPACE == type) {
+        } else if (TYPE_SPACE == type) {
             ((ViewHolderSpace) holder).bind(((SpaceVO) list.get(position)));
         }
     }
@@ -135,6 +135,9 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (!TextUtils.isEmpty(item.getPaymentType().getColor())) {
                 tvPaymentDate.setTextColor(Color.parseColor(item.getPaymentType().getColor()));
             }
+
+            int itemColor = item.isPinned() && !item.isApproved() ? R.color.item_pinned : R.color.item_default;
+            tvTag.setTextColor(itemView.getContext().getColor(itemColor));
 
             if (item.isClickable()) {
                 container.setOnClickListener(this);
