@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -32,6 +33,9 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.home_activity_fab)
     FloatingActionButton fab;
 
+    @BindView(R.id.home_view_pager)
+    ViewPager mViewPager;
+
     private HomeContract.Presenter presenter;
 
     @Override
@@ -48,6 +52,30 @@ public class HomeActivity extends AppCompatActivity {
                 presenter.requestTransactionManager();
             }
         });
+
+        mViewPager.setAdapter(new HomePageAdapter(getSupportFragmentManager()));
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                HomeFragment fragment = (HomeFragment) ((HomePageAdapter) mViewPager.getAdapter()).getRegisteredFragment(position);
+                if (fragment != null) {
+                    presenter = fragment.getPresenter();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        mViewPager.setCurrentItem(((HomePageAdapter) mViewPager.getAdapter()).getMiddle());
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
             getPermissionToReadSMS();
@@ -82,8 +110,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if (fragment instanceof HomeContract.View) {
             HomeContract.View view = (HomeContract.View) fragment;
-            presenter = new HomePresenter(view);
-            view.setPresenter(presenter);
+            view.setPresenter(new HomePresenter(view));
         }
     }
 

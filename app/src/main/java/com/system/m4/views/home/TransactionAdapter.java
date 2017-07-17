@@ -10,13 +10,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.vos.SpaceVO;
+import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
 import com.system.m4.views.vos.TitleVO;
 import com.system.m4.views.vos.Transaction;
@@ -34,9 +34,10 @@ import butterknife.ButterKnife;
 class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_TITLE = 0;
-    private static final int TYPE_TRANSACTION = 1;
-    private static final int TYPE_SPACE = 2;
-    private static final int TYPE_SUMMARY = 3;
+    private static final int TYPE_SUB_TITLE = 1;
+    private static final int TYPE_TRANSACTION = 2;
+    private static final int TYPE_SPACE = 3;
+    private static final int TYPE_SUMMARY = 4;
 
     private final HomeContract.Presenter presenter;
 
@@ -51,6 +52,8 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (TYPE_TITLE == viewType) {
             return new ViewHolderTitle(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_title, parent, false));
+        } else if (TYPE_SUB_TITLE == viewType) {
+            return new ViewHolderSubTitle(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sub_title, parent, false));
         } else if (TYPE_TRANSACTION == viewType) {
             return new ViewHolderTransaction(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction_dense, parent, false));
         } else if (TYPE_SPACE == viewType) {
@@ -66,6 +69,8 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         VOItemListInterface item = list.get(position);
         if (item instanceof TitleVO) {
             return TYPE_TITLE;
+        } else if (item instanceof SubTitleVO) {
+            return TYPE_SUB_TITLE;
         } else if (item instanceof Transaction) {
             return TYPE_TRANSACTION;
         } else if (item instanceof SpaceVO) {
@@ -81,6 +86,8 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int type = getItemViewType(position);
         if (TYPE_TITLE == type) {
             ((ViewHolderTitle) holder).bind(((TitleVO) list.get(position)));
+        } else if (TYPE_SUB_TITLE == type) {
+            ((ViewHolderSubTitle) holder).bind(((SubTitleVO) list.get(position)));
         } else if (TYPE_TRANSACTION == type) {
             ((ViewHolderTransaction) holder).bind(((Transaction) list.get(position)));
         } else if (TYPE_SPACE == type) {
@@ -108,7 +115,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /**
      *
      */
-    class ViewHolderTransaction extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolderTransaction extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         @BindView(R.id.list_item_container)
         LinearLayout container;
@@ -122,21 +129,11 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.item_transaction_price)
         TextView tvPrice;
 
-        @BindView(R.id.item_transaction_menu)
-        ImageView ivMenu;
-
         private Transaction item;
 
         ViewHolderTransaction(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
-            ivMenu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showPopup();
-                }
-            });
         }
 
         public void bind(final Transaction item) {
@@ -156,12 +153,19 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             if (item.isClickable()) {
                 container.setOnClickListener(this);
+                container.setOnLongClickListener(this);
             }
         }
 
         @Override
         public void onClick(View v) {
             presenter.selectItem(item);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            showPopup();
+            return true;
         }
 
         void showPopup() {
@@ -215,6 +219,21 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bind(final TitleVO item) {
+            mTitle.setText(item.getTitleRes());
+        }
+    }
+
+    class ViewHolderSubTitle extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.item_title_text)
+        TextView mTitle;
+
+        ViewHolderSubTitle(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void bind(final SubTitleVO item) {
             mTitle.setText(item.getTitleRes());
         }
     }

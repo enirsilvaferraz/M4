@@ -1,18 +1,14 @@
 package com.system.m4.businness;
 
-import android.support.annotation.NonNull;
-
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.ConverterUtils;
-import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.GroupTransactionVO;
 import com.system.m4.views.vos.ListTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -23,47 +19,22 @@ import java.util.List;
 
 public class HomeBusinness {
 
-    public static void findTransactions(final BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
+    public static void findTransactions(int year, int month, final BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
 
-        FilterTransactionBusinness.find(new BusinnessListener.OnSingleResultListener<FilterTransactionVO>() {
+        BusinnessObserver observer = new BusinnessObserver(year, month, listener);
 
-            @Override
-            public void onSuccess(FilterTransactionVO vo) {
-                if (vo == null) {
-                    vo = new FilterTransactionVO();
-                    vo.setYear(Calendar.getInstance().get(Calendar.YEAR));
-                    vo.setMonth(Calendar.getInstance().get(Calendar.MONTH));
-                }
-                findTransactions(vo, listener);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                listener.onError(e);
-            }
-        });
-    }
-
-    private static void findTransactions(final FilterTransactionVO filter, final BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
-
-        BusinnessObserver observer = new BusinnessObserver(filter, listener);
-
-        TransactionBusinness.findByFilter(filter.getYear(), filter.getMonth(), observer);
+        TransactionBusinness.findByFilter(year, month, observer);
         TagBusinness.findAll(observer);
         PaymentTypeBusinness.findAll(observer);
         GroupTransactionBusinness.findAll(observer);
-
-        if ((filter.getYear() == Calendar.getInstance().get(Calendar.YEAR) && filter.getMonth() >= Calendar.getInstance().get(Calendar.MONTH))
-                || (filter.getYear() > Calendar.getInstance().get(Calendar.YEAR))) {
-
-            TransactionBusinness.findFixed(observer);
-        }
+        TransactionBusinness.findFixed(observer);
     }
 
     private static class BusinnessObserver implements BusinnessListener.OnMultiResultListenner {
 
         private final BusinnessListener.OnSingleResultListener<ListTransactionVO> listener;
-        private FilterTransactionVO filter;
+        private final int year;
+        private final int month;
 
         private List<Transaction> listTransaction;
         private List<Transaction> listFixedTransaction;
@@ -71,8 +42,9 @@ public class HomeBusinness {
         private List<PaymentTypeVO> listPaymentType;
         private List<GroupTransactionVO> listGroup;
 
-        BusinnessObserver(FilterTransactionVO filter, BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
-            this.filter = filter;
+        BusinnessObserver(int year, int month, BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
+            this.year = year;
+            this.month = month;
             this.listener = listener;
         }
 
@@ -109,13 +81,15 @@ public class HomeBusinness {
             if (listTransaction != null && listTag != null && listPaymentType != null && listGroup != null) {
 
                 if (listFixedTransaction != null) {
+
                     for (Transaction fixed : listFixedTransaction) {
+
                         if (!listTransaction.contains(fixed)) {
 
                             Calendar instance = Calendar.getInstance();
                             instance.setTime(fixed.getPaymentDate());
-                            instance.set(Calendar.MONTH, filter.getMonth());
-                            instance.set(Calendar.YEAR, filter.getYear());
+                            instance.set(Calendar.MONTH, month);
+                            instance.set(Calendar.YEAR, year);
                             fixed.setPaymentDate(instance.getTime());
 
                             listTransaction.add(fixed);
@@ -128,10 +102,12 @@ public class HomeBusinness {
                     }
                 }
 
-                List<Transaction> listVo = filterTransaction(listTransaction, listTag, listPaymentType);
+                for (Transaction transaction : listTransaction) {
+                    ConverterUtils.fillTransaction(transaction, listTag, listPaymentType);
+                }
 
                 ListTransactionVO listTransactionVO = new ListTransactionVO();
-                listTransactionVO.setTransactions(listVo);
+                listTransactionVO.setTransactions(listTransaction);
 
                 if (!listGroup.isEmpty()) {
                     listTransactionVO.setGroup(ConverterUtils.fillGroupTransaction(listGroup.get(0), listPaymentType));
@@ -139,24 +115,6 @@ public class HomeBusinness {
 
                 listener.onSuccess(listTransactionVO);
             }
-        }
-
-        @NonNull
-        private List<Transaction> filterTransaction(List<Transaction> listTransaction, List<TagVO> listTag, List<PaymentTypeVO> listPaymentType) {
-
-            List<Transaction> listVo = new ArrayList<>();
-
-            for (Transaction vo : listTransaction) {
-                if (filter != null) {
-                    if ((filter.getTag() == null || vo.getTag().equals(filter.getTag())) &&
-                            (filter.getPaymentType() == null || vo.getPaymentType().equals(filter.getPaymentType()))) {
-                        listVo.add(ConverterUtils.fillTransaction(vo, listTag, listPaymentType));
-                    }
-                } else {
-                    listVo.add(ConverterUtils.fillTransaction(vo, listTag, listPaymentType));
-                }
-            }
-            return listVo;
         }
     }
 }

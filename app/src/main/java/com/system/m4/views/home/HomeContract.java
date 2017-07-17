@@ -33,12 +33,15 @@ class HomeContract {
         void requestTransactionManagerDialog();
 
         void requestDelete(Transaction item);
+
     }
 
     /**
      *
      */
     interface Presenter {
+
+        void init(int relativePosition);
 
         void requestListTransaction();
 

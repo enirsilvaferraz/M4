@@ -57,17 +57,9 @@
                 style="@style/AppTheme.Form.TextView.Secundary"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_toStartOf="@+id/item_transaction_menu"
+                android:layout_alignParentEnd="true"
                 android:gravity="center_vertical"
                 android:text="R$ 1.000,00" />
-
-            <ImageView
-                android:id="@+id/item_transaction_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_more_vert_black_24dp" />
 
         </RelativeLayout>
 

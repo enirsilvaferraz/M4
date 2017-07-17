@@ -5,11 +5,11 @@ package com.system.m4.views.vos;
  * For M4
  */
 
-public class TitleVO implements VOItemListInterface {
+public class SubTitleVO implements VOItemListInterface {
 
     private final String titleRes;
 
-    public TitleVO(String titleRes) {
+    public SubTitleVO(String titleRes) {
         this.titleRes = titleRes;
     }
 
@@ -22,7 +22,7 @@ public class TitleVO implements VOItemListInterface {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TitleVO subTitleVO = (TitleVO) o;
+        SubTitleVO subTitleVO = (SubTitleVO) o;
 
         return titleRes.equals(subTitleVO.titleRes);
 

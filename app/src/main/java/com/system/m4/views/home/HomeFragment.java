@@ -34,6 +34,8 @@ import butterknife.Unbinder;
  */
 public class HomeFragment extends Fragment implements HomeContract.View {
 
+    public static final String RELATIVE_POSITION = "RELATIVE_POSITION";
+
     @BindView(R.id.home_recyclerview)
     RecyclerView mRecyclerview;
 
@@ -60,6 +62,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());
         mRecyclerview.setAdapter(new TransactionAdapter(presenter));
 
+        this.presenter.init(getArguments().getInt(RELATIVE_POSITION));
         this.presenter.requestListTransaction();
     }
 
@@ -67,11 +70,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    @Override
-    public void setPresenter(HomeContract.Presenter presenter) {
-        this.presenter = presenter;
     }
 
     @Override
@@ -132,5 +130,14 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     public void showSuccessMessage(int template, int param) {
         String message = getString(template, getString(param));
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    public HomeContract.Presenter getPresenter() {
+        return presenter;
+    }
+
+    @Override
+    public void setPresenter(HomeContract.Presenter presenter) {
+        this.presenter = presenter;
     }
 }

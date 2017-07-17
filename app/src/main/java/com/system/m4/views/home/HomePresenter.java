@@ -3,10 +3,12 @@ package com.system.m4.views.home;
 import com.system.m4.businness.HomeBusinness;
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
+import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.views.vos.ListTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.SpaceVO;
+import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TitleVO;
@@ -29,14 +31,23 @@ class HomePresenter implements HomeContract.Presenter {
 
     private HomeContract.View mView;
 
+    private Calendar instance;
+
     HomePresenter(HomeContract.View view) {
         this.mView = view;
     }
 
     @Override
+    public void init(int relativePosition) {
+
+        instance = Calendar.getInstance();
+        instance.add(Calendar.MONTH, relativePosition);
+    }
+
+    @Override
     public void requestListTransaction() {
 
-        HomeBusinness.findTransactions(new BusinnessListener.OnSingleResultListener<ListTransactionVO>() {
+        HomeBusinness.findTransactions(instance.get(Calendar.YEAR), instance.get(Calendar.MONTH), new BusinnessListener.OnSingleResultListener<ListTransactionVO>() {
 
             @Override
             public void onSuccess(ListTransactionVO item) {
@@ -105,17 +116,18 @@ class HomePresenter implements HomeContract.Presenter {
             configSummary(listVO, listTransaction);
 
             if (!listTransaction.isEmpty()) {
-                listVO.add(new TitleVO("Transactions"));
+                listVO.add(new SubTitleVO("Transactions"));
                 listVO.addAll(listTransaction);
                 listVO.add(new SpaceVO());
             }
 
             for (PaymentTypeVO key : map.keySet()) {
-                listVO.add(new TitleVO(key.getName()));
+                listVO.add(new SubTitleVO(key.getName()));
                 listVO.addAll(map.get(key));
                 listVO.add(new SpaceVO());
             }
 
+            listVO.add(0, new TitleVO(JavaUtils.DateUtil.format(instance.getTime(), JavaUtils.DateUtil.MMMM_DE_YYYY)));
             mView.setListTransactions(listVO);
         }
     }
@@ -137,7 +149,7 @@ class HomePresenter implements HomeContract.Presenter {
             }
         }
 
-        listVO.add(new TitleVO("Summary"));
+        listVO.add(new SubTitleVO("Summary"));
         listVO.add(new SummaryVO("Actual spending", actual));
         listVO.add(new SummaryVO("Confirmed spending", actual + future));
         listVO.add(new SummaryVO("Expected spending", expected));
