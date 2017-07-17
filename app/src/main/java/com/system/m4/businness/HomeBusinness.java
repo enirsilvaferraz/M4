@@ -27,7 +27,11 @@ public class HomeBusinness {
         TagBusinness.findAll(observer);
         PaymentTypeBusinness.findAll(observer);
         GroupTransactionBusinness.findAll(observer);
-        TransactionBusinness.findFixed(observer);
+
+        if ((year == Calendar.getInstance().get(Calendar.YEAR) && month >= Calendar.getInstance().get(Calendar.MONTH))
+                || (year > Calendar.getInstance().get(Calendar.YEAR))) {
+            TransactionBusinness.findFixed(observer);
+        }
     }
 
     private static class BusinnessObserver implements BusinnessListener.OnMultiResultListenner {

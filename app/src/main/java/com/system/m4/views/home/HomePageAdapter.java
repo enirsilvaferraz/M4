@@ -11,11 +11,11 @@ import android.view.ViewGroup;
  * Created by eferraz on 16/07/17.
  */
 
-public class HomePageAdapter extends FragmentStatePagerAdapter {
+class HomePageAdapter extends FragmentStatePagerAdapter {
 
-    public static final int PAGE_COUNT = 12;
+    private static final int PAGE_MIDDLE = 6;
 
-    SparseArray<Fragment> registeredFragments = new SparseArray<>();
+    private SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
     HomePageAdapter(FragmentManager fm) {
         super(fm);
@@ -24,7 +24,7 @@ public class HomePageAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Bundle args = new Bundle();
-        args.putInt(HomeFragment.RELATIVE_POSITION, position - 5);
+        args.putInt(HomeFragment.RELATIVE_POSITION, position - PAGE_MIDDLE);
 
         HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
@@ -33,7 +33,7 @@ public class HomePageAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return (PAGE_MIDDLE * 2);
     }
 
     @Override
@@ -51,9 +51,5 @@ public class HomePageAdapter extends FragmentStatePagerAdapter {
 
     public Fragment getRegisteredFragment(int position) {
         return registeredFragments.get(position);
-    }
-
-    public int getMiddle() {
-        return Math.round(PAGE_COUNT / 2);
     }
 }

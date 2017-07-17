@@ -20,6 +20,8 @@ import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.filter.FilterTransactionDialog;
 import com.system.m4.views.vos.VOInterface;
 
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -75,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        mViewPager.setCurrentItem(((HomePageAdapter) mViewPager.getAdapter()).getMiddle());
+        mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH));
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
             getPermissionToReadSMS();
