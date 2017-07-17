@@ -32,13 +32,7 @@ class HomeContract {
 
         void requestTransactionManagerDialog();
 
-        void requestDelete();
-
-        void configureReadMode();
-
-        void configureEditMode(boolean canPin);
-
-        void markItemOff();
+        void requestDelete(Transaction item);
     }
 
     /**
@@ -54,16 +48,14 @@ class HomeContract {
 
         void selectItem(Transaction vo);
 
-        void markItemOn(Transaction item);
+        void requestCopy(Transaction item);
 
-        void markItemOff();
+        void requestDelete(Transaction item);
 
-        void requestDelete();
+        void delete(Transaction item);
 
-        void requestCopy();
+        void pinTransaction(Transaction item);
 
-        void delete();
-
-        void pinTransaction(boolean pin);
+        void unpinTransaction(Transaction item);
     }
 }

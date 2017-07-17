@@ -1,13 +1,16 @@
 package com.system.m4.views.home;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.view.menu.MenuPopupHelper;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,7 +39,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_SUMMARY = 3;
 
     private final HomeContract.Presenter presenter;
-    private ViewHolderTransaction markedViewHolder;
+
     private List<VOItemListInterface> list;
 
     TransactionAdapter(HomeContract.Presenter presenter) {
@@ -92,12 +95,6 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return list.size();
     }
 
-    public void markItemOff() {
-        if (markedViewHolder != null) {
-            markedViewHolder.markItemOff();
-        }
-    }
-
     void addCurrentList(List<VOItemListInterface> list) {
         this.list.addAll(list);
         notifyDataSetChanged();
@@ -111,7 +108,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /**
      *
      */
-    class ViewHolderTransaction extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    class ViewHolderTransaction extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.list_item_container)
         LinearLayout container;
@@ -125,11 +122,21 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.item_transaction_price)
         TextView tvPrice;
 
+        @BindView(R.id.item_transaction_menu)
+        ImageView ivMenu;
+
         private Transaction item;
 
         ViewHolderTransaction(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            ivMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showPopup();
+                }
+            });
         }
 
         public void bind(final Transaction item) {
@@ -149,50 +156,51 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             if (item.isClickable()) {
                 container.setOnClickListener(this);
-                container.setOnLongClickListener(this);
             }
         }
 
         @Override
         public void onClick(View v) {
-            if (markedViewHolder == null) {
-                presenter.selectItem(item);
-            } else {
-                markedViewHolder.markItemOff();
-                presenter.markItemOff();
-            }
+            presenter.selectItem(item);
         }
 
-        @Override
-        public boolean onLongClick(View v) {
-            if (markedViewHolder == null) {
-                markItemOn();
-                presenter.markItemOn(item);
-            } else if (!markedViewHolder.equals(ViewHolderTransaction.this)) {
-                markedViewHolder.markItemOff();
-                markItemOn();
-                presenter.markItemOn(item);
-            } else {
-                markedViewHolder.markItemOff();
-                presenter.markItemOff();
-            }
-            return true;
-        }
+        void showPopup() {
+            PopupMenu popupMenu = new PopupMenu(itemView.getContext(), tvPrice);
+            popupMenu.inflate(R.menu.menu_transaction);
 
-        private void markItemOff() {
-            container.setBackground(itemView.getContext().getDrawable(R.drawable.ripple));
-            tvTag.setTypeface(Typeface.DEFAULT);
-            tvPaymentDate.setTypeface(Typeface.DEFAULT);
-            tvPrice.setTypeface(Typeface.DEFAULT);
-            markedViewHolder = null;
-        }
+            popupMenu.getMenu().findItem(R.id.action_pin).setVisible(!item.isPinned());
+            popupMenu.getMenu().findItem(R.id.action_unpin).setVisible(item.isPinned());
 
-        private void markItemOn() {
-            container.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.item_marcked));
-            tvTag.setTypeface(Typeface.DEFAULT_BOLD);
-            tvPaymentDate.setTypeface(Typeface.DEFAULT_BOLD);
-            tvPrice.setTypeface(Typeface.DEFAULT_BOLD);
-            markedViewHolder = this;
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+
+                    switch (item.getItemId()) {
+
+                        case R.id.action_copy:
+                            presenter.requestCopy(ViewHolderTransaction.this.item);
+                            return true;
+
+                        case R.id.action_delete:
+                            presenter.requestDelete(ViewHolderTransaction.this.item);
+                            return true;
+
+                        case R.id.action_pin:
+                            presenter.pinTransaction(ViewHolderTransaction.this.item);
+                            return true;
+
+                        case R.id.action_unpin:
+                            presenter.unpinTransaction(ViewHolderTransaction.this.item);
+                            return true;
+                    }
+
+                    return false;
+                }
+            });
+
+            MenuPopupHelper menuHelper = new MenuPopupHelper(itemView.getContext(), (MenuBuilder) popupMenu.getMenu(), tvPrice);
+            menuHelper.setForceShowIcon(true);
+            menuHelper.show();
         }
     }
 
@@ -237,7 +245,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bind(final SpaceVO item) {
-
+            // DO NOTHING
         }
     }
 }

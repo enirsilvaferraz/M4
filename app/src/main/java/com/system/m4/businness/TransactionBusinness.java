@@ -61,7 +61,7 @@ public abstract class TransactionBusinness implements BusinnessInterface<Transac
                 @Override
                 public void onFind(TransactionDTO dto) {
 
-                    dto.setKey(null);
+                    //dto.setKey(null);
                     new TransactionFirebaseRepository(year, month).save(dto, new FirebaseRepository.FirebaseSingleReturnListener<TransactionDTO>() {
 
                         @Override

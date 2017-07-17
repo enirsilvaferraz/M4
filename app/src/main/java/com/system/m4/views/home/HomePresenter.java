@@ -28,7 +28,6 @@ import java.util.Map;
 class HomePresenter implements HomeContract.Presenter {
 
     private HomeContract.View mView;
-    private Transaction mSelectedItem;
 
     HomePresenter(HomeContract.View view) {
         this.mView = view;
@@ -162,36 +161,21 @@ class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public void markItemOn(Transaction vo) {
-        this.mSelectedItem = vo;
-        mView.configureEditMode(!vo.isPinned());
+    public void requestDelete(Transaction item) {
+        mView.requestDelete(item);
     }
 
     @Override
-    public void markItemOff() {
-        this.mSelectedItem = null;
-        mView.configureReadMode();
-        mView.markItemOff();
+    public void requestCopy(Transaction item) {
+        item.setKey(null);
+        mView.showTransactionDialog(item);
     }
 
     @Override
-    public void requestDelete() {
-        mView.requestDelete();
-    }
-
-    @Override
-    public void requestCopy() {
-        mSelectedItem.setKey(null);
-        mView.showTransactionDialog(mSelectedItem);
-        markItemOff();
-    }
-
-    @Override
-    public void delete() {
-        TransactionBusinness.delete(mSelectedItem, new BusinnessListener.OnPersistListener<DTOAbs>() {
+    public void delete(Transaction item) {
+        TransactionBusinness.delete(item, new BusinnessListener.OnPersistListener<DTOAbs>() {
             @Override
             public void onSuccess(DTOAbs dto) {
-                markItemOff();
                 requestListTransaction();
             }
 
@@ -203,39 +187,34 @@ class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public void pinTransaction(boolean pin) {
+    public void pinTransaction(Transaction item) {
+        TransactionBusinness.pin(item, new BusinnessListener.OnPersistListener<Transaction>() {
 
-        if (pin) {
+            @Override
+            public void onSuccess(Transaction dto) {
+                requestListTransaction();
+            }
 
-            TransactionBusinness.pin(mSelectedItem, new BusinnessListener.OnPersistListener<Transaction>() {
+            @Override
+            public void onError(Exception e) {
+                mView.showError(e.getMessage());
+            }
+        });
+    }
 
-                @Override
-                public void onSuccess(Transaction dto) {
-                    markItemOff();
-                    requestListTransaction();
-                }
+    @Override
+    public void unpinTransaction(Transaction item) {
+        TransactionBusinness.unpin(item, new BusinnessListener.OnPersistListener<Transaction>() {
 
-                @Override
-                public void onError(Exception e) {
-                    mView.showError(e.getMessage());
-                }
-            });
+            @Override
+            public void onSuccess(Transaction dto) {
+                requestListTransaction();
+            }
 
-        } else {
-
-            TransactionBusinness.unpin(mSelectedItem, new BusinnessListener.OnPersistListener<Transaction>() {
-
-                @Override
-                public void onSuccess(Transaction dto) {
-                    markItemOff();
-                    requestListTransaction();
-                }
-
-                @Override
-                public void onError(Exception e) {
-                    mView.showError(e.getMessage());
-                }
-            });
-        }
+            @Override
+            public void onError(Exception e) {
+                mView.showError(e.getMessage());
+            }
+        });
     }
 }

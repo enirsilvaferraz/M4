@@ -96,29 +96,14 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void requestDelete() {
+    public void requestDelete(final Transaction item) {
         JavaUtils.AndroidUtil.showAlertDialog(getContext(), R.string.system_message_request_delete,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        presenter.delete();
+                        presenter.delete(item);
                     }
                 });
-    }
-
-    @Override
-    public void configureReadMode() {
-        ((HomeActivity) getActivity()).configureReadMode();
-    }
-
-    @Override
-    public void configureEditMode(boolean canPin) {
-        ((HomeActivity) getActivity()).configureEditMode(canPin);
-    }
-
-    @Override
-    public void markItemOff() {
-        ((TransactionAdapter) mRecyclerview.getAdapter()).markItemOff();
     }
 
     @Override
