@@ -1,6 +1,6 @@
 package com.system.m4.views.home;
 
-import com.system.m4.businness.HomeBusinness;
+import com.system.m4.businness.HomeBusiness;
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.JavaUtils;
@@ -47,7 +47,7 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestListTransaction() {
 
-        HomeBusinness.findTransactions(instance.get(Calendar.YEAR), instance.get(Calendar.MONTH), new BusinnessListener.OnSingleResultListener<ListTransactionVO>() {
+        HomeBusiness.findTransactions(instance.get(Calendar.YEAR), instance.get(Calendar.MONTH), new BusinnessListener.OnSingleResultListener<ListTransactionVO>() {
 
             @Override
             public void onSuccess(ListTransactionVO item) {
@@ -128,6 +128,7 @@ class HomePresenter implements HomeContract.Presenter {
             }
 
             listVO.add(0, new TitleVO(JavaUtils.DateUtil.format(instance.getTime(), JavaUtils.DateUtil.MMMM_DE_YYYY)));
+            listVO.add(1, new SpaceVO());
             mView.setListTransactions(listVO);
         }
     }

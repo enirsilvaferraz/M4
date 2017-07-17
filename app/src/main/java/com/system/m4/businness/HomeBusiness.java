@@ -17,7 +17,11 @@ import java.util.List;
  * For M4
  */
 
-public class HomeBusinness {
+public class HomeBusiness {
+
+    private HomeBusiness() {
+        // DO NOTHING
+    }
 
     public static void findTransactions(int year, int month, final BusinnessListener.OnSingleResultListener<ListTransactionVO> listener) {
 
@@ -34,6 +38,7 @@ public class HomeBusinness {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private static class BusinnessObserver implements BusinnessListener.OnMultiResultListenner {
 
         private final BusinnessListener.OnSingleResultListener<ListTransactionVO> listener;

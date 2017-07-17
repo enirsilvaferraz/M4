@@ -146,6 +146,8 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             if (!TextUtils.isEmpty(item.getPaymentType().getColor())) {
                 tvPaymentDate.setTextColor(Color.parseColor(item.getPaymentType().getColor()));
+            } else {
+                tvPaymentDate.setTextColor(R.color.dafault_color);
             }
 
             int itemColor = item.isApproved() ? R.color.item_default : R.color.item_pinned;

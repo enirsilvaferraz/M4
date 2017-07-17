@@ -8,7 +8,7 @@
     <color name="secondary_text">#757575</color>
     <color name="icons">#212121</color>
     <color name="divider">#e7e5e5</color>
-    <color name="divider2">#b7b7b7</color>
+    <color name="dafault_color">#b7b7b7</color>
 
     <color name="item_marcked">#dcdada</color>
     <color name="item_pinned">#c10d0d</color>
