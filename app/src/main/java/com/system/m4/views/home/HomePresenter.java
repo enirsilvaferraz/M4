@@ -17,6 +17,7 @@ import com.system.m4.views.vos.VOItemListInterface;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +78,17 @@ class HomePresenter implements HomeContract.Presenter {
                     listGroup.add(transaction);
                 }
             }
+
+            Collections.sort(listGroup, new Comparator<Transaction>() {
+                @Override
+                public int compare(Transaction o1, Transaction o2) {
+                    if (o1.getPurchaseDate() != null && o2.getPurchaseDate() != null) {
+                        return o1.getPurchaseDate().compareTo(o2.getPurchaseDate()) * -1;
+                    } else {
+                        return o1.compareTo(o2);
+                    }
+                }
+            });
 
             Map<PaymentTypeVO, List<Transaction>> map = new HashMap<>();
 
