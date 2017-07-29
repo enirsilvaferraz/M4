@@ -1,6 +1,5 @@
 package com.system.m4.views.home;
 
-import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
 
@@ -22,15 +21,11 @@ class HomeContract {
 
         void setListTransactions(List<VOItemListInterface> listVo);
 
-        void showTransactionDialog(TagVO vo);
-
         void showTransactionDialog(Transaction vo);
 
         void showError(String message);
 
         void showSuccessMessage(int template, int param);
-
-        void requestTransactionManagerDialog();
 
         void requestDelete(Transaction item);
 
@@ -44,10 +39,6 @@ class HomeContract {
         void init(int relativePosition);
 
         void requestListTransaction();
-
-        void requestTransactionManager();
-
-        void requestTransactionDialog(TagVO vo);
 
         void selectItem(Transaction vo);
 

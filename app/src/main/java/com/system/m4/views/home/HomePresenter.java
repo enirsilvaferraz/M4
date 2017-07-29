@@ -10,7 +10,6 @@ import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
-import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TitleVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -156,16 +155,6 @@ class HomePresenter implements HomeContract.Presenter {
         listVO.add(new SummaryVO("Expected spending", expected));
         listVO.add(new SummaryVO("Total spending", actual + future + expected));
         listVO.add(new SpaceVO());
-    }
-
-    @Override
-    public void requestTransactionManager() {
-        mView.requestTransactionManagerDialog(); // Colocar PLaceholder e remover if list == null do adapter
-    }
-
-    @Override
-    public void requestTransactionDialog(TagVO vo) {
-        mView.showTransactionDialog(vo);
     }
 
     @Override

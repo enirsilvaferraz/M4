@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 /**
  *
  */
-class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_TITLE = 0;
     private static final int TYPE_SUB_TITLE = 1;
@@ -43,7 +43,7 @@ class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<VOItemListInterface> list;
 
-    TransactionAdapter(HomeContract.Presenter presenter) {
+    HomeAdapter(HomeContract.Presenter presenter) {
         this.presenter = presenter;
         this.list = new ArrayList<>();
     }

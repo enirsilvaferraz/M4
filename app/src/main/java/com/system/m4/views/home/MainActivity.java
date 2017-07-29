@@ -10,14 +10,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.views.BaseDialogFragment;
-import com.system.m4.views.filter.FilterTransactionDialog;
+import com.system.m4.views.components.dialogs.list.ListComponentDialog;
+import com.system.m4.views.components.dialogs.list.ListTagPresenter;
+import com.system.m4.views.transaction.TransactionManagerDialog;
+import com.system.m4.views.vos.TagVO;
+import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOInterface;
 
 import java.util.Calendar;
@@ -25,7 +27,7 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainContract.View {
 
     private static final int READ_SMS_PERMISSIONS_REQUEST = 1;
 
@@ -38,15 +40,17 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.home_view_pager)
     ViewPager mViewPager;
 
-    private HomeContract.Presenter presenter;
+    private MainContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+
+        presenter = new MainPresenter(this);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,28 +59,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        mViewPager.setAdapter(new HomePageAdapter(getSupportFragmentManager()));
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                HomeFragment fragment = (HomeFragment) ((HomePageAdapter) mViewPager.getAdapter()).getRegisteredFragment(position);
-                if (fragment != null) {
-                    presenter = fragment.getPresenter();
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
+        mViewPager.setAdapter(new MainPageAdapter(getSupportFragmentManager()));
         mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH));
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
@@ -117,27 +100,33 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
+    public void requestTransactionManagerDialog() {
+
+        ListComponentDialog listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new BaseDialogFragment.DialogListener() {
+            @Override
+            public void onFinish(VOInterface vo) {
+                presenter.requestTransactionDialog((TagVO) vo);
+            }
+        });
+
+        listComponentDialog.setPresenter(new ListTagPresenter(listComponentDialog));
+        listComponentDialog.show(getSupportFragmentManager(), ListComponentDialog.class.getSimpleName());
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_filter) {
-            showFilter();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
+    public void showTransactionDialog(TagVO vo) {
+        showTransactionDialog(new Transaction(vo));
     }
 
-    private void showFilter() {
-        FilterTransactionDialog.newInstance(new BaseDialogFragment.DialogListener() {
+    @Override
+    public void showTransactionDialog(Transaction vo) {
+        TransactionManagerDialog dialogFragment = TransactionManagerDialog.newInstance(vo);
+        dialogFragment.setDialogListener(new BaseDialogFragment.DialogListener() {
             @Override
             public void onFinish(VOInterface vo) {
-                presenter.requestListTransaction();
+                mViewPager.getAdapter().notifyDataSetChanged();
             }
-        }).show(getSupportFragmentManager(), FilterTransactionDialog.class.getSimpleName());
+        });
+        dialogFragment.show(getSupportFragmentManager(), TransactionManagerDialog.class.getSimpleName());
     }
 }

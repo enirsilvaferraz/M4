@@ -11,13 +11,13 @@ import android.view.ViewGroup;
  * Created by eferraz on 16/07/17.
  */
 
-class HomePageAdapter extends FragmentStatePagerAdapter {
+class MainPageAdapter extends FragmentStatePagerAdapter {
 
     private static final int PAGE_MIDDLE = 6;
 
     private SparseArray<Fragment> registeredFragments = new SparseArray<>();
 
-    HomePageAdapter(FragmentManager fm) {
+    MainPageAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -47,6 +47,14 @@ class HomePageAdapter extends FragmentStatePagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         registeredFragments.remove(position);
         super.destroyItem(container, position, object);
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        if (object instanceof HomeFragment) {
+            ((HomeFragment) object).requestListTransaction();
+        }
+        return super.getItemPosition(object);
     }
 
     public Fragment getRegisteredFragment(int position) {
