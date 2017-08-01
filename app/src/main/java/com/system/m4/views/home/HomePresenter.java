@@ -5,6 +5,7 @@ import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.DTOAbs;
+import com.system.m4.views.vos.ChartVO;
 import com.system.m4.views.vos.ListTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.SpaceVO;
@@ -125,6 +126,9 @@ class HomePresenter implements HomeContract.Presenter {
             List<VOItemListInterface> listVO = new ArrayList<>();
 
             configSummary(listVO, listTransaction);
+
+            listVO.add(new ChartVO());
+            listVO.add(new SpaceVO());
 
             if (!listTransaction.isEmpty()) {
                 listVO.add(new SubTitleVO("Transactions"));

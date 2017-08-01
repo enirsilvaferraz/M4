@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.views.components.CustomBarChart;
+import com.system.m4.views.vos.ChartVO;
 import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
@@ -38,6 +40,7 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_TRANSACTION = 2;
     private static final int TYPE_SPACE = 3;
     private static final int TYPE_SUMMARY = 4;
+    private static final int TYPE_CHART = 5;
 
     private final HomeContract.Presenter presenter;
 
@@ -60,6 +63,8 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return new ViewHolderSpace(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_space, parent, false));
         } else if (TYPE_SUMMARY == viewType) {
             return new ViewHolderSummary(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_summary, parent, false));
+        } else if (TYPE_CHART == viewType) {
+            return new ViewHolderChart(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chart, parent, false));
         }
         return null;
     }
@@ -77,6 +82,8 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return TYPE_SPACE;
         } else if (item instanceof SummaryVO) {
             return TYPE_SUMMARY;
+        } else if (item instanceof ChartVO) {
+            return TYPE_CHART;
         }
         return super.getItemViewType(position);
     }
@@ -94,6 +101,8 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((ViewHolderSpace) holder).bind(((SpaceVO) list.get(position)));
         } else if (TYPE_SUMMARY == type) {
             ((ViewHolderSummary) holder).bind(((SummaryVO) list.get(position)));
+        } else if (TYPE_CHART == type) {
+            ((ViewHolderChart) holder).bind(((ChartVO) list.get(position)));
         }
     }
 
@@ -267,6 +276,21 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bind(final SpaceVO item) {
             // DO NOTHING
+        }
+    }
+
+    class ViewHolderChart extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.item_bar_chart)
+        CustomBarChart mChart;
+
+        ViewHolderChart(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void bind(final ChartVO item) {
+            mChart.setDataVO(item);
         }
     }
 }
