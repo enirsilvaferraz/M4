@@ -1,10 +1,13 @@
 package com.system.m4.views.home;
 
+import android.support.annotation.NonNull;
+
 import com.system.m4.businness.HomeBusiness;
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.DTOAbs;
+import com.system.m4.views.vos.ChartItemVO;
 import com.system.m4.views.vos.ChartVO;
 import com.system.m4.views.vos.ListTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
@@ -127,7 +130,7 @@ class HomePresenter implements HomeContract.Presenter {
 
             configSummary(listVO, listTransaction);
 
-            listVO.add(new ChartVO());
+            listVO.add(getChart(listTransaction));
             listVO.add(new SpaceVO());
 
             if (!listTransaction.isEmpty()) {
@@ -146,6 +149,39 @@ class HomePresenter implements HomeContract.Presenter {
             listVO.add(1, new SpaceVO());
             mView.setListTransactions(listVO);
         }
+    }
+
+    @NonNull
+    private ChartVO getChart(List<Transaction> transactions) {
+
+        List<ChartItemVO> chartItems = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+
+            if (transaction.getKey() == null) {
+                continue;
+            }
+
+            ChartItemVO chartItem = new ChartItemVO(transaction.getTag().getName(), transaction.getPrice().floatValue());
+
+            if (chartItems.contains(chartItem)) {
+                ChartItemVO item = chartItems.get(chartItems.indexOf(chartItem));
+                item.setValue(item.getValue() + transaction.getPrice().floatValue());
+            } else {
+                chartItems.add(chartItem);
+            }
+        }
+
+        Collections.sort(chartItems, new Comparator<ChartItemVO>() {
+            @Override
+            public int compare(ChartItemVO o1, ChartItemVO o2) {
+                return Float.valueOf(o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+
+        ChartVO chart = new ChartVO();
+        chart.setItems(chartItems.subList(0, Math.min(5, chartItems.size())));
+
+        return chart;
     }
 
     private void configSummary(List<VOItemListInterface> listVO, List<Transaction> listTransaction) {

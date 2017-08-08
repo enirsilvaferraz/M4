@@ -22,8 +22,6 @@ import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOInterface;
 
-import java.util.Calendar;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -60,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         });
 
         mViewPager.setAdapter(new MainPageAdapter(getSupportFragmentManager()));
-        mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH));
+        mViewPager.setCurrentItem(MainPageAdapter.PAGE_MIDDLE);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
             getPermissionToReadSMS();

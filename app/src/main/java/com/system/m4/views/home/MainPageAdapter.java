@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 class MainPageAdapter extends FragmentStatePagerAdapter {
 
-    private static final int PAGE_MIDDLE = 6;
+    public static final int PAGE_MIDDLE = 6;
 
     private SparseArray<Fragment> registeredFragments = new SparseArray<>();
 

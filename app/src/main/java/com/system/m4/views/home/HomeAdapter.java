@@ -35,12 +35,12 @@ import butterknife.ButterKnife;
  */
 class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int TYPE_TITLE = 0;
-    private static final int TYPE_SUB_TITLE = 1;
-    private static final int TYPE_TRANSACTION = 2;
-    private static final int TYPE_SPACE = 3;
-    private static final int TYPE_SUMMARY = 4;
-    private static final int TYPE_CHART = 5;
+    private static final int TYPE_TITLE = 1;
+    private static final int TYPE_SUB_TITLE = 2;
+    private static final int TYPE_TRANSACTION = 3;
+    private static final int TYPE_SPACE = 4;
+    private static final int TYPE_SUMMARY = 5;
+    private static final int TYPE_CHART = 6;
 
     private final HomeContract.Presenter presenter;
 
@@ -290,7 +290,7 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bind(final ChartVO item) {
-            mChart.setDataVO(item);
+            mChart.bindView(item.getItems());
         }
     }
 }

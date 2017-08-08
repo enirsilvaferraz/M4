@@ -13,7 +13,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.system.m4.views.vos.ChartVO;
+import com.system.m4.views.vos.ChartItemVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +24,12 @@ import java.util.List;
 
 public class CustomBarChart extends BarChart {
 
+    private List<ChartItemVO> mItems;
+
     public CustomBarChart(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         createView();
-        bindView();
+        //bindView();
     }
 
     private void createView() {
@@ -53,14 +55,16 @@ public class CustomBarChart extends BarChart {
 
     }
 
-    private void bindView() {
+    public void bindView(List<ChartItemVO> items) {
+
+        this.mItems = items;
 
         List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(1, new float[]{1}));
-        entries.add(new BarEntry(2, new float[]{2}));
-        entries.add(new BarEntry(3, new float[]{3}));
-        entries.add(new BarEntry(4, new float[]{2}));
-        entries.add(new BarEntry(5, new float[]{1}));
+
+        for (int index = 0; index < items.size(); index++) {
+            float[] vals = {items.get(index).getValue()};
+            entries.add(new BarEntry(index, vals));
+        }
 
         BarDataSet dataSet = new BarDataSet(entries, "2017");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
@@ -78,15 +82,11 @@ public class CustomBarChart extends BarChart {
 
     }
 
-    public void setDataVO(ChartVO item) {
-
-    }
-
     private class DayAxisValueFormatter implements IAxisValueFormatter {
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            return "F: " + value;
+            return mItems.get(((int) value)).getTitle();
         }
     }
 }
