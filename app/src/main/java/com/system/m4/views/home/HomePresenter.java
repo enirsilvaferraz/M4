@@ -36,7 +36,7 @@ class HomePresenter implements HomeContract.Presenter {
 
     private HomeContract.View mView;
 
-    private Calendar instance;
+    private Calendar date;
 
     HomePresenter(HomeContract.View view) {
         this.mView = view;
@@ -45,14 +45,14 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void init(int relativePosition) {
 
-        instance = Calendar.getInstance();
-        instance.add(Calendar.MONTH, relativePosition);
+        date = Calendar.getInstance();
+        date.add(Calendar.MONTH, relativePosition);
     }
 
     @Override
     public void requestListTransaction() {
 
-        HomeBusiness.findTransactions(instance.get(Calendar.YEAR), instance.get(Calendar.MONTH), new BusinnessListener.OnSingleResultListener<ListTransactionVO>() {
+        HomeBusiness.findTransactions(date.get(Calendar.YEAR), date.get(Calendar.MONTH), new BusinnessListener.OnSingleResultListener<ListTransactionVO>() {
 
             @Override
             public void onSuccess(ListTransactionVO item) {
@@ -149,7 +149,7 @@ class HomePresenter implements HomeContract.Presenter {
                 listVO.add(new SpaceVO());
             }
 
-            listVO.add(0, new TitleVO(JavaUtils.DateUtil.format(instance.getTime(), JavaUtils.DateUtil.MMMM_DE_YYYY)));
+            listVO.add(0, new TitleVO(JavaUtils.DateUtil.format(date.getTime(), JavaUtils.DateUtil.MMMM_DE_YYYY)));
             listVO.add(1, new SpaceVO());
             mView.setListTransactions(listVO);
         }

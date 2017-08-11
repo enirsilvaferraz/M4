@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -38,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @BindView(R.id.home_view_pager)
     ViewPager mViewPager;
 
+    @BindView(R.id.main_collapsingToolbar)
+    CollapsingToolbarLayout mCollapsingToolbar;
+
     private MainContract.Presenter presenter;
 
     @Override
@@ -59,6 +63,19 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
         mViewPager.setAdapter(new MainPageAdapter(getSupportFragmentManager()));
         mViewPager.setCurrentItem(MainPageAdapter.PAGE_MIDDLE);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {/* DO NOTHING */}
+
+            @Override
+            public void onPageSelected(int position) {
+                presenter.configureTitle(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {/* DO NOTHING */}
+        });
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
             getPermissionToReadSMS();
@@ -126,5 +143,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             }
         });
         dialogFragment.show(getSupportFragmentManager(), TransactionManagerDialog.class.getSimpleName());
+    }
+
+    public void setMainTitle(String title){
+        mCollapsingToolbar.setTitle(title);
     }
 }

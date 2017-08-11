@@ -17,6 +17,8 @@ public interface MainContract {
         void showTransactionDialog(TagVO vo);
 
         void showTransactionDialog(Transaction vo);
+
+        void setMainTitle(String title);
     }
 
     interface Presenter {
@@ -25,5 +27,6 @@ public interface MainContract {
 
         void requestTransactionDialog(TagVO vo);
 
+        void configureTitle(int position);
     }
 }
