@@ -47,7 +47,7 @@ public class CustomBarChart extends BarChart {
         xAxis.setGranularity(1f);
         xAxis.setLabelCount(7);
         xAxis.setValueFormatter(new DayAxisValueFormatter());
-        xAxis.setLabelRotationAngle(18);
+        xAxis.setLabelRotationAngle(25);
 
         //getAxisLeft().setEnabled(false);
         getAxisRight().setEnabled(false);
@@ -88,8 +88,8 @@ public class CustomBarChart extends BarChart {
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
             String title = mItems.get(((int) value)).getTitle();
-            if (title.length() >= 10){
-                return title.substring(0, 7) + "...";
+            if (title.length() >= 9){
+                return title.substring(0, 6) + "...";
             }
             return title;
         }

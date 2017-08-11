@@ -183,7 +183,7 @@ class HomePresenter implements HomeContract.Presenter {
         });
 
         ChartVO chart = new ChartVO();
-        chart.setItems(chartItems.subList(0, Math.min(8, chartItems.size())));
+        chart.setItems(chartItems.subList(0, Math.min(10, chartItems.size())));
 
         return chart;
     }
