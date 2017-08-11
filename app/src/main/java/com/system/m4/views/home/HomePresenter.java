@@ -14,6 +14,7 @@ import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
+import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.TitleVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -114,6 +115,9 @@ class HomePresenter implements HomeContract.Presenter {
                 Transaction transaction = new Transaction();
                 transaction.setPaymentType(key);
 
+                transaction.setTag(new TagVO());
+                transaction.getTag().setName(key.getName());
+
                 for (Transaction itemList : map.get(key)) {
                     Double price = transaction.getPrice() != null ? transaction.getPrice() : 0D;
                     transaction.setPrice(price + itemList.getPrice());
@@ -174,12 +178,12 @@ class HomePresenter implements HomeContract.Presenter {
         Collections.sort(chartItems, new Comparator<ChartItemVO>() {
             @Override
             public int compare(ChartItemVO o1, ChartItemVO o2) {
-                return Float.valueOf(o1.getValue()).compareTo(o2.getValue());
+                return Float.valueOf(o1.getValue()).compareTo(o2.getValue()) *-1;
             }
         });
 
         ChartVO chart = new ChartVO();
-        chart.setItems(chartItems.subList(0, Math.min(5, chartItems.size())));
+        chart.setItems(chartItems.subList(0, Math.min(8, chartItems.size())));
 
         return chart;
     }
