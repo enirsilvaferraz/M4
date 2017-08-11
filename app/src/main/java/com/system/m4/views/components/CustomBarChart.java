@@ -29,29 +29,22 @@ public class CustomBarChart extends BarChart {
     public CustomBarChart(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         createView();
-        //bindView();
     }
 
     private void createView() {
 
-        setDrawBarShadow(false);
         setDrawValueAboveBar(true);
         getDescription().setEnabled(false);
-        setMaxVisibleValueCount(5);
         setDoubleTapToZoomEnabled(false);
-        setDrawGridBackground(false);
 
         XAxis xAxis = getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f);
-        xAxis.setLabelCount(7);
+        xAxis.setLabelCount(10);
         xAxis.setValueFormatter(new DayAxisValueFormatter());
         xAxis.setLabelRotationAngle(25);
 
-        //getAxisLeft().setEnabled(false);
         getAxisRight().setEnabled(false);
-
         getLegend().setEnabled(false);
 
     }
@@ -67,7 +60,7 @@ public class CustomBarChart extends BarChart {
             entries.add(new BarEntry(index, vals));
         }
 
-        BarDataSet dataSet = new BarDataSet(entries, "2017");
+        BarDataSet dataSet = new BarDataSet(entries, "");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
 
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
