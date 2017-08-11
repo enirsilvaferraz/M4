@@ -8,13 +8,14 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="192dp"
+        android:layout_height="220dp"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/main_collapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:expandedTitleMarginBottom="100dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <android.support.v7.widget.Toolbar
@@ -28,10 +29,10 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
-        app:behavior_overlapTop="64dp"
         android:id="@+id/home_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:behavior_overlapTop="80dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton

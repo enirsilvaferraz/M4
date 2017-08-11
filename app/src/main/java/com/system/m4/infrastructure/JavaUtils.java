@@ -123,7 +123,7 @@ public final class JavaUtils {
             if (date == null) {
                 return null;
             }
-            final String format = new SimpleDateFormat(template, Locale.getDefault()).format(date);
+            final String format = new SimpleDateFormat(template, Locale.ENGLISH).format(date);
             return format.substring(0, 1).toUpperCase() + format.substring(1);
         }
 

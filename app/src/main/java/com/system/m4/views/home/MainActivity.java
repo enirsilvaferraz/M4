@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void requestTransactionManagerDialog() {
-
         ListComponentDialog listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new BaseDialogFragment.DialogListener() {
             @Override
             public void onFinish(VOInterface vo) {
@@ -145,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         dialogFragment.show(getSupportFragmentManager(), TransactionManagerDialog.class.getSimpleName());
     }
 
-    public void setMainTitle(String title){
+    public void setMainTitle(String title) {
         mCollapsingToolbar.setTitle(title);
     }
 }

@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.system.m4.businness.HomeBusiness;
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
-import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.views.vos.ChartItemVO;
 import com.system.m4.views.vos.ChartVO;
@@ -15,7 +14,6 @@ import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
 import com.system.m4.views.vos.TagVO;
-import com.system.m4.views.vos.TitleVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
 
@@ -149,8 +147,8 @@ class HomePresenter implements HomeContract.Presenter {
                 listVO.add(new SpaceVO());
             }
 
-            listVO.add(0, new TitleVO(JavaUtils.DateUtil.format(date.getTime(), JavaUtils.DateUtil.MMMM_DE_YYYY)));
-            listVO.add(1, new SpaceVO());
+            //listVO.add(0, new TitleVO(JavaUtils.DateUtil.format(date.getTime(), JavaUtils.DateUtil.MMMM_DE_YYYY)));
+            //listVO.add(1, new SpaceVO());
             mView.setListTransactions(listVO);
         }
     }

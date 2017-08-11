@@ -15,7 +15,7 @@ public class MainPresenter implements MainContract.Presenter {
 
     public MainPresenter(MainContract.View mView) {
         this.mView = mView;
-        configureTitle(1);
+        configureTitle(MainPageAdapter.PAGE_MIDDLE);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void configureTitle(int position) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, position - MainPageAdapter.PAGE_MIDDLE);
+        calendar.set(Calendar.MONTH, position+1);
         mView.setMainTitle(JavaUtils.DateUtil.format(calendar.getTime(), JavaUtils.DateUtil.MMMM_DE_YYYY));
     }
 
