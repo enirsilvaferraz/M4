@@ -132,8 +132,11 @@ class HomePresenter implements HomeContract.Presenter {
 
             configSummary(listVO, listTransaction);
 
-            listVO.add(getChart(listTransaction));
-            listVO.add(new SpaceVO());
+            ChartVO chartVO = getChart(listTransaction);
+            if (!chartVO.getItems().isEmpty()) {
+                listVO.add(chartVO);
+                listVO.add(new SpaceVO());
+            }
 
             if (!listTransaction.isEmpty()) {
                 listVO.add(new SubTitleVO("Transactions"));
@@ -147,8 +150,6 @@ class HomePresenter implements HomeContract.Presenter {
                 listVO.add(new SpaceVO());
             }
 
-            //listVO.add(0, new TitleVO(JavaUtils.DateUtil.format(date.getTime(), JavaUtils.DateUtil.MMMM_DE_YYYY)));
-            //listVO.add(1, new SpaceVO());
             mView.setListTransactions(listVO);
         }
     }
@@ -159,7 +160,7 @@ class HomePresenter implements HomeContract.Presenter {
         List<ChartItemVO> chartItems = new ArrayList<>();
         for (Transaction transaction : transactions) {
 
-            if (transaction.getKey() == null) {
+            if (transaction.getKey() == null || !transaction.isApproved() || transaction.getPaymentDate().compareTo(Calendar.getInstance().getTime()) > 0) {
                 continue;
             }
 

@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
         mViewPager.setAdapter(new MainPageAdapter(getSupportFragmentManager()));
         mViewPager.setCurrentItem(MainPageAdapter.PAGE_MIDDLE);
+        //mViewPager.setOffscreenPageLimit(MainPageAdapter.PAGE_MIDDLE * 2);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
