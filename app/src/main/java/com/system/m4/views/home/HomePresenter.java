@@ -132,7 +132,7 @@ class HomePresenter implements HomeContract.Presenter {
 
             configSummary(listVO, listTransaction);
 
-            ChartVO chartVO = getChart(listTransaction);
+            ChartVO chartVO = getChart(item.getTransactions());
             if (!chartVO.getItems().isEmpty()) {
                 listVO.add(chartVO);
                 listVO.add(new SpaceVO());
