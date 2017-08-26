@@ -62,7 +62,7 @@ public final class JavaUtils {
 
         public static Date parse(String date, String template) {
             try {
-                return new SimpleDateFormat(template, Locale.getDefault()).parse(date);
+                return new SimpleDateFormat(template, Locale.ENGLISH).parse(date);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -164,7 +164,7 @@ public final class JavaUtils {
             }
 
             try {
-                final NumberFormat format = NumberFormat.getNumberInstance(Locale.getDefault());
+                final NumberFormat format = NumberFormat.getNumberInstance(Locale.ENGLISH);
                 if (format instanceof DecimalFormat) {
                     ((DecimalFormat) format).setParseBigDecimal(true);
                 }
@@ -177,7 +177,7 @@ public final class JavaUtils {
 
         public static String currencyFormat(Double value) {
             if (value != null) {
-                final NumberFormat instance = NumberFormat.getInstance(Locale.getDefault());
+                final NumberFormat instance = NumberFormat.getInstance(Locale.ENGLISH);
                 instance.setMinimumFractionDigits(2);
                 instance.setMinimumIntegerDigits(1);
                 return "R$ " + instance.format(value);
@@ -185,7 +185,7 @@ public final class JavaUtils {
         }
 
         public static String percentFormat(Double percentValue) {
-            final NumberFormat instance = NumberFormat.getInstance(Locale.getDefault());
+            final NumberFormat instance = NumberFormat.getInstance(Locale.ENGLISH);
             instance.setMinimumFractionDigits(1);
             instance.setMinimumIntegerDigits(1);
             instance.setMaximumFractionDigits(2);
