@@ -9,19 +9,22 @@ import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
  */
 class TagBusiness {
 
-    fun save(model: DataTag, listener: PersistenceListener<DataTag>) {
-        TagRepository().save(model, listener)
-    }
+    companion object {
 
-    fun update(model: DataTag, listener: PersistenceListener<DataTag>) {
-        TagRepository().update(model, listener)
-    }
+        fun save(model: DataTag, listener: PersistenceListener<DataTag>) {
+            TagRepository().save(model, listener)
+        }
 
-    fun delete(model: DataTag, listener: PersistenceListener<DataTag>) {
-        TagRepository().delete(model, listener)
-    }
+        fun update(model: DataTag, listener: PersistenceListener<DataTag>) {
+            TagRepository().update(model, listener)
+        }
 
-    fun findAll(listener: MultResultListener<DataTag>) {
-        TagRepository().findAll("name", listener)
+        fun delete(model: DataTag, listener: PersistenceListener<DataTag>) {
+            TagRepository().delete(model, listener)
+        }
+
+        fun findAll(listener: MultResultListener<DataTag>) {
+            TagRepository().findAll("name", listener)
+        }
     }
 }

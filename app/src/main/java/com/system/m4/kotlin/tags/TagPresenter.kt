@@ -17,7 +17,7 @@ class TagPresenter(private val view: TagContract.View) {
     private fun findAllTags() {
 
         view.showLoading()
-        TagBusiness().findAll(object : MultResultListener<DataTag> {
+        TagBusiness.findAll(object : MultResultListener<DataTag> {
 
             override fun onSuccess(list: ArrayList<DataTag>) {
                 view.loadData(list)
@@ -36,7 +36,7 @@ class TagPresenter(private val view: TagContract.View) {
         if (model.key.isNullOrBlank()) {
 
             view.showLoading()
-            TagBusiness().save(model, object : PersistenceListener<DataTag> {
+            TagBusiness.save(model, object : PersistenceListener<DataTag> {
 
                 override fun onSuccess(model: DataTag) {
                     view.addData(model)
@@ -51,7 +51,7 @@ class TagPresenter(private val view: TagContract.View) {
         } else {
 
             view.showLoading()
-            TagBusiness().update(model, object : PersistenceListener<DataTag> {
+            TagBusiness.update(model, object : PersistenceListener<DataTag> {
 
                 override fun onSuccess(model: DataTag) {
                     view.updateData(model)
@@ -69,7 +69,7 @@ class TagPresenter(private val view: TagContract.View) {
     fun delete(model: DataTag) {
 
         view.showLoading()
-        TagBusiness().delete(model, object : PersistenceListener<DataTag> {
+        TagBusiness.delete(model, object : PersistenceListener<DataTag> {
 
             override fun onSuccess(model: DataTag) {
                 view.removeData(model)
