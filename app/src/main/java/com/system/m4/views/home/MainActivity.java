@@ -15,9 +15,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.system.m4.R;
+import com.system.m4.kotlin.tags.TagListDialog;
 import com.system.m4.views.BaseDialogFragment;
-import com.system.m4.views.components.dialogs.list.ListComponentDialog;
-import com.system.m4.views.components.dialogs.list.ListTagPresenter;
 import com.system.m4.views.transaction.TransactionManagerDialog;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
@@ -117,15 +116,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void requestTransactionManagerDialog() {
-        ListComponentDialog listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new BaseDialogFragment.DialogListener() {
-            @Override
-            public void onFinish(VOInterface vo) {
-                presenter.requestTransactionDialog((TagVO) vo);
-            }
-        });
+//        ListComponentDialog listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new BaseDialogFragment.DialogListener() {
+//            @Override
+//            public void onFinish(VOInterface vo) {
+//                presenter.requestTransactionDialog((TagVO) vo);
+//            }
+//        });
+//
+//        listComponentDialog.setPresenter(new ListTagPresenter(listComponentDialog));
+//        listComponentDialog.show(getSupportFragmentManager(), ListComponentDialog.class.getSimpleName());
 
-        listComponentDialog.setPresenter(new ListTagPresenter(listComponentDialog));
-        listComponentDialog.show(getSupportFragmentManager(), ListComponentDialog.class.getSimpleName());
+        TagListDialog.Companion.instance().show(getSupportFragmentManager(), TagListDialog.class.getSimpleName());
     }
 
     @Override

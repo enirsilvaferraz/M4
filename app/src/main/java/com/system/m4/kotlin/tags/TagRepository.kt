@@ -12,7 +12,7 @@ import com.system.m4.kotlin.infrastructure.utils.KotlinUtils
  */
 class TagRepository {
 
-    val mFireRef = FirebaseDatabase.getInstance().getReference(" ${BuildConfig.FLAVOR}/${DataTag::class.simpleName}")
+    val mFireRef = FirebaseDatabase.getInstance().getReference("${BuildConfig.FLAVOR}/Tag")
 
     fun save(model: DataTag, listener: PersistenceListener<DataTag>) {
 

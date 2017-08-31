@@ -8,10 +8,14 @@ import java.util.*
  * Created by enirs on 30/08/2017.
  * Presenter
  */
-class TagPresenter(private val view: TagContract.View) {
+class TagPresenter(private val view: TagContract.View): TagContract.Presenter {
 
-    fun init() {
+    override fun init() {
         findAllTags()
+    }
+
+    override fun selectItem(model: DataTag) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private fun findAllTags() {
@@ -29,6 +33,10 @@ class TagPresenter(private val view: TagContract.View) {
                 view.stopLoading()
             }
         })
+    }
+
+    fun edit(model: DataTag) {
+        view.openDialogManager(model)
     }
 
     fun save(model: DataTag) {

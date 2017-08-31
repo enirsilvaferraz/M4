@@ -4,6 +4,7 @@ import java.util.*
 
 /**
  * Created by enirs on 30/08/2017.
+ * Contract
  */
 interface TagContract {
 
@@ -15,9 +16,11 @@ interface TagContract {
         fun addData(model: DataTag)
         fun updateData(model: DataTag)
         fun removeData(model: DataTag)
+        fun openDialogManager(model: DataTag)
     }
 
     interface Presenter{
-
+        fun init()
+        fun selectItem(model: DataTag)
     }
 }
