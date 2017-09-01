@@ -8,21 +8,20 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.ProgressBar
 import com.system.m4.R
-import com.system.m4.views.components.DialogToolbar
 import java.util.*
 
 /**
  * Created by enirs on 30/08/2017.
  * Activity from Tag
  */
-class TagListDialog : DialogFragment(), TagContract.View {
+class TagListDialog : DialogFragment(), TagListContract.View {
 
     private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mToolbar: DialogToolbar
+    private lateinit var mProgress: ProgressBar
 
-    lateinit var mPresenter: TagContract.Presenter
+    lateinit var mPresenter: TagListContract.Presenter
 
     companion object {
         fun instance(): TagListDialog {
@@ -40,15 +39,14 @@ class TagListDialog : DialogFragment(), TagContract.View {
         mRecyclerView = view?.findViewById(R.id.dialog_list_recycler) as RecyclerView
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
         mRecyclerView.adapter = TagAdapter(object : TagAdapter.OnClickListener {
-            override fun onSelectItem(model: DataTag) {
+            override fun onSelectItem(model: TagModel) {
                 mPresenter.selectItem(model)
             }
         })
 
-        mToolbar = view.findViewById(R.id.dialog_toolbar_title) as DialogToolbar
-        mToolbar.setTitle(R.string.transaction_tag)
+        mProgress = view.findViewById(R.id.tag_dialog_progress) as ProgressBar
 
-        mPresenter = TagPresenter(this)
+        mPresenter = TagListPresenter(this)
         mPresenter.init()
     }
 
@@ -57,30 +55,30 @@ class TagListDialog : DialogFragment(), TagContract.View {
     }
 
     override fun showLoading() {
-        Toast.makeText(context, "Loading...", Toast.LENGTH_SHORT).show()
+        mProgress.visibility = View.VISIBLE
     }
 
     override fun stopLoading() {
-        Toast.makeText(context, "Stop Loading...", Toast.LENGTH_SHORT).show()
+        mProgress.visibility = View.GONE
     }
 
-    override fun loadData(list: ArrayList<DataTag>) {
+    override fun loadData(list: ArrayList<TagModel>) {
         (mRecyclerView.adapter as TagAdapter).updateList(list)
     }
 
-    override fun addData(model: DataTag) {
+    override fun addData(model: TagModel) {
         (mRecyclerView.adapter as TagAdapter).addItem(model)
     }
 
-    override fun updateData(model: DataTag) {
+    override fun updateData(model: TagModel) {
         (mRecyclerView.adapter as TagAdapter).updateItem(model)
     }
 
-    override fun removeData(model: DataTag) {
+    override fun removeData(model: TagModel) {
         (mRecyclerView.adapter as TagAdapter).deleteItem(model)
     }
 
-    override fun openDialogManager(model: DataTag) {
+    override fun openDialogManager(model: TagModel) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

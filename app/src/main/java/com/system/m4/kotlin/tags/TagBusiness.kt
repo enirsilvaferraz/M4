@@ -11,19 +11,19 @@ class TagBusiness {
 
     companion object {
 
-        fun save(model: DataTag, listener: PersistenceListener<DataTag>) {
+        fun save(model: TagModel, listener: PersistenceListener<TagModel>) {
             TagRepository().save(model, listener)
         }
 
-        fun update(model: DataTag, listener: PersistenceListener<DataTag>) {
+        fun update(model: TagModel, listener: PersistenceListener<TagModel>) {
             TagRepository().update(model, listener)
         }
 
-        fun delete(model: DataTag, listener: PersistenceListener<DataTag>) {
+        fun delete(model: TagModel, listener: PersistenceListener<TagModel>) {
             TagRepository().delete(model, listener)
         }
 
-        fun findAll(listener: MultResultListener<DataTag>) {
+        fun findAll(listener: MultResultListener<TagModel>) {
             TagRepository().findAll("name", listener)
         }
     }

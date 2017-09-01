@@ -14,7 +14,7 @@ class TagRepository {
 
     val mFireRef = FirebaseDatabase.getInstance().getReference("${BuildConfig.FLAVOR}/Tag")
 
-    fun save(model: DataTag, listener: PersistenceListener<DataTag>) {
+    fun save(model: TagModel, listener: PersistenceListener<TagModel>) {
 
         val push = mFireRef.push()
         model.key = push.key
@@ -29,7 +29,7 @@ class TagRepository {
         })
     }
 
-    fun update(model: DataTag, listener: PersistenceListener<DataTag>) {
+    fun update(model: TagModel, listener: PersistenceListener<TagModel>) {
 
         mFireRef.updateChildren(KotlinUtils().modelToMap(model), object : DatabaseReference.CompletionListener {
             override fun onComplete(error: DatabaseError?, p1: DatabaseReference?) {
@@ -42,7 +42,7 @@ class TagRepository {
         })
     }
 
-    fun delete(model: DataTag, listener: PersistenceListener<DataTag>) {
+    fun delete(model: TagModel, listener: PersistenceListener<TagModel>) {
 
         mFireRef.child(model.key).removeValue(object : DatabaseReference.CompletionListener {
             override fun onComplete(error: DatabaseError?, p1: DatabaseReference?) {
@@ -55,14 +55,14 @@ class TagRepository {
         })
     }
 
-    fun findAll(orderBy: String = "key", listener: MultResultListener<DataTag>) {
+    fun findAll(orderBy: String = "key", listener: MultResultListener<TagModel>) {
 
         mFireRef.orderByChild(orderBy).addListenerForSingleValueEvent(object : ValueEventListener {
 
             override fun onDataChange(p0: DataSnapshot?) {
-                val resultList = arrayListOf<DataTag>()
+                val resultList = arrayListOf<TagModel>()
                 p0?.children?.mapTo(resultList) {
-                    it.getValue(DataTag::class.java)
+                    it.getValue(TagModel::class.java)
                 }
                 listener.onSuccess(resultList)
             }

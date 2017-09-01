@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
  * Created by enirs on 30/08/2017.
  * Data Tag
  */
-class DataTag {
+class TagModel {
 
     @SerializedName("key")
     var key: String? = null

@@ -8,22 +8,22 @@ import java.util.*
  * Created by enirs on 30/08/2017.
  * Presenter
  */
-class TagPresenter(private val view: TagContract.View): TagContract.Presenter {
+class TagListPresenter(private val view: TagListContract.View) : TagListContract.Presenter {
 
     override fun init() {
         findAllTags()
     }
 
-    override fun selectItem(model: DataTag) {
+    override fun selectItem(model: TagModel) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private fun findAllTags() {
 
         view.showLoading()
-        TagBusiness.findAll(object : MultResultListener<DataTag> {
+        TagBusiness.findAll(object : MultResultListener<TagModel> {
 
-            override fun onSuccess(list: ArrayList<DataTag>) {
+            override fun onSuccess(list: ArrayList<TagModel>) {
                 view.loadData(list)
                 view.stopLoading()
             }
@@ -35,18 +35,18 @@ class TagPresenter(private val view: TagContract.View): TagContract.Presenter {
         })
     }
 
-    fun edit(model: DataTag) {
+    fun edit(model: TagModel) {
         view.openDialogManager(model)
     }
 
-    fun save(model: DataTag) {
+    fun save(model: TagModel) {
 
         if (model.key.isNullOrBlank()) {
 
             view.showLoading()
-            TagBusiness.save(model, object : PersistenceListener<DataTag> {
+            TagBusiness.save(model, object : PersistenceListener<TagModel> {
 
-                override fun onSuccess(model: DataTag) {
+                override fun onSuccess(model: TagModel) {
                     view.addData(model)
                 }
 
@@ -59,9 +59,9 @@ class TagPresenter(private val view: TagContract.View): TagContract.Presenter {
         } else {
 
             view.showLoading()
-            TagBusiness.update(model, object : PersistenceListener<DataTag> {
+            TagBusiness.update(model, object : PersistenceListener<TagModel> {
 
-                override fun onSuccess(model: DataTag) {
+                override fun onSuccess(model: TagModel) {
                     view.updateData(model)
                 }
 
@@ -74,12 +74,12 @@ class TagPresenter(private val view: TagContract.View): TagContract.Presenter {
     }
 
 
-    fun delete(model: DataTag) {
+    fun delete(model: TagModel) {
 
         view.showLoading()
-        TagBusiness.delete(model, object : PersistenceListener<DataTag> {
+        TagBusiness.delete(model, object : PersistenceListener<TagModel> {
 
-            override fun onSuccess(model: DataTag) {
+            override fun onSuccess(model: TagModel) {
                 view.removeData(model)
             }
 

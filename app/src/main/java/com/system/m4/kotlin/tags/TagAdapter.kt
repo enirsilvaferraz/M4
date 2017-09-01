@@ -13,14 +13,14 @@ import com.system.m4.R
  */
 class TagAdapter(val onClick: TagAdapter.OnClickListener) : RecyclerView.Adapter<TagAdapter.ViewHolder>() {
 
-    private val mList: ArrayList<DataTag>
+    private val mList: ArrayList<TagModel>
 
     init {
         mList = arrayListOf()
     }
 
     override fun onBindViewHolder(holder: TagAdapter.ViewHolder?, position: Int) {
-        holder?.mTvName?.setText(mList.get(position).name)
+        holder?.mTvName?.text = mList.get(position).name
         holder?.view!!.setOnClickListener({ onClick.onSelectItem(mList.get(position)) })
     }
 
@@ -32,25 +32,25 @@ class TagAdapter(val onClick: TagAdapter.OnClickListener) : RecyclerView.Adapter
         return mList.size
     }
 
-    fun updateList(list: ArrayList<DataTag>) {
+    fun updateList(list: ArrayList<TagModel>) {
         mList.clear()
         mList.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun addItem(model: DataTag) {
+    fun addItem(model: TagModel) {
         mList.add(model)
         mList.sortBy { it.name }
         notifyItemInserted(mList.indexOf(model))
     }
 
-    fun updateItem(model: DataTag) {
+    fun updateItem(model: TagModel) {
         mList.set(mList.indexOf(model), model)
         mList.sortBy { it.name }
         notifyItemChanged(mList.indexOf(model))
     }
 
-    fun deleteItem(model: DataTag) {
+    fun deleteItem(model: TagModel) {
         val indexOf = mList.indexOf(model)
         mList.remove(model)
         notifyItemRemoved(indexOf)
@@ -61,6 +61,6 @@ class TagAdapter(val onClick: TagAdapter.OnClickListener) : RecyclerView.Adapter
     }
 
     interface OnClickListener {
-        fun onSelectItem(model: DataTag)
+        fun onSelectItem(model: TagModel)
     }
 }
