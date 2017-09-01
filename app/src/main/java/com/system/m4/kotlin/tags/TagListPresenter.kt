@@ -15,7 +15,7 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
     }
 
     override fun selectItem(model: TagModel) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        view.openDialogManager(model)
     }
 
     private fun findAllTags() {
@@ -33,10 +33,6 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
                 view.stopLoading()
             }
         })
-    }
-
-    fun edit(model: TagModel) {
-        view.openDialogManager(model)
     }
 
     fun save(model: TagModel) {
@@ -72,7 +68,6 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
             })
         }
     }
-
 
     fun delete(model: TagModel) {
 
