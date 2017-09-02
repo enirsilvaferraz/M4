@@ -20,7 +20,9 @@ class TagModel() : Parcelable {
         this.name = name
     }
 
-    constructor(source: Parcel) : this()
+    constructor(source: Parcel) : this(){
+        source.toString()
+    }
 
     override fun describeContents() = 0
 

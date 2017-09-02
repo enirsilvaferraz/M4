@@ -111,5 +111,6 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
 
     override fun select(model: TagModel) {
         mListener.onSelect(model)
+        dismiss()
     }
 }
