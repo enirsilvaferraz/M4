@@ -184,6 +184,15 @@ public final class JavaUtils {
             } else return null;
         }
 
+        public static String valueFormat(Double value) {
+            if (value != null) {
+                final NumberFormat instance = NumberFormat.getInstance(Locale.ENGLISH);
+                instance.setMaximumFractionDigits(0);
+                instance.setMinimumIntegerDigits(1);
+                return instance.format(value);
+            } else return null;
+        }
+
         public static String percentFormat(Double percentValue) {
             final NumberFormat instance = NumberFormat.getInstance(Locale.ENGLISH);
             instance.setMinimumFractionDigits(1);
