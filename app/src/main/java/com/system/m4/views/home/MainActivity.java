@@ -15,12 +15,16 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.system.m4.R;
+import com.system.m4.kotlin.tags.TagListContract;
 import com.system.m4.kotlin.tags.TagListDialog;
+import com.system.m4.kotlin.tags.TagModel;
 import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.transaction.TransactionManagerDialog;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOInterface;
+
+import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -126,7 +130,15 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 //        listComponentDialog.setPresenter(new ListTagPresenter(listComponentDialog));
 //        listComponentDialog.show(getSupportFragmentManager(), ListComponentDialog.class.getSimpleName());
 
-        TagListDialog.Companion.instance().show(getSupportFragmentManager(), TagListDialog.class.getSimpleName());
+        TagListDialog.Companion.instance(new TagListContract.OnSelectedListener() {
+            @Override
+            public void onSelect(@NotNull TagModel model) {
+                TagVO vo = new TagVO();
+                vo.setKey(model.getKey());
+                vo.setName(model.getName());
+                presenter.requestTransactionDialog(vo);
+            }
+        }).show(getSupportFragmentManager(), TagListDialog.class.getSimpleName());
     }
 
     @Override

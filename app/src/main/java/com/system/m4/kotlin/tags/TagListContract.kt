@@ -14,13 +14,27 @@ interface TagListContract {
         fun stopLoading()
         fun loadData(list: ArrayList<TagModel>)
         fun addData(model: TagModel)
-        fun updateData(model: TagModel)
         fun removeData(model: TagModel)
-        fun openDialogManager(model: TagModel)
+        fun openDialogManager(model: TagModel?)
+        fun select(model: TagModel)
     }
 
-    interface Presenter{
+    interface Presenter {
         fun init()
         fun selectItem(model: TagModel)
+        fun createModel(model: TagModel)
+        fun addItem()
+        fun edit(model: TagModel)
+        fun delete(model: TagModel)
+    }
+
+    interface OnSelectedListener {
+        fun onSelect(model: TagModel)
+    }
+
+    interface OnAdapterClickListener {
+        fun onSelect(model: TagModel)
+        fun onEdit(model: TagModel)
+        fun onDelete(model: TagModel)
     }
 }

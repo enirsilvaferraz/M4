@@ -10,11 +10,17 @@ interface TagManagerContract {
         fun showError(error: String)
         fun showLoading()
         fun stopLoading()
-        fun closeManager(model: TagModel?)
+        fun returnData(model: TagModel?)
+        fun fillFields(model: TagModel)
     }
 
     interface Presenter {
+        fun init(model: TagModel?)
         fun done(name: String)
         fun cancel()
+    }
+
+    interface OnCompleteListener {
+        fun onComplete(model: TagModel)
     }
 }

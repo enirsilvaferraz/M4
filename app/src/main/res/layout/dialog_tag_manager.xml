@@ -19,7 +19,7 @@
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="Tags" />
+                app:title="Tag Manager" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -32,7 +32,7 @@
             android:inputType="textAutoCorrect|textCapSentences"
             android:minWidth="250dp"
             android:textSize="16sp"
-            tools:text="Observações" />
+            tools:text="Nome" />
 
         <com.system.m4.views.components.DialogFooter
             android:id="@+id/base_dialog_container_action"

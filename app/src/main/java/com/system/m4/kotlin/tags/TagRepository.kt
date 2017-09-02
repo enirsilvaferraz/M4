@@ -31,7 +31,7 @@ class TagRepository {
 
     fun update(model: TagModel, listener: PersistenceListener<TagModel>) {
 
-        mFireRef.updateChildren(KotlinUtils().modelToMap(model), object : DatabaseReference.CompletionListener {
+        mFireRef.child(model.key).updateChildren(KotlinUtils().modelToMap(model), object : DatabaseReference.CompletionListener {
             override fun onComplete(error: DatabaseError?, p1: DatabaseReference?) {
                 if (error == null) {
                     listener.onSuccess(model)

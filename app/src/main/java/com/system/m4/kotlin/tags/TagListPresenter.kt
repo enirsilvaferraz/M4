@@ -15,7 +15,7 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
     }
 
     override fun selectItem(model: TagModel) {
-        view.openDialogManager(model)
+        view.select(model)
     }
 
     private fun findAllTags() {
@@ -35,47 +35,14 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
         })
     }
 
-    fun save(model: TagModel) {
-
-        if (model.key.isNullOrBlank()) {
-
-            view.showLoading()
-            TagBusiness.save(model, object : PersistenceListener<TagModel> {
-
-                override fun onSuccess(model: TagModel) {
-                    view.addData(model)
-                }
-
-                override fun onError(error: String) {
-                    view.showError(error)
-                    view.stopLoading()
-                }
-            })
-
-        } else {
-
-            view.showLoading()
-            TagBusiness.update(model, object : PersistenceListener<TagModel> {
-
-                override fun onSuccess(model: TagModel) {
-                    view.updateData(model)
-                }
-
-                override fun onError(error: String) {
-                    view.showError(error)
-                    view.stopLoading()
-                }
-            })
-        }
-    }
-
-    fun delete(model: TagModel) {
+    override fun delete(model: TagModel) {
 
         view.showLoading()
         TagBusiness.delete(model, object : PersistenceListener<TagModel> {
 
             override fun onSuccess(model: TagModel) {
                 view.removeData(model)
+                view.stopLoading()
             }
 
             override fun onError(error: String) {
@@ -83,5 +50,17 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
                 view.stopLoading()
             }
         })
+    }
+
+    override fun createModel(model: TagModel) {
+        view.addData(model)
+    }
+
+    override fun edit(model: TagModel) {
+        view.openDialogManager(model)
+    }
+
+    override fun addItem() {
+        view.openDialogManager(null)
     }
 }

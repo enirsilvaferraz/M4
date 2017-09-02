@@ -1,14 +1,16 @@
 package com.system.m4.kotlin.tags
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import com.system.m4.R
 import java.util.*
 
@@ -16,16 +18,21 @@ import java.util.*
  * Created by enirs on 30/08/2017.
  * Activity from Tag
  */
-class TagListDialog : DialogFragment(), TagListContract.View {
+class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItemClickListener {
 
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mProgress: ProgressBar
+    private lateinit var mToolbar: Toolbar
 
-    lateinit var mPresenter: TagListContract.Presenter
+
+    private lateinit var mListener: TagListContract.OnSelectedListener
+    private lateinit var mPresenter: TagListContract.Presenter
 
     companion object {
-        fun instance(): TagListDialog {
-            return TagListDialog()
+        fun instance(listener: TagListContract.OnSelectedListener): TagListDialog {
+            val dialog = TagListDialog()
+            dialog.mListener = listener
+            return dialog
         }
     }
 
@@ -36,11 +43,24 @@ class TagListDialog : DialogFragment(), TagListContract.View {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mRecyclerView = view?.findViewById(R.id.dialog_list_recycler) as RecyclerView
+        mToolbar = view?.findViewById(R.id.tag_dialog_toolbar) as Toolbar
+        mToolbar.setOnMenuItemClickListener(this)
+        mToolbar.inflateMenu(R.menu.menu_crud_list)
+
+        mRecyclerView = view.findViewById(R.id.dialog_list_recycler) as RecyclerView
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
-        mRecyclerView.adapter = TagAdapter(object : TagAdapter.OnClickListener {
-            override fun onSelectItem(model: TagModel) {
+        mRecyclerView.adapter = TagAdapter(object : TagListContract.OnAdapterClickListener {
+
+            override fun onSelect(model: TagModel) {
                 mPresenter.selectItem(model)
+            }
+
+            override fun onEdit(model: TagModel) {
+                mPresenter.edit(model)
+            }
+
+            override fun onDelete(model: TagModel) {
+                mPresenter.delete(model)
             }
         })
 
@@ -50,8 +70,15 @@ class TagListDialog : DialogFragment(), TagListContract.View {
         mPresenter.init()
     }
 
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        if (item?.itemId!!.equals(R.id.menu_crud_list_add_new)) {
+            mPresenter.addItem()
+        }
+        return true
+    }
+
     override fun showError(error: String) {
-        Snackbar.make(mRecyclerView, error, Snackbar.LENGTH_SHORT).show()
+        Toast.makeText(context, error, Toast.LENGTH_LONG).show()
     }
 
     override fun showLoading() {
@@ -59,7 +86,7 @@ class TagListDialog : DialogFragment(), TagListContract.View {
     }
 
     override fun stopLoading() {
-        mProgress.visibility = View.GONE
+        mProgress.visibility = View.INVISIBLE
     }
 
     override fun loadData(list: ArrayList<TagModel>) {
@@ -67,18 +94,22 @@ class TagListDialog : DialogFragment(), TagListContract.View {
     }
 
     override fun addData(model: TagModel) {
-        (mRecyclerView.adapter as TagAdapter).addItem(model)
-    }
-
-    override fun updateData(model: TagModel) {
-        (mRecyclerView.adapter as TagAdapter).updateItem(model)
+        (mRecyclerView.adapter as TagAdapter).addOrUpdateItem(model)
     }
 
     override fun removeData(model: TagModel) {
         (mRecyclerView.adapter as TagAdapter).deleteItem(model)
     }
 
-    override fun openDialogManager(model: TagModel) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun openDialogManager(model: TagModel?) {
+        TagManagerDialog.instance(model, object : TagManagerContract.OnCompleteListener {
+            override fun onComplete(model: TagModel) {
+                mPresenter.createModel(model)
+            }
+        }).show(fragmentManager, TagManagerDialog.TAG)
+    }
+
+    override fun select(model: TagModel) {
+        mListener.onSelect(model)
     }
 }

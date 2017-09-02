@@ -56,6 +56,16 @@ public class DialogFooter extends LinearLayout {
         this.listener = listener;
     }
 
+    public void showLoading() {
+        mBtnCancel.setVisibility(INVISIBLE);
+        mBtnDone.setVisibility(INVISIBLE);
+    }
+
+    public void hideLoading() {
+        mBtnCancel.setVisibility(VISIBLE);
+        mBtnDone.setVisibility(VISIBLE);
+    }
+
     /**
      * Listenner
      */
