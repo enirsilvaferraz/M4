@@ -1,6 +1,7 @@
 package com.system.m4.views.home;
 
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
@@ -20,6 +21,7 @@ import com.system.m4.views.vos.ChartVO;
 import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
+import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TitleVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -41,6 +43,7 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_SPACE = 4;
     private static final int TYPE_SUMMARY = 5;
     private static final int TYPE_CHART = 6;
+    private static final int TYPE_TAG_SUMMARY = 7;
 
     private final HomeContract.Presenter presenter;
 
@@ -65,6 +68,9 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return new ViewHolderSummary(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_summary, parent, false));
         } else if (TYPE_CHART == viewType) {
             return new ViewHolderChart(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chart, parent, false));
+        } else if (TYPE_TAG_SUMMARY == viewType) {
+            return new ViewHolderTagSummary(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag_summary, parent, false));
+
         }
         return null;
     }
@@ -84,6 +90,8 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return TYPE_SUMMARY;
         } else if (item instanceof ChartVO) {
             return TYPE_CHART;
+        } else if (item instanceof TagSummaryVO) {
+            return TYPE_TAG_SUMMARY;
         }
         return super.getItemViewType(position);
     }
@@ -103,6 +111,8 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((ViewHolderSummary) holder).bind(((SummaryVO) list.get(position)));
         } else if (TYPE_CHART == type) {
             ((ViewHolderChart) holder).bind(((ChartVO) list.get(position)));
+        } else if (TYPE_TAG_SUMMARY == type) {
+            ((ViewHolderTagSummary) holder).bind(((TagSummaryVO) list.get(position)));
         }
     }
 
@@ -156,7 +166,7 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (!TextUtils.isEmpty(item.getPaymentType().getColor())) {
                 tvPaymentDate.setTextColor(Color.parseColor(item.getPaymentType().getColor()));
             } else {
-                tvPaymentDate.setTextColor(R.color.dafault_color);
+                tvPaymentDate.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.dafault_color));
             }
 
             int itemColor = item.isApproved() ? R.color.item_default : R.color.item_pinned;
@@ -265,6 +275,25 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void bind(final SummaryVO item) {
             mLabel.setText(item.getTitle());
             mValue.setText(JavaUtils.NumberUtil.currencyFormat(item.getSummaryValue()));
+        }
+    }
+
+    class ViewHolderTagSummary extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.item_summary_title)
+        TextView mLabel;
+
+        @BindView(R.id.item_summary_value)
+        TextView mValue;
+
+        ViewHolderTagSummary(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void bind(final TagSummaryVO item) {
+            mLabel.setText(item.getName());
+            mValue.setText(JavaUtils.NumberUtil.currencyFormat(item.getValue()));
         }
     }
 
