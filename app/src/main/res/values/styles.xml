@@ -22,7 +22,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AppTheme.Form"></style>
+    <style name="AppTheme.Form" />
 
     <style name="AppTheme.Form.Section">
         <item name="android:paddingBottom">16dp</item>
@@ -33,6 +33,10 @@
         <item name="android:background">@drawable/ripple</item>
     </style>
 
+    <style name="AppTheme.Form.SectionWithMenu" parent="AppTheme.Form.Section">
+        <item name="android:paddingEnd">0dp</item>
+    </style>
+
     <style name="AppTheme.Form.Section.Start" parent="AppTheme.Form.Section">
         <item name="android:paddingEnd">12dp</item>
     </style>
@@ -41,7 +45,7 @@
         <item name="android:paddingStart">12dp</item>
     </style>
 
-    <style name="AppTheme.TextView" parent="Base.TextAppearance.AppCompat.Body1"></style>
+    <style name="AppTheme.TextView" parent="Base.TextAppearance.AppCompat.Body1" />
 
     <style name="AppTheme.Form.TextView.Primary" parent="AppTheme.TextView">
         <item name="android:textColor">@color/primary_text</item>

@@ -13,16 +13,20 @@ import android.widget.Toast;
 import com.system.m4.R;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.kotlin.paymenttype.PaymentTypeListContract;
+import com.system.m4.kotlin.paymenttype.PaymentTypeListDialog;
+import com.system.m4.kotlin.paymenttype.PaymentTypeModel;
 import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.dialogs.NumberComponentDialog;
 import com.system.m4.views.components.dialogs.TextComponentDialog;
 import com.system.m4.views.components.dialogs.list.ListComponentDialog;
-import com.system.m4.views.components.dialogs.list.ListPaymentTypePresenter;
 import com.system.m4.views.components.dialogs.list.ListTagPresenter;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOInterface;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
@@ -127,14 +131,26 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @OnClick(R.id.transaction_manager_action_payment_type)
     public void actionPaymentType() {
-        ListComponentDialog listComponentPaymentTypeDialog = ListComponentDialog.newInstance(R.string.transaction_payment_type, new DialogListener() {
+//        ListComponentDialog listComponentPaymentTypeDialog = ListComponentDialog.newInstance(R.string.transaction_payment_type, new DialogListener() {
+//            @Override
+//            public void onFinish(VOInterface vo) {
+//                TransactionManagerDialog.this.presenter.setPaymentType(((PaymentTypeVO) vo));
+//            }
+//        });
+//        listComponentPaymentTypeDialog.setPresenter(new ListPaymentTypePresenter(listComponentPaymentTypeDialog));
+//        listComponentPaymentTypeDialog.show(getChildFragmentManager());
+
+        PaymentTypeListDialog.Companion.instance(new PaymentTypeListContract.OnSelectedListener() {
             @Override
-            public void onFinish(VOInterface vo) {
-                TransactionManagerDialog.this.presenter.setPaymentType(((PaymentTypeVO) vo));
+            public void onSelect(@NotNull PaymentTypeModel model) {
+                PaymentTypeVO vo = new PaymentTypeVO();
+                vo.setKey(model.getKey());
+                vo.setName(model.getName());
+                vo.setColor(model.getColor());
+                presenter.setPaymentType(vo);
+
             }
-        });
-        listComponentPaymentTypeDialog.setPresenter(new ListPaymentTypePresenter(listComponentPaymentTypeDialog));
-        listComponentPaymentTypeDialog.show(getChildFragmentManager());
+        }).show(getFragmentManager(), PaymentTypeListDialog.class.getSimpleName());
     }
 
     @OnClick(R.id.transaction_manager_action_content)

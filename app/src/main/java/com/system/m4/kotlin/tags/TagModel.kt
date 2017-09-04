@@ -16,10 +16,6 @@ class TagModel() : Parcelable {
     @SerializedName("name")
     var name: String? = null
 
-    constructor(name: String) : this() {
-        this.name = name
-    }
-
     constructor(source: Parcel) : this(){
         source.toString()
     }

@@ -1,4 +1,4 @@
-package com.system.m4.kotlin.tags
+package com.system.m4.kotlin.paymenttype
 
 import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.RecyclerView
@@ -11,35 +11,35 @@ import com.system.m4.R
 
 /**
  * Created by enirs on 30/08/2017.
- * Tag Adapter
+ * PaymentType Adapter
  */
-class TagAdapter(val onClick: TagListContract.OnAdapterClickListener) : RecyclerView.Adapter<TagAdapter.ViewHolder>() {
+class PaymentTypeAdapter(val onClick: PaymentTypeListContract.OnAdapterClickListener) : RecyclerView.Adapter<PaymentTypeAdapter.ViewHolder>() {
 
-    private val mList: ArrayList<TagModel>
+    private val mList: ArrayList<PaymentTypeModel>
 
     init {
         mList = arrayListOf()
     }
 
-    override fun onBindViewHolder(holder: TagAdapter.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: PaymentTypeAdapter.ViewHolder?, position: Int) {
         holder?.bind(mList.get(position), onClick)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TagAdapter.ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.item_tag, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PaymentTypeAdapter.ViewHolder {
+        return ViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.item_paymenttype, parent, false))
     }
 
     override fun getItemCount(): Int {
         return mList.size
     }
 
-    fun updateList(list: ArrayList<TagModel>) {
+    fun updateList(list: ArrayList<PaymentTypeModel>) {
         mList.clear()
         mList.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun addOrUpdateItem(model: TagModel) {
+    fun addOrUpdateItem(model: PaymentTypeModel) {
         if (!mList.contains(model)) {
             mList.add(model)
             mList.sortBy { it.name }
@@ -51,7 +51,7 @@ class TagAdapter(val onClick: TagListContract.OnAdapterClickListener) : Recycler
         }
     }
 
-    fun deleteItem(model: TagModel) {
+    fun deleteItem(model: PaymentTypeModel) {
         val indexOf = mList.indexOf(model)
         mList.remove(model)
         notifyItemRemoved(indexOf)
@@ -61,15 +61,14 @@ class TagAdapter(val onClick: TagListContract.OnAdapterClickListener) : Recycler
 
         val mTvName = view.findViewById(R.id.item_list_dialog_text) as TextView
         val mBtMoreActions = view.findViewById(R.id.item_list_more_actions) as AppCompatImageButton
-        val mContainer = view.findViewById(R.id.list_item_container) as ViewGroup
 
-        fun bind(model: TagModel, listener: TagListContract.OnAdapterClickListener) {
+        fun bind(model: PaymentTypeModel, listener: PaymentTypeListContract.OnAdapterClickListener) {
             mTvName.text = model.name
             mBtMoreActions.setOnClickListener({ showPopupDialog(mBtMoreActions, model, listener) })
-            mContainer.setOnClickListener({ listener.onSelect(model) })
+            view.setOnClickListener({ listener.onSelect(model) })
         }
 
-        private fun showPopupDialog(view: View, model: TagModel, listener: TagListContract.OnAdapterClickListener) {
+        private fun showPopupDialog(view: View, model: PaymentTypeModel, listener: PaymentTypeListContract.OnAdapterClickListener) {
             val popupMenu = PopupMenu(this.itemView.context, view)
             val inflater = popupMenu.menuInflater
             inflater.inflate(R.menu.menu_crud_manager, popupMenu.menu)
