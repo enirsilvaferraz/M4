@@ -12,13 +12,13 @@
         tools:ignore="UselessParent">
 
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/tag_dialog_appbar"
+            android:id="@+id/dialog_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/tag_dialog_toolbar"
+                android:id="@+id/dialog_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="Tags" />
@@ -26,7 +26,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <ProgressBar
-            android:id="@+id/tag_dialog_progress"
+            android:id="@+id/dialog_progress"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

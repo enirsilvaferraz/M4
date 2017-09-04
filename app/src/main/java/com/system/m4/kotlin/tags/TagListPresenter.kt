@@ -10,21 +10,13 @@ import java.util.*
  */
 class TagListPresenter(private val view: TagListContract.View) : TagListContract.Presenter {
 
-    override fun init() {
-        findAllTags()
-    }
-
-    override fun selectItem(model: TagModel) {
-        view.select(model)
-    }
-
-    private fun findAllTags() {
+    override fun load() {
 
         view.showLoading()
         TagBusiness.findAll(object : MultResultListener<TagModel> {
 
             override fun onSuccess(list: ArrayList<TagModel>) {
-                view.loadData(list)
+                view.load(list)
                 view.stopLoading()
             }
 
@@ -33,6 +25,18 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
                 view.stopLoading()
             }
         })
+    }
+
+    override fun select(model: TagModel) {
+        view.select(model)
+    }
+
+    override fun create() {
+        view.openManager(null)
+    }
+
+    override fun edit(model: TagModel) {
+        view.openManager(model)
     }
 
     override fun delete(model: TagModel) {
@@ -41,7 +45,7 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
         TagBusiness.delete(model, object : PersistenceListener<TagModel> {
 
             override fun onSuccess(model: TagModel) {
-                view.removeData(model)
+                view.remove(model)
                 view.stopLoading()
             }
 
@@ -50,17 +54,5 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
                 view.stopLoading()
             }
         })
-    }
-
-    override fun createModel(model: TagModel) {
-        view.addData(model)
-    }
-
-    override fun edit(model: TagModel) {
-        view.openDialogManager(model)
-    }
-
-    override fun addItem() {
-        view.openDialogManager(null)
     }
 }

@@ -23,6 +23,9 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
 
     private lateinit var mListener: TagManagerContract.OnCompleteListener
 
+    /**
+     * STATIC
+     */
     companion object {
         fun instance(model: TagModel?, listener: TagManagerContract.OnCompleteListener): TagManagerDialog {
 
@@ -39,6 +42,9 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
         val TAG: String = "TagManagerDialog"
     }
 
+    /**
+     * LIFECYCLE
+     */
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.dialog_tag_manager, container, false)
     }
@@ -58,7 +64,7 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
             }
         })
 
-        mEtName = view.findViewById(R.id.dialog_tag_description) as EditText
+        mEtName = view.findViewById(R.id.dialog_description) as EditText
 
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 
@@ -66,12 +72,16 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
         mPresenter.init(arguments.getParcelable<TagModel>(TagModel.TAG))
     }
 
+    /**
+     * MVP
+     */
     override fun fillFields(model: TagModel) {
         mEtName.setText(model.name)
     }
 
-    override fun showError(error: String) {
-        Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+    override fun returnData(model: TagModel?) {
+        model?.let { mListener.onComplete(it) }
+        dismiss()
     }
 
     override fun showLoading() {
@@ -82,8 +92,9 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
         mDialogFooter.hideLoading()
     }
 
-    override fun returnData(model: TagModel?) {
-        model?.let { mListener.onComplete(it) }
-        dismiss()
+    override fun showError(error: String) {
+        Toast.makeText(context, error, Toast.LENGTH_LONG).show()
     }
+
+
 }
