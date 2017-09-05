@@ -23,6 +23,15 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <android.support.v7.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/dialog_autocomplete_tag_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:hint="Parent" />
+
         <EditText
             android:id="@+id/dialog_description"
             android:layout_width="match_parent"

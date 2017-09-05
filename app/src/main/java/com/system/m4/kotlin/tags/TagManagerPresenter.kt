@@ -1,5 +1,6 @@
 package com.system.m4.kotlin.tags
 
+import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
 
 /**
@@ -12,7 +13,25 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
 
     override fun init(model: TagModel?) {
         mModel = if (model != null) model else TagModel()
-        view.fillFields(mModel)
+        loadParent();
+    }
+
+    private fun loadParent() {
+
+        view.showLoading()
+        TagBusiness.findAllParent(object : MultResultListener<String> {
+
+            override fun onSuccess(list: ArrayList<String>) {
+                view.configureFields(list)
+                view.fillFields(mModel)
+                view.stopLoading()
+            }
+
+            override fun onError(error: String) {
+                view.showError(error)
+                view.stopLoading()
+            }
+        })
     }
 
     override fun done(name: String) {

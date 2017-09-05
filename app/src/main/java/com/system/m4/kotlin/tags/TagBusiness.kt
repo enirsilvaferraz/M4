@@ -26,5 +26,23 @@ class TagBusiness {
         fun findAll(listener: MultResultListener<TagModel>) {
             TagRepository().findAll("name", listener)
         }
+
+        fun findAllParent(listener: MultResultListener<String>) {
+
+            TagRepository().findAll("name", object : MultResultListener<TagModel>{
+
+                override fun onSuccess(list: ArrayList<TagModel>) {
+                    val arrayList: ArrayList<String> = arrayListOf()
+                    list.mapTo(arrayList) {
+                        it.name!!
+                    }
+                    listener.onSuccess(list = arrayList)
+                }
+
+                override fun onError(error: String) {
+                    listener.onError(error)
+                }
+            })
+        }
     }
 }

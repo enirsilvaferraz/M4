@@ -8,6 +8,7 @@ interface TagManagerContract {
 
     interface View {
         fun fillFields(model: TagModel)
+        fun configureFields(list: ArrayList<String>)
         fun returnData(model: TagModel?)
         fun showError(error: String)
         fun showLoading()
