@@ -16,7 +16,10 @@ class TagModel() : Parcelable {
     @SerializedName("name")
     var name: String? = null
 
-    var children: ArrayList<TagModel>? = null
+    var child: ArrayList<TagModel>? = null
+
+    @SerializedName("children")
+    var children: HashMap<String, TagModel>? = null
 
     constructor(source: Parcel) : this(){
         source.toString()

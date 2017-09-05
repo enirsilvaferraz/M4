@@ -66,8 +66,8 @@ class TagRepository {
                     val valor = it.getValue(TagModel::class.java)
 
                     if (it.child("children").exists()) {
-                        valor.children = arrayListOf()
-                        it.child("children").children.mapTo(valor.children!!) {
+                        valor.child = arrayListOf()
+                        it.child("children").children.mapTo(valor.child!!) {
                             it.getValue(TagModel::class.java)
                         }
                     }
