@@ -13,7 +13,7 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
     override fun load() {
 
         view.showLoading()
-        TagBusiness.findAll(object : MultResultListener<TagModel> {
+        TagBusiness.findAllForManager(object : MultResultListener<TagModel> {
 
             override fun onSuccess(list: ArrayList<TagModel>) {
                 view.load(list)

@@ -25,7 +25,8 @@ class TagBusiness {
                 TagRepository().update(child, object : PersistenceListener<TagModel> {
 
                     override fun onSuccess(model: TagModel) {
-                        TagRepository().delete(model, listener)
+                        child.parentKey = null
+                        TagRepository().delete(child, listener)
                     }
 
                     override fun onError(error: String) {
@@ -80,16 +81,18 @@ class TagBusiness {
             TagRepository().findAll("name", listener)
         }
 
-        fun findAllParent(listener: MultResultListener<String>) {
+        fun findAllForManager(listener: MultResultListener<TagModel>) {
 
             findAll(object : MultResultListener<TagModel> {
 
                 override fun onSuccess(list: ArrayList<TagModel>) {
-                    val arrayList: ArrayList<String> = arrayListOf()
-                    list.mapTo(arrayList) {
-                        it.name!!
+                    val array = arrayListOf<TagModel>()
+                    for (it: TagModel in list) {
+                        if (it.showInManager == null || it.showInManager!!) {
+                            array.add(it)
+                        }
                     }
-                    listener.onSuccess(list = arrayList)
+                    listener.onSuccess(array)
                 }
 
                 override fun onError(error: String) {

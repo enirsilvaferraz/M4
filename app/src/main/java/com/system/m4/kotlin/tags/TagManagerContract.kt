@@ -8,7 +8,7 @@ interface TagManagerContract {
 
     interface View {
         fun fillFields(model: TagModel)
-        fun configureFields(list: ArrayList<String>)
+        fun configureFields(list: ArrayList<TagModel>)
         fun returnData(model: TagModel?)
         fun showError(error: String)
         fun showLoading()
@@ -19,6 +19,7 @@ interface TagManagerContract {
         fun init(model: TagModel?)
         fun done(name: String)
         fun cancel()
+        fun configureParent(selected: TagModel)
     }
 
     interface OnCompleteListener {

@@ -23,20 +23,22 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.AppCompatAutoCompleteTextView
-            android:id="@+id/dialog_autocomplete_tag_parent"
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/dialog_spinner_tag_parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
-            android:hint="Parent" />
+            android:hint="@string/tag_manager_parent" />
 
         <EditText
             android:id="@+id/dialog_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
             android:hint="@string/system_empty_field"
             android:inputType="textAutoCorrect|textCapSentences"
             android:minWidth="250dp"

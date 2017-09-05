@@ -2,15 +2,16 @@ package com.system.m4.kotlin.tags
 
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.support.v7.widget.AppCompatAutoCompleteTextView
+import android.support.v7.widget.AppCompatSpinner
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.ArrayAdapter
+import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Toast
 import com.system.m4.R
+import com.system.m4.kotlin.infrastructure.customviews.CustomSpinnerAdapter
 import com.system.m4.views.components.DialogFooter
 
 /**
@@ -21,7 +22,7 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
 
     private lateinit var mPresenter: TagManagerContract.Presenter
     private lateinit var mEtName: EditText
-    private lateinit var mAcParent: AppCompatAutoCompleteTextView
+    private lateinit var mSpParent: AppCompatSpinner
     private lateinit var mDialogFooter: DialogFooter
 
     private lateinit var mListener: TagManagerContract.OnCompleteListener
@@ -69,7 +70,7 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
 
         mEtName = view.findViewById(R.id.dialog_description) as EditText
 
-        mAcParent = view.findViewById(R.id.dialog_autocomplete_tag_parent) as AppCompatAutoCompleteTextView
+        mSpParent = view.findViewById(R.id.dialog_spinner_tag_parent) as AppCompatSpinner
 
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 
@@ -84,9 +85,16 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
         mEtName.setText(model.name)
     }
 
-    override fun configureFields(list: ArrayList<String>) {
-        val adapter = ArrayAdapter<String> (context, android.R.layout.simple_list_item_1, list)
-        mAcParent.setAdapter(adapter)
+    override fun configureFields(list: ArrayList<TagModel>) {
+        mSpParent.adapter = CustomSpinnerAdapter(context, android.R.layout.simple_list_item_1, list)
+        mSpParent.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                mPresenter.configureParent(list.get(position))
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
 
     override fun returnData(model: TagModel?) {
@@ -105,6 +113,4 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
     override fun showError(error: String) {
         Toast.makeText(context, error, Toast.LENGTH_LONG).show()
     }
-
-
 }

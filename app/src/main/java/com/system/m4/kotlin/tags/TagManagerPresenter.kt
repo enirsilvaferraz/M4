@@ -10,18 +10,21 @@ import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
 class TagManagerPresenter(private val view: TagManagerContract.View) : TagManagerContract.Presenter {
 
     private lateinit var mModel: TagModel
+    private var mParent: TagModel? = null
+
 
     override fun init(model: TagModel?) {
         mModel = if (model != null) model else TagModel()
-        loadParent();
+        loadParent()
     }
 
     private fun loadParent() {
 
         view.showLoading()
-        TagBusiness.findAllParent(object : MultResultListener<String> {
+        TagBusiness.findAllForManager(object : MultResultListener<TagModel> {
 
-            override fun onSuccess(list: ArrayList<String>) {
+            override fun onSuccess(list: ArrayList<TagModel>) {
+                list.add(0, TagModel("--"))
                 view.configureFields(list)
                 view.fillFields(mModel)
                 view.stopLoading()
@@ -42,7 +45,7 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
 
         if (mModel.key.isNullOrBlank()) {
 
-            TagBusiness.create(mModel, object : PersistenceListener<TagModel> {
+            TagBusiness.create(model = mModel, parent = mParent, listener = object : PersistenceListener<TagModel> {
 
                 override fun onSuccess(model: TagModel) {
                     view.returnData(model)
@@ -57,7 +60,7 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
 
         } else {
 
-            TagBusiness.update(mModel, object : PersistenceListener<TagModel> {
+            TagBusiness.update(child = mModel, parent = mParent, listener = object : PersistenceListener<TagModel> {
 
                 override fun onSuccess(model: TagModel) {
                     view.returnData(model)
@@ -74,5 +77,9 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
 
     override fun cancel() {
         view.returnData(null)
+    }
+
+    override fun configureParent(selected: TagModel) {
+        mParent = if (!selected.key.isNullOrBlank()) selected else null
     }
 }

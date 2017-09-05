@@ -79,7 +79,7 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
      * LISTENERS
      */
     override fun onMenuItemClick(item: MenuItem?): Boolean {
-        if (item?.itemId!!.equals(R.id.menu_crud_list_add_new)) {
+        if (item?.itemId!! == R.id.menu_crud_list_add_new) {
             mPresenter.create()
         }
         return true

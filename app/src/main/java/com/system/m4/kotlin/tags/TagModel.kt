@@ -19,10 +19,17 @@ class TagModel() : Parcelable {
     @SerializedName("parentKey")
     var parentKey: String? = null
 
+    @SerializedName("showInManager")
+    var showInManager: Boolean? = null
+
     @SerializedName("children")
     var children: HashMap<String, TagModel>? = null
 
     var child: ArrayList<TagModel>? = null
+
+    constructor(name: String) : this() {
+        this.name = name
+    }
 
     constructor(source: Parcel) : this(){
         source.toString()

@@ -59,5 +59,6 @@
     <string name="system_action_add_new">Add New</string>
     <string name="system_action_edit">Edit</string>
     <string name="system_actions_more_actions">More actions</string>
+    <string name="tag_manager_parent">Parent</string>
 
 </resources>
