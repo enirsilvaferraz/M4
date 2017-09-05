@@ -42,7 +42,7 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
 
         if (mModel.key.isNullOrBlank()) {
 
-            TagBusiness.save(mModel, object : PersistenceListener<TagModel> {
+            TagBusiness.create(mModel, object : PersistenceListener<TagModel> {
 
                 override fun onSuccess(model: TagModel) {
                     view.returnData(model)

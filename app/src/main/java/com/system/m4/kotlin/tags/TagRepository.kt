@@ -12,12 +12,18 @@ import com.system.m4.kotlin.infrastructure.utils.KotlinUtils
  */
 class TagRepository {
 
-    val mFireRef = FirebaseDatabase.getInstance().getReference("${BuildConfig.FLAVOR}/Tag")
+    private val PATH_REF = "${BuildConfig.FLAVOR}/Tag"
 
-    fun save(model: TagModel, listener: PersistenceListener<TagModel>) {
+    private fun getFireRef(parentKey: String? = null): DatabaseReference {
+        val path = if (parentKey.isNullOrBlank()) PATH_REF else "$PATH_REF/${parentKey}/children"
+        return FirebaseDatabase.getInstance().getReference(path)
+    }
 
-        val push = mFireRef.push()
+    fun create(model: TagModel, listener: PersistenceListener<TagModel>) {
+
+        val push = getFireRef(model.parentKey).push()
         model.key = push.key
+
         push.setValue(model, object : DatabaseReference.CompletionListener {
             override fun onComplete(error: DatabaseError?, p1: DatabaseReference?) {
                 if (error == null) {
@@ -31,7 +37,7 @@ class TagRepository {
 
     fun update(model: TagModel, listener: PersistenceListener<TagModel>) {
 
-        mFireRef.child(model.key).updateChildren(KotlinUtils().modelToMap(model), object : DatabaseReference.CompletionListener {
+        getFireRef(model.parentKey).child(model.key).updateChildren(KotlinUtils().modelToMap(model), object : DatabaseReference.CompletionListener {
             override fun onComplete(error: DatabaseError?, p1: DatabaseReference?) {
                 if (error == null) {
                     listener.onSuccess(model)
@@ -44,7 +50,7 @@ class TagRepository {
 
     fun delete(model: TagModel, listener: PersistenceListener<TagModel>) {
 
-        mFireRef.child(model.key).removeValue(object : DatabaseReference.CompletionListener {
+        getFireRef(model.parentKey).child(model.key).removeValue(object : DatabaseReference.CompletionListener {
             override fun onComplete(error: DatabaseError?, p1: DatabaseReference?) {
                 if (error == null) {
                     listener.onSuccess(model)
@@ -57,22 +63,23 @@ class TagRepository {
 
     fun findAll(orderBy: String = "key", listener: MultResultListener<TagModel>) {
 
-        mFireRef.orderByChild(orderBy).addListenerForSingleValueEvent(object : ValueEventListener {
+        getFireRef().orderByChild(orderBy).addListenerForSingleValueEvent(object : ValueEventListener {
 
             override fun onDataChange(p0: DataSnapshot?) {
                 val resultList = arrayListOf<TagModel>()
                 p0?.children?.mapTo(resultList) {
 
-                    val valor = it.getValue(TagModel::class.java)
+                    //val valor =
+                    it.getValue(TagModel::class.java)
 
-                    if (it.child("children").exists()) {
-                        valor.child = arrayListOf()
-                        it.child("children").children.mapTo(valor.child!!) {
-                            it.getValue(TagModel::class.java)
-                        }
-                    }
-
-                    valor
+//                    if (it.child("children").exists()) {
+//                        valor.child = arrayListOf()
+//                        it.child("children").children.mapTo(valor.child!!) {
+//                            it.getValue(TagModel::class.java)
+//                        }
+//                    }
+//
+//                    valor
                 }
                 listener.onSuccess(resultList)
             }

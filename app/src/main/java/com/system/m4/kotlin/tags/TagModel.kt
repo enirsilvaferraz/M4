@@ -16,10 +16,13 @@ class TagModel() : Parcelable {
     @SerializedName("name")
     var name: String? = null
 
-    var child: ArrayList<TagModel>? = null
+    @SerializedName("parentKey")
+    var parentKey: String? = null
 
     @SerializedName("children")
     var children: HashMap<String, TagModel>? = null
+
+    var child: ArrayList<TagModel>? = null
 
     constructor(source: Parcel) : this(){
         source.toString()
@@ -30,11 +33,12 @@ class TagModel() : Parcelable {
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {}
 
     companion object {
+        val TAG: String = "TagModel"
+
         @JvmField
         val CREATOR: Parcelable.Creator<TagModel> = object : Parcelable.Creator<TagModel> {
             override fun createFromParcel(source: Parcel): TagModel = TagModel(source)
             override fun newArray(size: Int): Array<TagModel?> = arrayOfNulls(size)
         }
-        val TAG: String = "TagModel"
     }
 }

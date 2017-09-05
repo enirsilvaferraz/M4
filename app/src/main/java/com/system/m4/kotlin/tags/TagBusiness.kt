@@ -11,12 +11,65 @@ class TagBusiness {
 
     companion object {
 
-        fun save(model: TagModel, listener: PersistenceListener<TagModel>) {
-            TagRepository().save(model, listener)
+        fun create(model: TagModel, parent: TagModel? = null, listener: PersistenceListener<TagModel>) {
+            model.parentKey = parent?.key
+            TagRepository().create(model, listener)
         }
 
-        fun update(model: TagModel, listener: PersistenceListener<TagModel>) {
-            TagRepository().update(model, listener)
+        fun update(child: TagModel, parent: TagModel? = null, listener: PersistenceListener<TagModel>) {
+
+            // Add parent
+            if (child.parentKey.isNullOrBlank() && parent != null) {
+
+                child.parentKey = parent.key
+                TagRepository().update(child, object : PersistenceListener<TagModel> {
+
+                    override fun onSuccess(model: TagModel) {
+                        TagRepository().delete(model, listener)
+                    }
+
+                    override fun onError(error: String) {
+                        listener.onError(error)
+                    }
+                })
+            }
+
+            // Remove parent
+            else if (!child.parentKey.isNullOrBlank() && parent == null) {
+
+                TagRepository().delete(child, object : PersistenceListener<TagModel> {
+
+                    override fun onSuccess(model: TagModel) {
+                        model.parentKey = null
+                        TagRepository().update(model, listener)
+                    }
+
+                    override fun onError(error: String) {
+                        listener.onError(error)
+                    }
+                })
+            }
+
+            // Move to another parent
+            else if ((!child.parentKey.isNullOrBlank() && parent != null) && !child.parentKey.equals(parent.key)) {
+
+                TagRepository().delete(child, object : PersistenceListener<TagModel> {
+
+                    override fun onSuccess(model: TagModel) {
+                        model.parentKey = parent.key
+                        TagRepository().update(model, listener)
+                    }
+
+                    override fun onError(error: String) {
+                        listener.onError(error)
+                    }
+                })
+            }
+
+            // Do not have a parent or the parent is the same. Just update
+            else if ((child.parentKey.isNullOrBlank() && parent == null) || child.parentKey.equals(parent?.key)) {
+                TagRepository().update(child, listener)
+            }
         }
 
         fun delete(model: TagModel, listener: PersistenceListener<TagModel>) {
@@ -29,7 +82,7 @@ class TagBusiness {
 
         fun findAllParent(listener: MultResultListener<String>) {
 
-            TagRepository().findAll("name", object : MultResultListener<TagModel>{
+            findAll(object : MultResultListener<TagModel> {
 
                 override fun onSuccess(list: ArrayList<TagModel>) {
                     val arrayList: ArrayList<String> = arrayListOf()
