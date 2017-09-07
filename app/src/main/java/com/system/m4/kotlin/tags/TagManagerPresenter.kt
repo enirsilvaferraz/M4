@@ -24,8 +24,13 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
         TagBusiness.findAllParents(object : MultResultListener<TagModel> {
 
             override fun onSuccess(list: ArrayList<TagModel>) {
+
                 list.add(0, TagModel("--"))
-                view.fillFields(mModel, list)
+
+                val enable = mModel.children == null || mModel.children!!.isEmpty()
+                enable.let { view.fillFieldParent(model = mModel, list = list) }
+                view.enableParentSelection(enable)
+                view.fillFields(mModel)
                 view.stopLoading()
             }
 

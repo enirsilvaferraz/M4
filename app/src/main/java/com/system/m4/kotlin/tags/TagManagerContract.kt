@@ -7,11 +7,13 @@ package com.system.m4.kotlin.tags
 interface TagManagerContract {
 
     interface View {
-        fun fillFields(model: TagModel, list: ArrayList<TagModel>)
+        fun fillFields(model: TagModel)
+        fun fillFieldParent(list: ArrayList<TagModel>, model: TagModel)
         fun returnData(model: TagModel?)
         fun showError(error: String)
         fun showLoading()
         fun stopLoading()
+        fun enableParentSelection(enable: Boolean)
     }
 
     interface Presenter {
