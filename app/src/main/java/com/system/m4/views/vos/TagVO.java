@@ -35,6 +35,11 @@ public class TagVO implements VOInterface<TagVO>{
     public TagVO() {
     }
 
+    public TagVO(String key, String name) {
+        this.key = key;
+        this.name = name;
+    }
+
     protected TagVO(Parcel in) {
         this.name = in.readString();
     }

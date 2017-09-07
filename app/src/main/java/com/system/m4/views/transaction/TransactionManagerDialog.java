@@ -16,11 +16,12 @@ import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.kotlin.paymenttype.PaymentTypeListContract;
 import com.system.m4.kotlin.paymenttype.PaymentTypeListDialog;
 import com.system.m4.kotlin.paymenttype.PaymentTypeModel;
+import com.system.m4.kotlin.tags.TagListContract;
+import com.system.m4.kotlin.tags.TagListDialog;
+import com.system.m4.kotlin.tags.TagModel;
 import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.dialogs.NumberComponentDialog;
 import com.system.m4.views.components.dialogs.TextComponentDialog;
-import com.system.m4.views.components.dialogs.list.ListComponentDialog;
-import com.system.m4.views.components.dialogs.list.ListTagPresenter;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
@@ -300,13 +301,23 @@ public class TransactionManagerDialog extends BaseDialogFragment implements Tran
 
     @Override
     public void onTitleClick() {
-        ListComponentDialog listComponentTagsDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new DialogListener() {
+//        ListComponentDialog listComponentTagsDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new DialogListener() {
+//            @Override
+//            public void onFinish(VOInterface vo) {
+//                TransactionManagerDialog.this.presenter.setTags((TagVO) vo);
+//            }
+//        });
+//        listComponentTagsDialog.setPresenter(new ListTagPresenter(listComponentTagsDialog));
+//        listComponentTagsDialog.show(getChildFragmentManager());
+
+        TagListDialog.Companion.instance(new TagListContract.OnSelectedListener() {
             @Override
-            public void onFinish(VOInterface vo) {
-                TransactionManagerDialog.this.presenter.setTags((TagVO) vo);
+            public void onSelect(@NotNull TagModel model) {
+                TagVO vo = new TagVO();
+                vo.setKey(model.getKey());
+                vo.setName(model.getName());
+                presenter.setTags(vo);
             }
-        });
-        listComponentTagsDialog.setPresenter(new ListTagPresenter(listComponentTagsDialog));
-        listComponentTagsDialog.show(getChildFragmentManager());
+        }).show(getFragmentManager(), TagListDialog.class.getSimpleName());
     }
 }
