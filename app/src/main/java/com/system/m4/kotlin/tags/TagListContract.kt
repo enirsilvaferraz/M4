@@ -24,6 +24,7 @@ interface TagListContract {
         fun select(model: TagModel)
         fun edit(model: TagModel)
         fun delete(model: TagModel)
+        fun addList()
     }
 
     interface OnSelectedListener {

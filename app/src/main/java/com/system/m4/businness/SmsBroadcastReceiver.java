@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 
 import com.system.m4.R;
-import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.JavaUtils;
-import com.system.m4.repository.dtos.DTOAbs;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
@@ -60,7 +58,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
                 vo.getPaymentType().setKey(context.getResources().getString(R.string.paymenttype_debito_key));
 
                 vo.setTag(new TagVO());
-                vo.getTag().setKey(context.getResources().getString(R.string.tag_debito_key));
+                vo.getTag().setKey("TAG_UNKNOWN");
 
                 int localIndexStart = message.indexOf(STR_LOCAL);
                 int localIndexEnd = message.indexOf(".", localIndexStart);

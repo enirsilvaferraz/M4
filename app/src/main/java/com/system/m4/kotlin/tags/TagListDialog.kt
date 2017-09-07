@@ -104,7 +104,7 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
     override fun openManager(model: TagModel?) {
         TagManagerDialog.instance(model, object : TagManagerContract.OnCompleteListener {
             override fun onComplete(model: TagModel) {
-                (mRecyclerView.adapter as TagAdapter).addOrUpdateItem(model)
+                mPresenter.addList()
             }
         }).show(fragmentManager, TagManagerDialog.TAG)
     }

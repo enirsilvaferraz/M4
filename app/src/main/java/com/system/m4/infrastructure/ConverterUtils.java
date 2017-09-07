@@ -55,7 +55,14 @@ public final class ConverterUtils {
     }
 
     public static Transaction fillTransaction(Transaction vo, List<TagVO> tags, List<PaymentTypeVO> paymentTypes) {
-        vo.setTag(tags.get(tags.indexOf(vo.getTag())));
+        int index = tags.indexOf(vo.getTag());
+        if (index > -1) {
+            vo.setTag(tags.get(index));
+        } else {
+            TagVO tag = new TagVO();
+            tag.setName("(Pendente de Avaliação)");
+            vo.setTag(tag);
+        }
         vo.setPaymentType(paymentTypes.get(paymentTypes.indexOf(vo.getPaymentType())));
         return vo;
     }
@@ -141,7 +148,14 @@ public final class ConverterUtils {
     public static FilterTransactionVO fillFilterTransaction(FilterTransactionVO vo, List<TagVO> tags, List<PaymentTypeVO> paymentTypes) {
 
         if (vo.getTag() != null) {
-            vo.setTag(tags.get(tags.indexOf(vo.getTag())));
+            int index = tags.indexOf(vo.getTag());
+            if (index > -1) {
+                vo.setTag(tags.get(index));
+            } else {
+                TagVO tag = new TagVO();
+                tag.setName("(Pendente de Avaliação)");
+                vo.setTag(tag);
+            }
         }
 
         if (vo.getPaymentType() != null) {

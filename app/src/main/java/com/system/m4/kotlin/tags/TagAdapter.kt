@@ -1,5 +1,6 @@
 package com.system.m4.kotlin.tags
 
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -66,7 +67,15 @@ class TagAdapter(val onClick: TagListContract.OnAdapterClickListener) : Recycler
         fun bind(model: TagModel, listener: TagListContract.OnAdapterClickListener) {
             mTvName.text = model.name
             mBtMoreActions.setOnClickListener({ showPopupDialog(mBtMoreActions, model, listener) })
-            mContainer.setOnClickListener({ listener.onSelect(model) })
+
+            if (model.parentKey.isNullOrBlank()) {
+                mContainer.isEnabled = false
+                mContainer.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.md_grey_300))
+            } else {
+                mContainer.isEnabled = true
+                mContainer.setBackgroundResource(R.drawable.ripple)
+                mContainer.setOnClickListener({ listener.onSelect(model) })
+            }
         }
 
         private fun showPopupDialog(view: View, model: TagModel, listener: TagListContract.OnAdapterClickListener) {

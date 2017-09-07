@@ -21,12 +21,11 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
     private fun loadParent() {
 
         view.showLoading()
-        TagBusiness.findAllForManager(object : MultResultListener<TagModel> {
+        TagBusiness.findAllParents(object : MultResultListener<TagModel> {
 
             override fun onSuccess(list: ArrayList<TagModel>) {
                 list.add(0, TagModel("--"))
-                view.configureFields(list)
-                view.fillFields(mModel)
+                view.fillFields(mModel, list)
                 view.stopLoading()
             }
 

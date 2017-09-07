@@ -2,6 +2,7 @@ package com.system.m4.kotlin.paymenttype
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -10,12 +11,15 @@ import com.google.gson.annotations.SerializedName
  */
 class PaymentTypeModel() : Parcelable {
 
+    @Expose
     @SerializedName("key")
     var key: String? = null
 
+    @Expose
     @SerializedName("name")
     var name: String? = null
 
+    @Expose
     @SerializedName("color")
     var color: String? = null
 

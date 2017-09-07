@@ -81,20 +81,25 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
     /**
      * MVP
      */
-    override fun fillFields(model: TagModel) {
-        mEtName.setText(model.name)
-    }
+    override fun fillFields(model: TagModel, list: ArrayList<TagModel>) {
 
-    override fun configureFields(list: ArrayList<TagModel>) {
         mSpParent.adapter = CustomSpinnerAdapter(context, android.R.layout.simple_list_item_1, list)
         mSpParent.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 mPresenter.configureParent(list.get(position))
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
+        for ((index, it) in list.withIndex()) {
+            if (it.key.equals(model.parentKey)) {
+                mSpParent.setSelection(index)
+                break
+            }
+        }
+
+        mEtName.setText(model.name)
     }
 
     override fun returnData(model: TagModel?) {

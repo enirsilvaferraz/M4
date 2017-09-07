@@ -77,28 +77,33 @@ class TagBusiness {
             TagRepository().delete(model, listener)
         }
 
-        fun findAll(listener: MultResultListener<TagModel>) {
+        fun findAllParents(listener: MultResultListener<TagModel>) {
             TagRepository().findAll("name", listener)
         }
 
-        fun findAllForManager(listener: MultResultListener<TagModel>) {
+        fun findAll(listener: MultResultListener<TagModel>) {
 
-            findAll(object : MultResultListener<TagModel> {
+            findAllParents(object : MultResultListener<TagModel> {
 
                 override fun onSuccess(list: ArrayList<TagModel>) {
-                    val array = arrayListOf<TagModel>()
-                    for (it: TagModel in list) {
-                        if (it.showInManager == null || it.showInManager!!) {
-                            array.add(it)
-                        }
-                    }
-                    listener.onSuccess(array)
+                    listener.onSuccess(configureList(list))
                 }
 
                 override fun onError(error: String) {
                     listener.onError(error)
                 }
             })
+        }
+
+        private fun configureList(list: ArrayList<TagModel>): ArrayList<TagModel> {
+            val array = arrayListOf<TagModel>()
+            for (model: TagModel in list) {
+                array.add(model)
+                if (model.children != null) {
+                    array.addAll(model.children!!.values.sortedBy { it.name })
+                }
+            }
+            return array
         }
     }
 }

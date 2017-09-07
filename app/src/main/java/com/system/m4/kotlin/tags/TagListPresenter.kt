@@ -9,11 +9,10 @@ import java.util.*
  * Presenter
  */
 class TagListPresenter(private val view: TagListContract.View) : TagListContract.Presenter {
-
     override fun load() {
 
         view.showLoading()
-        TagBusiness.findAllForManager(object : MultResultListener<TagModel> {
+        TagBusiness.findAll(object : MultResultListener<TagModel> {
 
             override fun onSuccess(list: ArrayList<TagModel>) {
                 view.load(list)
@@ -54,5 +53,9 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
                 view.stopLoading()
             }
         })
+    }
+
+    override fun addList() {
+        load()
     }
 }

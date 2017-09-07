@@ -7,8 +7,7 @@ package com.system.m4.kotlin.tags
 interface TagManagerContract {
 
     interface View {
-        fun fillFields(model: TagModel)
-        fun configureFields(list: ArrayList<TagModel>)
+        fun fillFields(model: TagModel, list: ArrayList<TagModel>)
         fun returnData(model: TagModel?)
         fun showError(error: String)
         fun showLoading()

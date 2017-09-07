@@ -2,6 +2,7 @@ package com.system.m4.kotlin.tags
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -10,28 +11,31 @@ import com.google.gson.annotations.SerializedName
  */
 class TagModel() : Parcelable {
 
+    @Expose
     @SerializedName("key")
     var key: String? = null
 
+    @Expose
     @SerializedName("name")
     var name: String? = null
 
+    @Expose
     @SerializedName("parentKey")
     var parentKey: String? = null
 
+    @Expose
     @SerializedName("showInManager")
     var showInManager: Boolean? = null
 
+    @Expose
     @SerializedName("children")
     var children: HashMap<String, TagModel>? = null
-
-    var child: ArrayList<TagModel>? = null
 
     constructor(name: String) : this() {
         this.name = name
     }
 
-    constructor(source: Parcel) : this(){
+    constructor(source: Parcel) : this() {
         source.toString()
     }
 

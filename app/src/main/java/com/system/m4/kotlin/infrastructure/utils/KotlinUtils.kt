@@ -10,7 +10,7 @@ import com.google.gson.reflect.TypeToken
 class KotlinUtils {
 
     fun modelToMap(model: Any): MutableMap<String, Any>? {
-        val gson: Gson = GsonBuilder().create()
+        val gson: Gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
         val json: String = gson.toJson(model)
         return gson.fromJson(json, object : TypeToken<Map<String, Any>>() {}.type)
     }
