@@ -3,6 +3,7 @@ package com.system.m4.businness;
 import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.ConverterUtils;
+import com.system.m4.kotlin.tags.TagBusiness;
 import com.system.m4.views.vos.GroupTransactionVO;
 import com.system.m4.views.vos.ListTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
@@ -117,6 +118,7 @@ public class HomeBusiness {
 
                 ListTransactionVO listTransactionVO = new ListTransactionVO();
                 listTransactionVO.setTransactions(listTransaction);
+                listTransactionVO.setTagSummary(TagBusiness.Companion.calculateTagSummary(listTransaction));
 
                 if (!listGroup.isEmpty()) {
                     listTransactionVO.setGroup(ConverterUtils.fillGroupTransaction(listGroup.get(0), listPaymentType));

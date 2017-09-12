@@ -22,14 +22,16 @@ public class TagSummaryVO implements VOInterface<TagSummaryVO>, VOItemListInterf
         }
     };
     private String key;
+    private String parentName;
     private String name;
     private Double value;
 
     public TagSummaryVO() {
     }
 
-    public TagSummaryVO(String key, String name, Double price) {
+    public TagSummaryVO(String key, String parentName, String name, Double price) {
         this.key = key;
+        this.parentName = parentName;
         this.name = name;
         this.value = price;
     }
@@ -37,6 +39,7 @@ public class TagSummaryVO implements VOInterface<TagSummaryVO>, VOItemListInterf
     protected TagSummaryVO(Parcel in) {
         this.key = in.readString();
         this.name = in.readString();
+        this.parentName = in.readString();
         this.value = (Double) in.readValue(Double.class.getClassLoader());
     }
 
@@ -54,6 +57,14 @@ public class TagSummaryVO implements VOInterface<TagSummaryVO>, VOItemListInterf
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 
     public Double getValue() {
@@ -94,6 +105,7 @@ public class TagSummaryVO implements VOInterface<TagSummaryVO>, VOItemListInterf
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.key);
         dest.writeString(this.name);
+        dest.writeString(this.parentName);
         dest.writeValue(this.value);
     }
 }

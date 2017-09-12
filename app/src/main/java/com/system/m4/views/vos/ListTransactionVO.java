@@ -11,20 +11,29 @@ public class ListTransactionVO {
 
     private List<Transaction> transactions;
     private GroupTransactionVO group;
+    private List<TagSummaryVO> tagSummary;
 
     public List<Transaction> getTransactions() {
         return transactions;
-    }
-
-    public GroupTransactionVO getGroup() {
-        return group;
     }
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
 
+    public GroupTransactionVO getGroup() {
+        return group;
+    }
+
     public void setGroup(GroupTransactionVO group) {
         this.group = group;
+    }
+
+    public List<TagSummaryVO> getTagSummary() {
+        return tagSummary;
+    }
+
+    public void setTagSummary(List<TagSummaryVO> tagSummary) {
+        this.tagSummary = tagSummary;
     }
 }

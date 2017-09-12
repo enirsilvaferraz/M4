@@ -26,6 +26,7 @@ public class TagVO implements VOInterface<TagVO>{
 
     private String key;
     private String name;
+    private String parentName;
 
     public TagVO(TagDTO dto) {
         this.key = dto.getKey();
@@ -35,9 +36,10 @@ public class TagVO implements VOInterface<TagVO>{
     public TagVO() {
     }
 
-    public TagVO(String key, String name) {
+    public TagVO(String key, String parentName, String name) {
         this.key = key;
         this.name = name;
+        this.parentName = parentName;
     }
 
     protected TagVO(Parcel in) {
@@ -89,5 +91,13 @@ public class TagVO implements VOInterface<TagVO>{
     @Override
     public int compareTo(@NonNull TagVO o) {
         return this.name.compareTo(o.getName());
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 }

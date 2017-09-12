@@ -27,9 +27,10 @@ class TagModel() : Parcelable {
     @SerializedName("showInManager")
     var showInManager: Boolean? = null
 
-    @Expose
     @SerializedName("children")
     var children: HashMap<String, TagModel>? = null
+
+    var parentName: String? = null
 
     constructor(name: String) : this() {
         this.name = name
@@ -44,6 +45,7 @@ class TagModel() : Parcelable {
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {}
 
     companion object {
+
         val TAG: String = "TagModel"
 
         @JvmField

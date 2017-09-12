@@ -29,7 +29,7 @@ public abstract class TagBusinness {
 
                 List<TagVO> newList = new ArrayList<>();
                 for (TagModel model : list) {
-                    newList.add(new TagVO(model.getKey(), model.getName()));
+                    newList.add(new TagVO(model.getKey(), model.getParentName(), model.getName()));
                 }
 
                 onMultiResultListenner.onSuccess(newList, Constants.CALL_TAG_FINDALL);

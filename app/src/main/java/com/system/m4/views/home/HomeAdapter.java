@@ -292,7 +292,7 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
         public void bind(final TagSummaryVO item) {
-            mLabel.setText(item.getName());
+            mLabel.setText(item.getParentName() != null ? item.getParentName() + " / " + item.getName() : item.getName());
             mValue.setText(JavaUtils.NumberUtil.currencyFormat(item.getValue()));
         }
     }

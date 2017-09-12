@@ -2,6 +2,9 @@ package com.system.m4.kotlin.tags
 
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
+import com.system.m4.views.vos.TagSummaryVO
+import com.system.m4.views.vos.Transaction
+import java.util.*
 
 /**
  * Created by enirs on 30/08/2017.
@@ -100,10 +103,37 @@ class TagBusiness {
             for (model: TagModel in list) {
                 array.add(model)
                 if (model.children != null) {
-                    array.addAll(model.children!!.values.sortedBy { it.name })
+                    for (child in model.children!!.values) {
+                        child.parentName = model.name
+                    }
+                    val elements = model.children!!.values.sortedWith(compareBy({ it.parentName }, { it.name }))
+                    array.addAll(elements)
                 }
             }
             return array
+        }
+
+        fun calculateTagSummary(transactions: List<Transaction>): List<TagSummaryVO> {
+
+            val itens = arrayListOf<TagSummaryVO>()
+
+            for (transaction in transactions) {
+
+                if (transaction.key == null || !transaction.isApproved || transaction.paymentDate.compareTo(Calendar.getInstance().time) > 0) {
+                    continue
+                }
+
+                val chartItem = TagSummaryVO(transaction.tag.key, transaction.tag.parentName, transaction.tag.name, transaction.price)
+
+                if (itens.contains(chartItem)) {
+                    val item = itens[itens.indexOf(chartItem)]
+                    item.value = item.value!! + transaction.price!!.toFloat()
+                } else {
+                    itens.add(chartItem)
+                }
+            }
+
+            return itens.sortedWith(compareBy({ it.parentName }, { it.name }))
         }
     }
 }

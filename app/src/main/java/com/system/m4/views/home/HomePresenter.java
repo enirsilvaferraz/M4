@@ -13,7 +13,6 @@ import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
-import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -133,15 +132,15 @@ class HomePresenter implements HomeContract.Presenter {
 
             configSummary(listVO, listTransaction);
 
-            ChartVO chartVO = getChart(item.getTransactions());
-            if (!chartVO.getItems().isEmpty()) {
-                listVO.add(chartVO);
-                listVO.add(new SpaceVO());
-            }
+//            ChartVO chartVO = getChart(item.getTransactions());
+//            if (!chartVO.getItems().isEmpty()) {
+//                listVO.add(chartVO);
+//                listVO.add(new SpaceVO());
+//            }
 
             if (!listTransaction.isEmpty()) {
                 listVO.add(new SubTitleVO("Tag Summary"));
-                listVO.addAll(getTagSummaryVO(item.getTransactions()));
+                listVO.addAll(item.getTagSummary());
                 listVO.add(new SpaceVO());
             }
 
@@ -192,36 +191,6 @@ class HomePresenter implements HomeContract.Presenter {
         chart.setItems(chartItems.subList(0, Math.min(10, chartItems.size())));
 
         return chart;
-    }
-
-    @NonNull
-    private List<TagSummaryVO> getTagSummaryVO(List<Transaction> transactions) {
-
-        List<TagSummaryVO> itens = new ArrayList<>();
-        for (Transaction transaction : transactions) {
-
-            if (transaction.getKey() == null || !transaction.isApproved() || transaction.getPaymentDate().compareTo(Calendar.getInstance().getTime()) > 0) {
-                continue;
-            }
-
-            TagSummaryVO chartItem = new TagSummaryVO(transaction.getTag().getKey(), transaction.getTag().getName(), transaction.getPrice());
-
-            if (itens.contains(chartItem)) {
-                TagSummaryVO item = itens.get(itens.indexOf(chartItem));
-                item.setValue(item.getValue() + transaction.getPrice().floatValue());
-            } else {
-                itens.add(chartItem);
-            }
-        }
-
-        Collections.sort(itens, new Comparator<TagSummaryVO>() {
-            @Override
-            public int compare(TagSummaryVO o1, TagSummaryVO o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-
-        return itens;
     }
 
     private void configSummary(List<VOItemListInterface> listVO, List<Transaction> listTransaction) {
