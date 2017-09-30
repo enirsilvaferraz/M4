@@ -1,10 +1,10 @@
 package com.system.m4.infrastructure;
 
+import com.system.m4.kotlin.transaction.TransactionModel;
 import com.system.m4.repository.dtos.FilterTransactionDTO;
 import com.system.m4.repository.dtos.GroupTransactionDTO;
 import com.system.m4.repository.dtos.PaymentTypeDTO;
 import com.system.m4.repository.dtos.TagDTO;
-import com.system.m4.repository.dtos.TransactionDTO;
 import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.GroupTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
@@ -25,8 +25,8 @@ public final class ConverterUtils {
         // Do nothing
     }
 
-    public static TransactionDTO fromTransaction(Transaction vo) {
-        TransactionDTO dto = new TransactionDTO();
+    public static TransactionModel fromTransaction(Transaction vo) {
+        TransactionModel dto = new TransactionModel();
         dto.setKey(vo.getKey());
         dto.setTag(vo.getTag().getKey());
         dto.setPaymentType(vo.getPaymentType().getKey());
@@ -37,7 +37,7 @@ public final class ConverterUtils {
         return dto;
     }
 
-    public static Transaction fromTransaction(TransactionDTO dto) {
+    public static Transaction fromTransaction(TransactionModel dto) {
         Transaction vo = new Transaction();
         vo.setKey(dto.getKey());
         vo.setTag(new TagVO());
