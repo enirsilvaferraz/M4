@@ -277,6 +277,11 @@ public final class JavaUtils {
             new AlertDialog.Builder(context).setMessage(stringMessage)
                     .setPositiveButton(R.string.system_action_ok, onClickListener).create().show();
         }
+
+        public static void showAlertDialog(Context context, String stringMessage, DialogInterface.OnClickListener onClickListener) {
+            new AlertDialog.Builder(context).setMessage(stringMessage)
+                    .setPositiveButton(R.string.system_action_ok, onClickListener).create().show();
+        }
     }
 
 

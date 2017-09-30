@@ -1,6 +1,9 @@
 package com.system.m4.views.home;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.system.m4.R;
+import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.kotlin.tags.TagListContract;
 import com.system.m4.kotlin.tags.TagListDialog;
 import com.system.m4.kotlin.tags.TagModel;
@@ -28,6 +32,8 @@ import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
 
@@ -160,5 +166,32 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     public void setMainTitle(String title) {
         mCollapsingToolbar.setTitle(title);
+    }
+
+    @OnClick(R.id.main_appbar)
+    public void onAppBarClick() {
+
+        String log = getSharedPreferences("SHARED_PREF_M4", Context.MODE_PRIVATE)
+                .getString("NOTIFICATION_M4", "");
+
+        JavaUtils.AndroidUtil.showAlertDialog(this, log, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+    }
+
+    @OnLongClick(R.id.main_appbar)
+    public boolean onAppBarLongClick() {
+
+        SharedPreferences sp = getSharedPreferences("SHARED_PREF_M4", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor edit = sp.edit();
+        edit.clear();
+        edit.apply();
+
+        return true;
     }
 }
