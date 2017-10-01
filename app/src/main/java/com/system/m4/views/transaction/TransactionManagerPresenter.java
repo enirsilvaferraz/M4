@@ -3,11 +3,11 @@ package com.system.m4.views.transaction;
 import android.text.TextUtils;
 
 import com.system.m4.R;
-import com.system.m4.businness.TransactionBusinness;
-import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.infrastructure.Constants;
 import com.system.m4.infrastructure.JavaUtils;
-import com.system.m4.repository.dtos.DTOAbs;
+import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener;
+import com.system.m4.kotlin.transaction.TransactionBusiness;
+import com.system.m4.kotlin.transaction.TransactionModel;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
@@ -157,16 +157,16 @@ class TransactionManagerPresenter implements TransactionManagerContract.Presente
             mView.showError(R.string.system_error_required_field, R.string.transaction_price);
         } else {
 
-            TransactionBusinness.save(mVO, new BusinnessListener.OnPersistListener<DTOAbs>() {
+            new TransactionBusiness().save(mVO, new PersistenceListener<TransactionModel>() {
 
                 @Override
-                public void onSuccess(DTOAbs dto) {
+                public void onSuccess(TransactionModel dto) {
                     mView.dismissDialog(null);
                 }
 
                 @Override
-                public void onError(Exception e) {
-                    mView.showError(e.getMessage());
+                public void onError(String error) {
+                    mView.showError(error);
                 }
             });
         }

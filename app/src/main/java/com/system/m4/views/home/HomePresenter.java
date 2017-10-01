@@ -2,10 +2,13 @@ package com.system.m4.views.home;
 
 import android.support.annotation.NonNull;
 
-import com.system.m4.businness.HomeBusiness;
 import com.system.m4.businness.TransactionBusinness;
 import com.system.m4.infrastructure.BusinnessListener;
-import com.system.m4.repository.dtos.DTOAbs;
+import com.system.m4.kotlin.home.HomeBusiness;
+import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener;
+import com.system.m4.kotlin.infrastructure.listeners.SingleResultListener;
+import com.system.m4.kotlin.transaction.TransactionBusiness;
+import com.system.m4.kotlin.transaction.TransactionModel;
 import com.system.m4.views.vos.ChartItemVO;
 import com.system.m4.views.vos.ChartVO;
 import com.system.m4.views.vos.ListTransactionVO;
@@ -50,7 +53,7 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestListTransaction() {
 
-        HomeBusiness.findTransactions(date.get(Calendar.YEAR), date.get(Calendar.MONTH), new BusinnessListener.OnSingleResultListener<ListTransactionVO>() {
+        new HomeBusiness().findHomeList(date.get(Calendar.YEAR), date.get(Calendar.MONTH), new SingleResultListener<ListTransactionVO>() {
 
             @Override
             public void onSuccess(ListTransactionVO item) {
@@ -58,9 +61,9 @@ class HomePresenter implements HomeContract.Presenter {
             }
 
             @Override
-            public void onError(Exception e) {
+            public void onError(String e) {
                 mView.setListTransactions(new ArrayList<VOItemListInterface>());
-                mView.showError(e.getMessage());
+                mView.showError(e);
             }
         });
     }
@@ -236,15 +239,15 @@ class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void delete(Transaction item) {
-        TransactionBusinness.delete(item, new BusinnessListener.OnPersistListener<DTOAbs>() {
+        new TransactionBusiness().delete(item, new PersistenceListener<TransactionModel>() {
             @Override
-            public void onSuccess(DTOAbs dto) {
+            public void onSuccess(TransactionModel dto) {
                 requestListTransaction();
             }
 
             @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
+            public void onError(String e) {
+                mView.showError(e);
             }
         });
     }

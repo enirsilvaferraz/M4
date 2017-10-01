@@ -16,7 +16,7 @@ import java.util.List;
  * For M4
  */
 
-class GroupTransactionBusinness {
+public class GroupTransactionBusinness {
 
     public static void findAll(final BusinnessListener.OnMultiResultListenner<GroupTransactionVO> onMultiResultListenner) {
 

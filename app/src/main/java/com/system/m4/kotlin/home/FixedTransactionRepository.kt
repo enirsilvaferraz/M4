@@ -1,4 +1,4 @@
-package com.system.m4.kotlin.transaction
+package com.system.m4.kotlin.home
 
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -8,6 +8,7 @@ import com.system.m4.BuildConfig
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
 import com.system.m4.kotlin.infrastructure.utils.KotlinUtils
+import com.system.m4.kotlin.transaction.TransactionModel
 
 /**
  * Created by enirs on 30/09/2017.

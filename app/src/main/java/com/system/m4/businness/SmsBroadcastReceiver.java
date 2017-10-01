@@ -8,6 +8,7 @@ import android.telephony.SmsMessage;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.kotlin.transaction.TransactionBusiness;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
@@ -73,7 +74,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
                 String date = message.substring(dateIndex + STR_COMPRA_APROVADA.length(), currencyIndex).trim().replace(" ", "/" + year + " ");
                 vo.setPaymentDate(JavaUtils.DateUtil.parse(date, JavaUtils.DateUtil.DD_MM_YYYY_HH_MM_SS));
 
-                TransactionBusinness.save(vo, null);
+                new TransactionBusiness().save(vo, null);
             }
 
             //Toast.makeText(context, message, Toast.LENGTH_LONG).show();

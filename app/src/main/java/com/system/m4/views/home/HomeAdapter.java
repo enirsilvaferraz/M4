@@ -193,8 +193,11 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             PopupMenu popupMenu = new PopupMenu(itemView.getContext(), tvPrice);
             popupMenu.inflate(R.menu.menu_transaction);
 
-            popupMenu.getMenu().findItem(R.id.action_pin).setVisible(!item.isPinned());
-            popupMenu.getMenu().findItem(R.id.action_unpin).setVisible(item.isPinned());
+//            popupMenu.getMenu().findItem(R.id.action_pin).setVisible(!item.isPinned());
+//            popupMenu.getMenu().findItem(R.id.action_unpin).setVisible(item.isPinned());
+
+            popupMenu.getMenu().findItem(R.id.action_pin).setVisible(false);
+            popupMenu.getMenu().findItem(R.id.action_unpin).setVisible(false);
 
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override

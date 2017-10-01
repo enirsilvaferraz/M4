@@ -1,17 +1,20 @@
 package com.system.m4.infrastructure;
 
+import com.system.m4.kotlin.paymenttype.PaymentTypeModel;
+import com.system.m4.kotlin.tags.TagModel;
 import com.system.m4.kotlin.transaction.TransactionModel;
 import com.system.m4.repository.dtos.FilterTransactionDTO;
 import com.system.m4.repository.dtos.GroupTransactionDTO;
-import com.system.m4.repository.dtos.PaymentTypeDTO;
-import com.system.m4.repository.dtos.TagDTO;
 import com.system.m4.views.vos.FilterTransactionVO;
 import com.system.m4.views.vos.GroupTransactionVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -67,7 +70,7 @@ public final class ConverterUtils {
         return vo;
     }
 
-    public static PaymentTypeVO fromPaymentType(PaymentTypeDTO dto) {
+    public static PaymentTypeVO fromPaymentType(PaymentTypeModel dto) {
         PaymentTypeVO vo = new PaymentTypeVO();
         vo.setKey(dto.getKey());
         vo.setName(dto.getName());
@@ -75,25 +78,27 @@ public final class ConverterUtils {
         return vo;
     }
 
-    public static PaymentTypeDTO fromPaymentType(PaymentTypeVO vo) {
-        PaymentTypeDTO dto = new PaymentTypeDTO();
+    public static PaymentTypeModel fromPaymentType(PaymentTypeVO vo) {
+        PaymentTypeModel dto = new PaymentTypeModel();
         dto.setKey(vo.getKey());
         dto.setName(vo.getName());
         dto.setColor(vo.getColor());
         return dto;
     }
 
-    public static TagDTO fromTag(TagVO mVO) {
-        TagDTO dto = new TagDTO();
+    public static TagModel fromTag(TagVO mVO) {
+        TagModel dto = new TagModel();
         dto.setKey(mVO.getKey());
         dto.setName(mVO.getName());
+        dto.setParentName(mVO.getParentName());
         return dto;
     }
 
-    public static TagVO fromTag(TagDTO dto) {
+    public static TagVO fromTag(TagModel dto) {
         TagVO vo = new TagVO();
         vo.setKey(dto.getKey());
         vo.setName(dto.getName());
+        vo.setParentName(dto.getParentName());
         return vo;
     }
 
@@ -162,5 +167,56 @@ public final class ConverterUtils {
             vo.setPaymentType(paymentTypes.get(paymentTypes.indexOf(vo.getPaymentType())));
         }
         return vo;
+    }
+
+    public static ArrayList<Transaction> fromTransaction(@NotNull List<TransactionModel> list) {
+        ArrayList<Transaction> listVO = new ArrayList<>();
+        for (TransactionModel model : list) {
+            listVO.add(fromTransaction(model));
+        }
+        return listVO;
+    }
+
+    public static ArrayList<Transaction> fromFixedTransaction(@NotNull List<TransactionModel> list, int month, int year) {
+        ArrayList<Transaction> listVO = new ArrayList<>();
+        for (TransactionModel model : list) {
+            Transaction transaction = fromTransaction(model);
+            transaction.setPinned(true);
+            transaction.setApproved(false);
+
+            Calendar instance = Calendar.getInstance();
+            instance.setTime(transaction.getPaymentDate());
+            instance.set(Calendar.MONTH, month);
+            instance.set(Calendar.YEAR, year);
+
+            transaction.setPaymentDate(instance.getTime());
+
+            listVO.add(transaction);
+        }
+        return listVO;
+    }
+
+    public static ArrayList<TagVO> fromTag(@NotNull List<TagModel> list) {
+        ArrayList<TagVO> listVO = new ArrayList<>();
+        for (TagModel model : list) {
+            listVO.add(fromTag(model));
+        }
+        return listVO;
+    }
+
+    public static ArrayList<PaymentTypeVO> fromPaymentType(@NotNull ArrayList<PaymentTypeModel> list) {
+        ArrayList<PaymentTypeVO> listVO = new ArrayList<>();
+        for (PaymentTypeModel model : list) {
+            listVO.add(fromPaymentType(model));
+        }
+        return listVO;
+    }
+
+    public static ArrayList<GroupTransactionVO> fromGroupTransaction(@NotNull ArrayList<GroupTransactionDTO> list) {
+        ArrayList<GroupTransactionVO> listVO = new ArrayList<>();
+        for (GroupTransactionDTO model : list) {
+            listVO.add(fromGroupTransaction(model));
+        }
+        return listVO;
     }
 }

@@ -113,7 +113,7 @@ class TagBusiness {
             return array
         }
 
-        fun calculateTagSummary(transactions: List<Transaction>): List<TagSummaryVO> {
+        fun calculateTagSummary(transactions: ArrayList<Transaction>): List<TagSummaryVO> {
 
             val itens = arrayListOf<TagSummaryVO>()
 

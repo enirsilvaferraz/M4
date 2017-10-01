@@ -17,36 +17,36 @@ class TransactionRepository(val year: Int, val month: Int) {
 
     val mFireRef = FirebaseDatabase.getInstance().getReference("${BuildConfig.FLAVOR}/Register/$year/${(month + 1)}/Transaction/")
 
-    fun create(Model: TransactionModel, listener: PersistenceListener<TransactionModel>) {
+    fun create(model: TransactionModel, listener: PersistenceListener<TransactionModel>) {
 
         val push = mFireRef.push()
-        Model.key = push.key
+        model.key = push.key
 
-        push.setValue(Model) { databaseError, databaseReference ->
+        push.setValue(model) { databaseError, databaseReference ->
             if (databaseError == null) {
-                listener.onSuccess(Model)
+                listener.onSuccess(model)
             } else {
                 listener.onError(databaseError.message)
             }
         }
     }
 
-    fun update(Model: TransactionModel, listener: PersistenceListener<TransactionModel>) {
+    fun update(model: TransactionModel, listener: PersistenceListener<TransactionModel>) {
 
-        mFireRef.child(Model.key).updateChildren(KotlinUtils().modelToMap(Model)) { databaseError, databaseReference ->
+        mFireRef.child(model.key).updateChildren(KotlinUtils().modelToMap(model)) { databaseError, databaseReference ->
             if (databaseError == null) {
-                listener.onSuccess(Model)
+                listener.onSuccess(model)
             } else {
                 listener.onError(databaseError.message)
             }
         }
     }
 
-    fun delete(Model: TransactionModel, listener: PersistenceListener<TransactionModel>) {
+    fun delete(model: TransactionModel, listener: PersistenceListener<TransactionModel>) {
 
-        mFireRef.child(Model.key).removeValue { databaseError, databaseReference ->
+        mFireRef.child(model.key).removeValue { databaseError, databaseReference ->
             if (databaseError == null) {
-                listener.onSuccess(Model)
+                listener.onSuccess(model)
             } else {
                 listener.onError(databaseError.message)
             }
