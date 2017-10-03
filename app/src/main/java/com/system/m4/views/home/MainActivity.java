@@ -1,8 +1,10 @@
 package com.system.m4.views.home;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.kotlin.infrastructure.BaseDialogFragment;
+import com.system.m4.kotlin.notificationservice.NotificationReceiver;
 import com.system.m4.kotlin.tags.TagListContract;
 import com.system.m4.kotlin.tags.TagListDialog;
 import com.system.m4.kotlin.tags.TagModel;
@@ -90,6 +93,15 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
             getPermissionToReadSMS();
         }
+
+        if (!isNLServiceRunning()) {
+            JavaUtils.AndroidUtil.showAlertDialog(this, "Enable notification manager?", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+                }
+            });
+        }
     }
 
     public void getPermissionToReadSMS() {
@@ -126,15 +138,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void requestTransactionManagerDialog() {
-//        ListComponentDialog listComponentDialog = ListComponentDialog.newInstance(R.string.transaction_tag, new BaseDialogFragment.DialogListener() {
-//            @Override
-//            public void onFinish(VOInterface vo) {
-//                presenter.requestTransactionDialog((TagVO) vo);
-//            }
-//        });
-//
-//        listComponentDialog.setPresenter(new ListTagPresenter(listComponentDialog));
-//        listComponentDialog.show(getSupportFragmentManager(), ListComponentDialog.class.getSimpleName());
 
         TagListDialog.Companion.instance(new TagListContract.OnSelectedListener() {
             @Override
@@ -193,5 +196,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         edit.apply();
 
         return true;
+    }
+
+    private boolean isNLServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (NotificationReceiver.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
