@@ -3,11 +3,6 @@ package com.system.m4.views.vos;
 import android.os.Parcel;
 import android.support.annotation.NonNull;
 
-import com.system.m4.repository.dtos.PaymentTypeDTO;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by eferraz on 30/04/17.
  * For M4
@@ -37,19 +32,6 @@ public class PaymentTypeVO implements VOInterface<PaymentTypeVO> {
     protected PaymentTypeVO(Parcel in) {
         this.key = in.readString();
         this.name = in.readString();
-    }
-
-    public PaymentTypeVO(PaymentTypeDTO dto) {
-        this.key = dto.getKey();
-        this.name = dto.getName();
-    }
-
-    public static List<PaymentTypeVO> asList(List<PaymentTypeDTO> dtolist) {
-        List<PaymentTypeVO> volist = new ArrayList<>();
-        for (PaymentTypeDTO dto : dtolist) {
-            volist.add(new PaymentTypeVO(dto));
-        }
-        return volist;
     }
 
     public String getName() {

@@ -3,14 +3,12 @@ package com.system.m4.views.vos;
 import android.os.Parcel;
 import android.support.annotation.NonNull;
 
-import com.system.m4.repository.dtos.TagDTO;
-
 /**
  * Created by eferraz on 30/04/17.
  * For M4
  */
 
-public class TagVO implements VOInterface<TagVO>{
+public class TagVO implements VOInterface<TagVO> {
 
     public static final Creator<TagVO> CREATOR = new Creator<TagVO>() {
         @Override
@@ -27,11 +25,6 @@ public class TagVO implements VOInterface<TagVO>{
     private String key;
     private String name;
     private String parentName;
-
-    public TagVO(TagDTO dto) {
-        this.key = dto.getKey();
-        this.name = dto.getName();
-    }
 
     public TagVO() {
     }
