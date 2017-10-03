@@ -2,6 +2,8 @@ package com.system.m4.kotlin.transaction
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
 /**
  * Created by eferraz on 27/08/17.
@@ -9,12 +11,32 @@ import android.os.Parcelable
  */
 data class TransactionModel constructor(
 
+        @Expose
+        @SerializedName("key")
         var key: String?,
+
+        @Expose
+        @SerializedName("paymentDate")
         var paymentDate: String?,
+
+        @Expose
+        @SerializedName("purchaseDate")
         var purchaseDate: String?,
+
+        @Expose
+        @SerializedName("price")
         var price: Double,
+
+        @Expose
+        @SerializedName("tag")
         var tag: String?,
+
+        @Expose
+        @SerializedName("paymentType")
         var paymentType: String?,
+
+        @Expose
+        @SerializedName("content")
         var content: String?
 
 ) : Parcelable {

@@ -51,7 +51,7 @@ public final class JavaUtils {
         public static final String DD = "dd";
 
         public static final String MMMM = "MMMM";
-        
+
         public static final String YYYY = "yyyy";
 
         public static final String DD_MM_YYYY_HH_MM_SS = "dd/MM/yyyy hh:mm:ss";
@@ -177,7 +177,7 @@ public final class JavaUtils {
 
         public static String currencyFormat(Double value) {
             if (value != null) {
-                final NumberFormat instance = NumberFormat.getInstance(Locale.ENGLISH);
+                final NumberFormat instance = NumberFormat.getInstance();
                 instance.setMinimumFractionDigits(2);
                 instance.setMinimumIntegerDigits(1);
                 return "R$ " + instance.format(value);
@@ -186,7 +186,7 @@ public final class JavaUtils {
 
         public static String valueFormat(Double value) {
             if (value != null) {
-                final NumberFormat instance = NumberFormat.getInstance(Locale.ENGLISH);
+                final NumberFormat instance = NumberFormat.getInstance();
                 instance.setMaximumFractionDigits(0);
                 instance.setMinimumIntegerDigits(1);
                 return instance.format(value);
@@ -194,7 +194,7 @@ public final class JavaUtils {
         }
 
         public static String percentFormat(Double percentValue) {
-            final NumberFormat instance = NumberFormat.getInstance(Locale.ENGLISH);
+            final NumberFormat instance = NumberFormat.getInstance();
             instance.setMinimumFractionDigits(1);
             instance.setMinimumIntegerDigits(1);
             instance.setMaximumFractionDigits(2);

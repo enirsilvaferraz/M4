@@ -19,11 +19,11 @@ import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.kotlin.infrastructure.BaseDialogFragment;
 import com.system.m4.kotlin.tags.TagListContract;
 import com.system.m4.kotlin.tags.TagListDialog;
 import com.system.m4.kotlin.tags.TagModel;
-import com.system.m4.views.BaseDialogFragment;
-import com.system.m4.views.transaction.TransactionManagerDialog;
+import com.system.m4.kotlin.transaction.TransactionManagerDialog;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOInterface;
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void showTransactionDialog(Transaction vo) {
-        TransactionManagerDialog dialogFragment = TransactionManagerDialog.newInstance(vo);
+        TransactionManagerDialog dialogFragment = TransactionManagerDialog.Companion.newInstance(vo);
         dialogFragment.setDialogListener(new BaseDialogFragment.DialogListener() {
             @Override
             public void onFinish(VOInterface vo) {
