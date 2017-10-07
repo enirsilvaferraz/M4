@@ -3,11 +3,22 @@ package com.system.m4.kotlin.notificationservice
 import android.content.Context
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import com.system.m4.R
+import com.system.m4.infrastructure.JavaUtils
+import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
+import com.system.m4.kotlin.transaction.TransactionBusiness
+import com.system.m4.kotlin.transaction.TransactionModel
+import com.system.m4.views.vos.PaymentTypeVO
+import com.system.m4.views.vos.TagVO
+import com.system.m4.views.vos.Transaction
+import java.util.*
 
 
 /**
  * Created by enirs on 30/09/2017.
  * Service for Notification
+ *
+ * Ex.: Compra de R$ 10,00 APROVADA em Cabify
  */
 class NotificationReceiver : NotificationListenerService() {
 
@@ -17,12 +28,47 @@ class NotificationReceiver : NotificationListenerService() {
         if (sbn != null) {
 
             val extras = sbn.notification.extras
-            log(extras.toString())
 
             if (extras.getString("android.title").contains("Nubank")) {
                 val text = extras.getString("android.text")
+                val value = JavaUtils.NumberUtil.removeFormat(text.subSequence(text.indexOf("R$"), text.indexOf("APROVADA")).trim() as String?)
+                val content = text.subSequence(text.indexOf("APROVADA") + "APROVADA".length, text.length) as String
+
+                save(value, content)
             }
         }
+    }
+
+    private fun save(value: Double?, content: String) {
+
+        val vo = Transaction()
+        vo.purchaseDate = Calendar.getInstance().time
+        vo.price = value
+        vo.content = content
+
+        vo.paymentType = PaymentTypeVO()
+        vo.paymentType.key = resources.getString(R.string.paymenttype_debito_key)
+
+        vo.tag = TagVO()
+        vo.tag.key = "TAG_UNKNOWN"
+
+        val calendar = Calendar.getInstance()
+        if (calendar.get(Calendar.DATE) > 16) {
+            calendar.add(Calendar.MONTH, 1)
+        }
+        calendar.set(Calendar.DATE, 23)
+        vo.paymentDate = calendar.time
+
+        TransactionBusiness().save(vo, object : PersistenceListener<TransactionModel> {
+
+            override fun onSuccess(model: TransactionModel) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onError(error: String) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
     }
 
     private fun log(log: String) {

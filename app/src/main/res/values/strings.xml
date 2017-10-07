@@ -55,7 +55,9 @@
     </array>
 
     <string name="paymenttype_debito_key">-KkgOxzck3cnJjQqum-S</string>
+    <string name="paymenttype_nubank_key">-KkgW0A6MzTKBld82VwV</string>
     <string name="tag_debito_key">-KmOeEFCprnjvwY3yS_Y</string>
+
     <string name="system_action_add_new">Add New</string>
     <string name="system_action_edit">Edit</string>
     <string name="system_actions_more_actions">More actions</string>
