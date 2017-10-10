@@ -53,17 +53,17 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.dialog_transaction_manager, container, false)
 
-        tvPaymentDate = rootView.findViewById(R.id.transaction_manager_textview_payment_date) as TextView
-        tvPurchaseDate = rootView.findViewById(R.id.transaction_manager_textview_purchase_date) as TextView
-        tvValue = rootView.findViewById(R.id.transaction_manager_textview_value) as TextView
-        tvPaymentType = rootView.findViewById(R.id.transaction_manager_textview_payment_type) as TextView
-        tvContent = rootView.findViewById(R.id.transaction_manager_textview_content) as TextView
+        tvPaymentDate = rootView.findViewById(R.id.transaction_manager_textview_payment_date)
+        tvPurchaseDate = rootView.findViewById(R.id.transaction_manager_textview_purchase_date)
+        tvValue = rootView.findViewById(R.id.transaction_manager_textview_value)
+        tvPaymentType = rootView.findViewById(R.id.transaction_manager_textview_payment_type)
+        tvContent = rootView.findViewById(R.id.transaction_manager_textview_content)
 
-        llPaymentDate = rootView.findViewById(R.id.transaction_manager_action_payment_date) as LinearLayout
-        llPurchaseDate = rootView.findViewById(R.id.transaction_manager_action_purchase_date) as LinearLayout
-        llValue = rootView.findViewById(R.id.transaction_manager_action_value) as LinearLayout
-        llPaymentType = rootView.findViewById(R.id.transaction_manager_action_payment_type) as LinearLayout
-        llContent = rootView.findViewById(R.id.transaction_manager_action_content) as LinearLayout
+        llPaymentDate = rootView.findViewById(R.id.transaction_manager_action_payment_date)
+        llPurchaseDate = rootView.findViewById(R.id.transaction_manager_action_purchase_date)
+        llValue = rootView.findViewById(R.id.transaction_manager_action_value)
+        llPaymentType = rootView.findViewById(R.id.transaction_manager_action_payment_type)
+        llContent = rootView.findViewById(R.id.transaction_manager_action_content)
 
         llPaymentDate.setOnClickListener { actionPaymentDate() }
         llPurchaseDate.setOnClickListener { actionPurchaseDate() }

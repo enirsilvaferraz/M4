@@ -1,11 +1,11 @@
 package com.system.m4.kotlin.tags
 
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
 import com.system.m4.R
@@ -60,9 +60,9 @@ class TagAdapter(val onClick: TagListContract.OnAdapterClickListener) : Recycler
 
     class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
 
-        val mTvName = view.findViewById(R.id.item_list_dialog_text) as TextView
-        val mBtMoreActions = view.findViewById(R.id.item_list_more_actions) as AppCompatImageButton
-        val mContainer = view.findViewById(R.id.list_item_container) as ViewGroup
+        val mTvName = view.findViewById<TextView>(R.id.item_list_dialog_text)
+        val mBtMoreActions = view.findViewById<ImageButton>(R.id.item_list_more_actions)
+        val mContainer = view.findViewById<ViewGroup>(R.id.list_item_container)
 
         fun bind(model: TagModel, listener: TagListContract.OnAdapterClickListener) {
             mTvName.text = model.name

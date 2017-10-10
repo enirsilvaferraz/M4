@@ -56,7 +56,7 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mDialogFooter = view?.findViewById(R.id.base_dialog_container_action) as DialogFooter
+        mDialogFooter = view!!.findViewById<DialogFooter>(R.id.base_dialog_container_action)
         mDialogFooter.setListener(object : DialogFooter.OnClickListener {
 
             override fun onDoneClick() {
@@ -68,9 +68,9 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
             }
         })
 
-        mEtName = view.findViewById(R.id.dialog_description) as EditText
+        mEtName = view.findViewById<EditText>(R.id.dialog_description)
 
-        mSpParent = view.findViewById(R.id.dialog_spinner_tag_parent) as AppCompatSpinner
+        mSpParent = view.findViewById<AppCompatSpinner>(R.id.dialog_spinner_tag_parent)
 
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 

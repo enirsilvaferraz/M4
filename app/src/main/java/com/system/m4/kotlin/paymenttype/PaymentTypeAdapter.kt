@@ -1,10 +1,10 @@
 package com.system.m4.kotlin.paymenttype
 
-import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
 import com.system.m4.R
@@ -59,8 +59,8 @@ class PaymentTypeAdapter(val onClick: PaymentTypeListContract.OnAdapterClickList
 
     class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
 
-        val mTvName = view.findViewById(R.id.item_list_dialog_text) as TextView
-        val mBtMoreActions = view.findViewById(R.id.item_list_more_actions) as AppCompatImageButton
+        val mTvName = view.findViewById<TextView>(R.id.item_list_dialog_text)
+        val mBtMoreActions = view.findViewById<ImageButton>(R.id.item_list_more_actions)
 
         fun bind(model: PaymentTypeModel, listener: PaymentTypeListContract.OnAdapterClickListener) {
             mTvName.text = model.name

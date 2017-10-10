@@ -24,7 +24,7 @@ class CustomSpinnerAdapter(context: Context?, val resource: Int, val objects: Ar
     }
 
     private fun getCustomView(view: View, position: Int): View {
-        val textView = view.findViewById(android.R.id.text1) as TextView
+        val textView = view.findViewById<TextView>(android.R.id.text1)
         textView.text = objects.get(position).name
         return view
     }

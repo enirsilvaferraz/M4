@@ -52,7 +52,7 @@ class PaymentTypeManagerDialog : DialogFragment(), PaymentTypeManagerContract.Vi
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mDialogFooter = view?.findViewById(R.id.base_dialog_container_action) as DialogFooter
+        mDialogFooter = view!!.findViewById<DialogFooter>(R.id.base_dialog_container_action)
         mDialogFooter.setListener(object : DialogFooter.OnClickListener {
 
             override fun onDoneClick() {
@@ -64,7 +64,7 @@ class PaymentTypeManagerDialog : DialogFragment(), PaymentTypeManagerContract.Vi
             }
         })
 
-        mEtName = view.findViewById(R.id.dialog_description) as EditText
+        mEtName = view.findViewById(R.id.dialog_description)
 
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 

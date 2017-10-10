@@ -1,9 +1,5 @@
 package com.system.m4.kotlin.infrastructure
 
-/**
- * Created by enirs on 02/10/2017.
- */
-
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v4.app.DialogFragment
@@ -33,8 +29,8 @@ abstract class BaseDialogFragment : DialogFragment(), DialogFooter.OnClickListen
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mToolbar = view?.findViewById(R.id.dialog_toolbar_title) as DialogToolbar
-        mFooter = view.findViewById(R.id.base_dialog_container_action) as DialogFooter
+        mToolbar = view!!.findViewById<DialogToolbar>(R.id.dialog_toolbar_title)
+        mFooter = view.findViewById<DialogFooter>(R.id.base_dialog_container_action)
 
         mToolbar.setListener(this)
         mFooter.setListener(this)

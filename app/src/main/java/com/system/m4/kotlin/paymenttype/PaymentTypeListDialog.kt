@@ -48,11 +48,11 @@ class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, To
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mToolbar = view?.findViewById(R.id.dialog_toolbar) as Toolbar
+        mToolbar = view!!.findViewById<Toolbar>(R.id.dialog_toolbar)
         mToolbar.setOnMenuItemClickListener(this)
         mToolbar.inflateMenu(R.menu.menu_crud_list)
 
-        mRecyclerView = view.findViewById(R.id.dialog_list_recycler) as RecyclerView
+        mRecyclerView = view.findViewById<RecyclerView>(R.id.dialog_list_recycler)
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
         mRecyclerView.adapter = PaymentTypeAdapter(object : PaymentTypeListContract.OnAdapterClickListener {
 
@@ -69,7 +69,7 @@ class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, To
             }
         })
 
-        mProgress = view.findViewById(R.id.dialog_progress) as ProgressBar
+        mProgress = view.findViewById<ProgressBar>(R.id.dialog_progress)
 
         mPresenter = PaymentTypeListPresenter(this)
         mPresenter.load()
