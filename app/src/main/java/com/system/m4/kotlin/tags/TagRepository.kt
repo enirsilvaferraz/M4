@@ -67,10 +67,10 @@ class TagRepository {
 
             override fun onDataChange(p0: DataSnapshot?) {
                 val resultList = arrayListOf<TagModel>()
-                p0?.children?.mapTo(resultList) {
+                p0?.children!!.mapTo(resultList) {
 
                     //val valor =
-                    it.getValue(TagModel::class.java)
+                    it.getValue(TagModel::class.java)!!
 
 //                    if (it.child("children").exists()) {
 //                        valor.child = arrayListOf()

@@ -21,8 +21,8 @@ class GroupTransactionRepository {
 
             override fun onDataChange(p0: DataSnapshot?) {
                 val resultList = arrayListOf<GroupTransactionDTO>()
-                p0?.children?.mapTo(resultList) {
-                    it.getValue(GroupTransactionDTO::class.java)
+                p0?.children!!.mapTo(resultList) {
+                    it.getValue(GroupTransactionDTO::class.java)!!
                 }
                 listener.onSuccess(resultList)
             }

@@ -61,8 +61,8 @@ class PaymentTypeRepository {
 
             override fun onDataChange(p0: DataSnapshot?) {
                 val resultList = arrayListOf<PaymentTypeModel>()
-                p0?.children?.mapTo(resultList) {
-                    it.getValue(PaymentTypeModel::class.java)
+                p0?.children!!.mapTo(resultList) {
+                    it.getValue(PaymentTypeModel::class.java)!!
                 }
                 listener.onSuccess(resultList)
             }

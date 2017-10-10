@@ -59,8 +59,8 @@ class TransactionRepository(val year: Int, val month: Int) {
 
             override fun onDataChange(p0: DataSnapshot?) {
                 val resultList = arrayListOf<TransactionModel>()
-                p0?.children?.mapTo(resultList) {
-                    it.getValue(TransactionModel::class.java)
+                p0?.children!!.mapTo(resultList) {
+                    it.getValue(TransactionModel::class.java)!!
                 }
                 listener.onSuccess(resultList)
             }
