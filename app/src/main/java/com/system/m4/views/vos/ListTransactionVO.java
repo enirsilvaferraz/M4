@@ -12,6 +12,7 @@ public class ListTransactionVO {
     private List<Transaction> transactions;
     private GroupTransactionVO group;
     private List<TagSummaryVO> tagSummary;
+    private List<Transaction> pendingTransaction;
 
     public List<Transaction> getTransactions() {
         return transactions;
@@ -35,5 +36,13 @@ public class ListTransactionVO {
 
     public void setTagSummary(List<TagSummaryVO> tagSummary) {
         this.tagSummary = tagSummary;
+    }
+
+    public List<Transaction> getPendingTransaction() {
+        return pendingTransaction;
+    }
+
+    public void setPendingTransaction(List<Transaction> pendingTransaction) {
+        this.pendingTransaction = pendingTransaction;
     }
 }

@@ -1,5 +1,6 @@
 package com.system.m4.kotlin.home
 
+import com.system.m4.infrastructure.Constants
 import com.system.m4.infrastructure.ConverterUtils
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.SingleResultListener
@@ -11,7 +12,6 @@ import com.system.m4.kotlin.transaction.TransactionBusiness
 import com.system.m4.repository.dtos.GroupTransactionDTO
 import com.system.m4.views.vos.ListTransactionVO
 import com.system.m4.views.vos.Transaction
-import java.util.*
 
 /**
  * Created by enirs on 30/09/2017.
@@ -68,6 +68,7 @@ class HomeBusiness {
             val listTransactionVO = ListTransactionVO()
             listTransactionVO.tagSummary = TagBusiness.calculateTagSummary(listTransaction)
             listTransactionVO.transactions = listTransaction
+            listTransactionVO.pendingTransaction = getPendingTransaction(listTransaction)
 
             if (!listGroup.isEmpty()) {
                 listTransactionVO.group = ConverterUtils.fillGroupTransaction(listGroup.get(0), listPaymentType)
@@ -75,6 +76,16 @@ class HomeBusiness {
 
             listener.onSuccess(listTransactionVO)
         }
+    }
+
+    private fun getPendingTransaction(listTransaction: ArrayList<Transaction>): MutableList<Transaction>? {
+        val pendingList = arrayListOf<Transaction>()
+        for (transaction in listTransaction) {
+            if (transaction.tag.key == Constants.TAG_UNKNOWN) {
+                pendingList.add(transaction)
+            }
+        }
+        return pendingList
     }
 
     abstract class ErrorListener<T>(val listener: SingleResultListener<ListTransactionVO>) : MultResultListener<T> {

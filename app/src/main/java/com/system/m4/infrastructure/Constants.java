@@ -12,4 +12,5 @@ public interface Constants {
     String BUNDLE_TRANSACTION_VO = "BUNDLE_TRANSACTION_VO";
 
     int CALL_GROUP_FINDALL = 2000;
+    String TAG_UNKNOWN = "TAG_UNKNOWN";
 }

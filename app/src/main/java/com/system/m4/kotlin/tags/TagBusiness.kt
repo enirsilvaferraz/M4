@@ -119,7 +119,7 @@ class TagBusiness {
 
             for (transaction in transactions) {
 
-                if (transaction.key == null || !transaction.isApproved || transaction.paymentDate.compareTo(Calendar.getInstance().time) > 0) {
+                if (transaction.key == null || !transaction.isApproved) {
                     continue
                 }
 

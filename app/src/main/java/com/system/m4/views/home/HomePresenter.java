@@ -141,9 +141,15 @@ class HomePresenter implements HomeContract.Presenter {
 //                listVO.add(new SpaceVO());
 //            }
 
-            if (!listTransaction.isEmpty()) {
+            if (!item.getTagSummary().isEmpty()) {
                 listVO.add(new SubTitleVO("Tag Summary"));
                 listVO.addAll(item.getTagSummary());
+                listVO.add(new SpaceVO());
+            }
+
+            if (!item.getPendingTransaction().isEmpty()) {
+                listVO.add(new SubTitleVO("Pending Transactions"));
+                listVO.addAll(item.getPendingTransaction());
                 listVO.add(new SpaceVO());
             }
 
