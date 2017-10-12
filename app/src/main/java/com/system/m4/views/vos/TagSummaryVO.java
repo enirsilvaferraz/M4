@@ -3,6 +3,8 @@ package com.system.m4.views.vos;
 import android.os.Parcel;
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 /**
  * Created by eferraz on 30/04/17.
  * For M4
@@ -21,10 +23,12 @@ public class TagSummaryVO implements VOInterface<TagSummaryVO>, VOItemListInterf
             return new TagSummaryVO[size];
         }
     };
+
     private String key;
     private String parentName;
     private String name;
     private Double value;
+    private List<Transaction> transactions;
 
     public TagSummaryVO() {
     }
@@ -38,9 +42,10 @@ public class TagSummaryVO implements VOInterface<TagSummaryVO>, VOItemListInterf
 
     protected TagSummaryVO(Parcel in) {
         this.key = in.readString();
-        this.name = in.readString();
         this.parentName = in.readString();
+        this.name = in.readString();
         this.value = (Double) in.readValue(Double.class.getClassLoader());
+        this.transactions = in.createTypedArrayList(Transaction.CREATOR);
     }
 
     public String getName() {
@@ -75,6 +80,14 @@ public class TagSummaryVO implements VOInterface<TagSummaryVO>, VOItemListInterf
         this.value = value;
     }
 
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,8 +117,9 @@ public class TagSummaryVO implements VOInterface<TagSummaryVO>, VOItemListInterf
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.key);
-        dest.writeString(this.name);
         dest.writeString(this.parentName);
+        dest.writeString(this.name);
         dest.writeValue(this.value);
+        dest.writeTypedList(this.transactions);
     }
 }

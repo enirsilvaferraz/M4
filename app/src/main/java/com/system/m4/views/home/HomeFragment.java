@@ -14,9 +14,12 @@ import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.kotlin.transaction.TransactionListDialog;
+import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -86,6 +89,12 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                         presenter.delete(item);
                     }
                 });
+    }
+
+    @Override
+    public void requestShowListTransaction(TagSummaryVO item) {
+        TransactionListDialog dialogFragment = TransactionListDialog.Companion.instance(new ArrayList<>(item.getTransactions()));
+        dialogFragment.show(getFragmentManager(), TransactionListDialog.class.getSimpleName());
     }
 
     @Override

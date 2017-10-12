@@ -123,17 +123,21 @@ class TagBusiness {
                     continue
                 }
 
-                val chartItem = TagSummaryVO(transaction.tag.key, transaction.tag.parentName, transaction.tag.name, transaction.price)
+                val summaryVO = TagSummaryVO(transaction.tag.key, transaction.tag.parentName, transaction.tag.name, transaction.price)
 
-                if (itens.contains(chartItem)) {
-                    val item = itens[itens.indexOf(chartItem)]
+                if (itens.contains(summaryVO)) {
+                    val item = itens.get(itens.indexOf(summaryVO))
                     item.value = item.value!! + transaction.price!!.toFloat()
+                    item.transactions.add(transaction)
                 } else {
-                    itens.add(chartItem)
+                    summaryVO.transactions = arrayListOf<Transaction>()
+                    summaryVO.transactions.add(transaction)
+                    itens.add(summaryVO)
                 }
             }
 
-            return itens.sortedWith(compareBy({ it.parentName }, { it.name }))
+            var sortedWith = itens.sortedWith(compareBy({ it.parentName }, { it.name }))
+            return sortedWith
         }
     }
 }

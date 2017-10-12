@@ -16,6 +16,7 @@ import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
+import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TagVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -288,5 +289,10 @@ class HomePresenter implements HomeContract.Presenter {
                 mView.showError(e.getMessage());
             }
         });
+    }
+
+    @Override
+    public void requestShowListTransaction(TagSummaryVO item) {
+        mView.requestShowListTransaction(item);
     }
 }

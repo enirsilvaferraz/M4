@@ -7,7 +7,6 @@
     <dimen name="custom_dialog_heght_recyclerview">380dp</dimen>
 
 
-
-    <dimen name="card_horizontal_margin">8dp</dimen>
+    <dimen name="card_horizontal_margin">0dp</dimen>
 
 </resources>

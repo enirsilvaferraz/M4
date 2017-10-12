@@ -1,5 +1,6 @@
 package com.system.m4.views.home;
 
+import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.Transaction;
 import com.system.m4.views.vos.VOItemListInterface;
 
@@ -29,6 +30,7 @@ class HomeContract {
 
         void requestDelete(Transaction item);
 
+        void requestShowListTransaction(TagSummaryVO item);
     }
 
     /**
@@ -51,5 +53,7 @@ class HomeContract {
         void pinTransaction(Transaction item);
 
         void unpinTransaction(Transaction item);
+
+        void requestShowListTransaction(TagSummaryVO item);
     }
 }

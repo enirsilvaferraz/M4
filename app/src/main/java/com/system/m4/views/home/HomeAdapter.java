@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 /**
  *
  */
-class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_TITLE = 1;
     private static final int TYPE_SUB_TITLE = 2;
@@ -283,6 +283,9 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class ViewHolderTagSummary extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.list_item_container)
+        LinearLayout container;
+
         @BindView(R.id.item_summary_title)
         TextView mLabel;
 
@@ -297,6 +300,14 @@ class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void bind(final TagSummaryVO item) {
             mLabel.setText(item.getParentName() != null ? item.getParentName() + " / " + item.getName() : item.getName());
             mValue.setText(JavaUtils.NumberUtil.currencyFormat(item.getValue()));
+
+            container.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    presenter.requestShowListTransaction(item);
+                }
+            });
         }
     }
 

@@ -17,6 +17,7 @@
         android:background="@color/divider" />
 
     <LinearLayout
+        android:id="@+id/list_item_container"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:gravity="center_vertical"
