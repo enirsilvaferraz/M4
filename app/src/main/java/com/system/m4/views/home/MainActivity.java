@@ -1,13 +1,13 @@
 package com.system.m4.views.home;
 
 import android.Manifest;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -199,14 +199,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     private boolean isNLServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (NotificationReceiver.class.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-
-        return false;
+        String enabledNotificationListeners = Settings.Secure.getString(this.getContentResolver(), "enabled_notification_listeners");
+        return enabledNotificationListeners.contains(NotificationReceiver.class.getName());
     }
 }

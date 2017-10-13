@@ -1,6 +1,5 @@
 package com.system.m4.kotlin.home
 
-import com.system.m4.infrastructure.Constants
 import com.system.m4.infrastructure.ConverterUtils
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.SingleResultListener
@@ -81,7 +80,7 @@ class HomeBusiness {
     private fun getPendingTransaction(listTransaction: ArrayList<Transaction>): MutableList<Transaction>? {
         val pendingList = arrayListOf<Transaction>()
         for (transaction in listTransaction) {
-            if (transaction.tag.key == Constants.TAG_UNKNOWN) {
+            if (transaction.tag.key.isNullOrBlank()) {
                 pendingList.add(transaction)
             }
         }
