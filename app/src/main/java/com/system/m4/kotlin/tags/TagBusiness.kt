@@ -3,7 +3,8 @@ package com.system.m4.kotlin.tags
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
 import com.system.m4.views.vos.TagSummaryVO
-import com.system.m4.views.vos.Transaction
+import com.system.m4.views.vos.TagVO
+import com.system.m4.views.vos.TransactionVO
 import java.util.*
 
 /**
@@ -113,7 +114,7 @@ class TagBusiness {
             return array
         }
 
-        fun calculateTagSummary(transactions: ArrayList<Transaction>): List<TagSummaryVO> {
+        fun calculateTagSummary(transactions: ArrayList<TransactionVO>): List<TagSummaryVO> {
 
             val itens = arrayListOf<TagSummaryVO>()
 
@@ -130,7 +131,7 @@ class TagBusiness {
                     item.value = item.value!! + transaction.price!!.toFloat()
                     item.transactions.add(transaction)
                 } else {
-                    summaryVO.transactions = arrayListOf<Transaction>()
+                    summaryVO.transactions = arrayListOf<TransactionVO>()
                     summaryVO.transactions.add(transaction)
                     itens.add(summaryVO)
                 }
@@ -138,6 +139,30 @@ class TagBusiness {
 
             var sortedWith = itens.sortedWith(compareBy({ it.parentName }, { it.name }))
             return sortedWith
+        }
+
+        fun fromTag(list: List<TagModel>): ArrayList<TagVO> {
+            val listVO = ArrayList<TagVO>()
+            for (model in list) {
+                listVO.add(fromTag(model))
+            }
+            return listVO
+        }
+
+        fun fromTag(mVO: TagVO): TagModel {
+            val dto = TagModel()
+            dto.key = mVO.key
+            dto.name = mVO.name
+            dto.parentName = mVO.parentName
+            return dto
+        }
+
+        fun fromTag(dto: TagModel): TagVO {
+            val vo = TagVO()
+            vo.key = dto.key
+            vo.name = dto.name
+            vo.parentName = dto.parentName
+            return vo
         }
     }
 }

@@ -5,14 +5,14 @@ import com.system.m4.R
 import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.views.vos.PaymentTypeVO
 import com.system.m4.views.vos.TagVO
-import com.system.m4.views.vos.Transaction
+import com.system.m4.views.vos.TransactionVO
 import java.util.*
 
 /**
  * Created by enirs on 11/10/2017.
  * Business para SMS Reader
  */
-class SMSReaderBusiness {
+class SmsReaderBusiness {
 
     companion object {
 
@@ -22,7 +22,7 @@ class SMSReaderBusiness {
         internal val DEBIT_STR_RS = "R$"
         internal val DEBIT_STR_COMPRA_APROVADA = "COMPRA APROVADA"
 
-        fun readSMS(context: Context, message: String): Transaction? {
+        fun readSMS(context: Context, message: String): TransactionVO? {
 
             return when {
                 message.startsWith(SMS_TITLE_DEBIT) -> readSMSTextDebit(context, message)
@@ -34,9 +34,9 @@ class SMSReaderBusiness {
         /**
          * Template : ITAU DEBITO: Cartao final 0934 COMPRA APROVADA 11/06 08:11:39 R$ 50,00 Local: POSTO ODE. Consulte também pelo celular www.itau.com.br
          */
-        fun readSMSTextDebit(context: Context, message: String): Transaction {
+        fun readSMSTextDebit(context: Context, message: String): TransactionVO {
 
-            val vo = Transaction()
+            val vo = TransactionVO()
             vo.paymentType = PaymentTypeVO()
             vo.paymentType.key = context.resources.getString(R.string.paymenttype_debito_key)
 
@@ -66,9 +66,9 @@ class SMSReaderBusiness {
         /**
          * Template : Realizado pagamento de TITULOS ITAU no valor de R$ 442,77 na sua conta XXX53-3 em 10/10 as 19:48
          */
-        fun readSMSTextPayment(message: String, strKeyDebit: String): Transaction {
+        fun readSMSTextPayment(message: String, strKeyDebit: String): TransactionVO {
 
-            val vo = Transaction()
+            val vo = TransactionVO()
             vo.paymentType = PaymentTypeVO()
             vo.paymentType.key = strKeyDebit
 

@@ -9,17 +9,17 @@ import java.util.Date;
 /**
  *
  */
-public class Transaction implements VOInterface<Transaction>, VOItemListInterface, Parcelable, Comparable<Transaction> {
+public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInterface, Parcelable, Comparable<TransactionVO> {
 
-    public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
+    public static final Creator<TransactionVO> CREATOR = new Creator<TransactionVO>() {
         @Override
-        public Transaction createFromParcel(Parcel source) {
-            return new Transaction(source);
+        public TransactionVO createFromParcel(Parcel source) {
+            return new TransactionVO(source);
         }
 
         @Override
-        public Transaction[] newArray(int size) {
-            return new Transaction[size];
+        public TransactionVO[] newArray(int size) {
+            return new TransactionVO[size];
         }
     };
     private String key;
@@ -34,15 +34,15 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
     private boolean clickable = true;
     private boolean approved = true;
 
-    public Transaction() {
+    public TransactionVO() {
         // Default constructor
     }
 
-    public Transaction(TagVO tagVO) {
+    public TransactionVO(TagVO tagVO) {
         this.tag = tagVO;
     }
 
-    protected Transaction(Parcel in) {
+    protected TransactionVO(Parcel in) {
         this.key = in.readString();
         long tmpPaymentDate = in.readLong();
         this.paymentDate = tmpPaymentDate == -1 ? null : new Date(tmpPaymentDate);
@@ -111,11 +111,16 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
     }
 
     @Override
+    public void setName(String name) {
+
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Transaction that = (Transaction) o;
+        TransactionVO that = (TransactionVO) o;
 
         return key != null ? key.equals(that.key) : that.key == null;
 
@@ -124,11 +129,6 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
     @Override
     public int hashCode() {
         return key != null ? key.hashCode() : 0;
-    }
-
-    @Override
-    public void setName(String name) {
-
     }
 
     public String getKey() {
@@ -140,7 +140,7 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
     }
 
     @Override
-    public int compareTo(@NonNull Transaction o) {
+    public int compareTo(@NonNull TransactionVO o) {
 
         int compareTo = paymentDate.compareTo(o.getPaymentDate());
         if (compareTo != 0) {
@@ -189,19 +189,19 @@ public class Transaction implements VOInterface<Transaction>, VOItemListInterfac
         dest.writeByte(this.pinned ? (byte) 1 : (byte) 0);
     }
 
-    public void setClickable(boolean clickable) {
-        this.clickable = clickable;
-    }
-
     public boolean isClickable() {
         return clickable;
     }
 
-    public void setApproved(boolean approved) {
-        this.approved = approved;
+    public void setClickable(boolean clickable) {
+        this.clickable = clickable;
     }
 
     public boolean isApproved() {
         return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 }

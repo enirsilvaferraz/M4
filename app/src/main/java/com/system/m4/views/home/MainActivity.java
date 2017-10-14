@@ -28,7 +28,7 @@ import com.system.m4.kotlin.tags.TagListDialog;
 import com.system.m4.kotlin.tags.TagModel;
 import com.system.m4.kotlin.transaction.TransactionManagerDialog;
 import com.system.m4.views.vos.TagVO;
-import com.system.m4.views.vos.Transaction;
+import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOInterface;
 
 import org.jetbrains.annotations.NotNull;
@@ -152,11 +152,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void showTransactionDialog(TagVO vo) {
-        showTransactionDialog(new Transaction(vo));
+        showTransactionDialog(new TransactionVO(vo));
     }
 
     @Override
-    public void showTransactionDialog(Transaction vo) {
+    public void showTransactionDialog(TransactionVO vo) {
         TransactionManagerDialog dialogFragment = TransactionManagerDialog.Companion.newInstance(vo);
         dialogFragment.setDialogListener(new BaseDialogFragment.DialogListener() {
             @Override

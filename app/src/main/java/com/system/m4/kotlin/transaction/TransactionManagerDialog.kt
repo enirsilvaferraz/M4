@@ -21,7 +21,7 @@ import com.system.m4.views.components.dialogs.NumberComponentDialog
 import com.system.m4.views.components.dialogs.TextComponentDialog
 import com.system.m4.views.vos.PaymentTypeVO
 import com.system.m4.views.vos.TagVO
-import com.system.m4.views.vos.Transaction
+import com.system.m4.views.vos.TransactionVO
 import com.system.m4.views.vos.VOInterface
 import java.util.*
 
@@ -83,11 +83,11 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val transaction = arguments.getParcelable<Transaction>(Constants.BUNDLE_TRANSACTION_VO)
+        val transaction = arguments.getParcelable<TransactionVO>(Constants.BUNDLE_TRANSACTION_VO)
         presenter.init(transaction)
     }
 
-    override fun configureModel(transaction: Transaction) {
+    override fun configureModel(transaction: TransactionVO) {
         setTitle(transaction.tag.name)
         presenter.setTags(transaction.tag)
         presenter.setContent(transaction.content)
@@ -239,7 +239,7 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
 
     companion object {
 
-        fun newInstance(transaction: Transaction): TransactionManagerDialog {
+        fun newInstance(transaction: TransactionVO): TransactionManagerDialog {
             val bundle = Bundle()
             bundle.putParcelable(Constants.BUNDLE_TRANSACTION_VO, transaction)
 

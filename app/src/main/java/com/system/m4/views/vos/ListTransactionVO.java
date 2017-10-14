@@ -9,16 +9,16 @@ import java.util.List;
 
 public class ListTransactionVO {
 
-    private List<Transaction> transactions;
+    private List<TransactionVO> transactions;
     private GroupTransactionVO group;
     private List<TagSummaryVO> tagSummary;
-    private List<Transaction> pendingTransaction;
+    private List<TransactionVO> pendingTransaction;
 
-    public List<Transaction> getTransactions() {
+    public List<TransactionVO> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
+    public void setTransactions(List<TransactionVO> transactions) {
         this.transactions = transactions;
     }
 
@@ -38,11 +38,11 @@ public class ListTransactionVO {
         this.tagSummary = tagSummary;
     }
 
-    public List<Transaction> getPendingTransaction() {
+    public List<TransactionVO> getPendingTransaction() {
         return pendingTransaction;
     }
 
-    public void setPendingTransaction(List<Transaction> pendingTransaction) {
+    public void setPendingTransaction(List<TransactionVO> pendingTransaction) {
         this.pendingTransaction = pendingTransaction;
     }
 }

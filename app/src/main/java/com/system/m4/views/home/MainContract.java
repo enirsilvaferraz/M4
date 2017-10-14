@@ -1,7 +1,7 @@
 package com.system.m4.views.home;
 
 import com.system.m4.views.vos.TagVO;
-import com.system.m4.views.vos.Transaction;
+import com.system.m4.views.vos.TransactionVO;
 
 /**
  * Created by eferraz on 29/07/17.
@@ -16,7 +16,7 @@ public interface MainContract {
 
         void showTransactionDialog(TagVO vo);
 
-        void showTransactionDialog(Transaction vo);
+        void showTransactionDialog(TransactionVO vo);
 
         void setMainTitle(String title);
     }

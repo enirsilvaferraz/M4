@@ -11,7 +11,7 @@ import com.system.m4.kotlin.infrastructure.utils.KotlinUtils
 
 /**
  * Created by enirs on 30/09/2017.
- * Repository for Transaction
+ * Repository for TransactionVO
  */
 class TransactionRepository(val year: Int, val month: Int) {
 

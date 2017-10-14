@@ -2,8 +2,6 @@ package com.system.m4.views.home;
 
 import android.support.annotation.NonNull;
 
-import com.system.m4.businness.TransactionBusinness;
-import com.system.m4.infrastructure.BusinnessListener;
 import com.system.m4.kotlin.home.HomeBusiness;
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener;
 import com.system.m4.kotlin.infrastructure.listeners.SingleResultListener;
@@ -18,7 +16,7 @@ import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
 import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TagVO;
-import com.system.m4.views.vos.Transaction;
+import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
 
 import java.util.ArrayList;
@@ -75,10 +73,10 @@ class HomePresenter implements HomeContract.Presenter {
 
             Collections.sort(item.getTransactions());
 
-            List<Transaction> listTransaction = new ArrayList<>();
-            List<Transaction> listGroup = new ArrayList<>();
+            List<TransactionVO> listTransaction = new ArrayList<>();
+            List<TransactionVO> listGroup = new ArrayList<>();
 
-            for (Transaction transaction : item.getTransactions()) {
+            for (TransactionVO transaction : item.getTransactions()) {
                 if (!item.getGroup().getPaymentTypeList().contains(transaction.getPaymentType())) {
                     listTransaction.add(transaction);
                 } else {
@@ -86,9 +84,9 @@ class HomePresenter implements HomeContract.Presenter {
                 }
             }
 
-            Collections.sort(listGroup, new Comparator<Transaction>() {
+            Collections.sort(listGroup, new Comparator<TransactionVO>() {
                 @Override
-                public int compare(Transaction o1, Transaction o2) {
+                public int compare(TransactionVO o1, TransactionVO o2) {
                     if (o1.getPurchaseDate() != null && o2.getPurchaseDate() != null) {
                         return o1.getPurchaseDate().compareTo(o2.getPurchaseDate()) * -1;
                     } else {
@@ -97,12 +95,12 @@ class HomePresenter implements HomeContract.Presenter {
                 }
             });
 
-            Map<PaymentTypeVO, List<Transaction>> map = new HashMap<>();
+            Map<PaymentTypeVO, List<TransactionVO>> map = new HashMap<>();
 
-            for (Transaction itemGroup : listGroup) {
+            for (TransactionVO itemGroup : listGroup) {
 
                 if (!map.containsKey(itemGroup.getPaymentType())) {
-                    map.put(itemGroup.getPaymentType(), new ArrayList<Transaction>());
+                    map.put(itemGroup.getPaymentType(), new ArrayList<TransactionVO>());
                 }
 
                 for (PaymentTypeVO key : map.keySet()) {
@@ -114,13 +112,13 @@ class HomePresenter implements HomeContract.Presenter {
 
             for (PaymentTypeVO key : map.keySet()) {
 
-                Transaction transaction = new Transaction();
+                TransactionVO transaction = new TransactionVO();
                 transaction.setPaymentType(key);
 
                 transaction.setTag(new TagVO());
                 transaction.getTag().setName(key.getName());
 
-                for (Transaction itemList : map.get(key)) {
+                for (TransactionVO itemList : map.get(key)) {
                     Double price = transaction.getPrice() != null ? transaction.getPrice() : 0D;
                     transaction.setPrice(price + itemList.getPrice());
                     transaction.setPaymentDate(itemList.getPaymentDate());
@@ -171,10 +169,10 @@ class HomePresenter implements HomeContract.Presenter {
     }
 
     @NonNull
-    private ChartVO getChart(List<Transaction> transactions) {
+    private ChartVO getChart(List<TransactionVO> transactions) {
 
         List<ChartItemVO> chartItems = new ArrayList<>();
-        for (Transaction transaction : transactions) {
+        for (TransactionVO transaction : transactions) {
 
             if (transaction.getKey() == null || !transaction.isApproved() || transaction.getPaymentDate().compareTo(Calendar.getInstance().getTime()) > 0) {
                 continue;
@@ -203,13 +201,13 @@ class HomePresenter implements HomeContract.Presenter {
         return chart;
     }
 
-    private void configSummary(List<VOItemListInterface> listVO, List<Transaction> listTransaction) {
+    private void configSummary(List<VOItemListInterface> listVO, List<TransactionVO> listTransaction) {
 
         Double actual = 0D;
         Double expected = 0D;
         Double future = 0D;
 
-        for (Transaction transaction : listTransaction) {
+        for (TransactionVO transaction : listTransaction) {
 
             if (!transaction.isApproved()) {
                 expected += transaction.getPrice();
@@ -229,23 +227,23 @@ class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public void selectItem(Transaction vo) {
+    public void selectItem(TransactionVO vo) {
         mView.showTransactionDialog(vo);
     }
 
     @Override
-    public void requestDelete(Transaction item) {
+    public void requestDelete(TransactionVO item) {
         mView.requestDelete(item);
     }
 
     @Override
-    public void requestCopy(Transaction item) {
+    public void requestCopy(TransactionVO item) {
         item.setKey(null);
         mView.showTransactionDialog(item);
     }
 
     @Override
-    public void delete(Transaction item) {
+    public void delete(TransactionVO item) {
         new TransactionBusiness().delete(item, new PersistenceListener<TransactionModel>() {
             @Override
             public void onSuccess(TransactionModel dto) {
@@ -255,38 +253,6 @@ class HomePresenter implements HomeContract.Presenter {
             @Override
             public void onError(String e) {
                 mView.showError(e);
-            }
-        });
-    }
-
-    @Override
-    public void pinTransaction(Transaction item) {
-        TransactionBusinness.pin(item, new BusinnessListener.OnPersistListener<Transaction>() {
-
-            @Override
-            public void onSuccess(Transaction dto) {
-                requestListTransaction();
-            }
-
-            @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
-            }
-        });
-    }
-
-    @Override
-    public void unpinTransaction(Transaction item) {
-        TransactionBusinness.unpin(item, new BusinnessListener.OnPersistListener<Transaction>() {
-
-            @Override
-            public void onSuccess(Transaction dto) {
-                requestListTransaction();
-            }
-
-            @Override
-            public void onError(Exception e) {
-                mView.showError(e.getMessage());
             }
         });
     }

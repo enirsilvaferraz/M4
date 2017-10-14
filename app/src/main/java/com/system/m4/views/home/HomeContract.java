@@ -1,7 +1,7 @@
 package com.system.m4.views.home;
 
 import com.system.m4.views.vos.TagSummaryVO;
-import com.system.m4.views.vos.Transaction;
+import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
 
 import java.util.List;
@@ -22,13 +22,13 @@ class HomeContract {
 
         void setListTransactions(List<VOItemListInterface> listVo);
 
-        void showTransactionDialog(Transaction vo);
+        void showTransactionDialog(TransactionVO vo);
 
         void showError(String message);
 
         void showSuccessMessage(int template, int param);
 
-        void requestDelete(Transaction item);
+        void requestDelete(TransactionVO item);
 
         void requestShowListTransaction(TagSummaryVO item);
     }
@@ -42,17 +42,13 @@ class HomeContract {
 
         void requestListTransaction();
 
-        void selectItem(Transaction vo);
+        void selectItem(TransactionVO vo);
 
-        void requestCopy(Transaction item);
+        void requestCopy(TransactionVO item);
 
-        void requestDelete(Transaction item);
+        void requestDelete(TransactionVO item);
 
-        void delete(Transaction item);
-
-        void pinTransaction(Transaction item);
-
-        void unpinTransaction(Transaction item);
+        void delete(TransactionVO item);
 
         void requestShowListTransaction(TagSummaryVO item);
     }

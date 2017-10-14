@@ -26,7 +26,7 @@ public class GroupTransactionBusinness {
             public void onFindAll(List<GroupTransactionDTO> list) {
                 List<GroupTransactionVO> listVo = new ArrayList<>();
                 for (GroupTransactionDTO dto : list) {
-                    listVo.add(ConverterUtils.fromGroupTransaction(dto));
+                    listVo.add(ConverterUtils.INSTANCE.fromGroupTransaction(dto));
                 }
                 onMultiResultListenner.onSuccess(listVo, Constants.CALL_GROUP_FINDALL);
             }

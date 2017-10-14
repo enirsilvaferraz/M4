@@ -7,12 +7,11 @@ package com.system.m4.kotlin.transaction
 import android.text.TextUtils
 import com.system.m4.R
 import com.system.m4.infrastructure.Constants
-import com.system.m4.infrastructure.ConverterUtils
 import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
 import com.system.m4.views.vos.PaymentTypeVO
 import com.system.m4.views.vos.TagVO
-import com.system.m4.views.vos.Transaction
+import com.system.m4.views.vos.TransactionVO
 import java.util.*
 
 /**
@@ -22,10 +21,10 @@ import java.util.*
 
 class TransactionManagerPresenter(private val mView: TransactionManagerContract.View) : TransactionManagerContract.Presenter {
 
-    private var mVO: Transaction
+    private var mVO: TransactionVO
 
     init {
-        this.mVO = Transaction()
+        this.mVO = TransactionVO()
     }
 
     override fun setPaymentDate(date: Date?) {
@@ -43,7 +42,7 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
         mView.setValue(JavaUtils.StringUtil.formatEmpty(JavaUtils.NumberUtil.currencyFormat(value)))
     }
 
-    override fun init(transaction: Transaction) {
+    override fun init(transaction: TransactionVO) {
         mVO = transaction
         if (TextUtils.isEmpty(mVO.key)) {
             mVO.paymentDate = Calendar.getInstance().time
@@ -137,7 +136,7 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
             TransactionBusiness().save(mVO, object : PersistenceListener<TransactionModel> {
 
                 override fun onSuccess(dto: TransactionModel) {
-                    mView.dismissDialog(ConverterUtils.fromTransaction(dto))
+                    mView.dismissDialog(TransactionBusiness.fromTransaction(dto))
                 }
 
                 override fun onError(error: String) {

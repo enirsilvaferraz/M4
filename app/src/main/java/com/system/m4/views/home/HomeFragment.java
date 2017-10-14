@@ -16,7 +16,7 @@ import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.kotlin.transaction.TransactionListDialog;
 import com.system.m4.views.vos.TagSummaryVO;
-import com.system.m4.views.vos.Transaction;
+import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
 
 import java.util.ArrayList;
@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void requestDelete(final Transaction item) {
+    public void requestDelete(final TransactionVO item) {
         JavaUtils.AndroidUtil.showAlertDialog(getContext(), R.string.system_message_request_delete,
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -98,7 +98,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void showTransactionDialog(Transaction vo) {
+    public void showTransactionDialog(TransactionVO vo) {
         ((MainActivity) getActivity()).showTransactionDialog(vo);
     }
 

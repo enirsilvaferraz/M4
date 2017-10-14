@@ -10,7 +10,7 @@ import com.system.m4.kotlin.transaction.TransactionBusiness
 import com.system.m4.kotlin.transaction.TransactionModel
 import com.system.m4.views.vos.PaymentTypeVO
 import com.system.m4.views.vos.TagVO
-import com.system.m4.views.vos.Transaction
+import com.system.m4.views.vos.TransactionVO
 import java.util.*
 
 
@@ -41,7 +41,7 @@ class NotificationReceiver : NotificationListenerService() {
 
     private fun save(value: Double?, content: String) {
 
-        val vo = Transaction()
+        val vo = TransactionVO()
         vo.purchaseDate = Calendar.getInstance().time
         vo.price = value
         vo.content = content

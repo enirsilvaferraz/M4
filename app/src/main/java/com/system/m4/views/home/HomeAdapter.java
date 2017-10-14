@@ -23,7 +23,7 @@ import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
 import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TitleVO;
-import com.system.m4.views.vos.Transaction;
+import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
 
 import java.util.ArrayList;
@@ -82,7 +82,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return TYPE_TITLE;
         } else if (item instanceof SubTitleVO) {
             return TYPE_SUB_TITLE;
-        } else if (item instanceof Transaction) {
+        } else if (item instanceof TransactionVO) {
             return TYPE_TRANSACTION;
         } else if (item instanceof SpaceVO) {
             return TYPE_SPACE;
@@ -104,7 +104,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (TYPE_SUB_TITLE == type) {
             ((ViewHolderSubTitle) holder).bind(((SubTitleVO) list.get(position)));
         } else if (TYPE_TRANSACTION == type) {
-            ((ViewHolderTransaction) holder).bind(((Transaction) list.get(position)));
+            ((ViewHolderTransaction) holder).bind(((TransactionVO) list.get(position)));
         } else if (TYPE_SPACE == type) {
             ((ViewHolderSpace) holder).bind(((SpaceVO) list.get(position)));
         } else if (TYPE_SUMMARY == type) {
@@ -148,14 +148,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.item_transaction_price)
         TextView tvPrice;
 
-        private Transaction item;
+        private TransactionVO item;
 
         ViewHolderTransaction(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(final Transaction item) {
+        public void bind(final TransactionVO item) {
 
             this.item = item;
 
@@ -211,14 +211,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                         case R.id.action_delete:
                             presenter.requestDelete(ViewHolderTransaction.this.item);
-                            return true;
-
-                        case R.id.action_pin:
-                            presenter.pinTransaction(ViewHolderTransaction.this.item);
-                            return true;
-
-                        case R.id.action_unpin:
-                            presenter.unpinTransaction(ViewHolderTransaction.this.item);
                             return true;
                     }
 

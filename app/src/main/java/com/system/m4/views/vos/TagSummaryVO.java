@@ -28,7 +28,7 @@ public class TagSummaryVO implements VOInterface<TagSummaryVO>, VOItemListInterf
     private String parentName;
     private String name;
     private Double value;
-    private List<Transaction> transactions;
+    private List<TransactionVO> transactions;
 
     public TagSummaryVO() {
     }
@@ -45,7 +45,7 @@ public class TagSummaryVO implements VOInterface<TagSummaryVO>, VOItemListInterf
         this.parentName = in.readString();
         this.name = in.readString();
         this.value = (Double) in.readValue(Double.class.getClassLoader());
-        this.transactions = in.createTypedArrayList(Transaction.CREATOR);
+        this.transactions = in.createTypedArrayList(TransactionVO.CREATOR);
     }
 
     public String getName() {
@@ -80,11 +80,11 @@ public class TagSummaryVO implements VOInterface<TagSummaryVO>, VOItemListInterf
         this.value = value;
     }
 
-    public List<Transaction> getTransactions() {
+    public List<TransactionVO> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
+    public void setTransactions(List<TransactionVO> transactions) {
         this.transactions = transactions;
     }
 

@@ -12,7 +12,7 @@ import com.system.m4.kotlin.transaction.TransactionModel
 
 /**
  * Created by enirs on 30/09/2017.
- * Repository for Transaction
+ * Repository for TransactionVO
  */
 class FixedTransactionRepository {
 

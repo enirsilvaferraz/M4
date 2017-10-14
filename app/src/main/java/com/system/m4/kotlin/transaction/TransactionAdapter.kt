@@ -11,13 +11,13 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.system.m4.R
 import com.system.m4.infrastructure.JavaUtils
-import com.system.m4.views.vos.Transaction
+import com.system.m4.views.vos.TransactionVO
 
 /**
  * Created by enirs on 11/10/2017.
  * Adapter list
  */
-class TransactionAdapter(val mList: ArrayList<Transaction>, val listener: OnClickListener) : RecyclerView.Adapter<TransactionAdapter.ViewHolderTransaction>() {
+class TransactionAdapter(val mList: ArrayList<TransactionVO>, val listener: OnClickListener) : RecyclerView.Adapter<TransactionAdapter.ViewHolderTransaction>() {
 
     override fun onBindViewHolder(holder: TransactionAdapter.ViewHolderTransaction?, position: Int) {
         holder?.bind(mList.get(position))
@@ -41,7 +41,7 @@ class TransactionAdapter(val mList: ArrayList<Transaction>, val listener: OnClic
         var tvPaymentDate: TextView? = null
         var tvPrice: TextView? = null
 
-        fun bind(item: Transaction) {
+        fun bind(item: TransactionVO) {
 
             container = itemView.findViewById(R.id.list_item_container)
             tvTag = itemView.findViewById(R.id.item_transaction_tag)
@@ -66,6 +66,6 @@ class TransactionAdapter(val mList: ArrayList<Transaction>, val listener: OnClic
     }
 
     interface OnClickListener {
-        fun onClick(vo: Transaction)
+        fun onClick(vo: TransactionVO)
     }
 }

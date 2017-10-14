@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.system.m4.R
 import com.system.m4.kotlin.infrastructure.BaseDialogFragment
-import com.system.m4.views.vos.Transaction
+import com.system.m4.views.vos.TransactionVO
 import com.system.m4.views.vos.VOInterface
 
 /**
@@ -26,7 +26,7 @@ class TransactionListDialog : DialogFragment() {
      * STATIC
      */
     companion object {
-        fun instance(list: ArrayList<Transaction>): TransactionListDialog {
+        fun instance(list: ArrayList<TransactionVO>): TransactionListDialog {
 
             val bundle = Bundle()
             bundle.putParcelableArrayList("LIST", list)
@@ -49,9 +49,9 @@ class TransactionListDialog : DialogFragment() {
 
         mRecyclerView = view!!.findViewById<RecyclerView>(R.id.dialog_list_recycler)
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
-        mRecyclerView.adapter = TransactionAdapter(arguments.getParcelableArrayList<Transaction>("LIST"), object : TransactionAdapter.OnClickListener {
+        mRecyclerView.adapter = TransactionAdapter(arguments.getParcelableArrayList<TransactionVO>("LIST"), object : TransactionAdapter.OnClickListener {
 
-            override fun onClick(vo: Transaction) {
+            override fun onClick(vo: TransactionVO) {
                 val dialogFragment = TransactionManagerDialog.newInstance(vo)
                 dialogFragment.dialogListener = object : BaseDialogFragment.DialogListener {
                     override fun onFinish(vo: VOInterface<*>) {

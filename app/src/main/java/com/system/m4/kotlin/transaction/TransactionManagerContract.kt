@@ -2,7 +2,7 @@ package com.system.m4.kotlin.transaction
 
 import com.system.m4.views.vos.PaymentTypeVO
 import com.system.m4.views.vos.TagVO
-import com.system.m4.views.vos.Transaction
+import com.system.m4.views.vos.TransactionVO
 import com.system.m4.views.vos.VOInterface
 import java.util.*
 
@@ -15,7 +15,7 @@ interface TransactionManagerContract {
 
     interface View {
 
-        fun configureModel(transaction: Transaction)
+        fun configureModel(transaction: TransactionVO)
 
         fun setPaymentDate(value: String)
 
@@ -80,6 +80,6 @@ interface TransactionManagerContract {
 
         fun save()
 
-        fun init(transaction: Transaction)
+        fun init(transaction: TransactionVO)
     }
 }
