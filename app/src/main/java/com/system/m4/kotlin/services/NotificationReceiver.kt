@@ -47,7 +47,7 @@ class NotificationReceiver : NotificationListenerService() {
         vo.content = content
 
         vo.paymentType = PaymentTypeVO()
-        vo.paymentType.key = resources.getString(R.string.paymenttype_debito_key)
+        vo.paymentType.key = resources.getString(R.string.paymenttype_nubank_key)
 
         vo.tag = TagVO()
         vo.tag.key = "TAG_UNKNOWN"
