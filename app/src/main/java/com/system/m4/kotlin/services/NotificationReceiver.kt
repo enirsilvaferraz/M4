@@ -1,4 +1,4 @@
-package com.system.m4.kotlin.notificationservice
+package com.system.m4.kotlin.services
 
 import android.content.Context
 import android.service.notification.NotificationListenerService
@@ -29,7 +29,7 @@ class NotificationReceiver : NotificationListenerService() {
 
             val extras = sbn.notification.extras
 
-            if (extras.getString("android.title").contains("Nubank")) {
+            if (extras.getString("android.title", "").contains("Nubank")) {
                 val text = extras.getString("android.text")
                 val value = JavaUtils.NumberUtil.removeFormat(text.subSequence(text.indexOf("R$"), text.indexOf("APROVADA")).trim() as String?)
                 val content = text.subSequence(text.indexOf("APROVADA") + "APROVADA".length, text.length) as String
@@ -39,7 +39,7 @@ class NotificationReceiver : NotificationListenerService() {
         }
     }
 
-    private fun save(value: Double?, content: String) {
+    private fun save(value: Double, content: String) {
 
         val vo = TransactionVO()
         vo.purchaseDate = Calendar.getInstance().time
@@ -60,14 +60,8 @@ class NotificationReceiver : NotificationListenerService() {
         vo.paymentDate = calendar.time
 
         TransactionBusiness().save(vo, object : PersistenceListener<TransactionModel> {
-
-            override fun onSuccess(model: TransactionModel) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onError(error: String) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+            override fun onSuccess(model: TransactionModel) {}
+            override fun onError(error: String) {}
         })
     }
 

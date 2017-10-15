@@ -22,7 +22,7 @@ import android.widget.Toast;
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.kotlin.infrastructure.BaseDialogFragment;
-import com.system.m4.kotlin.notificationservice.NotificationReceiver;
+import com.system.m4.kotlin.services.NotificationReceiver;
 import com.system.m4.kotlin.tags.TagListContract;
 import com.system.m4.kotlin.tags.TagListDialog;
 import com.system.m4.kotlin.tags.TagModel;
