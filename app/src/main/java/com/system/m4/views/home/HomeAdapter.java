@@ -148,6 +148,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.item_transaction_price)
         TextView tvPrice;
 
+        @BindView(R.id.item_transaction_context)
+        TextView tvContext;
+
         private TransactionVO item;
 
         ViewHolderTransaction(View itemView) {
@@ -162,6 +165,12 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvTag.setText(item.getTag() != null ? item.getTag().getName() : item.getPaymentType().getName());
             tvPaymentDate.setText(JavaUtils.DateUtil.format(item.getPaymentDate(), JavaUtils.DateUtil.DD));
             tvPrice.setText(JavaUtils.NumberUtil.currencyFormat(item.getPrice()));
+
+            if (JavaUtils.StringUtil.isEmpty(item.getContent())) {
+                tvContext.setText(item.getTag().getParentName());
+            } else {
+                tvContext.setText(item.getContent());
+            }
 
             if (!TextUtils.isEmpty(item.getPaymentType().getColor())) {
                 tvPaymentDate.setTextColor(Color.parseColor(item.getPaymentType().getColor()));

@@ -12,8 +12,8 @@
     <LinearLayout
         android:id="@+id/list_item_container"
         style="@style/AppTheme.Card"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
@@ -26,7 +26,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="12dp"
             android:paddingEnd="16dp"
@@ -47,7 +47,8 @@
                 android:id="@+id/item_transaction_tag"
                 style="@style/AppTheme.Form.TextView.Secundary"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/item_transaction_payment_date"
                 android:layout_toEndOf="@id/item_transaction_payment_date"
                 android:gravity="center_vertical"
                 tools:text="Aluguel" />
@@ -59,7 +60,21 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:gravity="center_vertical"
-                android:text="R$ 1.000,00" />
+                tools:text="R$ 1.000,00" />
+
+            <TextView
+                android:id="@+id/item_transaction_context"
+                style="@style/AppTheme.Form.TextView.Ternary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/item_transaction_payment_date"
+                android:layout_below="@id/item_transaction_tag"
+                android:layout_marginEnd="8dp"
+                android:layout_toEndOf="@id/item_transaction_payment_date"
+                android:layout_toStartOf="@id/item_transaction_price"
+                android:ellipsize="end"
+                android:lines="1"
+                tools:text="Pagamento do mês de janeiro do ano de 2017 - Transferencia" />
 
         </RelativeLayout>
 

@@ -117,6 +117,7 @@ class HomePresenter implements HomeContract.Presenter {
 
                 transaction.setTag(new TagVO());
                 transaction.getTag().setName(key.getName());
+                transaction.getTag().setParentName("Grupo de transações");
 
                 for (TransactionVO itemList : map.get(key)) {
                     Double price = transaction.getPrice() != null ? transaction.getPrice() : 0D;
