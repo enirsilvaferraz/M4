@@ -1,6 +1,6 @@
 package com.system.m4.kotlin.home
 
-import com.system.m4.infrastructure.ConverterUtils
+import com.system.m4.kotlin.group.GroupTransactionBusiness
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.SingleResultListener
 import com.system.m4.kotlin.paymenttype.PaymentTypeBusiness
@@ -8,7 +8,7 @@ import com.system.m4.kotlin.paymenttype.PaymentTypeModel
 import com.system.m4.kotlin.tags.TagBusiness
 import com.system.m4.kotlin.tags.TagModel
 import com.system.m4.kotlin.transaction.TransactionBusiness
-import com.system.m4.repository.dtos.GroupTransactionDTO
+import com.system.m4.views.vos.GroupTransactionVO
 import com.system.m4.views.vos.ListTransactionVO
 import com.system.m4.views.vos.TransactionVO
 
@@ -43,9 +43,9 @@ class HomeBusiness {
             }
         })
 
-        GroupTransactionRepository().findAll(object : ErrorListener<GroupTransactionDTO>(listener) {
-            override fun onSuccess(list: ArrayList<GroupTransactionDTO>) {
-                homeVo.listGroup = ConverterUtils.fromGroupTransaction(list)
+        GroupTransactionBusiness.findAll(object : ErrorListener<GroupTransactionVO>(listener) {
+            override fun onSuccess(list: ArrayList<GroupTransactionVO>) {
+                homeVo.listGroup = list
                 validate(homeVo, listener)
             }
         })
@@ -70,7 +70,7 @@ class HomeBusiness {
             listTransactionVO.pendingTransaction = getPendingTransaction(listTransaction)
 
             if (!listGroup.isEmpty()) {
-                listTransactionVO.group = ConverterUtils.fillGroupTransaction(listGroup.get(0), listPaymentType)
+                listTransactionVO.group = GroupTransactionBusiness.fillGroupTransaction(listGroup.get(0), listPaymentType)
             }
 
             listener.onSuccess(listTransactionVO)

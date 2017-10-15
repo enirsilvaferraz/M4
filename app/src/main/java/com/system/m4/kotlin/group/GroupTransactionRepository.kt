@@ -1,4 +1,4 @@
-package com.system.m4.kotlin.home
+package com.system.m4.kotlin.group
 
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -6,12 +6,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.system.m4.BuildConfig
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
-import com.system.m4.repository.dtos.GroupTransactionDTO
 
 /**
  * Created by enirs on 30/09/2017.
  */
-class GroupTransactionRepository {
+object GroupTransactionRepository {
 
     val mFireRef = FirebaseDatabase.getInstance().getReference("${BuildConfig.FLAVOR}/GroupTransaction/")
 
