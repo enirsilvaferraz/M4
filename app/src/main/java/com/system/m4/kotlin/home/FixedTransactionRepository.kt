@@ -14,7 +14,7 @@ import com.system.m4.kotlin.transaction.TransactionModel
  * Created by enirs on 30/09/2017.
  * Repository for TransactionVO
  */
-class FixedTransactionRepository {
+object FixedTransactionRepository {
 
     val mFireRef = FirebaseDatabase.getInstance().getReference("${BuildConfig.FLAVOR}/FixedTransaction/")
 

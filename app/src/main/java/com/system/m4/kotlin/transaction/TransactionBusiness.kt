@@ -1,12 +1,14 @@
 package com.system.m4.kotlin.transaction
 
 import com.system.m4.infrastructure.JavaUtils
+import com.system.m4.kotlin.home.FixedTransactionRepository
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
 import com.system.m4.views.vos.PaymentTypeVO
 import com.system.m4.views.vos.TagVO
 import com.system.m4.views.vos.TransactionVO
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by enirs on 30/09/2017.
@@ -90,7 +92,15 @@ class TransactionBusiness {
 
         TransactionRepository(year, month).findAll(object : MultResultListener<TransactionModel> {
             override fun onSuccess(list: ArrayList<TransactionModel>) {
-                listener.onSuccess(fromTransaction(list))
+
+                val transactions = fromTransaction(list)
+
+                val calendar = Calendar.getInstance()
+                if (year > calendar.get(Calendar.YEAR) || (year == calendar.get(Calendar.YEAR) && month >= calendar.get(Calendar.MONTH))) {
+                    findFixed(year, month, transactions, listener)
+                } else {
+                    listener.onSuccess(transactions)
+                }
             }
 
             override fun onError(error: String) {
@@ -99,7 +109,67 @@ class TransactionBusiness {
         })
     }
 
+    private fun findFixed(year: Int, month: Int, transactions: ArrayList<TransactionVO>, listener: MultResultListener<TransactionVO>) {
+
+        FixedTransactionRepository.findAll(object : MultResultListener<TransactionModel> {
+            override fun onSuccess(list: ArrayList<TransactionModel>) {
+
+                val fixedTransactions = fromFixedTransaction(list, year, month)
+
+                for (transaction in transactions) {
+                    for (fixedTransaction in fixedTransactions) {
+                        if (fixedTransaction.key.equals(transaction.key)) {
+                            transaction.isPinned = true
+                        }
+                    }
+                }
+
+                transactions.addAll(fixedTransactions.filter { shouldRetain(it) })
+                listener.onSuccess(transactions)
+            }
+
+            override fun onError(error: String) {
+                listener.onError(error)
+            }
+
+            private fun shouldRetain(it: TransactionVO): Boolean {
+                for (transaction in transactions) {
+                    if (transaction.key.equals(it.key)) {
+                        return false
+                    }
+                }
+                return true
+            }
+        })
+    }
+
     companion object {
+
+        fun pin(vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
+
+            FixedTransactionRepository.update(fromTransaction(vo), object : PersistenceListener<TransactionModel> {
+                override fun onSuccess(model: TransactionModel) {
+                    listener.onSuccess(fromTransaction(model))
+                }
+
+                override fun onError(error: String) {
+                    listener.onError(error)
+                }
+            })
+        }
+
+        fun unpin(vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
+
+            FixedTransactionRepository.delete(fromTransaction(vo), object : PersistenceListener<TransactionModel> {
+                override fun onSuccess(model: TransactionModel) {
+                    listener.onSuccess(fromTransaction(model))
+                }
+
+                override fun onError(error: String) {
+                    listener.onError(error)
+                }
+            })
+        }
 
         fun fromTransaction(vo: TransactionVO): TransactionModel {
             val dto = TransactionModel()
@@ -128,6 +198,48 @@ class TransactionBusiness {
             // Usado para saber onde é o path, não é armazenado no Firebase
             vo.paymentDateOrigin = vo.paymentDate
             return vo
+        }
+
+        fun fromFixedTransaction(dto: TransactionModel, year: Int, month: Int): TransactionVO {
+
+            val vo = TransactionVO()
+            vo.key = dto.key
+            vo.tag = TagVO()
+            vo.tag.key = dto.tag
+            vo.paymentType = PaymentTypeVO()
+            vo.paymentType.key = dto.paymentType
+
+            val calPaymentDate = Calendar.getInstance()
+            calPaymentDate.time = JavaUtils.DateUtil.parse(dto.paymentDate, JavaUtils.DateUtil.YYYY_MM_DD)
+            calPaymentDate.set(Calendar.YEAR, year)
+            calPaymentDate.set(Calendar.MONTH, month)
+            vo.paymentDate = calPaymentDate.time
+
+            if (dto.purchaseDate != null) {
+                val calPurchaseDate = Calendar.getInstance()
+                calPurchaseDate.time = JavaUtils.DateUtil.parse(dto.purchaseDate, JavaUtils.DateUtil.YYYY_MM_DD)
+                calPurchaseDate.set(Calendar.YEAR, year)
+                calPurchaseDate.set(Calendar.MONTH, month)
+                vo.purchaseDate = calPurchaseDate.time
+            }
+
+            vo.content = dto.content
+            vo.price = dto.price
+
+            vo.isApproved = false
+            vo.isPinned = true
+
+            // Usado para saber onde é o path, não é armazenado no Firebase
+            vo.paymentDateOrigin = vo.paymentDate
+            return vo
+        }
+
+        fun fromFixedTransaction(list: List<TransactionModel>, year: Int, month: Int): ArrayList<TransactionVO> {
+            val listVO = ArrayList<TransactionVO>()
+            for (model in list) {
+                listVO.add(fromFixedTransaction(model, year, month))
+            }
+            return listVO
         }
 
         fun fromTransaction(list: List<TransactionModel>): ArrayList<TransactionVO> {

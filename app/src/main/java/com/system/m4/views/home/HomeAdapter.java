@@ -202,11 +202,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             PopupMenu popupMenu = new PopupMenu(itemView.getContext(), tvPrice);
             popupMenu.inflate(R.menu.menu_transaction);
 
-//            popupMenu.getMenu().findItem(R.id.action_pin).setVisible(!item.isPinned());
-//            popupMenu.getMenu().findItem(R.id.action_unpin).setVisible(item.isPinned());
-
-            popupMenu.getMenu().findItem(R.id.action_pin).setVisible(false);
-            popupMenu.getMenu().findItem(R.id.action_unpin).setVisible(false);
+            popupMenu.getMenu().findItem(R.id.action_pin).setVisible(!item.isPinned());
+            popupMenu.getMenu().findItem(R.id.action_unpin).setVisible(item.isPinned());
 
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
@@ -220,6 +217,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                         case R.id.action_delete:
                             presenter.requestDelete(ViewHolderTransaction.this.item);
+                            return true;
+
+                        case R.id.action_pin:
+                            presenter.requestPin(ViewHolderTransaction.this.item);
+                            return true;
+
+                        case R.id.action_unpin:
+                            presenter.requestUnpin(ViewHolderTransaction.this.item);
                             return true;
                     }
 

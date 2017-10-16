@@ -262,4 +262,34 @@ class HomePresenter implements HomeContract.Presenter {
     public void requestShowListTransaction(TagSummaryVO item) {
         mView.requestShowListTransaction(item);
     }
+
+    @Override
+    public void requestPin(TransactionVO item) {
+        TransactionBusiness.Companion.pin(item, new PersistenceListener<TransactionVO>() {
+            @Override
+            public void onSuccess(TransactionVO vo) {
+                requestListTransaction();
+            }
+
+            @Override
+            public void onError(String e) {
+                mView.showError(e);
+            }
+        });
+    }
+
+    @Override
+    public void requestUnpin(TransactionVO item) {
+        TransactionBusiness.Companion.unpin(item, new PersistenceListener<TransactionVO>() {
+            @Override
+            public void onSuccess(TransactionVO vo) {
+                requestListTransaction();
+            }
+
+            @Override
+            public void onError(String e) {
+                mView.showError(e);
+            }
+        });
+    }
 }

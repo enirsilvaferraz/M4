@@ -51,5 +51,9 @@ class HomeContract {
         void delete(TransactionVO item);
 
         void requestShowListTransaction(TagSummaryVO item);
+
+        void requestPin(TransactionVO item);
+
+        void requestUnpin(TransactionVO item);
     }
 }
