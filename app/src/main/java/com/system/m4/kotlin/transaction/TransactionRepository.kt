@@ -70,4 +70,22 @@ class TransactionRepository(val year: Int, val month: Int) {
             }
         })
     }
+
+    fun findFixed(listener: MultResultListener<TransactionModel>) {
+
+        mFireRef.orderByChild("fixed").equalTo(true).addListenerForSingleValueEvent(object : ValueEventListener {
+
+            override fun onDataChange(p0: DataSnapshot?) {
+                val resultList = arrayListOf<TransactionModel>()
+                p0?.children!!.mapTo(resultList) {
+                    it.getValue(TransactionModel::class.java)!!
+                }
+                listener.onSuccess(resultList)
+            }
+
+            override fun onCancelled(p0: DatabaseError?) {
+                listener.onError(p0?.message!!)
+            }
+        })
+    }
 }

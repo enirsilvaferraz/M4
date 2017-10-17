@@ -245,9 +245,9 @@ class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void delete(TransactionVO item) {
-        new TransactionBusiness().delete(item, new PersistenceListener<TransactionModel>() {
+        TransactionBusiness.Companion.delete(item, new PersistenceListener<TransactionModel>() {
             @Override
-            public void onSuccess(TransactionModel dto) {
+            public void onSuccess(TransactionModel transactionVO) {
                 requestListTransaction();
             }
 

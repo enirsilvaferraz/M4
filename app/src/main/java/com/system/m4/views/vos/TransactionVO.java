@@ -30,7 +30,7 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
     private TagVO tag;
     private PaymentTypeVO paymentType;
     private String content;
-    private boolean pinned;
+    private boolean fixed = false;
     private boolean clickable = true;
     private boolean approved = true;
 
@@ -54,7 +54,7 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         this.tag = in.readParcelable(TagVO.class.getClassLoader());
         this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
         this.content = in.readString();
-        this.pinned = in.readByte() != 0;
+        this.fixed = in.readByte() != 0;
     }
 
     public Date getPaymentDate() {
@@ -155,12 +155,12 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         return tag.compareTo(o.tag);
     }
 
-    public boolean isPinned() {
-        return pinned;
+    public boolean isFixed() {
+        return fixed;
     }
 
-    public void setPinned(boolean pinned) {
-        this.pinned = pinned;
+    public void setFixed(boolean fixed) {
+        this.fixed = fixed;
     }
 
     public Date getPaymentDateOrigin() {
@@ -186,7 +186,7 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         dest.writeParcelable(this.tag, flags);
         dest.writeParcelable(this.paymentType, flags);
         dest.writeString(this.content);
-        dest.writeByte(this.pinned ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.fixed ? (byte) 1 : (byte) 0);
     }
 
     public boolean isClickable() {

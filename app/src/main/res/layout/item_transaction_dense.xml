@@ -53,6 +53,15 @@
                 android:gravity="center_vertical"
                 tools:text="Aluguel" />
 
+            <ImageView
+                android:id="@+id/item_transaction_fixed"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/item_transaction_tag"
+                android:layout_marginStart="4dp"
+                android:layout_toEndOf="@id/item_transaction_tag"
+                android:src="@drawable/ic_lock_black_24dp" />
+
             <TextView
                 android:id="@+id/item_transaction_price"
                 style="@style/AppTheme.Form.TextView.Secundary"

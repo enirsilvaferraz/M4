@@ -7,7 +7,6 @@ import com.system.m4.R
 import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
 import com.system.m4.kotlin.transaction.TransactionBusiness
-import com.system.m4.kotlin.transaction.TransactionModel
 import com.system.m4.views.vos.PaymentTypeVO
 import com.system.m4.views.vos.TagVO
 import com.system.m4.views.vos.TransactionVO
@@ -59,8 +58,8 @@ class NotificationReceiver : NotificationListenerService() {
         calendar.set(Calendar.DATE, 23)
         vo.paymentDate = calendar.time
 
-        TransactionBusiness().save(vo, object : PersistenceListener<TransactionModel> {
-            override fun onSuccess(model: TransactionModel) {}
+        TransactionBusiness.save(vo, object : PersistenceListener<TransactionVO> {
+            override fun onSuccess(model: TransactionVO) {}
             override fun onError(error: String) {}
         })
     }

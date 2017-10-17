@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -151,6 +152,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.item_transaction_context)
         TextView tvContext;
 
+        @BindView(R.id.item_transaction_fixed)
+        ImageView imFixed;
+
         private TransactionVO item;
 
         ViewHolderTransaction(View itemView) {
@@ -181,6 +185,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             int itemColor = item.isApproved() ? R.color.item_default : R.color.item_pinned;
             tvTag.setTextColor(itemView.getContext().getColor(itemColor));
 
+            imFixed.setVisibility(item.isFixed() ? View.VISIBLE : View.GONE);
+
             if (item.isClickable()) {
                 container.setOnClickListener(this);
                 container.setOnLongClickListener(this);
@@ -202,8 +208,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             PopupMenu popupMenu = new PopupMenu(itemView.getContext(), tvPrice);
             popupMenu.inflate(R.menu.menu_transaction);
 
-            popupMenu.getMenu().findItem(R.id.action_pin).setVisible(!item.isPinned());
-            popupMenu.getMenu().findItem(R.id.action_unpin).setVisible(item.isPinned());
+            popupMenu.getMenu().findItem(R.id.action_pin).setVisible(!item.isFixed());
+            popupMenu.getMenu().findItem(R.id.action_unpin).setVisible(item.isFixed());
 
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override

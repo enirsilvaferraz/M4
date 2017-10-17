@@ -1,7 +1,6 @@
 package com.system.m4.kotlin.transaction
 
 import com.system.m4.infrastructure.JavaUtils
-import com.system.m4.kotlin.home.FixedTransactionRepository
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
 import com.system.m4.views.vos.PaymentTypeVO
@@ -16,159 +15,149 @@ import kotlin.collections.ArrayList
  */
 class TransactionBusiness {
 
-    fun save(vo: TransactionVO, persistListener: PersistenceListener<TransactionModel>?) {
+    companion object {
 
-        val listener = object : PersistenceListener<TransactionModel> {
 
-            override fun onSuccess(model: TransactionModel) {
-                persistListener?.onSuccess(model)
-            }
+        fun save(vo: TransactionVO, persistListener: PersistenceListener<TransactionVO>?) {
 
-            override fun onError(error: String) {
-                persistListener?.onError(error)
-            }
-        }
-
-        val year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
-        val month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
-
-        val model = fromTransaction(vo)
-
-        if (model.key == null) {
-            TransactionRepository(year, month).create(model, listener)
-
-        } else if (isInPath(vo)) {
-            TransactionRepository(year, month).update(model, listener)
-
-        } else {
-
-            val yearOrigin = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDateOrigin)
-            val monthOrigin = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDateOrigin)
-
-            TransactionRepository(yearOrigin, monthOrigin).delete(model, object : PersistenceListener<TransactionModel> {
+            val listener = object : PersistenceListener<TransactionModel> {
 
                 override fun onSuccess(model: TransactionModel) {
-                    TransactionRepository(year, month).update(model, listener)
+                    persistListener?.onSuccess(fromTransaction(model))
                 }
 
                 override fun onError(error: String) {
                     persistListener?.onError(error)
                 }
-            })
+            }
+
+            val year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
+            val month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
+
+            val model = fromTransaction(vo)
+
+            if (model.key == null) {
+                TransactionRepository(year, month).create(model, listener)
+
+            } else if (isInPath(vo)) {
+                TransactionRepository(year, month).update(model, listener)
+
+            } else {
+
+                val yearOrigin = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDateOrigin)
+                val monthOrigin = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDateOrigin)
+
+                TransactionRepository(yearOrigin, monthOrigin).delete(model, object : PersistenceListener<TransactionModel> {
+
+                    override fun onSuccess(model: TransactionModel) {
+                        TransactionRepository(year, month).update(model, listener)
+                    }
+
+                    override fun onError(error: String) {
+                        persistListener?.onError(error)
+                    }
+                })
+            }
         }
-    }
 
-    fun delete(vo: TransactionVO, listener: PersistenceListener<TransactionModel>) {
+        fun delete(vo: TransactionVO, listener: PersistenceListener<TransactionModel>) {
 
-        val dto = fromTransaction(vo)
+            val dto = fromTransaction(vo)
 
-        val year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
-        val month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
+            val year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
+            val month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
 
-        TransactionRepository(year, month).delete(dto, object : PersistenceListener<TransactionModel> {
+            TransactionRepository(year, month).delete(dto, object : PersistenceListener<TransactionModel> {
 
-            override fun onSuccess(model: TransactionModel) {
-                listener.onSuccess(model)
-            }
-
-            override fun onError(error: String) {
-                listener.onError(error)
-            }
-        })
-    }
-
-    private fun isInPath(vo: TransactionVO): Boolean {
-
-        val year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
-        val month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
-
-        val yearOrigin = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDateOrigin)
-        val monthOrigin = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDateOrigin)
-
-        return year == yearOrigin && month == monthOrigin
-    }
-
-    fun findAll(year: Int, month: Int, listener: MultResultListener<TransactionVO>) {
-
-        TransactionRepository(year, month).findAll(object : MultResultListener<TransactionModel> {
-            override fun onSuccess(list: ArrayList<TransactionModel>) {
-
-                val transactions = fromTransaction(list)
-
-                val calendar = Calendar.getInstance()
-                if (year > calendar.get(Calendar.YEAR) || (year == calendar.get(Calendar.YEAR) && month >= calendar.get(Calendar.MONTH))) {
-                    findFixed(year, month, transactions, listener)
-                } else {
-                    listener.onSuccess(transactions)
-                }
-            }
-
-            override fun onError(error: String) {
-                listener.onError(error)
-            }
-        })
-    }
-
-    private fun findFixed(year: Int, month: Int, transactions: ArrayList<TransactionVO>, listener: MultResultListener<TransactionVO>) {
-
-        FixedTransactionRepository.findAll(object : MultResultListener<TransactionModel> {
-            override fun onSuccess(list: ArrayList<TransactionModel>) {
-
-                val fixedTransactions = fromFixedTransaction(list, year, month)
-
-                for (transaction in transactions) {
-                    for (fixedTransaction in fixedTransactions) {
-                        if (fixedTransaction.key.equals(transaction.key)) {
-                            transaction.isPinned = true
-                        }
-                    }
-                }
-
-                transactions.addAll(fixedTransactions.filter { shouldRetain(it) })
-                listener.onSuccess(transactions)
-            }
-
-            override fun onError(error: String) {
-                listener.onError(error)
-            }
-
-            private fun shouldRetain(it: TransactionVO): Boolean {
-                for (transaction in transactions) {
-                    if (transaction.key.equals(it.key)) {
-                        return false
-                    }
-                }
-                return true
-            }
-        })
-    }
-
-    companion object {
-
-        fun pin(vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
-
-            FixedTransactionRepository.update(fromTransaction(vo), object : PersistenceListener<TransactionModel> {
                 override fun onSuccess(model: TransactionModel) {
-                    listener.onSuccess(fromTransaction(model))
+                    listener.onSuccess(model)
                 }
 
                 override fun onError(error: String) {
                     listener.onError(error)
                 }
             })
+        }
+
+        private fun isInPath(vo: TransactionVO): Boolean {
+
+            val year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
+            val month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
+
+            val yearOrigin = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDateOrigin)
+            val monthOrigin = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDateOrigin)
+
+            return year == yearOrigin && month == monthOrigin
+        }
+
+        fun findAll(year: Int, month: Int, listener: MultResultListener<TransactionVO>) {
+
+            TransactionRepository(year, month).findAll(object : MultResultListener<TransactionModel> {
+                override fun onSuccess(list: ArrayList<TransactionModel>) {
+
+                    val transactions = fromTransaction(list)
+
+                    val calendar = Calendar.getInstance()
+                    if (year > calendar.get(Calendar.YEAR) || (year == calendar.get(Calendar.YEAR) && month >= calendar.get(Calendar.MONTH))) {
+                        findFixed(year, month, transactions, listener)
+                    } else {
+                        listener.onSuccess(transactions)
+                    }
+                }
+
+                override fun onError(error: String) {
+                    listener.onError(error)
+                }
+            })
+        }
+
+        private fun findFixed(year: Int, month: Int, transactions: ArrayList<TransactionVO>, listener: MultResultListener<TransactionVO>) {
+
+            var calendar = Calendar.getInstance()
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.add(Calendar.MONTH, -1)
+
+            TransactionRepository(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)).findFixed(object : MultResultListener<TransactionModel> {
+                override fun onSuccess(list: ArrayList<TransactionModel>) {
+
+                    val fixedTransactions = fromFixedTransaction(list, year, month)
+
+                    for (transaction in transactions) {
+                        for (fixedTransaction in fixedTransactions) {
+                            if (fixedTransaction.key.equals(transaction.key)) {
+                                transaction.isFixed = true
+                            }
+                        }
+                    }
+
+                    transactions.addAll(fixedTransactions.filter { shouldRetain(it) })
+                    listener.onSuccess(transactions)
+                }
+
+                override fun onError(error: String) {
+                    listener.onError(error)
+                }
+
+                private fun shouldRetain(it: TransactionVO): Boolean {
+                    for (transaction in transactions) {
+                        if (transaction.key.equals(it.key)) {
+                            return false
+                        }
+                    }
+                    return true
+                }
+            })
+        }
+
+        fun pin(vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
+            vo.isFixed = true
+            save(vo, listener)
         }
 
         fun unpin(vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
-
-            FixedTransactionRepository.delete(fromTransaction(vo), object : PersistenceListener<TransactionModel> {
-                override fun onSuccess(model: TransactionModel) {
-                    listener.onSuccess(fromTransaction(model))
-                }
-
-                override fun onError(error: String) {
-                    listener.onError(error)
-                }
-            })
+            vo.isFixed = false
+            save(vo, listener)
         }
 
         fun fromTransaction(vo: TransactionVO): TransactionModel {
@@ -180,6 +169,7 @@ class TransactionBusiness {
             dto.purchaseDate = if (vo.purchaseDate != null) JavaUtils.DateUtil.format(vo.purchaseDate, JavaUtils.DateUtil.YYYY_MM_DD) else null
             dto.content = vo.content
             dto.price = vo.price
+            dto.fixed = vo.isFixed
             return dto
         }
 
@@ -194,6 +184,8 @@ class TransactionBusiness {
             vo.purchaseDate = if (dto.purchaseDate != null) JavaUtils.DateUtil.parse(dto.purchaseDate, JavaUtils.DateUtil.YYYY_MM_DD) else null
             vo.content = dto.content
             vo.price = dto.price
+            vo.isApproved = true
+            vo.isFixed = dto.fixed
 
             // Usado para saber onde é o path, não é armazenado no Firebase
             vo.paymentDateOrigin = vo.paymentDate
@@ -227,7 +219,7 @@ class TransactionBusiness {
             vo.price = dto.price
 
             vo.isApproved = false
-            vo.isPinned = true
+            vo.isFixed = dto.fixed
 
             // Usado para saber onde é o path, não é armazenado no Firebase
             vo.paymentDateOrigin = vo.paymentDate

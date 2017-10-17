@@ -22,7 +22,7 @@ class HomeBusiness {
 
         val homeVo = HomeDTO(year, month)
 
-        TransactionBusiness().findAll(year, month, object : ErrorListener<TransactionVO>(listener) {
+        TransactionBusiness.findAll(year, month, object : ErrorListener<TransactionVO>(listener) {
             override fun onSuccess(list: ArrayList<TransactionVO>) {
                 homeVo.listTransaction = list
                 validate(homeVo, listener)

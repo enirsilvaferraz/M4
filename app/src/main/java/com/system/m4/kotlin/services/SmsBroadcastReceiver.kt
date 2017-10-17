@@ -23,7 +23,7 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
 
                 val transaction = SmsReaderBusiness.readSMS(context, smsMessage.messageBody)
                 if (transaction != null) {
-                    TransactionBusiness().save(transaction, null)
+                    TransactionBusiness.save(transaction, null)
                 }
             }
         }
