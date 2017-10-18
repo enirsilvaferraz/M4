@@ -207,8 +207,13 @@ class HomePresenter implements HomeContract.Presenter {
         Double actual = 0D;
         Double expected = 0D;
         Double future = 0D;
+        Double fixed = 0D;
 
         for (TransactionVO transaction : listTransaction) {
+
+            if (transaction.isFixed()) {
+                fixed += transaction.getPrice();
+            }
 
             if (!transaction.isApproved()) {
                 expected += transaction.getPrice();
@@ -223,6 +228,7 @@ class HomePresenter implements HomeContract.Presenter {
         listVO.add(new SummaryVO("Actual spending", actual));
         listVO.add(new SummaryVO("Confirmed spending", actual + future));
         listVO.add(new SummaryVO("Expected spending", expected));
+        listVO.add(new SummaryVO("Essential spending", fixed));
         listVO.add(new SummaryVO("Total spending", actual + future + expected));
         listVO.add(new SpaceVO());
     }
