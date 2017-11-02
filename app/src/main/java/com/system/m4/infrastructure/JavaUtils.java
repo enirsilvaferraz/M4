@@ -11,6 +11,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.system.m4.R;
 import com.system.m4.views.vos.VOInterface;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -40,6 +42,8 @@ public final class JavaUtils {
         public static final String DD_DE_MMMM_DE_YYYY = "dd 'de' MMMM 'de' yyyy";
 
         public static final String DD = "dd";
+
+        public static final String MMM = "MMM";
 
         public static final String DD_MM_YYYY_HH_MM_SS = "dd/MM/yyyy hh:mm:ss";
 
@@ -72,6 +76,13 @@ public final class JavaUtils {
             cInit.set(Calendar.MINUTE, 0);
             cInit.set(Calendar.SECOND, 0);
             return cInit.getTime();
+        }
+
+        @NotNull
+        public static String getMonth(int month) {
+            Calendar instance = Calendar.getInstance();
+            instance.set(Calendar.MONTH, month);
+            return format(instance.getTime(), MMM);
         }
     }
 

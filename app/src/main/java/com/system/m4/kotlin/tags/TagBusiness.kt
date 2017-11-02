@@ -5,7 +5,6 @@ import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
 import com.system.m4.views.vos.TagSummaryVO
 import com.system.m4.views.vos.TagVO
 import com.system.m4.views.vos.TransactionVO
-import java.util.*
 
 /**
  * Created by enirs on 30/08/2017.
@@ -139,6 +138,30 @@ class TagBusiness {
 
             var sortedWith = itens.sortedWith(compareBy({ it.parentName }, { it.name }))
             return sortedWith
+        }
+
+        fun calculateTagSummaryToExport(transactions: ArrayList<TransactionVO>, tags: ArrayList<TagVO>): List<TagSummaryVO> {
+
+            val itens = arrayListOf<TagSummaryVO>()
+
+            for (tag in tags) {
+
+                if (tag.parentName.isNullOrBlank()) {
+                    continue
+                }
+
+                val summary = TagSummaryVO(tag.key, tag.parentName, tag.name, 0.0)
+
+                for (transaction in transactions) {
+                    if (transaction.tag.key.equals(tag.key)) {
+                        summary.value += transaction.price
+                    }
+                }
+
+                itens.add(summary)
+            }
+
+            return itens
         }
 
         fun fromTag(list: List<TagModel>): ArrayList<TagVO> {

@@ -58,7 +58,7 @@ class NotificationReceiver : NotificationListenerService() {
         calendar.set(Calendar.DATE, 23)
         vo.paymentDate = calendar.time
 
-        TransactionBusiness.save(this, vo, object : PersistenceListener<TransactionVO> {
+        TransactionBusiness.save(vo, object : PersistenceListener<TransactionVO> {
             override fun onSuccess(model: TransactionVO) {}
             override fun onError(error: String) {}
         })

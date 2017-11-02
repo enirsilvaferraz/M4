@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.kotlin.infrastructure.BaseDialogFragment;
+import com.system.m4.kotlin.services.ExportToCSVService;
 import com.system.m4.kotlin.services.NotificationReceiver;
 import com.system.m4.kotlin.tags.TagListContract;
 import com.system.m4.kotlin.tags.TagListDialog;
@@ -70,6 +71,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             @Override
             public void onClick(View view) {
                 presenter.requestTransactionManager();
+            }
+        });
+
+        fab.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ExportToCSVService.Companion.startActionBackup(MainActivity.this);
+                return true;
             }
         });
 

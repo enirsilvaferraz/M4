@@ -1,10 +1,8 @@
 package com.system.m4.kotlin.transaction
 
-import android.content.Context
 import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
-import com.system.m4.kotlin.services.ExportToCSVService
 import com.system.m4.views.vos.PaymentTypeVO
 import com.system.m4.views.vos.TagVO
 import com.system.m4.views.vos.TransactionVO
@@ -19,7 +17,7 @@ class TransactionBusiness {
 
     companion object {
 
-        fun save(context: Context, vo: TransactionVO, persistListener: PersistenceListener<TransactionVO>?) {
+        fun save(vo: TransactionVO, persistListener: PersistenceListener<TransactionVO>?) {
 
             val year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
             val month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
@@ -28,7 +26,6 @@ class TransactionBusiness {
 
                 override fun onSuccess(model: TransactionModel) {
                     persistListener?.onSuccess(fromTransaction(model))
-                    ExportToCSVService.startActionBackup(context, year, month)
                 }
 
                 override fun onError(error: String) {
@@ -53,8 +50,6 @@ class TransactionBusiness {
 
                     override fun onSuccess(model: TransactionModel) {
                         TransactionRepository(year, month).update(model, listener)
-                        ExportToCSVService.startActionBackup(context, yearOrigin, monthOrigin)
-
                     }
 
                     override fun onError(error: String) {
@@ -64,7 +59,7 @@ class TransactionBusiness {
             }
         }
 
-        fun delete(context: Context, vo: TransactionVO, listener: PersistenceListener<TransactionModel>) {
+        fun delete(vo: TransactionVO, listener: PersistenceListener<TransactionModel>) {
 
             val dto = fromTransaction(vo)
 
@@ -75,7 +70,6 @@ class TransactionBusiness {
 
                 override fun onSuccess(model: TransactionModel) {
                     listener.onSuccess(model)
-                    ExportToCSVService.startActionBackup(context, year, month)
                 }
 
                 override fun onError(error: String) {
@@ -98,6 +92,7 @@ class TransactionBusiness {
         fun findAll(year: Int, month: Int, listener: MultResultListener<TransactionVO>) {
 
             TransactionRepository(year, month).findAll(object : MultResultListener<TransactionModel> {
+
                 override fun onSuccess(list: ArrayList<TransactionModel>) {
 
                     val transactions = fromTransaction(list)
@@ -155,14 +150,14 @@ class TransactionBusiness {
             })
         }
 
-        fun pin(context: Context, vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
+        fun pin(vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
             vo.isFixed = true
-            save(context, vo, listener)
+            save(vo, listener)
         }
 
-        fun unpin(context: Context, vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
+        fun unpin(vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
             vo.isFixed = false
-            save(context, vo, listener)
+            save(vo, listener)
         }
 
         fun fromTransaction(vo: TransactionVO): TransactionModel {
@@ -262,6 +257,13 @@ class TransactionBusiness {
                 vo.paymentType = paymentTypes[paymentTypes.indexOf(vo.paymentType)]
             }
             return vo
+        }
+
+        fun fillTransaction(vos: ArrayList<TransactionVO>, tags: List<TagVO>, paymentTypes: List<PaymentTypeVO>?): ArrayList<TransactionVO> {
+            for (vo in vos) {
+                fillTransaction(vo, tags, paymentTypes)
+            }
+            return vos
         }
     }
 }

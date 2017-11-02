@@ -11,9 +11,7 @@ class ExportToCSVService : IntentService("ExportToCSVService") {
         if (intent != null) {
             val action = intent.action
             if (ACTION_BACKUP == action) {
-
-                ExportToCSVBusiness.findData(intent.getIntExtra(EXTRA_YEAR, 2017),
-                        intent.getIntExtra(EXTRA_MONTH, 0))
+                ExportToCSVBusiness.findData()
             }
         }
     }
@@ -24,11 +22,9 @@ class ExportToCSVService : IntentService("ExportToCSVService") {
         private val EXTRA_MONTH = "MONTH"
         private val EXTRA_YEAR = "YEAR"
 
-        fun startActionBackup(context: Context, year: Int, month: Int) {
+        fun startActionBackup(context: Context) {
             val intent = Intent(context, ExportToCSVService::class.java)
             intent.action = ACTION_BACKUP
-            intent.putExtra(EXTRA_YEAR, year)
-            intent.putExtra(EXTRA_MONTH, month)
             context.startService(intent)
         }
     }
