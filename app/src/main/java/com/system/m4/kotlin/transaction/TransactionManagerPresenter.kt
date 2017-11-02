@@ -133,7 +133,7 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
             mView.showError(R.string.system_error_required_field, R.string.transaction_price)
         } else {
 
-            TransactionBusiness.save(mVO, object : PersistenceListener<TransactionVO> {
+            TransactionBusiness.save(mView.getContext(), mVO, object : PersistenceListener<TransactionVO> {
 
                 override fun onSuccess(transaction: TransactionVO) {
                     mView.dismissDialog(transaction)

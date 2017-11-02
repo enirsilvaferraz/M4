@@ -67,6 +67,7 @@ dependencies {
     compile "com.google.firebase:firebase-database:${firebaseVersion}"
     compile "com.google.firebase:firebase-crash:${firebaseVersion}"
     implementation "com.google.firebase:firebase-database:${firebaseVersion}"
+    compile "com.google.firebase:firebase-storage:${firebaseVersion}"
 
     // Gson
     compile 'com.google.code.gson:gson:2.8.0'
@@ -90,3 +91,5 @@ dependencies {
 
 apply plugin: 'com.google.gms.google-services'
 
+
+apply plugin: 'kotlin-android-extensions'

@@ -1,5 +1,6 @@
 package com.system.m4.kotlin.transaction
 
+import android.content.Context
 import com.system.m4.views.vos.PaymentTypeVO
 import com.system.m4.views.vos.TagVO
 import com.system.m4.views.vos.TransactionVO
@@ -44,6 +45,8 @@ interface TransactionManagerContract {
         fun showSuccessMessage(template: Int, param: Int)
 
         fun showError(template: Int, param: Int)
+
+        fun getContext(): Context
     }
 
     interface Presenter {

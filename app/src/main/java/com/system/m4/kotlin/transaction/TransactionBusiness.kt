@@ -1,8 +1,10 @@
 package com.system.m4.kotlin.transaction
 
+import android.content.Context
 import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
+import com.system.m4.kotlin.services.ExportToCSVService
 import com.system.m4.views.vos.PaymentTypeVO
 import com.system.m4.views.vos.TagVO
 import com.system.m4.views.vos.TransactionVO
@@ -17,22 +19,22 @@ class TransactionBusiness {
 
     companion object {
 
+        fun save(context: Context, vo: TransactionVO, persistListener: PersistenceListener<TransactionVO>?) {
 
-        fun save(vo: TransactionVO, persistListener: PersistenceListener<TransactionVO>?) {
+            val year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
+            val month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
 
             val listener = object : PersistenceListener<TransactionModel> {
 
                 override fun onSuccess(model: TransactionModel) {
                     persistListener?.onSuccess(fromTransaction(model))
+                    ExportToCSVService.startActionBackup(context, year, month)
                 }
 
                 override fun onError(error: String) {
                     persistListener?.onError(error)
                 }
             }
-
-            val year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
-            val month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
 
             val model = fromTransaction(vo)
 
@@ -51,6 +53,8 @@ class TransactionBusiness {
 
                     override fun onSuccess(model: TransactionModel) {
                         TransactionRepository(year, month).update(model, listener)
+                        ExportToCSVService.startActionBackup(context, yearOrigin, monthOrigin)
+
                     }
 
                     override fun onError(error: String) {
@@ -60,7 +64,7 @@ class TransactionBusiness {
             }
         }
 
-        fun delete(vo: TransactionVO, listener: PersistenceListener<TransactionModel>) {
+        fun delete(context: Context, vo: TransactionVO, listener: PersistenceListener<TransactionModel>) {
 
             val dto = fromTransaction(vo)
 
@@ -71,6 +75,7 @@ class TransactionBusiness {
 
                 override fun onSuccess(model: TransactionModel) {
                     listener.onSuccess(model)
+                    ExportToCSVService.startActionBackup(context, year, month)
                 }
 
                 override fun onError(error: String) {
@@ -150,14 +155,14 @@ class TransactionBusiness {
             })
         }
 
-        fun pin(vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
+        fun pin(context: Context, vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
             vo.isFixed = true
-            save(vo, listener)
+            save(context, vo, listener)
         }
 
-        fun unpin(vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
+        fun unpin(context: Context, vo: TransactionVO, listener: PersistenceListener<TransactionVO>) {
             vo.isFixed = false
-            save(vo, listener)
+            save(context, vo, listener)
         }
 
         fun fromTransaction(vo: TransactionVO): TransactionModel {
@@ -242,7 +247,8 @@ class TransactionBusiness {
             return listVO
         }
 
-        fun fillTransaction(vo: TransactionVO, tags: List<TagVO>, paymentTypes: List<PaymentTypeVO>): TransactionVO {
+        fun fillTransaction(vo: TransactionVO, tags: List<TagVO>, paymentTypes: List<PaymentTypeVO>?): TransactionVO {
+
             val index = tags.indexOf(vo.tag)
             if (index > -1) {
                 vo.tag = tags[index]
@@ -251,7 +257,10 @@ class TransactionBusiness {
                 tag.name = "(Pendente de Avaliação)"
                 vo.tag = tag
             }
-            vo.paymentType = paymentTypes[paymentTypes.indexOf(vo.paymentType)]
+
+            if (paymentTypes != null) {
+                vo.paymentType = paymentTypes[paymentTypes.indexOf(vo.paymentType)]
+            }
             return vo
         }
     }

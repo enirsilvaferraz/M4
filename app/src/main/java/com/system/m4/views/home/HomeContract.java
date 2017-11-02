@@ -1,5 +1,7 @@
 package com.system.m4.views.home;
 
+import android.content.Context;
+
 import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -31,6 +33,8 @@ class HomeContract {
         void requestDelete(TransactionVO item);
 
         void requestShowListTransaction(TagSummaryVO item);
+
+        Context getContext();
     }
 
     /**

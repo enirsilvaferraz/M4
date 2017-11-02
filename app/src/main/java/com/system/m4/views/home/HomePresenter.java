@@ -251,7 +251,7 @@ class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void delete(TransactionVO item) {
-        TransactionBusiness.Companion.delete(item, new PersistenceListener<TransactionModel>() {
+        TransactionBusiness.Companion.delete(mView.getContext(), item, new PersistenceListener<TransactionModel>() {
             @Override
             public void onSuccess(TransactionModel transactionVO) {
                 requestListTransaction();
@@ -271,7 +271,7 @@ class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void requestPin(TransactionVO item) {
-        TransactionBusiness.Companion.pin(item, new PersistenceListener<TransactionVO>() {
+        TransactionBusiness.Companion.pin(mView.getContext(), item, new PersistenceListener<TransactionVO>() {
             @Override
             public void onSuccess(TransactionVO vo) {
                 requestListTransaction();
@@ -286,7 +286,7 @@ class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void requestUnpin(TransactionVO item) {
-        TransactionBusiness.Companion.unpin(item, new PersistenceListener<TransactionVO>() {
+        TransactionBusiness.Companion.unpin(mView.getContext(), item, new PersistenceListener<TransactionVO>() {
             @Override
             public void onSuccess(TransactionVO vo) {
                 requestListTransaction();

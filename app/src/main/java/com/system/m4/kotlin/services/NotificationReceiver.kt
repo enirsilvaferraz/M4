@@ -43,7 +43,7 @@ class NotificationReceiver : NotificationListenerService() {
         val vo = TransactionVO()
         vo.purchaseDate = Calendar.getInstance().time
         vo.price = value
-        vo.content = content
+        vo.content = content.trim()
 
         vo.paymentType = PaymentTypeVO()
         vo.paymentType.key = resources.getString(R.string.paymenttype_nubank_key)
@@ -58,7 +58,7 @@ class NotificationReceiver : NotificationListenerService() {
         calendar.set(Calendar.DATE, 23)
         vo.paymentDate = calendar.time
 
-        TransactionBusiness.save(vo, object : PersistenceListener<TransactionVO> {
+        TransactionBusiness.save(this, vo, object : PersistenceListener<TransactionVO> {
             override fun onSuccess(model: TransactionVO) {}
             override fun onError(error: String) {}
         })
