@@ -187,48 +187,48 @@ public class HomePresenter implements HomeContract.Presenter {
                 listVO.add(new SpaceVO());
             }
 
-            if ((mHomeVisibility == HomeVisibility.TRANSACTIONS || mHomeVisibility == HomeVisibility.ALL) && !listTransaction.isEmpty()) {
+//            if ((mHomeVisibility == HomeVisibility.TRANSACTIONS || mHomeVisibility == HomeVisibility.ALL) && !listTransaction.isEmpty()) {
                 listVO.add(new SubTitleVO("Transactions"));
 
-                if (mHomeVisibility == HomeVisibility.TRANSACTIONS) {
+//                if (mHomeVisibility == HomeVisibility.TRANSACTIONS) {
                     listVO.addAll(listTransaction);
 
-                } else {
-
-                    Collections.sort(listTransaction, new Comparator<TransactionVO>() {
-                        @Override
-                        public int compare(TransactionVO t0, TransactionVO t1) {
-                            return t0.getPaymentDate().compareTo(t1.getPaymentDate()) * -1;
-                        }
-                    });
-
-                    listVO.addAll(listTransaction.subList(0, listTransaction.size() > NUM_ITENS ? NUM_ITENS : listTransaction.size()));
-                    listVO.add(new RedirectButtomVO(HomeVisibility.TRANSACTIONS, mRelativePosition));
-                }
+//                } else {
+//
+//                    Collections.sort(listTransaction, new Comparator<TransactionVO>() {
+//                        @Override
+//                        public int compare(TransactionVO t0, TransactionVO t1) {
+//                            return t0.getPaymentDate().compareTo(t1.getPaymentDate()) * -1;
+//                        }
+//                    });
+//
+//                    listVO.addAll(listTransaction.subList(0, listTransaction.size() > NUM_ITENS ? NUM_ITENS : listTransaction.size()));
+//                    listVO.add(new RedirectButtomVO(HomeVisibility.TRANSACTIONS, mRelativePosition));
+//                }
 
                 listVO.add(new SpaceVO());
 
                 for (PaymentTypeVO key : map.keySet()) {
                     listVO.add(new SubTitleVO(key.getName()));
 
-                    if (mHomeVisibility == HomeVisibility.TRANSACTIONS) {
+//                    if (mHomeVisibility == HomeVisibility.TRANSACTIONS) {
                         listVO.addAll(map.get(key));
-                    } else {
-
-                        Collections.sort(map.get(key), new Comparator<TransactionVO>() {
-                            @Override
-                            public int compare(TransactionVO t0, TransactionVO t1) {
-                                return t0.getPurchaseDate().compareTo(t1.getPurchaseDate()) * -1;
-                            }
-                        });
-
-                        listVO.addAll(map.get(key).subList(0, map.get(key).size() > NUM_ITENS ? NUM_ITENS : map.get(key).size()));
-                        listVO.add(new RedirectButtomVO(HomeVisibility.TRANSACTIONS, mRelativePosition));
-                    }
+//                    } else {
+//
+//                        Collections.sort(map.get(key), new Comparator<TransactionVO>() {
+//                            @Override
+//                            public int compare(TransactionVO t0, TransactionVO t1) {
+//                                return t0.getPurchaseDate().compareTo(t1.getPurchaseDate()) * -1;
+//                            }
+//                        });
+//
+//                        listVO.addAll(map.get(key).subList(0, map.get(key).size() > NUM_ITENS ? NUM_ITENS : map.get(key).size()));
+//                        listVO.add(new RedirectButtomVO(HomeVisibility.TRANSACTIONS, mRelativePosition));
+//                    }
 
                     listVO.add(new SpaceVO());
                 }
-            }
+//            }
 
             mView.setListTransactions(listVO);
         }
