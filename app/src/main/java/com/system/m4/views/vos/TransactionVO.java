@@ -33,6 +33,7 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
     private boolean fixed = false;
     private boolean clickable = true;
     private boolean approved = true;
+    private boolean onGroup;
 
     public TransactionVO() {
         // Default constructor
@@ -203,5 +204,13 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
 
     public void setApproved(boolean approved) {
         this.approved = approved;
+    }
+
+    public boolean isOnGroup() {
+        return onGroup;
+    }
+
+    public void setOnGroup(boolean onGroup) {
+        this.onGroup = onGroup;
     }
 }

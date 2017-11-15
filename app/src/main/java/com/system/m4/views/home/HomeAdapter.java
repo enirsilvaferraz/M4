@@ -176,8 +176,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             this.item = item;
 
             tvTag.setText(item.getTag() != null ? item.getTag().getName() : item.getPaymentType().getName());
-            tvPaymentDate.setText(JavaUtils.DateUtil.format(item.getPaymentDate(), JavaUtils.DateUtil.DD));
             tvPrice.setText(JavaUtils.NumberUtil.currencyFormat(item.getPrice()));
+
+            if (item.isOnGroup()) {
+                tvPaymentDate.setText(JavaUtils.DateUtil.format(item.getPurchaseDate(), JavaUtils.DateUtil.DD));
+            } else {
+                tvPaymentDate.setText(JavaUtils.DateUtil.format(item.getPaymentDate(), JavaUtils.DateUtil.DD));
+            }
 
             if (JavaUtils.StringUtil.isEmpty(item.getContent())) {
                 tvContext.setText(item.getTag().getParentName());

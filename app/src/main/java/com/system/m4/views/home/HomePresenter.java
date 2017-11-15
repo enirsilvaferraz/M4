@@ -113,6 +113,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
                 for (PaymentTypeVO key : map.keySet()) {
                     if (key.equals(itemGroup.getPaymentType())) {
+                        itemGroup.setOnGroup(true);
                         map.get(key).add(itemGroup);
                     }
                 }
