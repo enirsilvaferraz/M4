@@ -42,11 +42,11 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-
         <service
             android:name=".kotlin.services.ExportToCSVService"
             android:exported="false" />
 
+        <activity android:name=".kotlin.home.HomeDetailActivity" />
     </application>
 
 </manifest>

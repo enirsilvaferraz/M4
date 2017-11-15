@@ -13,7 +13,7 @@ import java.util.List;
  * For M4
  */
 
-class HomeContract {
+public class HomeContract {
 
     /**
      *
@@ -42,7 +42,7 @@ class HomeContract {
      */
     interface Presenter {
 
-        void init(int relativePosition);
+        void init(int relativePosition, int homeVisibility);
 
         void requestListTransaction();
 

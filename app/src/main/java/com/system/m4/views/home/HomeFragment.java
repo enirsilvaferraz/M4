@@ -32,6 +32,7 @@ import butterknife.Unbinder;
 public class HomeFragment extends Fragment implements HomeContract.View {
 
     public static final String RELATIVE_POSITION = "RELATIVE_POSITION";
+    public static final String ITEM_VIEW = "ITEM_VIEW";
 
     @BindView(R.id.home_recyclerview)
     RecyclerView mRecyclerview;
@@ -59,7 +60,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());
         mRecyclerview.setAdapter(new HomeAdapter(presenter));
 
-        this.presenter.init(getArguments().getInt(RELATIVE_POSITION));
+        this.presenter.init(getArguments().getInt(RELATIVE_POSITION), getArguments().getInt(ITEM_VIEW));
         requestListTransaction();
     }
 

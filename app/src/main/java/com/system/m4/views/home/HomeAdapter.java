@@ -1,5 +1,6 @@
 package com.system.m4.views.home;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.view.menu.MenuBuilder;
@@ -17,8 +18,10 @@ import android.widget.TextView;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.kotlin.home.HomeDetailActivity;
 import com.system.m4.views.components.CustomBarChart;
 import com.system.m4.views.vos.ChartVO;
+import com.system.m4.views.vos.RedirectButtomVO;
 import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
@@ -45,6 +48,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_SUMMARY = 5;
     private static final int TYPE_CHART = 6;
     private static final int TYPE_TAG_SUMMARY = 7;
+    private static final int TYPE_REDIRECT_BUTTOM = 8;
 
     private final HomeContract.Presenter presenter;
 
@@ -71,7 +75,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return new ViewHolderChart(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chart, parent, false));
         } else if (TYPE_TAG_SUMMARY == viewType) {
             return new ViewHolderTagSummary(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag_summary, parent, false));
-
+        } else if (TYPE_REDIRECT_BUTTOM == viewType) {
+            return new ViewHolderRedirectButtom(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_redirect_buttom, parent, false));
         }
         return null;
     }
@@ -93,6 +98,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return TYPE_CHART;
         } else if (item instanceof TagSummaryVO) {
             return TYPE_TAG_SUMMARY;
+        } else if (item instanceof RedirectButtomVO) {
+            return TYPE_REDIRECT_BUTTOM;
         }
         return super.getItemViewType(position);
     }
@@ -114,6 +121,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((ViewHolderChart) holder).bind(((ChartVO) list.get(position)));
         } else if (TYPE_TAG_SUMMARY == type) {
             ((ViewHolderTagSummary) holder).bind(((TagSummaryVO) list.get(position)));
+        } else if (TYPE_REDIRECT_BUTTOM == type) {
+            ((ViewHolderRedirectButtom) holder).bind(((RedirectButtomVO) list.get(position)));
         }
     }
 
@@ -331,6 +340,29 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public void bind(final SpaceVO item) {
             // DO NOTHING
+        }
+    }
+
+    class ViewHolderRedirectButtom extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.list_item_container)
+        LinearLayout container;
+
+        ViewHolderRedirectButtom(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void bind(final RedirectButtomVO item) {
+            container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(itemView.getContext(), HomeDetailActivity.class);
+                    intent.putExtra(HomeFragment.ITEM_VIEW, item.getHomeVisibility());
+                    intent.putExtra(HomeFragment.RELATIVE_POSITION, item.getRelativePosition());
+                    itemView.getContext().startActivity(intent);
+                }
+            });
         }
     }
 
