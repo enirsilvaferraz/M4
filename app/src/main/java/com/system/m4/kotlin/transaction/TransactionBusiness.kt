@@ -169,6 +169,7 @@ class TransactionBusiness {
             dto.purchaseDate = if (vo.purchaseDate != null) JavaUtils.DateUtil.format(vo.purchaseDate, JavaUtils.DateUtil.YYYY_MM_DD) else null
             dto.content = vo.content
             dto.price = vo.price
+            dto.refund = vo.refund
             dto.fixed = vo.isFixed
             return dto
         }
@@ -184,6 +185,7 @@ class TransactionBusiness {
             vo.purchaseDate = if (dto.purchaseDate != null) JavaUtils.DateUtil.parse(dto.purchaseDate, JavaUtils.DateUtil.YYYY_MM_DD) else null
             vo.content = dto.content
             vo.price = dto.price
+            vo.refund = dto.refund
             vo.isApproved = true
             vo.isFixed = dto.fixed
 
@@ -217,6 +219,7 @@ class TransactionBusiness {
 
             vo.content = dto.content
             vo.price = dto.price
+            vo.refund = dto.refund
 
             vo.isApproved = false
             vo.isFixed = dto.fixed

@@ -90,7 +90,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/transaction_manager_action_value"
+                android:id="@+id/transaction_manager_action_price"
                 style="@style/AppTheme.Card.Section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,12 +103,35 @@
                     android:text="@string/transaction_price" />
 
                 <TextView
-                    android:id="@+id/transaction_manager_textview_value"
+                    android:id="@+id/transaction_manager_textview_price"
                     style="@style/AppTheme.Card.TextView.Secundary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/system_empty_field"
                     tools:text="R$ 500,00" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/transaction_manager_action_refund"
+                style="@style/AppTheme.Card.Section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/AppTheme.Card.TextView.Primary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transaction_refund" />
+
+                <TextView
+                    android:id="@+id/transaction_manager_textview_refund"
+                    style="@style/AppTheme.Card.TextView.Secundary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_empty_field"
+                    tools:text="R$ 50,00" />
 
             </LinearLayout>
             

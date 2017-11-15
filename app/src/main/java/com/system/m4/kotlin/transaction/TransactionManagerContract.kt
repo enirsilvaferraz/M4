@@ -22,7 +22,9 @@ interface TransactionManagerContract {
 
         fun setPurchaseDate(value: String)
 
-        fun setValue(value: String)
+        fun setPrice(value: String)
+
+        fun setRefund(value: String)
 
         fun setTags(value: String)
 
@@ -30,7 +32,9 @@ interface TransactionManagerContract {
 
         fun setContent(value: String)
 
-        fun showValueDialog(value: Double?)
+        fun showPriceDialog(value: Double?)
+
+        fun showRefundDialog(value: Double?)
 
         fun showContentDialog(value: String?)
 
@@ -55,7 +59,9 @@ interface TransactionManagerContract {
 
         fun setPurchaseDate(date: Date?)
 
-        fun setValue(value: Double?)
+        fun setPrice(value: Double?)
+
+        fun setRefund(value: Double?)
 
         fun setTags(tagVO: TagVO)
 
@@ -63,7 +69,9 @@ interface TransactionManagerContract {
 
         fun setContent(content: String?)
 
-        fun requestValueDialog(text: String)
+        fun requestPriceDialog(text: String)
+
+        fun requestRefundDialog(text: String)
 
         fun requestContentDialog(text: String)
 
@@ -76,6 +84,8 @@ interface TransactionManagerContract {
         fun clearPaymentType()
 
         fun clearPrice()
+
+        fun clearRefund()
 
         fun clearPurchaseDate()
 

@@ -13,6 +13,7 @@
     <string name="title_activity_transaction_manager">Transaction Manager</string>
     <string name="transaction_payment_type">Payment Type</string>
     <string name="transaction_price">Price</string>
+    <string name="transaction_refund">Refund</string>
     <string name="transaction_payment_date">Payment Date</string>
     <string name="transaction_purchase_date">Purchase Date</string>
     <string name="transaction_content">Content</string>

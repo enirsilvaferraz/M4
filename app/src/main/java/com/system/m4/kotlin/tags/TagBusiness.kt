@@ -123,11 +123,11 @@ class TagBusiness {
                     continue
                 }
 
-                val summaryVO = TagSummaryVO(transaction.tag.key, transaction.tag.parentName, transaction.tag.name, transaction.price)
+                val summaryVO = TagSummaryVO(transaction.tag.key, transaction.tag.parentName, transaction.tag.name, transaction.total)
 
                 if (itens.contains(summaryVO)) {
                     val item = itens.get(itens.indexOf(summaryVO))
-                    item.value = item.value!! + transaction.price!!.toFloat()
+                    item.value = item.value!! + transaction.total!!.toFloat()
                     item.transactions.add(transaction)
                 } else {
                     summaryVO.transactions = arrayListOf<TransactionVO>()
@@ -154,7 +154,7 @@ class TagBusiness {
 
                 for (transaction in transactions) {
                     if (transaction.tag.key.equals(tag.key)) {
-                        summary.value += transaction.price
+                        summary.value += transaction.total
                     }
                 }
 

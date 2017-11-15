@@ -129,8 +129,13 @@ public class HomePresenter implements HomeContract.Presenter {
                 transaction.getTag().setParentName("Grupo de transações");
 
                 for (TransactionVO itemList : map.get(key)) {
+
                     Double price = transaction.getPrice() != null ? transaction.getPrice() : 0D;
                     transaction.setPrice(price + itemList.getPrice());
+
+                    Double refund = transaction.getPrice() != null ? transaction.getRefund() : 0D;
+                    transaction.setRefund(refund + itemList.getRefund());
+
                     transaction.setPaymentDate(itemList.getPaymentDate());
                     transaction.setClickable(false);
                 }
@@ -245,11 +250,11 @@ public class HomePresenter implements HomeContract.Presenter {
                 continue;
             }
 
-            ChartItemVO chartItem = new ChartItemVO(transaction.getTag().getName(), transaction.getPrice().floatValue());
+            ChartItemVO chartItem = new ChartItemVO(transaction.getTag().getName(), transaction.getTotal().floatValue());
 
             if (chartItems.contains(chartItem)) {
                 ChartItemVO item = chartItems.get(chartItems.indexOf(chartItem));
-                item.setValue(item.getValue() + transaction.getPrice().floatValue());
+                item.setValue(item.getValue() + transaction.getTotal().floatValue());
             } else {
                 chartItems.add(chartItem);
             }
@@ -278,15 +283,15 @@ public class HomePresenter implements HomeContract.Presenter {
         for (TransactionVO transaction : listTransaction) {
 
             if (transaction.isFixed()) {
-                fixed += transaction.getPrice();
+                fixed += transaction.getTotal();
             }
 
             if (!transaction.isApproved()) {
-                expected += transaction.getPrice();
+                expected += transaction.getTotal();
             } else if (transaction.getPaymentDate().compareTo(Calendar.getInstance().getTime()) <= 0) {
-                actual += transaction.getPrice();
+                actual += transaction.getTotal();
             } else {
-                future += transaction.getPrice();
+                future += transaction.getTotal();
             }
         }
 

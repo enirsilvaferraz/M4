@@ -158,6 +158,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.item_transaction_price)
         TextView tvPrice;
 
+        @BindView(R.id.item_transaction_refund)
+        TextView tvRefund;
+
         @BindView(R.id.item_transaction_context)
         TextView tvContext;
 
@@ -177,6 +180,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             tvTag.setText(item.getTag() != null ? item.getTag().getName() : item.getPaymentType().getName());
             tvPrice.setText(JavaUtils.NumberUtil.currencyFormat(item.getPrice()));
+
+            if (item.getRefund() != 0) {
+                tvRefund.setText(JavaUtils.NumberUtil.currencyFormat(item.getRefund()));
+                tvRefund.setVisibility(View.VISIBLE);
+            } else {
+                tvRefund.setVisibility(View.GONE);
+            }
 
             if (item.isOnGroup()) {
                 tvPaymentDate.setText(JavaUtils.DateUtil.format(item.getPurchaseDate(), JavaUtils.DateUtil.DD));

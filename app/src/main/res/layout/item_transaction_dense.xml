@@ -62,14 +62,36 @@
                 android:layout_toEndOf="@id/item_transaction_tag"
                 android:src="@drawable/ic_lock_black_24dp" />
 
-            <TextView
-                android:id="@+id/item_transaction_price"
-                style="@style/AppTheme.Form.TextView.Secundary"
+            <LinearLayout
+                android:id="@+id/item_transaction_price_value"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:gravity="center_vertical"
-                tools:text="R$ 1.000,00" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/item_transaction_refund"
+                    style="@style/AppTheme.Form.TextView.Secundary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textColor="#04c74e"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    tools:text="R$ 100,00"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/item_transaction_price"
+                    style="@style/AppTheme.Form.TextView.Secundary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    tools:text="R$ 1.000,00" />
+
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/item_transaction_context"
@@ -80,7 +102,7 @@
                 android:layout_below="@id/item_transaction_tag"
                 android:layout_marginEnd="8dp"
                 android:layout_toEndOf="@id/item_transaction_payment_date"
-                android:layout_toStartOf="@id/item_transaction_price"
+                android:layout_toStartOf="@id/item_transaction_price_value"
                 android:ellipsize="end"
                 android:lines="1"
                 tools:text="Pagamento do mês de janeiro do ano de 2017 - Transferencia" />

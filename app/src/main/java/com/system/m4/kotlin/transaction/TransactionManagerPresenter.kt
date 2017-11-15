@@ -37,9 +37,14 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
         mView.setPurchaseDate(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)))
     }
 
-    override fun setValue(value: Double?) {
+    override fun setPrice(value: Double?) {
         mVO.price = value
-        mView.setValue(JavaUtils.StringUtil.formatEmpty(JavaUtils.NumberUtil.currencyFormat(value)))
+        mView.setPrice(JavaUtils.StringUtil.formatEmpty(JavaUtils.NumberUtil.currencyFormat(value)))
+    }
+
+    override fun setRefund(value: Double?) {
+        mVO.refund = value
+        mView.setRefund(JavaUtils.StringUtil.formatEmpty(JavaUtils.NumberUtil.currencyFormat(value)))
     }
 
     override fun init(transaction: TransactionVO) {
@@ -68,9 +73,14 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
         mView.setContent(JavaUtils.StringUtil.formatEmpty(content))
     }
 
-    override fun requestValueDialog(text: String) {
+    override fun requestPriceDialog(text: String) {
         val value = if (text.isEmpty() || text == Constants.EMPTY_FIELD) null else JavaUtils.NumberUtil.removeFormat(text)
-        mView.showValueDialog(value)
+        mView.showPriceDialog(value)
+    }
+
+    override fun requestRefundDialog(text: String) {
+        val value = if (text.isEmpty() || text == Constants.EMPTY_FIELD) null else JavaUtils.NumberUtil.removeFormat(text)
+        mView.showRefundDialog(value)
     }
 
     override fun requestContentDialog(text: String) {
@@ -111,6 +121,10 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
 
     override fun clearPrice() {
         mVO.price = null
+    }
+
+    override fun clearRefund() {
+        mVO.refund = null
     }
 
     override fun clearPurchaseDate() {

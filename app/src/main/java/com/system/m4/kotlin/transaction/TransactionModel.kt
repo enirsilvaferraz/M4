@@ -28,6 +28,10 @@ data class TransactionModel constructor(
         var price: Double,
 
         @Expose
+        @SerializedName("refund")
+        var refund: Double,
+
+        @Expose
         @SerializedName("tag")
         var tag: String?,
 
@@ -44,7 +48,7 @@ data class TransactionModel constructor(
         var fixed: Boolean
 
 ) : Parcelable {
-    constructor() : this(null, null, null, 0.0, null, null, null, false) {
+    constructor() : this(null, null, null, 0.0, 0.0, null, null, null, false) {
         // Nothing to do
     }
 
@@ -52,6 +56,7 @@ data class TransactionModel constructor(
             source.readString(),
             source.readString(),
             source.readString(),
+            source.readDouble(),
             source.readDouble(),
             source.readString(),
             source.readString(),
@@ -66,6 +71,7 @@ data class TransactionModel constructor(
         writeString(paymentDate)
         writeString(purchaseDate)
         writeDouble(price)
+        writeDouble(refund)
         writeString(tag)
         writeString(paymentType)
         writeString(content)

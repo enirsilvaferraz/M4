@@ -27,6 +27,7 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
     private Date paymentDateOrigin;
     private Date purchaseDate;
     private Double price;
+    private double refund;
     private TagVO tag;
     private PaymentTypeVO paymentType;
     private String content;
@@ -52,6 +53,7 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         long tmpPurchaseDate = in.readLong();
         this.purchaseDate = tmpPurchaseDate == -1 ? null : new Date(tmpPurchaseDate);
         this.price = (Double) in.readValue(Double.class.getClassLoader());
+        this.refund = (Double) in.readValue(Double.class.getClassLoader());
         this.tag = in.readParcelable(TagVO.class.getClassLoader());
         this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
         this.content = in.readString();
@@ -184,6 +186,7 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         dest.writeLong(this.paymentDateOrigin != null ? this.paymentDateOrigin.getTime() : -1);
         dest.writeLong(this.purchaseDate != null ? this.purchaseDate.getTime() : -1);
         dest.writeValue(this.price);
+        dest.writeValue(this.refund);
         dest.writeParcelable(this.tag, flags);
         dest.writeParcelable(this.paymentType, flags);
         dest.writeString(this.content);
@@ -212,5 +215,17 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
 
     public void setOnGroup(boolean onGroup) {
         this.onGroup = onGroup;
+    }
+
+    public Double getRefund() {
+        return refund;
+    }
+
+    public void setRefund(Double refund) {
+        this.refund = refund;
+    }
+
+    public Double getTotal() {
+        return price - refund;
     }
 }

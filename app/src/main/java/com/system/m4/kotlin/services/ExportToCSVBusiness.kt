@@ -81,7 +81,7 @@ object ExportToCSVBusiness {
                 if (arrayList != null) {
                     for (transaction in arrayList) {
                         if (tag.key.equals(transaction.tag.key)) {
-                            summary.amounts[index].amount += transaction.price
+                            summary.amounts[index].amount += transaction.total
                         }
                     }
                 }
