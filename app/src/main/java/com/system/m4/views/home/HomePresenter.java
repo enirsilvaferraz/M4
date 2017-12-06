@@ -179,12 +179,14 @@ public class HomePresenter implements HomeContract.Presenter {
 
                 } else {
 
-                    Collections.sort(item.getTagSummary(), new Comparator<TagSummaryVO>() {
-                        @Override
-                        public int compare(TagSummaryVO t0, TagSummaryVO t1) {
-                            return t0.getValue().compareTo(t1.getValue()) * -1;
-                        }
-                    });
+                    if (item.getTagSummary().size() >= 2) {
+                        Collections.sort(item.getTagSummary(), new Comparator<TagSummaryVO>() {
+                            @Override
+                            public int compare(TagSummaryVO t0, TagSummaryVO t1) {
+                                return t0.getValue().compareTo(t1.getValue()) * -1;
+                            }
+                        });
+                    }
 
                     listVO.addAll(item.getTagSummary().subList(0, item.getTagSummary().size() > NUM_ITENS ? NUM_ITENS : item.getTagSummary().size()));
                     listVO.add(new RedirectButtomVO(HomeVisibility.SUMMARY_TRANSACTION, mRelativePosition));
