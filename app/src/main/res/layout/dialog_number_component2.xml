@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e1e1e1"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="340dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="R$"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/btn_back"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="1000,00"
+                android:textColor="#696969"
+                android:textSize="30sp" />
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="16dp"
+                android:src="@drawable/ic_backspace_black_24dp"
+                android:textSize="30sp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#c9c9c9" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_7"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="7"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/btn_8"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="8"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/btn_9"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="9"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/btn_sum"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="+"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_4"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="4"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/btn_5"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="5"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/btn_6"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="6"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/btn_minus"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="-"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_1"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="1"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/btn_2"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="2"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/btn_3"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="3"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/btn_multiply"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="*"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btn_dot"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="."
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/btn_0"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="0"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/btn_equals"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="="
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+                <Button
+                    android:id="@+id/btn_divide"
+                    android:layout_width="85dp"
+                    android:layout_height="55dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="8dp"
+                    android:text="/"
+                    android:textColor="#696969"
+                    android:textSize="30sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.system.m4.views.components.DialogFooter
+            android:id="@+id/base_dialog_container_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</RelativeLayout>
