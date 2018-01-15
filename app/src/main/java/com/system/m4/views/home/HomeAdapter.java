@@ -19,14 +19,10 @@ import android.widget.TextView;
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.kotlin.home.HomeDetailActivity;
-import com.system.m4.views.components.CustomBarChart;
-import com.system.m4.views.vos.ChartVO;
+import com.system.m4.kotlin.recycler.CustomViewHolder;
+import com.system.m4.kotlin.recycler.RecyclerConstants;
 import com.system.m4.views.vos.RedirectButtomVO;
-import com.system.m4.views.vos.SpaceVO;
-import com.system.m4.views.vos.SubTitleVO;
-import com.system.m4.views.vos.SummaryVO;
 import com.system.m4.views.vos.TagSummaryVO;
-import com.system.m4.views.vos.TitleVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
 
@@ -39,14 +35,9 @@ import butterknife.ButterKnife;
 /**
  *
  */
-public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<CustomViewHolder> {
 
-    private static final int TYPE_TITLE = 1;
-    private static final int TYPE_SUB_TITLE = 2;
     private static final int TYPE_TRANSACTION = 3;
-    private static final int TYPE_SPACE = 4;
-    private static final int TYPE_SUMMARY = 5;
-    private static final int TYPE_CHART = 6;
     private static final int TYPE_TAG_SUMMARY = 7;
     private static final int TYPE_REDIRECT_BUTTOM = 8;
 
@@ -60,70 +51,26 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (TYPE_TITLE == viewType) {
-            return new ViewHolderTitle(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_title, parent, false));
-        } else if (TYPE_SUB_TITLE == viewType) {
-            return new ViewHolderSubTitle(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sub_title, parent, false));
-        } else if (TYPE_TRANSACTION == viewType) {
+    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (TYPE_TRANSACTION == viewType) {
             return new ViewHolderTransaction(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction_dense, parent, false));
-        } else if (TYPE_SPACE == viewType) {
-            return new ViewHolderSpace(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_space, parent, false));
-        } else if (TYPE_SUMMARY == viewType) {
-            return new ViewHolderSummary(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_summary, parent, false));
-        } else if (TYPE_CHART == viewType) {
-            return new ViewHolderChart(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chart, parent, false));
         } else if (TYPE_TAG_SUMMARY == viewType) {
             return new ViewHolderTagSummary(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag_summary, parent, false));
         } else if (TYPE_REDIRECT_BUTTOM == viewType) {
             return new ViewHolderRedirectButtom(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_redirect_buttom, parent, false));
         }
-        return null;
+        return RecyclerConstants.INSTANCE.createViewHolder(parent, viewType);
     }
+
 
     @Override
     public int getItemViewType(int position) {
-        VOItemListInterface item = list.get(position);
-        if (item instanceof TitleVO) {
-            return TYPE_TITLE;
-        } else if (item instanceof SubTitleVO) {
-            return TYPE_SUB_TITLE;
-        } else if (item instanceof TransactionVO) {
-            return TYPE_TRANSACTION;
-        } else if (item instanceof SpaceVO) {
-            return TYPE_SPACE;
-        } else if (item instanceof SummaryVO) {
-            return TYPE_SUMMARY;
-        } else if (item instanceof ChartVO) {
-            return TYPE_CHART;
-        } else if (item instanceof TagSummaryVO) {
-            return TYPE_TAG_SUMMARY;
-        } else if (item instanceof RedirectButtomVO) {
-            return TYPE_REDIRECT_BUTTOM;
-        }
-        return super.getItemViewType(position);
+        return RecyclerConstants.INSTANCE.getItemViewType(list.get(position));
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        int type = getItemViewType(position);
-        if (TYPE_TITLE == type) {
-            ((ViewHolderTitle) holder).bind(((TitleVO) list.get(position)));
-        } else if (TYPE_SUB_TITLE == type) {
-            ((ViewHolderSubTitle) holder).bind(((SubTitleVO) list.get(position)));
-        } else if (TYPE_TRANSACTION == type) {
-            ((ViewHolderTransaction) holder).bind(((TransactionVO) list.get(position)));
-        } else if (TYPE_SPACE == type) {
-            ((ViewHolderSpace) holder).bind(((SpaceVO) list.get(position)));
-        } else if (TYPE_SUMMARY == type) {
-            ((ViewHolderSummary) holder).bind(((SummaryVO) list.get(position)));
-        } else if (TYPE_CHART == type) {
-            ((ViewHolderChart) holder).bind(((ChartVO) list.get(position)));
-        } else if (TYPE_TAG_SUMMARY == type) {
-            ((ViewHolderTagSummary) holder).bind(((TagSummaryVO) list.get(position)));
-        } else if (TYPE_REDIRECT_BUTTOM == type) {
-            ((ViewHolderRedirectButtom) holder).bind(((RedirectButtomVO) list.get(position)));
-        }
+    public void onBindViewHolder(CustomViewHolder holder, int position) {
+        holder.bind(list.get(position));
     }
 
     @Override
@@ -144,7 +91,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /**
      *
      */
-    class ViewHolderTransaction extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class ViewHolderTransaction extends CustomViewHolder<TransactionVO> implements View.OnClickListener, View.OnLongClickListener {
 
         @BindView(R.id.list_item_container)
         LinearLayout container;
@@ -268,56 +215,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    class ViewHolderTitle extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.item_title_text)
-        TextView mTitle;
-
-        ViewHolderTitle(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        public void bind(final TitleVO item) {
-            mTitle.setText(item.getTitleRes());
-        }
-    }
-
-    class ViewHolderSubTitle extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.item_title_text)
-        TextView mTitle;
-
-        ViewHolderSubTitle(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        public void bind(final SubTitleVO item) {
-            mTitle.setText(item.getTitleRes());
-        }
-    }
-
-    class ViewHolderSummary extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.item_summary_title)
-        TextView mLabel;
-
-        @BindView(R.id.item_summary_value)
-        TextView mValue;
-
-        ViewHolderSummary(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        public void bind(final SummaryVO item) {
-            mLabel.setText(item.getTitle());
-            mValue.setText(JavaUtils.NumberUtil.currencyFormat(item.getSummaryValue()));
-        }
-    }
-
-    class ViewHolderTagSummary extends RecyclerView.ViewHolder {
+    public class ViewHolderTagSummary extends CustomViewHolder<TagSummaryVO> {
 
         @BindView(R.id.list_item_container)
         LinearLayout container;
@@ -347,18 +245,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    class ViewHolderSpace extends RecyclerView.ViewHolder {
 
-        ViewHolderSpace(View itemView) {
-            super(itemView);
-        }
-
-        public void bind(final SpaceVO item) {
-            // DO NOTHING
-        }
-    }
-
-    class ViewHolderRedirectButtom extends RecyclerView.ViewHolder {
+    public class ViewHolderRedirectButtom extends CustomViewHolder<RedirectButtomVO> {
 
         @BindView(R.id.list_item_container)
         LinearLayout container;
@@ -381,18 +269,5 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    class ViewHolderChart extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.item_bar_chart)
-        CustomBarChart mChart;
-
-        ViewHolderChart(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        public void bind(final ChartVO item) {
-            mChart.bindView(item.getItems());
-        }
-    }
 }

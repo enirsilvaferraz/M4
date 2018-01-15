@@ -47,6 +47,10 @@
             android:exported="false" />
 
         <activity android:name=".kotlin.home.HomeDetailActivity" />
+        <activity
+            android:name=".kotlin.creditcard.CreditCardActivity"
+            android:label="@string/title_activity_credit_card"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

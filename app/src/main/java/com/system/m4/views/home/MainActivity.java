@@ -214,6 +214,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     private boolean isNLServiceRunning() {
         String enabledNotificationListeners = Settings.Secure.getString(this.getContentResolver(), "enabled_notification_listeners");
-        return enabledNotificationListeners.contains(NotificationReceiver.class.getName());
+        return enabledNotificationListeners == null || enabledNotificationListeners.contains(NotificationReceiver.class.getName());
     }
 }
