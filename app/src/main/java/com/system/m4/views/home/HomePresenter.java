@@ -312,12 +312,12 @@ public class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public void requestDelete(TransactionVO item) {
+    public void requestDelete(@NonNull TransactionVO item) {
         mView.requestDelete(item);
     }
 
     @Override
-    public void requestCopy(TransactionVO item) {
+    public void requestCopy(@NonNull TransactionVO item) {
         item.setKey(null);
         mView.showTransactionDialog(item);
     }
@@ -338,12 +338,12 @@ public class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public void requestShowListTransaction(TagSummaryVO item) {
+    public void requestShowListTransaction(@NonNull TagSummaryVO item) {
         mView.requestShowListTransaction(item);
     }
 
     @Override
-    public void requestPin(TransactionVO item) {
+    public void requestPin(@NonNull TransactionVO item) {
         TransactionBusiness.Companion.pin(item, new PersistenceListener<TransactionVO>() {
             @Override
             public void onSuccess(TransactionVO vo) {
@@ -358,7 +358,7 @@ public class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public void requestUnpin(TransactionVO item) {
+    public void requestUnpin(@NonNull TransactionVO item) {
         TransactionBusiness.Companion.unpin(item, new PersistenceListener<TransactionVO>() {
             @Override
             public void onSuccess(TransactionVO vo) {

@@ -6,76 +6,63 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.system.m4.R
-import com.system.m4.views.home.HomeAdapter
 import com.system.m4.views.vos.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-object ViewTypes {
-
-    val TYPE_TITLE = 1
-    val TYPE_SUB_TITLE = 2
-    val TYPE_TRANSACTION = 3
-    val TYPE_SPACE = 4
-    val TYPE_SUMMARY = 5
-    val TYPE_CHART = 6
-    val TYPE_TAG_SUMMARY = 7
-    val TYPE_REDIRECT_BUTTOM = 8
-}
-
 enum class ViewHolderEnum(val type: Int, @LayoutRes val resource: Int, val kClassVH: KClass<*>, val kClassVO: KClass<*>) {
 
     TITLE(
-            ViewTypes.TYPE_TITLE,
+            1,
             R.layout.item_title,
             ViewHolderTitle::class,
             TitleVO::class
     ),
 
     SUB_TITLE(
-            ViewTypes.TYPE_SUB_TITLE,
+            2,
             R.layout.item_sub_title,
             ViewHolderSubTitle::class,
             SubTitleVO::class
     ),
 
     TRANSACTION(
-            ViewTypes.TYPE_TRANSACTION,
+            3,
             R.layout.item_transaction_dense,
-            HomeAdapter.ViewHolderTransaction::class,
+            ViewHolderTransaction::class,
             TransactionVO::class
     ),
 
     SPACE(
-            ViewTypes.TYPE_SPACE,
+            4,
             R.layout.item_space,
             ViewHolderSpace::class,
             SpaceVO::class
     ),
 
     SUMMARY(
-            ViewTypes.TYPE_SUMMARY,
+            5,
             R.layout.item_summary,
             ViewHolderSummary::class,
             SummaryVO::class
     ),
 
     CHART(
-            ViewTypes.TYPE_CHART,
+            6,
             R.layout.item_chart,
             ViewHolderChart::class,
             ChartVO::class
     ),
 
     TAG_SUMMARY(
-            ViewTypes.TYPE_TAG_SUMMARY,
+            7,
             R.layout.item_tag_summary,
-            HomeAdapter.ViewHolderTagSummary::class,
+            ViewHolderTagSummary::class,
             TagSummaryVO::class
     ),
 
     REDIRECT_BUTTOM(
-            ViewTypes.TYPE_REDIRECT_BUTTOM,
+            8,
             R.layout.item_redirect_buttom,
             ViewHolderRedirectButtom::class,
             RedirectButtomVO::class
@@ -102,5 +89,15 @@ object RecyclerConstants {
 }
 
 abstract class CustomViewHolder<VO>(val view: View) : RecyclerView.ViewHolder(view) {
+    var presenter: GenericPresenter? = null
     abstract fun bind(vo: VO)
+}
+
+interface GenericPresenter {
+    fun requestShowListTransaction(vo: TagSummaryVO)
+    fun selectItem(vo: TransactionVO)
+    fun requestCopy(vo: TransactionVO)
+    fun requestDelete(vo: TransactionVO)
+    fun requestPin(vo: TransactionVO)
+    fun requestUnpin(vo: TransactionVO)
 }
