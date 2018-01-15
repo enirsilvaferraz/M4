@@ -60,9 +60,11 @@ class HomeBusiness {
 
         if (listTransaction != null && listTag != null && listPaymentType != null && listGroup != null) {
 
-            for (transaction in listTransaction) {
-                TransactionBusiness.fillTransaction(transaction, listTag, listPaymentType)
-            }
+//            for (transaction in listTransaction) {
+//                TransactionBusiness.fillTransaction(transaction, listTag, listPaymentType)
+//            }
+
+            listTransaction.forEach { TransactionBusiness.fillTransaction(it, listTag, listPaymentType) }
 
             val listTransactionVO = ListTransactionVO()
             listTransactionVO.tagSummary = TagBusiness.calculateTagSummary(listTransaction)

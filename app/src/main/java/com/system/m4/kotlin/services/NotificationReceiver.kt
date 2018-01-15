@@ -1,6 +1,5 @@
 package com.system.m4.kotlin.services
 
-import android.content.Context
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.system.m4.R
@@ -21,6 +20,13 @@ import java.util.*
  */
 class NotificationReceiver : NotificationListenerService() {
 
+    private val APROVADA = "APROVADA em "
+    private val RS = "R$"
+    private val SMS_TITLE = "Nubank"
+
+    private val CONFIG_TITLE = "android.title"
+    private val CONFIG_BODY = "android.text"
+
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
 
@@ -28,17 +34,23 @@ class NotificationReceiver : NotificationListenerService() {
 
             val extras = sbn.notification.extras
 
-            if (extras.getString("android.title", "").contains("Nubank")) {
-                val text = extras.getString("android.text")
-                val value = JavaUtils.NumberUtil.removeFormat(text.subSequence(text.indexOf("R$"), text.indexOf("APROVADA")).trim() as String?)
-                val content = text.subSequence(text.indexOf("APROVADA") + "APROVADA".length, text.length) as String
-
-                save(value, content)
+            if (extras.getString(CONFIG_TITLE, "").contains(SMS_TITLE)) {
+                val text = extras.getString(CONFIG_BODY)
+                val value = JavaUtils.NumberUtil.removeFormat(text.subSequence(text.indexOf(RS), text.indexOf(APROVADA)).trim() as String?)
+                val content = text.subSequence(text.indexOf(APROVADA) + APROVADA.length, text.length) as String
+                save(getTransaction(value, content))
             }
         }
     }
 
-    private fun save(value: Double, content: String) {
+    private fun save(vo: TransactionVO) {
+        TransactionBusiness.save(vo, object : PersistenceListener<TransactionVO> {
+            override fun onSuccess(model: TransactionVO) {}
+            override fun onError(error: String) {}
+        })
+    }
+
+    private fun getTransaction(value: Double, content: String): TransactionVO {
 
         val vo = TransactionVO()
         vo.purchaseDate = Calendar.getInstance().time
@@ -57,21 +69,6 @@ class NotificationReceiver : NotificationListenerService() {
         }
         calendar.set(Calendar.DATE, 23)
         vo.paymentDate = calendar.time
-
-        TransactionBusiness.save(vo, object : PersistenceListener<TransactionVO> {
-            override fun onSuccess(model: TransactionVO) {}
-            override fun onError(error: String) {}
-        })
-    }
-
-    private fun log(log: String) {
-
-        val sharedPref = getSharedPreferences("SHARED_PREF_M4", Context.MODE_PRIVATE)
-
-        val logShared = sharedPref.getString("NOTIFICATION_M4", "") + "\n\n" + log
-
-        val editor = sharedPref.edit()
-        editor.putString("NOTIFICATION_M4", logShared)
-        editor.apply()
+        return vo
     }
 }
