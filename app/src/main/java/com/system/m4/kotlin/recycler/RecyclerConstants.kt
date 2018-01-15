@@ -89,7 +89,12 @@ object RecyclerConstants {
 }
 
 abstract class CustomViewHolder<VO>(val view: View) : RecyclerView.ViewHolder(view) {
+
+    @Deprecated(message = "Sera substituido pelo onClickListener e pelo onLongClickListener")
     var presenter: GenericPresenter? = null
+
+    lateinit var onClickListener: View.OnClickListener
+    lateinit var onLongClickListener: View.OnLongClickListener
     abstract fun bind(vo: VO)
 }
 

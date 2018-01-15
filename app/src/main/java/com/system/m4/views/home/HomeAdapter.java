@@ -1,6 +1,7 @@
 package com.system.m4.views.home;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.system.m4.kotlin.recycler.CustomViewHolder;
@@ -36,7 +37,26 @@ public class HomeAdapter extends RecyclerView.Adapter<CustomViewHolder> {
 
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
-        holder.bind(list.get(position));
+
+        final VOItemListInterface vo = list.get(position);
+
+        holder.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                presenter.onClickVO(vo);
+            }
+        });
+
+        holder.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                return presenter.onLongClickVO(vo);
+            }
+        });
+
+        holder.bind(vo);
         holder.setPresenter(presenter);
     }
 

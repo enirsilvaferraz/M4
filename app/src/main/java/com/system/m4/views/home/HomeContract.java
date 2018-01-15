@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.system.m4.kotlin.recycler.GenericPresenter;
+import com.system.m4.views.vos.RedirectButtomVO;
 import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -37,6 +38,8 @@ public class HomeContract {
         void requestShowListTransaction(TagSummaryVO item);
 
         Context getContext();
+
+        void openDetail(RedirectButtomVO vo);
     }
 
     /**
@@ -61,5 +64,9 @@ public class HomeContract {
         void requestPin(@NonNull TransactionVO item);
 
         void requestUnpin(@NonNull TransactionVO item);
+
+        void onClickVO(VOItemListInterface vo);
+
+        boolean onLongClickVO(VOItemListInterface vo);
     }
 }

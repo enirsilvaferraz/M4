@@ -371,4 +371,21 @@ public class HomePresenter implements HomeContract.Presenter {
             }
         });
     }
+
+    @Override
+    public void onClickVO(VOItemListInterface vo) {
+
+        if (vo instanceof TransactionVO) {
+            selectItem(((TransactionVO) vo));
+        } else if (vo instanceof TagSummaryVO) {
+            requestShowListTransaction(((TagSummaryVO) vo));
+        } else if (vo instanceof RedirectButtomVO) {
+            mView.openDetail(((RedirectButtomVO) vo));
+        }
+    }
+
+    @Override
+    public boolean onLongClickVO(VOItemListInterface vo) {
+        return false;
+    }
 }

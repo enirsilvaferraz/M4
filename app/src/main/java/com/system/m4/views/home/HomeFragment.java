@@ -1,6 +1,7 @@
 package com.system.m4.views.home;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,9 @@ import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.kotlin.home.HomeDetailActivity;
 import com.system.m4.kotlin.transaction.TransactionListDialog;
+import com.system.m4.views.vos.RedirectButtomVO;
 import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -96,6 +99,14 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     public void requestShowListTransaction(TagSummaryVO item) {
         TransactionListDialog dialogFragment = TransactionListDialog.Companion.instance(new ArrayList<>(item.getTransactions()));
         dialogFragment.show(getFragmentManager(), TransactionListDialog.class.getSimpleName());
+    }
+
+    @Override
+    public void openDetail(RedirectButtomVO vo) {
+        Intent intent = new Intent(getContext(), HomeDetailActivity.class);
+        intent.putExtra(HomeFragment.ITEM_VIEW, vo.getHomeVisibility());
+        intent.putExtra(HomeFragment.RELATIVE_POSITION, vo.getRelativePosition());
+        startActivity(intent);
     }
 
     @Override
