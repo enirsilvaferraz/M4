@@ -1,6 +1,5 @@
 package com.system.m4.views.home;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.view.menu.MenuBuilder;
@@ -18,10 +17,8 @@ import android.widget.TextView;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
-import com.system.m4.kotlin.home.HomeDetailActivity;
 import com.system.m4.kotlin.recycler.CustomViewHolder;
 import com.system.m4.kotlin.recycler.RecyclerConstants;
-import com.system.m4.views.vos.RedirectButtomVO;
 import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -39,7 +36,6 @@ public class HomeAdapter extends RecyclerView.Adapter<CustomViewHolder> {
 
     private static final int TYPE_TRANSACTION = 3;
     private static final int TYPE_TAG_SUMMARY = 7;
-    private static final int TYPE_REDIRECT_BUTTOM = 8;
 
     private final HomeContract.Presenter presenter;
 
@@ -56,8 +52,6 @@ public class HomeAdapter extends RecyclerView.Adapter<CustomViewHolder> {
             return new ViewHolderTransaction(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction_dense, parent, false));
         } else if (TYPE_TAG_SUMMARY == viewType) {
             return new ViewHolderTagSummary(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag_summary, parent, false));
-        } else if (TYPE_REDIRECT_BUTTOM == viewType) {
-            return new ViewHolderRedirectButtom(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_redirect_buttom, parent, false));
         }
         return RecyclerConstants.INSTANCE.createViewHolder(parent, viewType);
     }
@@ -244,30 +238,4 @@ public class HomeAdapter extends RecyclerView.Adapter<CustomViewHolder> {
             });
         }
     }
-
-
-    public class ViewHolderRedirectButtom extends CustomViewHolder<RedirectButtomVO> {
-
-        @BindView(R.id.list_item_container)
-        LinearLayout container;
-
-        ViewHolderRedirectButtom(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-
-        public void bind(final RedirectButtomVO item) {
-            container.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(itemView.getContext(), HomeDetailActivity.class);
-                    intent.putExtra(HomeFragment.ITEM_VIEW, item.getHomeVisibility());
-                    intent.putExtra(HomeFragment.RELATIVE_POSITION, item.getRelativePosition());
-                    itemView.getContext().startActivity(intent);
-                }
-            });
-        }
-    }
-
-
 }

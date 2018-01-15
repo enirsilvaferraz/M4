@@ -1,10 +1,15 @@
 package com.system.m4.kotlin.recycler
 
+import android.content.Intent
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
+import butterknife.ButterKnife
 import com.system.m4.R
 import com.system.m4.infrastructure.JavaUtils
+import com.system.m4.kotlin.home.HomeDetailActivity
 import com.system.m4.views.components.CustomBarChart
+import com.system.m4.views.home.HomeFragment
 import com.system.m4.views.vos.*
 
 class ViewHolderSubTitle internal constructor(itemView: View) : CustomViewHolder<SubTitleVO>(itemView) {
@@ -27,7 +32,7 @@ class ViewHolderChart internal constructor(itemView: View) : CustomViewHolder<Ch
 
 class ViewHolderSpace internal constructor(itemView: View) : CustomViewHolder<SpaceVO>(itemView) {
 
-    override fun bind(item: SpaceVO) {
+    override fun bind(vo: SpaceVO) {
         // DO NOTHING
     }
 }
@@ -49,6 +54,24 @@ class ViewHolderTitle internal constructor(itemView: View) : CustomViewHolder<Ti
 
     override fun bind(vo: TitleVO) {
         mTitle.text = vo.titleRes
+    }
+}
+
+class ViewHolderRedirectButtom internal constructor(itemView: View) : CustomViewHolder<RedirectButtomVO>(itemView) {
+
+    var container: LinearLayout = itemView.findViewById(R.id.list_item_container)
+
+    init {
+        ButterKnife.bind(this, itemView)
+    }
+
+    override fun bind(vo: RedirectButtomVO) {
+        container.setOnClickListener {
+            val intent = Intent(itemView.context, HomeDetailActivity::class.java)
+            intent.putExtra(HomeFragment.ITEM_VIEW, vo.homeVisibility)
+            intent.putExtra(HomeFragment.RELATIVE_POSITION, vo.relativePosition)
+            itemView.context.startActivity(intent)
+        }
     }
 }
 

@@ -6,14 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.system.m4.R
-import com.system.m4.kotlin.recycler.ViewTypes.TYPE_CHART
-import com.system.m4.kotlin.recycler.ViewTypes.TYPE_REDIRECT_BUTTOM
-import com.system.m4.kotlin.recycler.ViewTypes.TYPE_SPACE
-import com.system.m4.kotlin.recycler.ViewTypes.TYPE_SUB_TITLE
-import com.system.m4.kotlin.recycler.ViewTypes.TYPE_SUMMARY
-import com.system.m4.kotlin.recycler.ViewTypes.TYPE_TAG_SUMMARY
-import com.system.m4.kotlin.recycler.ViewTypes.TYPE_TITLE
-import com.system.m4.kotlin.recycler.ViewTypes.TYPE_TRANSACTION
 import com.system.m4.views.home.HomeAdapter
 import com.system.m4.views.vos.*
 import kotlin.reflect.KClass
@@ -32,14 +24,62 @@ object ViewTypes {
 }
 
 enum class ViewHolderEnum(val type: Int, @LayoutRes val resource: Int, val kClassVH: KClass<*>, val kClassVO: KClass<*>) {
-    TITLE(TYPE_TITLE, R.layout.item_title, ViewHolderTitle::class, TitleVO::class),
-    SUB_TITLE(TYPE_SUB_TITLE, R.layout.item_sub_title, ViewHolderSubTitle::class, SubTitleVO::class),
-    TRANSACTION(TYPE_TRANSACTION, R.layout.item_transaction_dense, HomeAdapter.ViewHolderTransaction::class, TransactionVO::class),
-    SPACE(TYPE_SPACE, R.layout.item_space, ViewHolderSpace::class, SpaceVO::class),
-    SUMMARY(TYPE_SUMMARY, R.layout.item_summary, ViewHolderSummary::class, SummaryVO::class),
-    CHART(TYPE_CHART, R.layout.item_chart, ViewHolderChart::class, ChartVO::class),
-    TAG_SUMMARY(TYPE_TAG_SUMMARY, R.layout.item_tag_summary, HomeAdapter.ViewHolderTagSummary::class, TagSummaryVO::class),
-    REDIRECT_BUTTOM(TYPE_REDIRECT_BUTTOM, R.layout.item_redirect_buttom, HomeAdapter.ViewHolderRedirectButtom::class, RedirectButtomVO::class)
+
+    TITLE(
+            ViewTypes.TYPE_TITLE,
+            R.layout.item_title,
+            ViewHolderTitle::class,
+            TitleVO::class
+    ),
+
+    SUB_TITLE(
+            ViewTypes.TYPE_SUB_TITLE,
+            R.layout.item_sub_title,
+            ViewHolderSubTitle::class,
+            SubTitleVO::class
+    ),
+
+    TRANSACTION(
+            ViewTypes.TYPE_TRANSACTION,
+            R.layout.item_transaction_dense,
+            HomeAdapter.ViewHolderTransaction::class,
+            TransactionVO::class
+    ),
+
+    SPACE(
+            ViewTypes.TYPE_SPACE,
+            R.layout.item_space,
+            ViewHolderSpace::class,
+            SpaceVO::class
+    ),
+
+    SUMMARY(
+            ViewTypes.TYPE_SUMMARY,
+            R.layout.item_summary,
+            ViewHolderSummary::class,
+            SummaryVO::class
+    ),
+
+    CHART(
+            ViewTypes.TYPE_CHART,
+            R.layout.item_chart,
+            ViewHolderChart::class,
+            ChartVO::class
+    ),
+
+    TAG_SUMMARY(
+            ViewTypes.TYPE_TAG_SUMMARY,
+            R.layout.item_tag_summary,
+            HomeAdapter.ViewHolderTagSummary::class,
+            TagSummaryVO::class
+    ),
+
+    REDIRECT_BUTTOM(
+            ViewTypes.TYPE_REDIRECT_BUTTOM,
+            R.layout.item_redirect_buttom,
+            ViewHolderRedirectButtom::class,
+            RedirectButtomVO::class
+    )
 }
 
 
