@@ -3,7 +3,6 @@ package com.system.m4.views.home;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.system.m4.kotlin.recycler.GenericPresenter;
 import com.system.m4.views.vos.RedirectButtomVO;
 import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TransactionVO;

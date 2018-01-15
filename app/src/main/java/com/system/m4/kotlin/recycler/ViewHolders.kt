@@ -5,6 +5,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.view.menu.MenuBuilder
 import android.support.v7.view.menu.MenuPopupHelper
 import android.support.v7.widget.PopupMenu
+import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
@@ -13,7 +14,18 @@ import android.widget.TextView
 import com.system.m4.R
 import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.views.components.CustomBarChart
+import com.system.m4.views.home.GenericPresenter
 import com.system.m4.views.vos.*
+
+abstract class CustomViewHolder<VO>(val view: View) : RecyclerView.ViewHolder(view) {
+
+    @Deprecated(message = "Sera substituido pelo onClickListener e pelo onLongClickListener")
+    var presenter: GenericPresenter? = null
+
+    lateinit var onClickListener: View.OnClickListener
+    lateinit var onLongClickListener: View.OnLongClickListener
+    abstract fun bind(vo: VO)
+}
 
 class ViewHolderSubTitle internal constructor(itemView: View) : CustomViewHolder<SubTitleVO>(itemView) {
 
@@ -104,40 +116,25 @@ class ViewHolderTransaction internal constructor(itemView: View) : CustomViewHol
         tvTag.text = if (vo.tag != null) vo.tag.name else vo.paymentType.name
         tvPrice.text = JavaUtils.NumberUtil.currencyFormat(vo.price)
 
-        if (vo.refund != 0.0) {
-            tvRefund.text = JavaUtils.NumberUtil.currencyFormat(vo.refund)
-            tvRefund.visibility = View.VISIBLE
-        } else {
-            tvRefund.visibility = View.GONE
-        }
+        tvRefund.text = JavaUtils.NumberUtil.currencyFormat(vo.refund)
+        tvRefund.visibility = if (vo.refund != 0.0) View.VISIBLE else View.GONE
 
-        if (vo.isOnGroup) {
-            tvPaymentDate.text = JavaUtils.DateUtil.format(vo.purchaseDate, JavaUtils.DateUtil.DD)
-        } else {
-            tvPaymentDate.text = JavaUtils.DateUtil.format(vo.paymentDate, JavaUtils.DateUtil.DD)
-        }
+        val date = if (vo.isOnGroup) vo.purchaseDate else vo.paymentDate
+        tvPaymentDate.text = JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD)
 
-        if (JavaUtils.StringUtil.isEmpty(vo.content)) {
-            tvContext.text = vo.tag.parentName
-        } else {
-            tvContext.text = vo.content
-        }
+        tvContext.text = if (JavaUtils.StringUtil.isEmpty(vo.content)) vo.tag.parentName else vo.content
 
-        if (!TextUtils.isEmpty(vo.paymentType.color)) {
-            tvPaymentDate.setTextColor(Color.parseColor(vo.paymentType.color))
-        } else {
-            tvPaymentDate.setTextColor(ContextCompat.getColor(itemView.context, R.color.dafault_color))
-        }
+        val empty = TextUtils.isEmpty(vo.paymentType.color)
+        tvPaymentDate.setTextColor(if (!empty) Color.parseColor(vo.paymentType.color) else
+            ContextCompat.getColor(itemView.context, R.color.dafault_color))
 
         val itemColor = if (vo.isApproved) R.color.item_default else R.color.item_pinned
         tvTag.setTextColor(itemView.context.getColor(itemColor))
 
         imFixed.visibility = if (vo.isFixed) View.VISIBLE else View.GONE
 
-        if (vo.isClickable) {
-            container.setOnClickListener(onClickListener)
-            container.setOnLongClickListener(this)
-        }
+        container.setOnClickListener(if (vo.isClickable) onClickListener else null)
+        container.setOnLongClickListener(if (vo.isClickable) this else null)
     }
 
     override fun onLongClick(view: View): Boolean {
@@ -184,4 +181,3 @@ class ViewHolderTransaction internal constructor(itemView: View) : CustomViewHol
         menuHelper.show()
     }
 }
-
