@@ -1,10 +1,13 @@
 package com.system.m4.kotlin.recycler
 
 import android.graphics.Color
+import android.support.annotation.LayoutRes
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -18,37 +21,51 @@ abstract class CustomViewHolder<VO>(val view: View) : RecyclerView.ViewHolder(vi
     lateinit var onClickListener: View.OnClickListener
     lateinit var onLongClickListener: View.OnLongClickListener
     abstract fun bind(vo: VO)
+
+    companion object {
+        fun inflateView(parent: ViewGroup, @LayoutRes layout: Int): View {
+            return LayoutInflater.from(parent.context).inflate(layout, parent, false)
+        }
+    }
 }
 
-class ViewHolderSubTitle internal constructor(itemView: View) : CustomViewHolder<SubTitleVO>(itemView) {
+class ViewHolderSubTitle private constructor(itemView: View) : CustomViewHolder<SubTitleVO>(itemView) {
 
     private val title: TextView = itemView.findViewById(R.id.item_title_text)
+
+    constructor(parent: ViewGroup) : this(inflateView(parent, R.layout.item_sub_title))
 
     override fun bind(vo: SubTitleVO) {
         title.text = vo.titleRes
     }
 }
 
-class ViewHolderChart internal constructor(itemView: View) : CustomViewHolder<ChartVO>(itemView) {
+class ViewHolderChart private constructor(itemView: View) : CustomViewHolder<ChartVO>(itemView) {
 
     private val chart: CustomBarChart = itemView.findViewById(R.id.item_bar_chart)
+
+    constructor(parent: ViewGroup) : this(inflateView(parent, R.layout.item_chart))
 
     override fun bind(vo: ChartVO) {
         chart.bindView(vo.items)
     }
 }
 
-class ViewHolderSpace internal constructor(itemView: View) : CustomViewHolder<SpaceVO>(itemView) {
+class ViewHolderSpace private constructor(itemView: View) : CustomViewHolder<SpaceVO>(itemView) {
+
+    constructor(parent: ViewGroup) : this(inflateView(parent, R.layout.item_space))
 
     override fun bind(vo: SpaceVO) {
         // DO NOTHING
     }
 }
 
-class ViewHolderSummary internal constructor(itemView: View) : CustomViewHolder<SummaryVO>(itemView) {
+class ViewHolderSummary private constructor(itemView: View) : CustomViewHolder<SummaryVO>(itemView) {
 
     private val label: TextView = itemView.findViewById(R.id.item_summary_title)
     private val value: TextView = itemView.findViewById(R.id.item_summary_value)
+
+    constructor(parent: ViewGroup) : this(inflateView(parent, R.layout.item_summary))
 
     override fun bind(vo: SummaryVO) {
         label.text = vo.title
@@ -56,29 +73,35 @@ class ViewHolderSummary internal constructor(itemView: View) : CustomViewHolder<
     }
 }
 
-class ViewHolderTitle internal constructor(itemView: View) : CustomViewHolder<TitleVO>(itemView) {
+class ViewHolderTitle private constructor(itemView: View) : CustomViewHolder<TitleVO>(itemView) {
 
     private val title: TextView = itemView.findViewById(R.id.item_title_text)
+
+    constructor(parent: ViewGroup) : this(inflateView(parent, R.layout.item_title))
 
     override fun bind(vo: TitleVO) {
         title.text = vo.titleRes
     }
 }
 
-class ViewHolderRedirectButtom internal constructor(itemView: View) : CustomViewHolder<RedirectButtomVO>(itemView) {
+class ViewHolderRedirectButtom private constructor(itemView: View) : CustomViewHolder<RedirectButtomVO>(itemView) {
 
     private val container: LinearLayout = itemView.findViewById(R.id.list_item_container)
+
+    constructor(parent: ViewGroup) : this(inflateView(parent, R.layout.item_redirect_buttom))
 
     override fun bind(vo: RedirectButtomVO) {
         container.setOnClickListener(onClickListener)
     }
 }
 
-class ViewHolderTagSummary internal constructor(itemView: View) : CustomViewHolder<TagSummaryVO>(itemView) {
+class ViewHolderTagSummary private constructor(itemView: View) : CustomViewHolder<TagSummaryVO>(itemView) {
 
     private val container: LinearLayout = itemView.findViewById(R.id.list_item_container)
     private val label: TextView = itemView.findViewById(R.id.item_summary_title)
     private val value: TextView = itemView.findViewById(R.id.item_summary_value)
+
+    constructor(parent: ViewGroup) : this(inflateView(parent, R.layout.item_tag_summary))
 
     override fun bind(vo: TagSummaryVO) {
         label.text = if (vo.parentName != null) vo.parentName + " / " + vo.name else vo.name
@@ -90,7 +113,7 @@ class ViewHolderTagSummary internal constructor(itemView: View) : CustomViewHold
 /**
  *
  */
-class ViewHolderTransaction internal constructor(itemView: View) : CustomViewHolder<TransactionVO>(itemView) {
+class ViewHolderTransaction private constructor(itemView: View) : CustomViewHolder<TransactionVO>(itemView) {
 
     private val container: LinearLayout = itemView.findViewById(R.id.list_item_container)
     private val tvTag: TextView = itemView.findViewById(R.id.item_transaction_tag)
@@ -101,6 +124,8 @@ class ViewHolderTransaction internal constructor(itemView: View) : CustomViewHol
     private val imFixed: ImageView = itemView.findViewById(R.id.item_transaction_fixed)
 
     private var vo: TransactionVO? = null
+
+    constructor(parent: ViewGroup) : this(inflateView(parent, R.layout.item_transaction_dense))
 
     override fun bind(vo: TransactionVO) {
 

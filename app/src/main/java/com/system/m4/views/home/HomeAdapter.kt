@@ -1,14 +1,11 @@
 package com.system.m4.views.home
 
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.system.m4.kotlin.recycler.CustomViewHolder
-import com.system.m4.kotlin.recycler.ViewHolderEnum
-import com.system.m4.views.vos.VOItemListInterface
+import com.system.m4.kotlin.recycler.*
+import com.system.m4.views.vos.*
 import java.util.*
-import kotlin.reflect.full.primaryConstructor
 
 /**
  *
@@ -19,22 +16,43 @@ class HomeAdapter internal constructor(private val presenter: HomeContract.Prese
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder<VOItemListInterface> {
-        val viewHolderEnum = ViewHolderEnum.values().filter { it.type == viewType }.get(0)
-        val view = LayoutInflater.from(parent.context).inflate(viewHolderEnum.resource, parent, false)
-        return viewHolderEnum.kClassVH.primaryConstructor?.call(view) as CustomViewHolder<VOItemListInterface>
+
+        return when (viewType) {
+
+            1 -> ViewHolderTitle(parent)
+            2 -> ViewHolderSubTitle(parent)
+            3 -> ViewHolderSummary(parent)
+            4 -> ViewHolderTagSummary(parent)
+            5 -> ViewHolderTransaction(parent)
+            6 -> ViewHolderRedirectButtom(parent)
+            7 -> ViewHolderSpace(parent)
+            8 -> ViewHolderChart(parent)
+            else -> null
+
+        } as CustomViewHolder<VOItemListInterface>
     }
 
     override fun getItemViewType(position: Int): Int {
-        return ViewHolderEnum.values().filter { list[position]::class == it.kClassVO }.get(0).type
+
+        return when (list[position]::class) {
+
+            TitleVO::class -> 1
+            SubTitleVO::class -> 2
+            SummaryVO::class -> 3
+            TagSummaryVO::class -> 4
+            TransactionVO::class -> 5
+            RedirectButtomVO::class -> 6
+            SpaceVO::class -> 7
+            ChartVO::class -> 8
+            else -> 0
+
+        }
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder<VOItemListInterface>, position: Int) {
-
         val vo = list[position]
-
         holder.onClickListener = View.OnClickListener { presenter.onClickVO(vo) }
         holder.onLongClickListener = View.OnLongClickListener { view -> presenter.onLongClickVO(vo, view) }
-
         holder.bind(vo)
     }
 
