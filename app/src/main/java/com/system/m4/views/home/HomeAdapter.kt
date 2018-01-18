@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.system.m4.kotlin.recycler.CustomViewHolder
 import com.system.m4.kotlin.recycler.ViewHolderEnum
-import com.system.m4.views.vos.TagSummaryVO
-import com.system.m4.views.vos.TransactionVO
 import com.system.m4.views.vos.VOItemListInterface
 import java.util.*
 import kotlin.reflect.full.primaryConstructor
@@ -35,10 +33,9 @@ class HomeAdapter internal constructor(private val presenter: HomeContract.Prese
         val vo = list[position]
 
         holder.onClickListener = View.OnClickListener { presenter.onClickVO(vo) }
-        holder.onLongClickListener = View.OnLongClickListener { presenter.onLongClickVO(vo) }
+        holder.onLongClickListener = View.OnLongClickListener { view -> presenter.onLongClickVO(vo, view) }
 
         holder.bind(vo)
-        holder.presenter = presenter
     }
 
     override fun getItemCount(): Int {
@@ -54,14 +51,4 @@ class HomeAdapter internal constructor(private val presenter: HomeContract.Prese
         this.list.clear()
         notifyDataSetChanged()
     }
-}
-
-@Deprecated("Sera substituido")
-interface GenericPresenter {
-    fun requestShowListTransaction(vo: TagSummaryVO)
-    fun selectItem(vo: TransactionVO)
-    fun requestCopy(vo: TransactionVO)
-    fun requestDelete(vo: TransactionVO)
-    fun requestPin(vo: TransactionVO)
-    fun requestUnpin(vo: TransactionVO)
 }

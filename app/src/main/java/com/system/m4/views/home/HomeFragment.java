@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -132,5 +136,46 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void setPresenter(HomeContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void showPoupu(View viewClicked, final TransactionVO vo) {
+
+        PopupMenu popupMenu = new PopupMenu(getContext(), viewClicked);
+        popupMenu.inflate(R.menu.menu_transaction);
+
+        popupMenu.getMenu().findItem(R.id.action_pin).setVisible(!vo.isFixed());
+        popupMenu.getMenu().findItem(R.id.action_unpin).setVisible(vo.isFixed());
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case R.id.action_copy:
+                        presenter.requestCopy(vo);
+                        return true;
+
+                    case R.id.action_delete:
+                        presenter.requestDelete(vo);
+                        return true;
+
+                    case R.id.action_pin:
+                        presenter.requestPin(vo);
+                        return true;
+
+                    case R.id.action_unpin:
+                        presenter.requestUnpin(vo);
+                        return true;
+                }
+
+                return false;
+            }
+        });
+
+        MenuPopupHelper menuHelper = new MenuPopupHelper(getContext(), (MenuBuilder) popupMenu.getMenu(), viewClicked);
+        menuHelper.setForceShowIcon(true);
+        menuHelper.show();
     }
 }

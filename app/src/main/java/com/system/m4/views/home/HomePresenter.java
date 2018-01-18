@@ -1,6 +1,7 @@
 package com.system.m4.views.home;
 
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.system.m4.kotlin.home.HomeBusiness;
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener;
@@ -385,7 +386,13 @@ public class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public boolean onLongClickVO(VOItemListInterface vo) {
+    public boolean onLongClickVO(VOItemListInterface vo, View view) {
+
+        if (vo instanceof TransactionVO) {
+            mView.showPoupu(view, (TransactionVO) vo);
+            return true;
+        }
+
         return false;
     }
 }

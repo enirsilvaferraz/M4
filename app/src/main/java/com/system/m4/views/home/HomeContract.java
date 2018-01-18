@@ -39,12 +39,14 @@ public class HomeContract {
         Context getContext();
 
         void openDetail(RedirectButtomVO vo);
+
+        void showPoupu(android.view.View viewClicked, TransactionVO vo);
     }
 
     /**
      *
      */
-    interface Presenter extends GenericPresenter {
+    interface Presenter {
 
         void init(int relativePosition, int homeVisibility);
 
@@ -66,6 +68,6 @@ public class HomeContract {
 
         void onClickVO(VOItemListInterface vo);
 
-        boolean onLongClickVO(VOItemListInterface vo);
+        boolean onLongClickVO(VOItemListInterface vo, android.view.View view);
     }
 }

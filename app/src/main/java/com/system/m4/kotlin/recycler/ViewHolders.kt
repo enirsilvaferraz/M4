@@ -2,9 +2,6 @@ package com.system.m4.kotlin.recycler
 
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
-import android.support.v7.view.menu.MenuBuilder
-import android.support.v7.view.menu.MenuPopupHelper
-import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.View
@@ -14,13 +11,9 @@ import android.widget.TextView
 import com.system.m4.R
 import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.views.components.CustomBarChart
-import com.system.m4.views.home.GenericPresenter
 import com.system.m4.views.vos.*
 
 abstract class CustomViewHolder<VO>(val view: View) : RecyclerView.ViewHolder(view) {
-
-    @Deprecated(message = "Sera substituido pelo onClickListener e pelo onLongClickListener")
-    var presenter: GenericPresenter? = null
 
     lateinit var onClickListener: View.OnClickListener
     lateinit var onLongClickListener: View.OnLongClickListener
@@ -97,7 +90,7 @@ class ViewHolderTagSummary internal constructor(itemView: View) : CustomViewHold
 /**
  *
  */
-class ViewHolderTransaction internal constructor(itemView: View) : CustomViewHolder<TransactionVO>(itemView), View.OnLongClickListener {
+class ViewHolderTransaction internal constructor(itemView: View) : CustomViewHolder<TransactionVO>(itemView) {
 
     private val container: LinearLayout = itemView.findViewById(R.id.list_item_container)
     private val tvTag: TextView = itemView.findViewById(R.id.item_transaction_tag)
@@ -134,50 +127,6 @@ class ViewHolderTransaction internal constructor(itemView: View) : CustomViewHol
         imFixed.visibility = if (vo.isFixed) View.VISIBLE else View.GONE
 
         container.setOnClickListener(if (vo.isClickable) onClickListener else null)
-        container.setOnLongClickListener(if (vo.isClickable) this else null)
-    }
-
-    override fun onLongClick(view: View): Boolean {
-        showPopup()
-        return true
-    }
-
-    internal fun showPopup() {
-        val popupMenu = PopupMenu(itemView.context, itemView)
-        popupMenu.inflate(R.menu.menu_transaction)
-
-        popupMenu.menu.findItem(R.id.action_pin).isVisible = !vo!!.isFixed
-        popupMenu.menu.findItem(R.id.action_unpin).isVisible = vo!!.isFixed
-
-        popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
-            when (item.itemId) {
-
-                R.id.action_copy -> {
-                    presenter!!.requestCopy(vo!!)
-                    return@OnMenuItemClickListener true
-                }
-
-                R.id.action_delete -> {
-                    presenter!!.requestDelete(vo!!)
-                    return@OnMenuItemClickListener true
-                }
-
-                R.id.action_pin -> {
-                    presenter!!.requestPin(vo!!)
-                    return@OnMenuItemClickListener true
-                }
-
-                R.id.action_unpin -> {
-                    presenter!!.requestUnpin(vo!!)
-                    return@OnMenuItemClickListener true
-                }
-            }
-
-            false
-        })
-
-        val menuHelper = MenuPopupHelper(itemView.context, popupMenu.menu as MenuBuilder, tvPrice)
-        menuHelper.setForceShowIcon(true)
-        menuHelper.show()
+        container.setOnLongClickListener(if (vo.isClickable) onLongClickListener else null)
     }
 }
