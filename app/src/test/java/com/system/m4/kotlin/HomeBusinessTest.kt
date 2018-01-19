@@ -12,7 +12,7 @@ import org.junit.Test
 class HomeBusinessTest {
 
     @Test
-    fun splitTransactionsByDate20_nulls() {
+    fun splitTransactionsByDate20WithNulls() {
 
         val homeDTO = HomeDTO(1, 2018)
         val homeVO = HomeVO()
@@ -27,7 +27,7 @@ class HomeBusinessTest {
     }
 
     @Test
-    fun splitTransactionsByDate20_0Q() {
+    fun splitTransactionsByDate20With0Q() {
 
         val listOfTransactions = mutableListOf<TransactionVO>()
 
@@ -46,7 +46,7 @@ class HomeBusinessTest {
     }
 
     @Test
-    fun splitTransactionsByDate20_1Q() {
+    fun splitTransactionsByDate20With1Q() {
 
         val listOfTransactions = mutableListOf<TransactionVO>()
         listOfTransactions.add(mockTransaction("1", "02/01/2018", 10.10, "Alimentação", "Celular"))
@@ -62,10 +62,10 @@ class HomeBusinessTest {
         HomeBusiness().splitTransactionsByDate20(homeVO, homeDTO)
 
         Assert.assertEquals(4, homeVO.transactions1Q.size)
-        Assert.assertEquals("4", homeVO.transactions1Q.get(0).key)
-        Assert.assertEquals("1", homeVO.transactions1Q.get(1).key)
-        Assert.assertEquals("3", homeVO.transactions1Q.get(2).key)
-        Assert.assertEquals("2", homeVO.transactions1Q.get(3).key)
+        Assert.assertEquals("4", homeVO.transactions1Q[0].key)
+        Assert.assertEquals("1", homeVO.transactions1Q[1].key)
+        Assert.assertEquals("3", homeVO.transactions1Q[2].key)
+        Assert.assertEquals("2", homeVO.transactions1Q[3].key)
 
         Assert.assertEquals(0, homeVO.transactions2Q.size)
 
@@ -74,7 +74,7 @@ class HomeBusinessTest {
     }
 
     @Test
-    fun splitTransactionsByDate20_2Q() {
+    fun splitTransactionsByDate20With2Q() {
 
         val listOfTransactions = mutableListOf<TransactionVO>()
         listOfTransactions.add(mockTransaction("1", "21/01/2018", 30.5, "Alimentação", "Celular"))
@@ -93,18 +93,18 @@ class HomeBusinessTest {
         Assert.assertEquals(0, homeVO.transactions1Q.size)
 
         Assert.assertEquals(5, homeVO.transactions2Q.size)
-        Assert.assertEquals("5", homeVO.transactions2Q.get(0).key)
-        Assert.assertEquals("4", homeVO.transactions2Q.get(1).key)
-        Assert.assertEquals("3", homeVO.transactions2Q.get(2).key)
-        Assert.assertEquals("1", homeVO.transactions2Q.get(3).key)
-        Assert.assertEquals("2", homeVO.transactions2Q.get(4).key)
+        Assert.assertEquals("5", homeVO.transactions2Q[0].key)
+        Assert.assertEquals("4", homeVO.transactions2Q[1].key)
+        Assert.assertEquals("3", homeVO.transactions2Q[2].key)
+        Assert.assertEquals("1", homeVO.transactions2Q[3].key)
+        Assert.assertEquals("2", homeVO.transactions2Q[4].key)
 
         Assert.assertEquals(0.0, homeVO.amount1Q)
         Assert.assertEquals(200.8, homeVO.amount2Q)
     }
 
     @Test
-    fun splitTransactionsByDate20_1and2Q() {
+    fun splitTransactionsByDate20With1and2Q() {
 
         val listOfTransactions = mutableListOf<TransactionVO>()
         listOfTransactions.add(mockTransaction("1", "01/01/2018", 50.0, "Alimentação", "Celular"))
@@ -120,12 +120,12 @@ class HomeBusinessTest {
         HomeBusiness().splitTransactionsByDate20(homeVO, homeDTO)
 
         Assert.assertEquals(2, homeVO.transactions1Q.size)
-        Assert.assertEquals("1", homeVO.transactions1Q.get(0).key)
-        Assert.assertEquals("2", homeVO.transactions1Q.get(1).key)
+        Assert.assertEquals("1", homeVO.transactions1Q[0].key)
+        Assert.assertEquals("2", homeVO.transactions1Q[1].key)
 
         Assert.assertEquals(2, homeVO.transactions2Q.size)
-        Assert.assertEquals("3", homeVO.transactions2Q.get(0).key)
-        Assert.assertEquals("4", homeVO.transactions2Q.get(1).key)
+        Assert.assertEquals("3", homeVO.transactions2Q[0].key)
+        Assert.assertEquals("4", homeVO.transactions2Q[1].key)
 
         Assert.assertEquals(100.0, homeVO.amount1Q)
         Assert.assertEquals(100.0, homeVO.amount2Q)
