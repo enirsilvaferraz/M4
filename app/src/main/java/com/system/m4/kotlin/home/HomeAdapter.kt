@@ -1,9 +1,10 @@
-package com.system.m4.views.home
+package com.system.m4.kotlin.home
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.system.m4.kotlin.recycler.*
+import com.system.m4.views.home.HomeContract
 import com.system.m4.views.vos.*
 import java.util.*
 

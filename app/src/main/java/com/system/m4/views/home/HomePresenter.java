@@ -10,7 +10,7 @@ import com.system.m4.kotlin.transaction.TransactionBusiness;
 import com.system.m4.kotlin.transaction.TransactionModel;
 import com.system.m4.views.vos.ChartItemVO;
 import com.system.m4.views.vos.ChartVO;
-import com.system.m4.views.vos.ListTransactionVO;
+import com.system.m4.views.vos.HomeVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.RedirectButtomVO;
 import com.system.m4.views.vos.SpaceVO;
@@ -61,10 +61,10 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestListTransaction() {
 
-        new HomeBusiness().findHomeList(date.get(Calendar.YEAR), date.get(Calendar.MONTH), new SingleResultListener<ListTransactionVO>() {
+        new HomeBusiness().findHomeList(date.get(Calendar.YEAR), date.get(Calendar.MONTH), new SingleResultListener<HomeVO>() {
 
             @Override
-            public void onSuccess(ListTransactionVO item) {
+            public void onSuccess(HomeVO item) {
                 configureHeaderList(item);
             }
 
@@ -76,16 +76,16 @@ public class HomePresenter implements HomeContract.Presenter {
         });
     }
 
-    private void configureHeaderList(ListTransactionVO item) {
+    private void configureHeaderList(HomeVO item) {
 
         if (item != null) {
 
-            Collections.sort(item.getTransactions());
+            Collections.sort(item.getTransactions1Q());
 
             List<TransactionVO> listTransaction = new ArrayList<>();
             List<TransactionVO> listGroup = new ArrayList<>();
 
-            for (TransactionVO transaction : item.getTransactions()) {
+            for (TransactionVO transaction : item.getTransactions1Q()) {
                 if (!item.getGroup().getPaymentTypeList().contains(transaction.getPaymentType())) {
                     listTransaction.add(transaction);
                 } else {
@@ -152,12 +152,6 @@ public class HomePresenter implements HomeContract.Presenter {
                 configSummary(listVO, listTransaction);
             }
 
-//            ChartVO chartVO = getChart(item.getTransactions());
-//            if (!chartVO.getItems().isEmpty()) {
-//                listVO.add(chartVO);
-//                listVO.add(new SpaceVO());
-//            }
-
             if ((mHomeVisibility == HomeVisibility.PENDING || mHomeVisibility == HomeVisibility.ALL) && !item.getPendingTransaction().isEmpty()) {
                 listVO.add(new SubTitleVO("Pending Transactions"));
 
@@ -196,48 +190,47 @@ public class HomePresenter implements HomeContract.Presenter {
                 listVO.add(new SpaceVO());
             }
 
-//            if ((mHomeVisibility == HomeVisibility.TRANSACTIONS || mHomeVisibility == HomeVisibility.ALL) && !listTransaction.isEmpty()) {
-                listVO.add(new SubTitleVO("Transactions"));
+            listVO.add(new SubTitleVO("Transactions"));
 
-//                if (mHomeVisibility == HomeVisibility.TRANSACTIONS) {
-                    listVO.addAll(listTransaction);
+            if (!listTransaction.isEmpty()) {
 
-//                } else {
-//
-//                    Collections.sort(listTransaction, new Comparator<TransactionVO>() {
-//                        @Override
-//                        public int compare(TransactionVO t0, TransactionVO t1) {
-//                            return t0.getPaymentDate().compareTo(t1.getPaymentDate()) * -1;
-//                        }
-//                    });
-//
-//                    listVO.addAll(listTransaction.subList(0, listTransaction.size() > NUM_ITENS ? NUM_ITENS : listTransaction.size()));
-//                    listVO.add(new RedirectButtomVO(HomeVisibility.TRANSACTIONS, mRelativePosition));
-//                }
+                Calendar instance20 = Calendar.getInstance();
+                instance20.setTime(listTransaction.get(0).getPaymentDate());
+                instance20.set(Calendar.DATE, 20);
+                instance20.set(Calendar.HOUR, 0);
+                instance20.set(Calendar.MINUTE, 0);
+                instance20.set(Calendar.SECOND, 0);
+
+                boolean hasBefore20 = false;
+                boolean end20 = false;
+                boolean sectionAdded = false;
+
+                for (TransactionVO vo : listTransaction) {
+
+                    if (vo.getPaymentDate().before(instance20.getTime())) {
+                        hasBefore20 = true;
+                    } else {
+                        end20 = true;
+                    }
+
+                    if (hasBefore20 && end20 && !sectionAdded) {
+                        listVO.add(new SpaceVO());
+                        listVO.add(new SubTitleVO("Transactions"));
+                        sectionAdded = true;
+                    }
+
+                    listVO.add(vo);
+                }
 
                 listVO.add(new SpaceVO());
+            }
 
-                for (PaymentTypeVO key : map.keySet()) {
-                    listVO.add(new SubTitleVO(key.getName()));
+            for (PaymentTypeVO key : map.keySet()) {
+                listVO.add(new SubTitleVO(key.getName()));
 
-//                    if (mHomeVisibility == HomeVisibility.TRANSACTIONS) {
-                        listVO.addAll(map.get(key));
-//                    } else {
-//
-//                        Collections.sort(map.get(key), new Comparator<TransactionVO>() {
-//                            @Override
-//                            public int compare(TransactionVO t0, TransactionVO t1) {
-//                                return t0.getPurchaseDate().compareTo(t1.getPurchaseDate()) * -1;
-//                            }
-//                        });
-//
-//                        listVO.addAll(map.get(key).subList(0, map.get(key).size() > NUM_ITENS ? NUM_ITENS : map.get(key).size()));
-//                        listVO.add(new RedirectButtomVO(HomeVisibility.TRANSACTIONS, mRelativePosition));
-//                    }
-
-                    listVO.add(new SpaceVO());
-                }
-//            }
+                listVO.addAll(map.get(key));
+                listVO.add(new SpaceVO());
+            }
 
             mView.setListTransactions(listVO);
         }

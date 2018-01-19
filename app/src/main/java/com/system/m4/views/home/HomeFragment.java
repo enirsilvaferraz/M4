@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
+import com.system.m4.kotlin.home.HomeAdapter;
 import com.system.m4.kotlin.home.HomeDetailActivity;
 import com.system.m4.kotlin.transaction.TransactionListDialog;
 import com.system.m4.views.vos.RedirectButtomVO;

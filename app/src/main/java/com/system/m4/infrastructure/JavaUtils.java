@@ -49,7 +49,7 @@ public final class JavaUtils {
 
         public static Date parse(String date, String template) {
             try {
-                return new SimpleDateFormat(template, Locale.ENGLISH).parse(date);
+                return new SimpleDateFormat(template, Locale.getDefault()).parse(date);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -59,7 +59,7 @@ public final class JavaUtils {
             if (date == null) {
                 return null;
             }
-            final String format = new SimpleDateFormat(template, Locale.ENGLISH).format(date);
+            final String format = new SimpleDateFormat(template, Locale.getDefault()).format(date);
             return format.substring(0, 1).toUpperCase() + format.substring(1);
         }
 
@@ -70,12 +70,7 @@ public final class JavaUtils {
         }
 
         public static Date getDate(int year, int month, int day) {
-            Calendar cInit = Calendar.getInstance();
-            cInit.set(year, month, day);
-            cInit.set(Calendar.HOUR_OF_DAY, 0);
-            cInit.set(Calendar.MINUTE, 0);
-            cInit.set(Calendar.SECOND, 0);
-            return cInit.getTime();
+            return parse(String.format(Locale.getDefault(), "%d/%d/%d", day, month, year), DD_MM_YYYY);
         }
 
         @NotNull

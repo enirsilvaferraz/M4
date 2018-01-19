@@ -1,5 +1,6 @@
 package com.system.m4.kotlin.home
 
+import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.kotlin.group.GroupTransactionBusiness
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.SingleResultListener
@@ -9,8 +10,11 @@ import com.system.m4.kotlin.tags.TagBusiness
 import com.system.m4.kotlin.tags.TagModel
 import com.system.m4.kotlin.transaction.TransactionBusiness
 import com.system.m4.views.vos.GroupTransactionVO
-import com.system.m4.views.vos.ListTransactionVO
+import com.system.m4.views.vos.HomeVO
 import com.system.m4.views.vos.TransactionVO
+import java.math.BigDecimal
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by enirs on 30/09/2017.
@@ -18,7 +22,7 @@ import com.system.m4.views.vos.TransactionVO
  */
 class HomeBusiness {
 
-    fun findHomeList(year: Int, month: Int, listener: SingleResultListener<ListTransactionVO>) {
+    fun findHomeList(year: Int, month: Int, listener: SingleResultListener<HomeVO>) {
 
         val homeVo = HomeDTO(year, month)
 
@@ -51,7 +55,7 @@ class HomeBusiness {
         })
     }
 
-    private fun validate(homeDTO: HomeDTO, listener: SingleResultListener<ListTransactionVO>) {
+    private fun validate(homeDTO: HomeDTO, listener: SingleResultListener<HomeVO>) {
 
         val listTransaction = homeDTO.listTransaction
         val listTag = homeDTO.listTag
@@ -60,22 +64,18 @@ class HomeBusiness {
 
         if (listTransaction != null && listTag != null && listPaymentType != null && listGroup != null) {
 
-//            for (transaction in listTransaction) {
-//                TransactionBusiness.fillTransaction(transaction, listTag, listPaymentType)
-//            }
-
             listTransaction.forEach { TransactionBusiness.fillTransaction(it, listTag, listPaymentType) }
 
-            val listTransactionVO = ListTransactionVO()
-            listTransactionVO.tagSummary = TagBusiness.calculateTagSummary(listTransaction)
-            listTransactionVO.transactions = listTransaction
-            listTransactionVO.pendingTransaction = getPendingTransaction(listTransaction)
+            val homeVO = HomeVO()
+            homeVO.tagSummary = TagBusiness.calculateTagSummary(listTransaction)
+            homeVO.transactions1Q = listTransaction
+            homeVO.pendingTransaction = getPendingTransaction(listTransaction)
 
             if (!listGroup.isEmpty()) {
-                listTransactionVO.group = GroupTransactionBusiness.fillGroupTransaction(listGroup.get(0), listPaymentType)
+                homeVO.group = GroupTransactionBusiness.fillGroupTransaction(listGroup.get(0), listPaymentType)
             }
 
-            listener.onSuccess(listTransactionVO)
+            listener.onSuccess(homeVO)
         }
     }
 
@@ -89,9 +89,49 @@ class HomeBusiness {
         return pendingList
     }
 
-    abstract class ErrorListener<T>(val listener: SingleResultListener<ListTransactionVO>) : MultResultListener<T> {
+    abstract class ErrorListener<T>(val listener: SingleResultListener<HomeVO>) : MultResultListener<T> {
         override fun onError(error: String) {
             listener.onError(error)
         }
     }
+
+    fun splitTransactionsByDate20(homeVO: HomeVO, homeDTO: HomeDTO) {
+
+        homeVO.transactions1Q = mutableListOf()
+        homeVO.transactions2Q = mutableListOf()
+
+        homeVO.amount1Q = 0.0
+        homeVO.amount2Q = 0.0
+
+        if (homeDTO.listTransaction != null) {
+
+            val transactions = ArrayList(homeDTO.listTransaction)
+            transactions.sortWith(compareBy({ it.paymentDate }, { it.tag.parentName }, { it.tag.name }))
+
+            homeVO.transactions1Q = transactions.filter {
+
+                val date20 = JavaUtils.DateUtil.getDate(
+                        JavaUtils.DateUtil.get(Calendar.YEAR, it.paymentDate),
+                        JavaUtils.DateUtil.get(Calendar.MONTH, it.paymentDate) + 1, 20)
+
+                it.paymentDate.before(date20)
+            }
+
+            homeVO.amount1Q = homeVO.transactions1Q.sumByDouble { it.price }.roundTo2Decimal()
+
+            homeVO.transactions2Q = transactions.filter {
+
+                val date20 = JavaUtils.DateUtil.getDate(
+                        JavaUtils.DateUtil.get(Calendar.YEAR, it.paymentDate),
+                        JavaUtils.DateUtil.get(Calendar.MONTH, it.paymentDate) + 1, 20)
+
+                it.paymentDate.after(date20) || it.paymentDate.equals(date20)
+            }
+
+            homeVO.amount2Q = homeVO.transactions2Q.sumByDouble { it.price }.roundTo2Decimal()
+        }
+    }
+
+    fun Double.roundTo2Decimal() =
+            BigDecimal(this).setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
 }

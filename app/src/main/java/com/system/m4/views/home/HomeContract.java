@@ -46,7 +46,7 @@ public class HomeContract {
     /**
      *
      */
-    interface Presenter {
+    public interface Presenter {
 
         void init(int relativePosition, int homeVisibility);
 
