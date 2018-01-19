@@ -95,6 +95,15 @@ class HomeBusiness {
         }
     }
 
+    fun splitPendingTransactions(homeVO: HomeVO, homeDTO: HomeDTO) {
+
+        homeVO.pendingTransaction = mutableListOf()
+
+        if (homeDTO.listTransaction != null) {
+            homeVO.pendingTransaction = homeDTO.listTransaction?.filter { it.tag.key.isNullOrBlank() }
+        }
+    }
+
     fun splitTransactionsByDate20(homeVO: HomeVO, homeDTO: HomeDTO) {
 
         homeVO.transactions1Q = mutableListOf()
@@ -106,32 +115,23 @@ class HomeBusiness {
         if (homeDTO.listTransaction != null) {
 
             val transactions = ArrayList(homeDTO.listTransaction)
-            transactions.sortWith(compareBy({ it.paymentDate }, { it.tag.parentName }, { it.tag.name }))
 
-            homeVO.transactions1Q = transactions.filter {
-
-                val date20 = JavaUtils.DateUtil.getDate(
-                        JavaUtils.DateUtil.get(Calendar.YEAR, it.paymentDate),
-                        JavaUtils.DateUtil.get(Calendar.MONTH, it.paymentDate) + 1, 20)
-
-                it.paymentDate.before(date20)
-            }
-
-            homeVO.amount1Q = homeVO.transactions1Q.sumByDouble { it.price }.roundTo2Decimal()
-
-            homeVO.transactions2Q = transactions.filter {
+            if (transactions.isNotEmpty()) {
 
                 val date20 = JavaUtils.DateUtil.getDate(
-                        JavaUtils.DateUtil.get(Calendar.YEAR, it.paymentDate),
-                        JavaUtils.DateUtil.get(Calendar.MONTH, it.paymentDate) + 1, 20)
+                        JavaUtils.DateUtil.get(Calendar.YEAR, transactions[0].paymentDate),
+                        JavaUtils.DateUtil.get(Calendar.MONTH, transactions[0].paymentDate) + 1, 20)
 
-                it.paymentDate.after(date20) || it.paymentDate.equals(date20)
+                transactions.sortWith(compareBy({ it.paymentDate }, { it.tag.parentName }, { it.tag.name }))
+
+                homeVO.transactions1Q = transactions.filter { it.paymentDate.before(date20) }
+                homeVO.amount1Q = homeVO.transactions1Q.sumByDouble { it.price }.roundTo2Decimal()
+
+                homeVO.transactions2Q = transactions.filter { it.paymentDate.after(date20) || it.paymentDate.equals(date20) }
+                homeVO.amount2Q = homeVO.transactions2Q.sumByDouble { it.price }.roundTo2Decimal()
             }
-
-            homeVO.amount2Q = homeVO.transactions2Q.sumByDouble { it.price }.roundTo2Decimal()
         }
     }
 
-    fun Double.roundTo2Decimal() =
-            BigDecimal(this).setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
+    fun Double.roundTo2Decimal() = BigDecimal(this).setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
 }
