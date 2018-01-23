@@ -1,5 +1,8 @@
 package com.system.m4.views.vos;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -9,15 +12,24 @@ import java.util.List;
 
 public class HomeVO {
 
+    @NotNull
+    public HashMap<PaymentTypeVO, List<TransactionVO>> groupMap;
     private List<TransactionVO> transactions1Q;
     private List<TransactionVO> transactions2Q;
     private double amount1Q;
     private double amount2Q;
-
     private GroupTransactionVO group;
     private List<TagSummaryVO> tagSummary;
     private List<TransactionVO> pendingTransaction;
 
+    @NotNull
+    public HashMap<PaymentTypeVO, List<TransactionVO>> getGroupMap() {
+        return groupMap;
+    }
+
+    public void setGroupMap(@NotNull HashMap<PaymentTypeVO, List<TransactionVO>> groupMap) {
+        this.groupMap = groupMap;
+    }
 
     public List<TransactionVO> getTransactions1Q() {
         return transactions1Q;

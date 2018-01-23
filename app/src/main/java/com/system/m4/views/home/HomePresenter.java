@@ -25,9 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by eferraz on 29/04/17.
@@ -83,44 +81,8 @@ public class HomePresenter implements HomeContract.Presenter {
             Collections.sort(item.getTransactions1Q());
 
             List<TransactionVO> listTransaction = new ArrayList<>();
-            List<TransactionVO> listGroup = new ArrayList<>();
 
-            for (TransactionVO transaction : item.getTransactions1Q()) {
-                if (!item.getGroup().getPaymentTypeList().contains(transaction.getPaymentType())) {
-                    listTransaction.add(transaction);
-                } else {
-                    listGroup.add(transaction);
-                }
-            }
-
-            Collections.sort(listGroup, new Comparator<TransactionVO>() {
-                @Override
-                public int compare(TransactionVO o1, TransactionVO o2) {
-                    if (o1.getPurchaseDate() != null && o2.getPurchaseDate() != null) {
-                        return o1.getPurchaseDate().compareTo(o2.getPurchaseDate()) * -1;
-                    } else {
-                        return o1.compareTo(o2);
-                    }
-                }
-            });
-
-            Map<PaymentTypeVO, List<TransactionVO>> map = new HashMap<>();
-
-            for (TransactionVO itemGroup : listGroup) {
-
-                if (!map.containsKey(itemGroup.getPaymentType())) {
-                    map.put(itemGroup.getPaymentType(), new ArrayList<TransactionVO>());
-                }
-
-                for (PaymentTypeVO key : map.keySet()) {
-                    if (key.equals(itemGroup.getPaymentType())) {
-                        itemGroup.setOnGroup(true);
-                        map.get(key).add(itemGroup);
-                    }
-                }
-            }
-
-            for (PaymentTypeVO key : map.keySet()) {
+            for (PaymentTypeVO key : item.getGroupMap().keySet()) {
 
                 TransactionVO transaction = new TransactionVO();
                 transaction.setPaymentType(key);
@@ -129,7 +91,7 @@ public class HomePresenter implements HomeContract.Presenter {
                 transaction.getTag().setName(key.getName());
                 transaction.getTag().setParentName("Grupo de transações");
 
-                for (TransactionVO itemList : map.get(key)) {
+                for (TransactionVO itemList : item.getGroupMap().get(key)) {
 
                     Double price = transaction.getPrice() != null ? transaction.getPrice() : 0D;
                     transaction.setPrice(price + itemList.getPrice());
@@ -190,45 +152,21 @@ public class HomePresenter implements HomeContract.Presenter {
                 listVO.add(new SpaceVO());
             }
 
-            listVO.add(new SubTitleVO("Transactions"));
-
-            if (!listTransaction.isEmpty()) {
-
-                Calendar instance20 = Calendar.getInstance();
-                instance20.setTime(listTransaction.get(0).getPaymentDate());
-                instance20.set(Calendar.DATE, 20);
-                instance20.set(Calendar.HOUR, 0);
-                instance20.set(Calendar.MINUTE, 0);
-                instance20.set(Calendar.SECOND, 0);
-
-                boolean hasBefore20 = false;
-                boolean end20 = false;
-                boolean sectionAdded = false;
-
-                for (TransactionVO vo : listTransaction) {
-
-                    if (vo.getPaymentDate().before(instance20.getTime())) {
-                        hasBefore20 = true;
-                    } else {
-                        end20 = true;
-                    }
-
-                    if (hasBefore20 && end20 && !sectionAdded) {
-                        listVO.add(new SpaceVO());
-                        listVO.add(new SubTitleVO("Transactions"));
-                        sectionAdded = true;
-                    }
-
-                    listVO.add(vo);
-                }
-
+            if (!item.getTransactions1Q().isEmpty()) {
+                listVO.add(new SubTitleVO("Transações da 1a quinzena"));
+                listVO.addAll(item.getTransactions1Q());
                 listVO.add(new SpaceVO());
             }
 
-            for (PaymentTypeVO key : map.keySet()) {
-                listVO.add(new SubTitleVO(key.getName()));
+            if (!item.getTransactions2Q().isEmpty()) {
+                listVO.add(new SubTitleVO("Transações da 2a quinzena"));
+                listVO.addAll(item.getTransactions2Q());
+                listVO.add(new SpaceVO());
+            }
 
-                listVO.addAll(map.get(key));
+            for (PaymentTypeVO key : item.getGroupMap().keySet()) {
+                listVO.add(new SubTitleVO(key.getName()));
+                listVO.addAll(item.getGroupMap().get(key));
                 listVO.add(new SpaceVO());
             }
 

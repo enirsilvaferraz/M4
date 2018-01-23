@@ -29,6 +29,10 @@ public class PaymentTypeVO implements VOInterface<PaymentTypeVO> {
     public PaymentTypeVO() {
     }
 
+    public PaymentTypeVO(String key) {
+        this.key = key;
+    }
+
     protected PaymentTypeVO(Parcel in) {
         this.key = in.readString();
         this.name = in.readString();

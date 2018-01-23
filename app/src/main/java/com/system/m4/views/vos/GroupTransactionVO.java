@@ -29,6 +29,13 @@ public class GroupTransactionVO implements VOItemListInterface {
         this.key = key;
     }
 
+    public GroupTransactionVO() {
+    }
+
+    public GroupTransactionVO(List<PaymentTypeVO> paymentTypeList) {
+        this.paymentTypeList = paymentTypeList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

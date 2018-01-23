@@ -11,6 +11,7 @@ import com.system.m4.kotlin.tags.TagModel
 import com.system.m4.kotlin.transaction.TransactionBusiness
 import com.system.m4.views.vos.GroupTransactionVO
 import com.system.m4.views.vos.HomeVO
+import com.system.m4.views.vos.PaymentTypeVO
 import com.system.m4.views.vos.TransactionVO
 import java.math.BigDecimal
 import java.util.*
@@ -95,13 +96,37 @@ class HomeBusiness {
         }
     }
 
+    fun splitGroupTransaction(homeVO: HomeVO, homeDTO: HomeDTO) {
+
+        val transactions = homeDTO.listTransaction
+        val listGroup = homeDTO.listGroup
+        val map = hashMapOf<PaymentTypeVO, List<TransactionVO>>()
+
+        if (transactions != null && listGroup != null && listGroup.isNotEmpty()) {
+
+            val paymentTypesGroup = listGroup[0].paymentTypeList // TODO MUDAR ESSA IMPLEMENTACAO NO FIREBASE
+
+            paymentTypesGroup.forEach { type ->
+                val mutableList = transactions.filter { it.paymentType.key == type.key }.toMutableList()
+                mutableList.sortWith(compareBy({ it.purchaseDate }))
+                map.put(type, mutableList)
+            }
+        }
+
+        homeVO.groupMap = map
+    }
+
     fun splitPendingTransactions(homeVO: HomeVO, homeDTO: HomeDTO) {
 
-        homeVO.pendingTransaction = mutableListOf()
+        val transactionsDTO = homeDTO.listTransaction
+        var transactionsVO = mutableListOf<TransactionVO>()
 
-        if (homeDTO.listTransaction != null) {
-            homeVO.pendingTransaction = homeDTO.listTransaction?.filter { it.tag.key.isNullOrBlank() }
+        if (transactionsDTO != null) {
+            transactionsVO = transactionsDTO.filter { it.tag.key.isNullOrBlank() }.toMutableList()
+            transactionsVO.sortWith(compareBy({ it.paymentDate }))
         }
+
+        homeVO.pendingTransaction = transactionsVO
     }
 
     fun splitTransactionsByDate20(homeVO: HomeVO, homeDTO: HomeDTO) {
