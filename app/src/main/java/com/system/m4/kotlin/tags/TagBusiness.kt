@@ -113,32 +113,6 @@ class TagBusiness {
             return array
         }
 
-        fun calculateTagSummary(transactions: ArrayList<TransactionVO>): List<TagSummaryVO> {
-
-            val itens = arrayListOf<TagSummaryVO>()
-
-            for (transaction in transactions) {
-
-                if (transaction.key == null || !transaction.isApproved) {
-                    continue
-                }
-
-                val summaryVO = TagSummaryVO(transaction.tag.key, transaction.tag.parentName, transaction.tag.name, transaction.total)
-
-                if (itens.contains(summaryVO)) {
-                    val item = itens.get(itens.indexOf(summaryVO))
-                    item.value = item.value!! + transaction.total!!.toFloat()
-                    item.transactions.add(transaction)
-                } else {
-                    summaryVO.transactions = arrayListOf<TransactionVO>()
-                    summaryVO.transactions.add(transaction)
-                    itens.add(summaryVO)
-                }
-            }
-
-            var sortedWith = itens.sortedWith(compareBy({ it.parentName }, { it.name }))
-            return sortedWith
-        }
 
         fun calculateTagSummaryToExport(transactions: ArrayList<TransactionVO>, tags: ArrayList<TagVO>): List<TagSummaryVO> {
 

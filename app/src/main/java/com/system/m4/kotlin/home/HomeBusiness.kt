@@ -9,10 +9,7 @@ import com.system.m4.kotlin.paymenttype.PaymentTypeModel
 import com.system.m4.kotlin.tags.TagBusiness
 import com.system.m4.kotlin.tags.TagModel
 import com.system.m4.kotlin.transaction.TransactionBusiness
-import com.system.m4.views.vos.GroupTransactionVO
-import com.system.m4.views.vos.HomeVO
-import com.system.m4.views.vos.PaymentTypeVO
-import com.system.m4.views.vos.TransactionVO
+import com.system.m4.views.vos.*
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
@@ -25,69 +22,55 @@ class HomeBusiness {
 
     fun findHomeList(year: Int, month: Int, listener: SingleResultListener<HomeVO>) {
 
-        val homeVo = HomeDTO(year, month)
+        val homeDTO = HomeDTO(year, month)
 
         TransactionBusiness.findAll(year, month, object : ErrorListener<TransactionVO>(listener) {
             override fun onSuccess(list: ArrayList<TransactionVO>) {
-                homeVo.listTransaction = list
-                validate(homeVo, listener)
+                homeDTO.listTransaction = list
+                validate(homeDTO, listener)
             }
         })
 
         TagBusiness.findAll(object : ErrorListener<TagModel>(listener) {
             override fun onSuccess(list: ArrayList<TagModel>) {
-                homeVo.listTag = TagBusiness.fromTag(list)
-                validate(homeVo, listener)
+                homeDTO.listTag = TagBusiness.fromTag(list)
+                validate(homeDTO, listener)
             }
         })
 
         PaymentTypeBusiness.findAll(object : ErrorListener<PaymentTypeModel>(listener) {
             override fun onSuccess(list: ArrayList<PaymentTypeModel>) {
-                homeVo.listPaymentType = PaymentTypeBusiness.fromPaymentType(list)
-                validate(homeVo, listener)
+                homeDTO.listPaymentType = PaymentTypeBusiness.fromPaymentType(list)
+                validate(homeDTO, listener)
             }
         })
 
         GroupTransactionBusiness.findAll(object : ErrorListener<GroupTransactionVO>(listener) {
             override fun onSuccess(list: ArrayList<GroupTransactionVO>) {
-                homeVo.listGroup = list
-                validate(homeVo, listener)
+                homeDTO.listGroup = list
+                validate(homeDTO, listener)
             }
         })
     }
 
     private fun validate(homeDTO: HomeDTO, listener: SingleResultListener<HomeVO>) {
 
-        val listTransaction = homeDTO.listTransaction
-        val listTag = homeDTO.listTag
-        val listPaymentType = homeDTO.listPaymentType
-        val listGroup = homeDTO.listGroup
+        if (homeDTO.listTransaction != null && homeDTO.listTag != null && homeDTO.listPaymentType != null && homeDTO.listGroup != null) {
 
-        if (listTransaction != null && listTag != null && listPaymentType != null && listGroup != null) {
-
-            listTransaction.forEach { TransactionBusiness.fillTransaction(it, listTag, listPaymentType) }
+            homeDTO.listTransaction!!.forEach { TransactionBusiness.fillTransaction(it, homeDTO.listTag!!, homeDTO.listPaymentType!!) }
 
             val homeVO = HomeVO()
-            homeVO.tagSummary = TagBusiness.calculateTagSummary(listTransaction)
-            homeVO.transactions1Q = listTransaction
-            homeVO.pendingTransaction = getPendingTransaction(listTransaction)
+            homeVO.tagSummary = splitTagSummary(homeDTO)
+            homeVO.transactions1Q = splitTransactionsByDate20(homeDTO, true)
+            homeVO.transactions2Q = splitTransactionsByDate20(homeDTO, false)
+            homeVO.pendingTransaction = splitPendingTransactions(homeDTO)
 
-            if (!listGroup.isEmpty()) {
-                homeVO.group = GroupTransactionBusiness.fillGroupTransaction(listGroup.get(0), listPaymentType)
-            }
+//            if (homeDTO.listGroup!!.isNotEmpty()) {
+//                homeVO.group = GroupTransactionBusiness.fillGroupTransaction(homeDTO.listGroup!!.get(0), homeDTO.listPaymentType!!)
+//            }
 
             listener.onSuccess(homeVO)
         }
-    }
-
-    private fun getPendingTransaction(listTransaction: ArrayList<TransactionVO>): MutableList<TransactionVO>? {
-        val pendingList = arrayListOf<TransactionVO>()
-        for (transaction in listTransaction) {
-            if (transaction.tag.key.isNullOrBlank()) {
-                pendingList.add(transaction)
-            }
-        }
-        return pendingList
     }
 
     abstract class ErrorListener<T>(val listener: SingleResultListener<HomeVO>) : MultResultListener<T> {
@@ -96,49 +79,66 @@ class HomeBusiness {
         }
     }
 
-    fun splitGroupTransaction(homeVO: HomeVO, homeDTO: HomeDTO) {
+    fun splitTagSummary(homeDTO: HomeDTO): List<TagSummaryVO> {
 
-        val transactions = homeDTO.listTransaction
-        val listGroup = homeDTO.listGroup
-        val map = hashMapOf<PaymentTypeVO, List<TransactionVO>>()
+        val itens = arrayListOf<TagSummaryVO>()
 
-        if (transactions != null && listGroup != null && listGroup.isNotEmpty()) {
+        if (homeDTO.listTag != null && homeDTO.listTag!!.isNotEmpty()) {
 
-            val paymentTypesGroup = listGroup[0].paymentTypeList // TODO MUDAR ESSA IMPLEMENTACAO NO FIREBASE
+            homeDTO.listTag!!.forEach { tag ->
+                val filter = homeDTO.listTransaction?.filter { transaction -> transaction.tag.key == tag.key }
+                if (filter!!.isNotEmpty()) itens.add(TagSummaryVO(tag.key, tag.parentName, tag.name, filter.sumByDouble { it.price }))
+            }
 
-            paymentTypesGroup.forEach { type ->
-                val mutableList = transactions.filter { it.paymentType.key == type.key }.toMutableList()
-                mutableList.sortWith(compareBy({ it.purchaseDate }))
-                map.put(type, mutableList)
+            itens.sortWith(compareBy({ it.parentName }, { it.name }, { it.value }))
+        }
+
+        return itens
+    }
+
+    fun splitGroupTransaction(homeDTO: HomeDTO): HashMap<PaymentTypeVO, TransactionListVO> {
+
+        val transactionsDTO = homeDTO.listTransaction
+        val groupsDTO = homeDTO.listGroup
+
+        val map = hashMapOf<PaymentTypeVO, TransactionListVO>()
+
+        if (transactionsDTO != null && groupsDTO != null && groupsDTO.isNotEmpty()) {
+
+            // TODO MUDAR ESSA IMPLEMENTACAO NO FIREBASE
+            groupsDTO[0].paymentTypeList.forEach { type ->
+
+                val transactions = transactionsDTO.filter { it.paymentType.key == type.key }.toMutableList()
+                transactions.sortWith(compareBy({ it.purchaseDate }))
+
+                val amount = transactions.sumByDouble { it.price }.roundTo2Decimal()
+
+                val transactionListVO = TransactionListVO(transactions, amount)
+                map.put(type, transactionListVO)
             }
         }
 
-        homeVO.groupMap = map
+        return map
     }
 
-    fun splitPendingTransactions(homeVO: HomeVO, homeDTO: HomeDTO) {
+    fun splitPendingTransactions(homeDTO: HomeDTO): MutableList<TransactionVO> {
 
         val transactionsDTO = homeDTO.listTransaction
-        var transactionsVO = mutableListOf<TransactionVO>()
+        var transactions = mutableListOf<TransactionVO>()
 
-        if (transactionsDTO != null) {
-            transactionsVO = transactionsDTO.filter { it.tag.key.isNullOrBlank() }.toMutableList()
-            transactionsVO.sortWith(compareBy({ it.paymentDate }))
+        if (transactionsDTO != null && transactionsDTO.isNotEmpty()) {
+            transactions = transactionsDTO.filter { it.tag.key.isNullOrBlank() }.toMutableList()
+            transactions.sortWith(compareBy({ it.paymentDate }))
         }
 
-        homeVO.pendingTransaction = transactionsVO
+        return transactions
     }
 
-    fun splitTransactionsByDate20(homeVO: HomeVO, homeDTO: HomeDTO) {
+    fun splitTransactionsByDate20(homeDTO: HomeDTO, firstFortnight: Boolean): TransactionListVO {
 
-        homeVO.transactions1Q = mutableListOf()
-        homeVO.transactions2Q = mutableListOf()
-
-        homeVO.amount1Q = 0.0
-        homeVO.amount2Q = 0.0
+        val transactionListVO = TransactionListVO(mutableListOf(), 0.0)
 
         if (homeDTO.listTransaction != null) {
-
             val transactions = ArrayList(homeDTO.listTransaction)
 
             if (transactions.isNotEmpty()) {
@@ -149,13 +149,15 @@ class HomeBusiness {
 
                 transactions.sortWith(compareBy({ it.paymentDate }, { it.tag.parentName }, { it.tag.name }))
 
-                homeVO.transactions1Q = transactions.filter { it.paymentDate.before(date20) }
-                homeVO.amount1Q = homeVO.transactions1Q.sumByDouble { it.price }.roundTo2Decimal()
+                transactionListVO.transactions = transactions.filter {
+                    if (firstFortnight) it.paymentDate.before(date20) else it.paymentDate.equals(date20) || it.paymentDate.after(date20)
+                }
 
-                homeVO.transactions2Q = transactions.filter { it.paymentDate.after(date20) || it.paymentDate.equals(date20) }
-                homeVO.amount2Q = homeVO.transactions2Q.sumByDouble { it.price }.roundTo2Decimal()
+                transactionListVO.amount = transactionListVO.transactions.sumByDouble { it.price }.roundTo2Decimal()
             }
         }
+
+        return transactionListVO
     }
 
     fun Double.roundTo2Decimal() = BigDecimal(this).setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()

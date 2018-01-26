@@ -12,38 +12,35 @@ import java.util.List;
 
 public class HomeVO {
 
-    @NotNull
-    public HashMap<PaymentTypeVO, List<TransactionVO>> groupMap;
-    private List<TransactionVO> transactions1Q;
-    private List<TransactionVO> transactions2Q;
-    private double amount1Q;
-    private double amount2Q;
+    public HashMap<PaymentTypeVO, TransactionListVO> groupMap;
+    private TransactionListVO transactions1Q;
+    private TransactionListVO transactions2Q;
     private GroupTransactionVO group;
     private List<TagSummaryVO> tagSummary;
     private List<TransactionVO> pendingTransaction;
 
     @NotNull
-    public HashMap<PaymentTypeVO, List<TransactionVO>> getGroupMap() {
+    public HashMap<PaymentTypeVO, TransactionListVO> getGroupMap() {
         return groupMap;
     }
 
-    public void setGroupMap(@NotNull HashMap<PaymentTypeVO, List<TransactionVO>> groupMap) {
+    public void setGroupMap(@NotNull HashMap<PaymentTypeVO, TransactionListVO> groupMap) {
         this.groupMap = groupMap;
     }
 
-    public List<TransactionVO> getTransactions1Q() {
+    public TransactionListVO getTransactions1Q() {
         return transactions1Q;
     }
 
-    public void setTransactions1Q(List<TransactionVO> transactions1Q) {
+    public void setTransactions1Q(TransactionListVO transactions1Q) {
         this.transactions1Q = transactions1Q;
     }
 
-    public List<TransactionVO> getTransactions2Q() {
+    public TransactionListVO getTransactions2Q() {
         return transactions2Q;
     }
 
-    public void setTransactions2Q(List<TransactionVO> transactions2Q) {
+    public void setTransactions2Q(TransactionListVO transactions2Q) {
         this.transactions2Q = transactions2Q;
     }
 
@@ -69,22 +66,6 @@ public class HomeVO {
 
     public void setPendingTransaction(List<TransactionVO> pendingTransaction) {
         this.pendingTransaction = pendingTransaction;
-    }
-
-    public double getAmount1Q() {
-        return amount1Q;
-    }
-
-    public void setAmount1Q(double amount1Q) {
-        this.amount1Q = amount1Q;
-    }
-
-    public double getAmount2Q() {
-        return amount2Q;
-    }
-
-    public void setAmount2Q(double amount2Q) {
-        this.amount2Q = amount2Q;
     }
 }
 
