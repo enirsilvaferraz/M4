@@ -12,6 +12,7 @@ import com.system.m4.R;
 import com.system.m4.views.vos.VOInterface;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -43,7 +44,7 @@ public final class JavaUtils {
 
         public static final String DD = "dd";
 
-        public static final String MMM = "MMM";
+        private static final String MMM = "MMM";
 
         public static final String DD_MM_YYYY_HH_MM_SS = "dd/MM/yyyy hh:mm:ss";
 
@@ -78,6 +79,11 @@ public final class JavaUtils {
             Calendar instance = Calendar.getInstance();
             instance.set(Calendar.MONTH, month);
             return format(instance.getTime(), MMM);
+        }
+
+        @NotNull
+        public static Date getDate(@Nullable Date date, int day) {
+            return getDate(get(Calendar.YEAR, date), get(Calendar.MONTH, date) + 1, day);
         }
     }
 

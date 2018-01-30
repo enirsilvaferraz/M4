@@ -3,6 +3,8 @@ package com.system.m4.views.vos;
 import android.os.Parcel;
 import android.support.annotation.NonNull;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Created by eferraz on 30/04/17.
  * For M4
@@ -38,6 +40,10 @@ public class TagVO implements VOInterface<TagVO> {
         this.key = in.readString();
         this.name = in.readString();
         this.parentName = in.readString();
+    }
+
+    public TagVO(@Nullable String name) {
+        this.name = name;
     }
 
     public String getName() {

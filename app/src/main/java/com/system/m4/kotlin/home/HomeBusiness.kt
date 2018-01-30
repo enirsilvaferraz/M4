@@ -12,7 +12,6 @@ import com.system.m4.kotlin.transaction.TransactionBusiness
 import com.system.m4.views.vos.*
 import java.math.BigDecimal
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by enirs on 30/09/2017.
@@ -60,14 +59,15 @@ class HomeBusiness {
             homeDTO.listTransaction!!.forEach { TransactionBusiness.fillTransaction(it, homeDTO.listTag!!, homeDTO.listPaymentType!!) }
 
             val homeVO = HomeVO()
-            homeVO.tagSummary = splitTagSummary(homeDTO)
-            homeVO.transactions1Q = splitTransactionsByDate20(homeDTO, true)
-            homeVO.transactions2Q = splitTransactionsByDate20(homeDTO, false)
-            homeVO.pendingTransaction = splitPendingTransactions(homeDTO)
+            homeVO.tagSummary = splitTagSummary(homeDTO.listTag!!, homeDTO.listTransaction!!)
+            homeVO.transactions1Q = splitTransactionsByDate20(homeDTO.listTransaction!!, true)
+            homeVO.transactions2Q = splitTransactionsByDate20(homeDTO.listTransaction!!, false)
+            homeVO.pendingTransaction = splitPendingTransactions(homeDTO.listTransaction!!)
 
-//            if (homeDTO.listGroup!!.isNotEmpty()) {
-//                homeVO.group = GroupTransactionBusiness.fillGroupTransaction(homeDTO.listGroup!!.get(0), homeDTO.listPaymentType!!)
-//            }
+            if (homeDTO.listGroup!!.isNotEmpty()) {
+                // TODO MUDAR A IMPLEMENTACAO DE GROUPOS NO FIREBASE
+                homeVO.groups = splitGroupTransaction(homeDTO.listGroup!![0], homeDTO.listTransaction!!)
+            }
 
             listener.onSuccess(homeVO)
         }
@@ -79,85 +79,78 @@ class HomeBusiness {
         }
     }
 
-    fun splitTagSummary(homeDTO: HomeDTO): List<TagSummaryVO> {
+    fun splitTagSummary(tags: MutableList<TagVO>, transactions: MutableList<TransactionVO>): List<TagSummaryVO> {
 
-        val itens = arrayListOf<TagSummaryVO>()
+        val items = arrayListOf<TagSummaryVO>()
 
-        if (homeDTO.listTag != null && homeDTO.listTag!!.isNotEmpty()) {
-
-            homeDTO.listTag!!.forEach { tag ->
-                val filter = homeDTO.listTransaction?.filter { transaction -> transaction.tag.key == tag.key }
-                if (filter!!.isNotEmpty()) itens.add(TagSummaryVO(tag.key, tag.parentName, tag.name, filter.sumByDouble { it.price }))
-            }
-
-            itens.sortWith(compareBy({ it.parentName }, { it.name }, { it.value }))
+        tags.forEach { tag ->
+            val filter = transactions.filter { transaction -> transaction.tag.key == tag.key }
+            if (filter.isNotEmpty())
+                items.add(TagSummaryVO(tag.key, tag.parentName, tag.name, filter.sumByDouble { it.price }))
         }
 
-        return itens
+        items.sortWith(compareBy({ it.parentName }, { it.name }, { it.value }))
+        return items
     }
 
-    fun splitGroupTransaction(homeDTO: HomeDTO): HashMap<PaymentTypeVO, TransactionListVO> {
-
-        val transactionsDTO = homeDTO.listTransaction
-        val groupsDTO = homeDTO.listGroup
+    fun splitGroupTransaction(group: GroupTransactionVO, transactions: MutableList<TransactionVO>): HashMap<PaymentTypeVO, TransactionListVO> {
 
         val map = hashMapOf<PaymentTypeVO, TransactionListVO>()
 
-        if (transactionsDTO != null && groupsDTO != null && groupsDTO.isNotEmpty()) {
+        group.paymentTypeList.forEach { type ->
 
-            // TODO MUDAR ESSA IMPLEMENTACAO NO FIREBASE
-            groupsDTO[0].paymentTypeList.forEach { type ->
+            val items = transactions.filter { it.paymentType.key == type.key }.toMutableList()
+            items.sortWith(compareBy({ it.purchaseDate }))
 
-                val transactions = transactionsDTO.filter { it.paymentType.key == type.key }.toMutableList()
-                transactions.sortWith(compareBy({ it.purchaseDate }))
-
-                val amount = transactions.sumByDouble { it.price }.roundTo2Decimal()
-
-                val transactionListVO = TransactionListVO(transactions, amount)
-                map.put(type, transactionListVO)
-            }
+            val transactionListVO = TransactionListVO(items, items.sumByDouble { it.price }.roundTo2Decimal())
+            map.put(type, transactionListVO)
         }
 
         return map
     }
 
-    fun splitPendingTransactions(homeDTO: HomeDTO): MutableList<TransactionVO> {
-
-        val transactionsDTO = homeDTO.listTransaction
-        var transactions = mutableListOf<TransactionVO>()
-
-        if (transactionsDTO != null && transactionsDTO.isNotEmpty()) {
-            transactions = transactionsDTO.filter { it.tag.key.isNullOrBlank() }.toMutableList()
-            transactions.sortWith(compareBy({ it.paymentDate }))
-        }
-
-        return transactions
+    fun splitPendingTransactions(transactions: MutableList<TransactionVO>): MutableList<TransactionVO> {
+        val items = transactions.filter { it.tag.key.isNullOrBlank() }.toMutableList()
+        items.sortWith(compareBy({ it.paymentDate }))
+        return items
     }
 
-    fun splitTransactionsByDate20(homeDTO: HomeDTO, firstFortnight: Boolean): TransactionListVO {
+    fun splitTransactionsByDate20(transactions: MutableList<TransactionVO>, firstFortnight: Boolean): TransactionListVO {
 
-        val transactionListVO = TransactionListVO(mutableListOf(), 0.0)
+        if (transactions.isNotEmpty()) {
 
-        if (homeDTO.listTransaction != null) {
-            val transactions = ArrayList(homeDTO.listTransaction)
+            val date20 = JavaUtils.DateUtil.getDate(transactions[0].paymentDate, 20)
 
-            if (transactions.isNotEmpty()) {
+            val transactions20 = transactions.filter {
+                if (firstFortnight) it.paymentDate.before(date20) else it.paymentDate.equals(date20) || it.paymentDate.after(date20)
+            }.toMutableList()
 
-                val date20 = JavaUtils.DateUtil.getDate(
-                        JavaUtils.DateUtil.get(Calendar.YEAR, transactions[0].paymentDate),
-                        JavaUtils.DateUtil.get(Calendar.MONTH, transactions[0].paymentDate) + 1, 20)
+            transactions20.sortWith(compareBy({ it.paymentDate }, { it.tag.parentName }, { it.tag.name }))
+            return TransactionListVO(transactions20, transactions20.sumByDouble { it.price }.roundTo2Decimal())
 
-                transactions.sortWith(compareBy({ it.paymentDate }, { it.tag.parentName }, { it.tag.name }))
+        } else {
+            return TransactionListVO(mutableListOf(), 0.0)
+        }
+    }
 
-                transactionListVO.transactions = transactions.filter {
-                    if (firstFortnight) it.paymentDate.before(date20) else it.paymentDate.equals(date20) || it.paymentDate.after(date20)
-                }
+    private fun getTransactionGrouped(group: GroupTransactionVO?, transactions: MutableList<TransactionVO>): MutableList<TransactionVO> {
 
-                transactionListVO.amount = transactionListVO.transactions.sumByDouble { it.price }.roundTo2Decimal()
-            }
+        val transactionsGrouped = mutableListOf<TransactionVO>()
+
+        if (group != null) group.paymentTypeList.forEach { paymentType ->
+
+            val filter = transactions.filter { it.paymentType == paymentType }
+            val transaction = TransactionVO()
+            transaction.paymentType = paymentType
+            transaction.tag = TagVO(paymentType.name)
+            transaction.paymentDate = filter[0].paymentDate
+            transaction.price = filter.sumByDouble { it.price }
+            transaction.isClickable = false
+
+            transactionsGrouped.add(transaction)
         }
 
-        return transactionListVO
+        return transactionsGrouped
     }
 
     fun Double.roundTo2Decimal() = BigDecimal(this).setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()

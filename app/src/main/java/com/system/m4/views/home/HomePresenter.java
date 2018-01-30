@@ -83,9 +83,9 @@ public class HomePresenter implements HomeContract.Presenter {
             listVO.add(new SpaceVO());
         }
 
-        for (PaymentTypeVO key : item.getGroupMap().keySet()) {
+        for (PaymentTypeVO key : item.getGroups().keySet()) {
             listVO.add(new SubTitleVO(key.getName()));
-            listVO.addAll(item.getGroupMap().get(key).getTransactions());
+            listVO.addAll(item.getGroups().get(key).getTransactions());
             listVO.add(new SpaceVO());
         }
 
