@@ -15,6 +15,7 @@ public class HomeVO {
     private List<TagSummaryVO> tagSummary;
     private List<TransactionVO> pendingTransaction;
     private HashMap<PaymentTypeVO, TransactionListVO> groups;
+    private double amount;
 
     public TransactionListVO getTransactions1Q() {
         return transactions1Q;
@@ -54,6 +55,14 @@ public class HomeVO {
 
     public void setGroups(HashMap<PaymentTypeVO, TransactionListVO> groups) {
         this.groups = groups;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 }
 

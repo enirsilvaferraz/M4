@@ -69,6 +69,7 @@ class HomeBusiness {
             homeVO.transactions2Q = splitTransactionsByDate20(homeDTO.listTransaction!!, false, group)
             homeVO.pendingTransaction = splitPendingTransactions(homeDTO.listTransaction!!)
             homeVO.groups = splitGroupTransaction(group, homeDTO.listTransaction!!)
+            homeVO.amount = homeVO.transactions1Q.amount + homeVO.transactions2Q.amount
 
             listener.onSuccess(homeVO)
         }
@@ -150,7 +151,7 @@ class HomeBusiness {
 
                 val transaction = TransactionVO()
                 transaction.paymentType = paymentType
-                transaction.tag = TagVO(paymentType.name)
+                transaction.tag = TagVO(null, "Grupo de Transações", paymentType.name)
                 transaction.paymentDate = filter[0].paymentDate
                 transaction.price = filter.sumByDouble { it.price }
                 transaction.isClickable = false

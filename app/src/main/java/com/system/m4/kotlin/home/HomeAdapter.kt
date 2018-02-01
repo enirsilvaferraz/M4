@@ -28,6 +28,7 @@ class HomeAdapter internal constructor(private val presenter: HomeContract.Prese
             6 -> ViewHolderRedirectButtom(parent)
             7 -> ViewHolderSpace(parent)
             8 -> ViewHolderChart(parent)
+            9 -> ViewHolderAmount(parent)
             else -> null
 
         } as CustomViewHolder<VOItemListInterface>
@@ -45,6 +46,7 @@ class HomeAdapter internal constructor(private val presenter: HomeContract.Prese
             RedirectButtomVO::class -> 6
             SpaceVO::class -> 7
             ChartVO::class -> 8
+            AmountVO::class -> 9
             else -> 0
 
         }

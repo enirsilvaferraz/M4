@@ -113,6 +113,23 @@ class ViewHolderTagSummary private constructor(itemView: View) : CustomViewHolde
 /**
  *
  */
+class ViewHolderAmount private constructor(itemView: View) : CustomViewHolder<AmountVO>(itemView) {
+
+    private val tvAmount: TextView = itemView.findViewById(R.id.item_amount_text)
+
+    private var vo: AmountVO? = null
+
+    constructor(parent: ViewGroup) : this(inflateView(parent, R.layout.item_amount))
+
+    override fun bind(vo: AmountVO) {
+        this.vo = vo
+        tvAmount.text = JavaUtils.NumberUtil.currencyFormat(vo.value)
+    }
+}
+
+/**
+ *
+ */
 class ViewHolderTransaction private constructor(itemView: View) : CustomViewHolder<TransactionVO>(itemView) {
 
     private val container: LinearLayout = itemView.findViewById(R.id.list_item_container)

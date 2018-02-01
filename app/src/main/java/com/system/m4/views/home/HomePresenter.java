@@ -8,6 +8,7 @@ import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener;
 import com.system.m4.kotlin.infrastructure.listeners.SingleResultListener;
 import com.system.m4.kotlin.transaction.TransactionBusiness;
 import com.system.m4.kotlin.transaction.TransactionModel;
+import com.system.m4.views.vos.AmountVO;
 import com.system.m4.views.vos.HomeVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.RedirectButtomVO;
@@ -65,6 +66,10 @@ public class HomePresenter implements HomeContract.Presenter {
 
         List<VOItemListInterface> listVO = new ArrayList<>();
 
+        listVO.add(new SubTitleVO("Resumo"));
+        listVO.add(new SummaryVO("Total Gasto", item.getAmount()));
+        listVO.add(new SpaceVO());
+
         if (!item.getPendingTransaction().isEmpty()) {
             listVO.add(new SubTitleVO("Transações Pendentes"));
             listVO.addAll(item.getPendingTransaction());
@@ -74,18 +79,21 @@ public class HomePresenter implements HomeContract.Presenter {
         if (!item.getTransactions1Q().getTransactions().isEmpty()) {
             listVO.add(new SubTitleVO("Transações da 1a quinzena"));
             listVO.addAll(item.getTransactions1Q().getTransactions());
+            listVO.add(new AmountVO(item.getTransactions1Q().getAmount()));
             listVO.add(new SpaceVO());
         }
 
         if (!item.getTransactions2Q().getTransactions().isEmpty()) {
             listVO.add(new SubTitleVO("Transações da 2a quinzena"));
             listVO.addAll(item.getTransactions2Q().getTransactions());
+            listVO.add(new AmountVO(item.getTransactions2Q().getAmount()));
             listVO.add(new SpaceVO());
         }
 
         for (PaymentTypeVO key : item.getGroups().keySet()) {
             listVO.add(new SubTitleVO(key.getName()));
             listVO.addAll(item.getGroups().get(key).getTransactions());
+            listVO.add(new AmountVO(item.getGroups().get(key).getAmount()));
             listVO.add(new SpaceVO());
         }
 
