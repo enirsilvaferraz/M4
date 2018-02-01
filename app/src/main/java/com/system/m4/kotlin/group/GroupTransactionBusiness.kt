@@ -29,9 +29,16 @@ object GroupTransactionBusiness {
     }
 
     fun fillGroupTransaction(group: GroupTransactionVO, listPaymentType: List<PaymentTypeVO>): GroupTransactionVO {
-        for (typeVO in group.paymentTypeList) {
-            typeVO.name = listPaymentType[listPaymentType.indexOf(typeVO)].name
+
+        group.paymentTypeList.forEach {
+
+            val item = listPaymentType[listPaymentType.indexOf(it)]
+
+            it.key = item.key
+            it.name = item.name
+            it.color = item.color
         }
+
         return group
     }
 

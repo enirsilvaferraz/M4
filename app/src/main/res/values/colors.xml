@@ -11,7 +11,7 @@
     <color name="divider">#BDBDBD</color>
 
     <color name="ternary_text">#a7757575</color>
-    <color name="dafault_color">#b7b7b7</color>
+    <color name="dafault_color">#666666</color>
 
     <color name="item_marcked">#dcdada</color>
     <color name="item_pinned">#c10d0d</color>
