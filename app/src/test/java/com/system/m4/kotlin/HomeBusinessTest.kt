@@ -190,10 +190,12 @@ class HomeBusinessTest {
             when (it.key) {
                 "KEY_PAYMENT1" -> {
                     Assert.assertEquals(3, homeVO.groups[it]?.transactions?.size)
+                    Assert.assertEquals(true, homeVO.groups[it]?.transactions!![0].isOnGroup)
                     Assert.assertEquals(150.0, homeVO.groups[it]?.amount)
                 }
                 "KEY_PAYMENT2" -> {
                     Assert.assertEquals(2, homeVO.groups[it]?.transactions?.size)
+                    Assert.assertEquals(true, homeVO.groups[it]?.transactions!![0].isOnGroup)
                     Assert.assertEquals(100.0, homeVO.groups[it]?.amount)
                 }
                 "KEY_PAYMENT3" -> {
