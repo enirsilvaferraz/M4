@@ -44,15 +44,11 @@ data class TransactionModel(
         var content: String?,
 
         @Expose
-        @SerializedName("fixed")
-        var fixed: Boolean,
-
-        @Expose
         @SerializedName("parcels")
         var parcels: String?
 
 ) : Parcelable {
-    constructor() : this(null, null, null, 0.0, null, null, null, null, false, null) {
+    constructor() : this(null, null, null, 0.0, null, null, null, null, null) {
         // Nothing to do
     }
 
@@ -65,7 +61,6 @@ data class TransactionModel(
             source.readString(),
             source.readString(),
             source.readString(),
-            1 == source.readInt(),
             source.readString()
     )
 
@@ -80,7 +75,6 @@ data class TransactionModel(
         writeString(tag)
         writeString(paymentType)
         writeString(content)
-        writeInt((if (fixed) 1 else 0))
         writeString(parcels)
     }
 

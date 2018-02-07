@@ -32,7 +32,6 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
     private TagVO tag;
     private PaymentTypeVO paymentType;
     private String content;
-    private boolean fixed = false;
     private boolean clickable = true;
     private boolean approved = true;
     private boolean onGroup;
@@ -52,7 +51,6 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         this.tag = vo.tag;
         this.paymentType = vo.paymentType;
         this.content = vo.content;
-        this.fixed = vo.fixed;
         this.clickable = vo.clickable;
         this.approved = vo.approved;
         this.onGroup = vo.onGroup;
@@ -76,7 +74,6 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         this.tag = in.readParcelable(TagVO.class.getClassLoader());
         this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
         this.content = in.readString();
-        this.fixed = in.readByte() != 0;
         this.clickable = in.readByte() != 0;
         this.approved = in.readByte() != 0;
         this.onGroup = in.readByte() != 0;
@@ -189,14 +186,6 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         return tag.compareTo(o.tag);
     }
 
-    public boolean isFixed() {
-        return fixed;
-    }
-
-    public void setFixed(boolean fixed) {
-        this.fixed = fixed;
-    }
-
     public Date getPaymentDateOrigin() {
         return paymentDateOrigin;
     }
@@ -262,7 +251,6 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         dest.writeParcelable(this.tag, flags);
         dest.writeParcelable(this.paymentType, flags);
         dest.writeString(this.content);
-        dest.writeByte(this.fixed ? (byte) 1 : (byte) 0);
         dest.writeByte(this.clickable ? (byte) 1 : (byte) 0);
         dest.writeByte(this.approved ? (byte) 1 : (byte) 0);
         dest.writeByte(this.onGroup ? (byte) 1 : (byte) 0);

@@ -8,7 +8,6 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.system.m4.R
@@ -138,7 +137,6 @@ class ViewHolderTransaction private constructor(itemView: View) : CustomViewHold
     private val tvPrice: TextView = itemView.findViewById(R.id.item_transaction_price)
     private val tvRefund: TextView = itemView.findViewById(R.id.item_transaction_refund)
     private val tvContext: TextView = itemView.findViewById(R.id.item_transaction_context)
-    private val imFixed: ImageView = itemView.findViewById(R.id.item_transaction_fixed)
 
     private var vo: TransactionVO? = null
 
@@ -165,8 +163,6 @@ class ViewHolderTransaction private constructor(itemView: View) : CustomViewHold
 
         val itemColor = if (vo.isApproved) R.color.item_default else R.color.item_pinned
         tvTag.setTextColor(itemView.context.getColor(itemColor))
-
-        imFixed.visibility = if (vo.isFixed) View.VISIBLE else View.GONE
 
         container.setOnClickListener(if (vo.isClickable) onClickListener else null)
         container.setOnLongClickListener(if (vo.isClickable) onLongClickListener else null)

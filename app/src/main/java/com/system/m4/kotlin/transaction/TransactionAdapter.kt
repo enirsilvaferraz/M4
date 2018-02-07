@@ -7,7 +7,6 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.system.m4.R
@@ -18,7 +17,7 @@ import com.system.m4.views.vos.TransactionVO
  * Created by enirs on 11/10/2017.
  * Adapter list
  */
-class TransactionAdapter(val mList: ArrayList<TransactionVO>, val listener: OnClickListener) : RecyclerView.Adapter<TransactionAdapter.ViewHolderTransaction>() {
+class TransactionAdapter(private val mList: ArrayList<TransactionVO>, val listener: OnClickListener) : RecyclerView.Adapter<TransactionAdapter.ViewHolderTransaction>() {
 
     override fun onBindViewHolder(holder: TransactionAdapter.ViewHolderTransaction?, position: Int) {
         holder?.bind(mList.get(position))
@@ -37,12 +36,11 @@ class TransactionAdapter(val mList: ArrayList<TransactionVO>, val listener: OnCl
      */
     class ViewHolderTransaction(itemView: View, val listener: OnClickListener) : RecyclerView.ViewHolder(itemView) {
 
-        lateinit var container: LinearLayout
-        lateinit var tvTag: TextView
-        lateinit var tvPaymentDate: TextView
-        lateinit var tvPrice: TextView
-        lateinit var tvContext: TextView
-        lateinit var imFixed: ImageView
+        private lateinit var container: LinearLayout
+        private lateinit var tvTag: TextView
+        private lateinit var tvPaymentDate: TextView
+        private lateinit var tvPrice: TextView
+        private lateinit var tvContext: TextView
 
         fun bind(item: TransactionVO) {
 
@@ -51,7 +49,6 @@ class TransactionAdapter(val mList: ArrayList<TransactionVO>, val listener: OnCl
             tvPaymentDate = itemView.findViewById(R.id.item_transaction_payment_date)
             tvPrice = itemView.findViewById(R.id.item_transaction_price)
             tvContext = itemView.findViewById(R.id.item_transaction_context)
-            imFixed = itemView.findViewById(R.id.item_transaction_fixed)
 
             tvTag.text = if (item.tag != null) item.tag.name else item.paymentType.name
             tvPaymentDate.text = JavaUtils.DateUtil.format(item.paymentDate, JavaUtils.DateUtil.DD)
@@ -71,8 +68,6 @@ class TransactionAdapter(val mList: ArrayList<TransactionVO>, val listener: OnCl
 
             val itemColor = if (item.isApproved) R.color.item_default else R.color.item_pinned
             tvTag.setTextColor(itemView.context.getColor(itemColor))
-
-            imFixed.visibility = if (item.isFixed) View.VISIBLE else View.GONE
 
             if (item.isClickable) {
                 container.setOnClickListener({ listener.onClick(item) })

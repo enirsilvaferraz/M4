@@ -145,9 +145,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         PopupMenu popupMenu = new PopupMenu(getContext(), viewClicked);
         popupMenu.inflate(R.menu.menu_transaction);
 
-        popupMenu.getMenu().findItem(R.id.action_pin).setVisible(!vo.isFixed());
-        popupMenu.getMenu().findItem(R.id.action_unpin).setVisible(vo.isFixed());
-
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
             @Override
@@ -160,14 +157,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
                     case R.id.action_delete:
                         presenter.requestDelete(vo);
-                        return true;
-
-                    case R.id.action_pin:
-                        presenter.requestPin(vo);
-                        return true;
-
-                    case R.id.action_unpin:
-                        presenter.requestUnpin(vo);
                         return true;
                 }
 
