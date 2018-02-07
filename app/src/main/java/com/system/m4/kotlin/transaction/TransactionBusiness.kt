@@ -40,12 +40,7 @@ class TransactionBusiness {
                     var actualParcel = vo.parcels.split("/")[0].toInt()
                     val countParcel = vo.parcels.split("/")[1].toInt()
 
-                    do {
-
-                        val instance = Calendar.getInstance()
-                        instance.time = vo.paymentDate
-                        instance.set(Calendar.MONTH, actualParcel)
-                        vo.paymentDate = instance.time
+                    while (actualParcel <= countParcel) {
 
                         year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
                         month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
@@ -53,9 +48,14 @@ class TransactionBusiness {
                         vo.parcels = "${actualParcel}/${countParcel}"
 
                         TransactionRepository(year, month).create(fromTransaction(vo), listener)
-                        actualParcel++
 
-                    } while (actualParcel <= countParcel)
+                        val instance = Calendar.getInstance()
+                        instance.time = vo.paymentDate
+                        instance.add(Calendar.MONTH, 1)
+                        vo.paymentDate = instance.time
+
+                        actualParcel++
+                    }
 
                 } else {
                     TransactionRepository(year, month).create(fromTransaction(vo), listener)
