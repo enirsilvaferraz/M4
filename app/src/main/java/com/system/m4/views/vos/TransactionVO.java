@@ -22,12 +22,13 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
             return new TransactionVO[size];
         }
     };
+
     private String key;
     private Date paymentDate;
     private Date paymentDateOrigin;
     private Date purchaseDate;
     private Double price;
-    private double refund;
+    private Double refund;
     private TagVO tag;
     private PaymentTypeVO paymentType;
     private String content;
@@ -35,9 +36,27 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
     private boolean clickable = true;
     private boolean approved = true;
     private boolean onGroup;
+    private String parcels;
 
     public TransactionVO() {
         // Default constructor
+    }
+
+    public TransactionVO(TransactionVO vo) {
+        this.key = vo.key;
+        this.paymentDate = vo.paymentDate;
+        this.paymentDateOrigin = vo.paymentDateOrigin;
+        this.purchaseDate = vo.purchaseDate;
+        this.price = vo.price;
+        this.refund = vo.refund;
+        this.tag = vo.tag;
+        this.paymentType = vo.paymentType;
+        this.content = vo.content;
+        this.fixed = vo.fixed;
+        this.clickable = vo.clickable;
+        this.approved = vo.approved;
+        this.onGroup = vo.onGroup;
+        this.parcels = vo.parcels;
     }
 
     public TransactionVO(TagVO tagVO) {
@@ -53,11 +72,15 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         long tmpPurchaseDate = in.readLong();
         this.purchaseDate = tmpPurchaseDate == -1 ? null : new Date(tmpPurchaseDate);
         this.price = (Double) in.readValue(Double.class.getClassLoader());
-        this.refund = (Double) in.readValue(Double.class.getClassLoader());
+        this.refund = in.readDouble();
         this.tag = in.readParcelable(TagVO.class.getClassLoader());
         this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
         this.content = in.readString();
         this.fixed = in.readByte() != 0;
+        this.clickable = in.readByte() != 0;
+        this.approved = in.readByte() != 0;
+        this.onGroup = in.readByte() != 0;
+        this.parcels = in.readString();
     }
 
     public Date getPaymentDate() {
@@ -106,6 +129,14 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getParcels() {
+        return parcels;
+    }
+
+    public void setParcels(String parcels) {
+        this.parcels = parcels;
     }
 
     @Override
@@ -174,25 +205,6 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         this.paymentDateOrigin = paymentDateOrigin;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.key);
-        dest.writeLong(this.paymentDate != null ? this.paymentDate.getTime() : -1);
-        dest.writeLong(this.paymentDateOrigin != null ? this.paymentDateOrigin.getTime() : -1);
-        dest.writeLong(this.purchaseDate != null ? this.purchaseDate.getTime() : -1);
-        dest.writeValue(this.price);
-        dest.writeValue(this.refund);
-        dest.writeParcelable(this.tag, flags);
-        dest.writeParcelable(this.paymentType, flags);
-        dest.writeString(this.content);
-        dest.writeByte(this.fixed ? (byte) 1 : (byte) 0);
-    }
-
     public boolean isClickable() {
         return clickable;
     }
@@ -232,5 +244,28 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
     public TransactionVO putOnGroup() {
         this.onGroup = true;
         return this;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.key);
+        dest.writeLong(this.paymentDate != null ? this.paymentDate.getTime() : -1);
+        dest.writeLong(this.paymentDateOrigin != null ? this.paymentDateOrigin.getTime() : -1);
+        dest.writeLong(this.purchaseDate != null ? this.purchaseDate.getTime() : -1);
+        dest.writeValue(this.price);
+        dest.writeDouble(this.refund);
+        dest.writeParcelable(this.tag, flags);
+        dest.writeParcelable(this.paymentType, flags);
+        dest.writeString(this.content);
+        dest.writeByte(this.fixed ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.clickable ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.approved ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.onGroup ? (byte) 1 : (byte) 0);
+        dest.writeString(this.parcels);
     }
 }

@@ -154,7 +154,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/system_empty_field"
-                    tools:text="Parcela 1 de 20." />
+                    tools:text="Passagem de onibus voltando do trabalho" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/transaction_manager_action_parcels"
+                style="@style/AppTheme.Card.Section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/AppTheme.Card.TextView.Primary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transaction_parcels" />
+
+                <TextView
+                    android:id="@+id/transaction_manager_textview_parcels"
+                    style="@style/AppTheme.Card.TextView.Secundary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_empty_field"
+                    tools:text="1/20" />
 
             </LinearLayout>
 

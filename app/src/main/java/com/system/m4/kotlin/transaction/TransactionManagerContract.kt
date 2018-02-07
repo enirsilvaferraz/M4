@@ -32,11 +32,15 @@ interface TransactionManagerContract {
 
         fun setContent(value: String)
 
+        fun setParcels(value: String)
+
         fun showPriceDialog(value: Double?)
 
         fun showRefundDialog(value: Double?)
 
         fun showContentDialog(value: String?)
+
+        fun showParcelsDialog(value: String?)
 
         fun showPaymentDateDialog(date: Date)
 
@@ -69,17 +73,23 @@ interface TransactionManagerContract {
 
         fun setContent(content: String?)
 
+        fun setParcels(parcels: String?)
+
         fun requestPriceDialog(text: String)
 
         fun requestRefundDialog(text: String)
 
         fun requestContentDialog(text: String)
 
+        fun requestParcelsDialog(text: String)
+
         fun requestPaymentDateDialog(text: String)
 
         fun requestPurchaseDateDialog(text: String)
 
         fun clearContent()
+
+        fun clearParcels()
 
         fun clearPaymentType()
 

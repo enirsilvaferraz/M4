@@ -21,11 +21,9 @@ import java.util.*
 
 class TransactionManagerPresenter(private val mView: TransactionManagerContract.View) : TransactionManagerContract.Presenter {
 
-    private var mVO: TransactionVO
+    private val REGEX = "^(([1-9][0-9]{0,1})\\/([1-9][0-9]{0,1}))\$"
 
-    init {
-        this.mVO = TransactionVO()
-    }
+    private var mVO = TransactionVO()
 
     override fun setPaymentDate(date: Date?) {
         mVO.paymentDate = date
@@ -73,6 +71,11 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
         mView.setContent(JavaUtils.StringUtil.formatEmpty(content))
     }
 
+    override fun setParcels(parcels: String?) {
+        mVO.parcels = parcels
+        mView.setParcels(JavaUtils.StringUtil.formatEmpty(parcels))
+    }
+
     override fun requestPriceDialog(text: String) {
         val value = if (text.isEmpty() || text == Constants.EMPTY_FIELD) null else JavaUtils.NumberUtil.removeFormat(text)
         mView.showPriceDialog(value)
@@ -85,6 +88,10 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
 
     override fun requestContentDialog(text: String) {
         mView.showContentDialog(if (text == Constants.EMPTY_FIELD) null else text)
+    }
+
+    override fun requestParcelsDialog(text: String) {
+        mView.showParcelsDialog(if (text == Constants.EMPTY_FIELD) null else text)
     }
 
     override fun requestPaymentDateDialog(text: String) {
@@ -113,6 +120,10 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
 
     override fun clearContent() {
         mVO.content = null
+    }
+
+    override fun clearParcels() {
+        mVO.parcels = null
     }
 
     override fun clearPaymentType() {
@@ -145,12 +156,14 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
             mView.showError(R.string.system_error_required_field, R.string.transaction_payment_date)
         } else if (mVO.price == null) {
             mView.showError(R.string.system_error_required_field, R.string.transaction_price)
+        } else if (mVO.parcels.isNotEmpty() && !mVO.parcels.contains(Regex(REGEX))) {
+            mView.showError(R.string.system_error_not_allowed_field, R.string.transaction_parcels)
         } else {
 
             TransactionBusiness.save(mVO, object : PersistenceListener<TransactionVO> {
 
-                override fun onSuccess(transaction: TransactionVO) {
-                    mView.dismissDialog(transaction)
+                override fun onSuccess(model: TransactionVO) {
+                    mView.dismissDialog(model)
                 }
 
                 override fun onError(error: String) {

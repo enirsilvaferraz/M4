@@ -19,8 +19,8 @@ class TransactionBusiness {
 
         fun save(vo: TransactionVO, persistListener: PersistenceListener<TransactionVO>?) {
 
-            val year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
-            val month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
+            var year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
+            var month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
 
             val listener = object : PersistenceListener<TransactionModel> {
 
@@ -33,20 +33,43 @@ class TransactionBusiness {
                 }
             }
 
-            val model = fromTransaction(vo)
+            if (vo.key == null) {
 
-            if (model.key == null) {
-                TransactionRepository(year, month).create(model, listener)
+                if (!vo.parcels.isNullOrBlank()) {
+
+                    var actualParcel = vo.parcels.split("/")[0].toInt()
+                    val countParcel = vo.parcels.split("/")[1].toInt()
+
+                    do {
+
+                        val instance = Calendar.getInstance()
+                        instance.time = vo.paymentDate
+                        instance.set(Calendar.MONTH, actualParcel)
+                        vo.paymentDate = instance.time
+
+                        year = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDate)
+                        month = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDate)
+
+                        vo.parcels = "${actualParcel}/${countParcel}"
+
+                        TransactionRepository(year, month).create(fromTransaction(vo), listener)
+                        actualParcel++
+
+                    } while (actualParcel <= countParcel)
+
+                } else {
+                    TransactionRepository(year, month).create(fromTransaction(vo), listener)
+                }
 
             } else if (isInPath(vo)) {
-                TransactionRepository(year, month).update(model, listener)
+                TransactionRepository(year, month).update(fromTransaction(vo), listener)
 
             } else {
 
                 val yearOrigin = JavaUtils.DateUtil.get(Calendar.YEAR, vo.paymentDateOrigin)
                 val monthOrigin = JavaUtils.DateUtil.get(Calendar.MONTH, vo.paymentDateOrigin)
 
-                TransactionRepository(yearOrigin, monthOrigin).delete(model, object : PersistenceListener<TransactionModel> {
+                TransactionRepository(yearOrigin, monthOrigin).delete(fromTransaction(vo), object : PersistenceListener<TransactionModel> {
 
                     override fun onSuccess(model: TransactionModel) {
                         TransactionRepository(year, month).update(model, listener)
@@ -171,6 +194,7 @@ class TransactionBusiness {
             dto.price = vo.price
             dto.refund = vo.refund
             dto.fixed = vo.isFixed
+            dto.parcels = vo.parcels
             return dto
         }
 
@@ -188,6 +212,7 @@ class TransactionBusiness {
             vo.refund = dto.refund
             vo.isApproved = true
             vo.isFixed = dto.fixed
+            vo.parcels = dto.parcels
 
             // Usado para saber onde é o path, não é armazenado no Firebase
             vo.paymentDateOrigin = vo.paymentDate
