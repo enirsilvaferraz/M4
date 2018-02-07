@@ -243,11 +243,15 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
     }
 
     override fun showPaymentDateDialog(date: Date) {
-        JavaUtils.AndroidUtil.showDatePicker(context, date) { view, year, month, dayOfMonth -> presenter.setPaymentDate(JavaUtils.DateUtil.getDate(year, month, dayOfMonth)) }
+        JavaUtils.AndroidUtil.showDatePicker(context, date) { view, year, month, dayOfMonth ->
+            presenter.setPaymentDate(JavaUtils.DateUtil.getDate(year, month + 1, dayOfMonth))
+        }
     }
 
     override fun showPurchaseDateDialog(date: Date) {
-        JavaUtils.AndroidUtil.showDatePicker(context, date) { view, year, month, dayOfMonth -> presenter.setPurchaseDate(JavaUtils.DateUtil.getDate(year, month, dayOfMonth)) }
+        JavaUtils.AndroidUtil.showDatePicker(context, date) { view, year, month, dayOfMonth ->
+            presenter.setPurchaseDate(JavaUtils.DateUtil.getDate(year, month + 1, dayOfMonth))
+        }
     }
 
     override fun dismissDialog(vo: VOInterface<*>) {

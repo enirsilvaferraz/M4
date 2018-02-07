@@ -96,11 +96,10 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
 
     override fun requestPaymentDateDialog(text: String) {
 
-        val date: Date
-        if (text.isEmpty() || text == Constants.EMPTY_FIELD) {
-            date = Calendar.getInstance().time
+        val date = if (text.isEmpty() || text == Constants.EMPTY_FIELD) {
+            Calendar.getInstance().time
         } else {
-            date = JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)
+            JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)
         }
 
         mView.showPaymentDateDialog(date)
@@ -108,11 +107,10 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
 
     override fun requestPurchaseDateDialog(text: String) {
 
-        val date: Date
-        if (text.isEmpty() || text == Constants.EMPTY_FIELD) {
-            date = Calendar.getInstance().time
+        val date = if (text.isEmpty() || text == Constants.EMPTY_FIELD) {
+            Calendar.getInstance().time
         } else {
-            date = JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)
+            JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)
         }
 
         mView.showPurchaseDateDialog(date)
