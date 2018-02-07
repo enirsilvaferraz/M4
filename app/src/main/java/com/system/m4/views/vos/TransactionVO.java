@@ -228,4 +228,9 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
     public Double getTotal() {
         return price - refund;
     }
+
+    public TransactionVO putOnGroup() {
+        this.onGroup = true;
+        return this;
+    }
 }
