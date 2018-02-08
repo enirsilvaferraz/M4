@@ -62,10 +62,6 @@ public class HomeContract {
 
         void requestShowListTransaction(@NonNull TagSummaryVO item);
 
-        void requestPin(@NonNull TransactionVO item);
-
-        void requestUnpin(@NonNull TransactionVO item);
-
         void onClickVO(VOItemListInterface vo);
 
         boolean onLongClickVO(VOItemListInterface vo, android.view.View view);

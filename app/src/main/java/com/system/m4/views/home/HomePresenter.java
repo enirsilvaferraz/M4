@@ -108,37 +108,6 @@ public class HomePresenter implements HomeContract.Presenter {
         mView.setListTransactions(listVO);
     }
 
-    private void configSummary(List<VOItemListInterface> listVO, List<TransactionVO> listTransaction) {
-
-        Double actual = 0D;
-        Double expected = 0D;
-        Double future = 0D;
-        Double fixed = 0D;
-
-        for (TransactionVO transaction : listTransaction) {
-
-            if (transaction.isFixed()) {
-                fixed += transaction.getTotal();
-            }
-
-            if (!transaction.isApproved()) {
-                expected += transaction.getTotal();
-            } else if (transaction.getPaymentDate().compareTo(Calendar.getInstance().getTime()) <= 0) {
-                actual += transaction.getTotal();
-            } else {
-                future += transaction.getTotal();
-            }
-        }
-
-        listVO.add(new SubTitleVO("Summary"));
-        listVO.add(new SummaryVO("Actual spending", actual));
-        listVO.add(new SummaryVO("Confirmed spending", actual + future));
-        listVO.add(new SummaryVO("Expected spending", expected));
-        listVO.add(new SummaryVO("Essential spending", fixed));
-        listVO.add(new SummaryVO("Total spending", actual + future + expected));
-        listVO.add(new SpaceVO());
-    }
-
     @Override
     public void selectItem(TransactionVO vo) {
         mView.showTransactionDialog(vo);
@@ -173,36 +142,6 @@ public class HomePresenter implements HomeContract.Presenter {
     @Override
     public void requestShowListTransaction(@NonNull TagSummaryVO item) {
         mView.requestShowListTransaction(item);
-    }
-
-    @Override
-    public void requestPin(@NonNull TransactionVO item) {
-        TransactionBusiness.Companion.pin(item, new PersistenceListener<TransactionVO>() {
-            @Override
-            public void onSuccess(TransactionVO vo) {
-                requestListTransaction();
-            }
-
-            @Override
-            public void onError(@NonNull String e) {
-                mView.showError(e);
-            }
-        });
-    }
-
-    @Override
-    public void requestUnpin(@NonNull TransactionVO item) {
-        TransactionBusiness.Companion.unpin(item, new PersistenceListener<TransactionVO>() {
-            @Override
-            public void onSuccess(TransactionVO vo) {
-                requestListTransaction();
-            }
-
-            @Override
-            public void onError(@NonNull String e) {
-                mView.showError(e);
-            }
-        });
     }
 
     @Override

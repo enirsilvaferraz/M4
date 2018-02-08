@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
  * Created by eferraz on 27/08/17.
  * DTO for Transction
  */
-data class TransactionModel constructor(
+data class TransactionModel(
 
         @Expose
         @SerializedName("key")
@@ -29,7 +29,7 @@ data class TransactionModel constructor(
 
         @Expose
         @SerializedName("refund")
-        var refund: Double,
+        var refund: Double?,
 
         @Expose
         @SerializedName("tag")
@@ -44,11 +44,11 @@ data class TransactionModel constructor(
         var content: String?,
 
         @Expose
-        @SerializedName("fixed")
-        var fixed: Boolean
+        @SerializedName("parcels")
+        var parcels: String?
 
 ) : Parcelable {
-    constructor() : this(null, null, null, 0.0, 0.0, null, null, null, false) {
+    constructor() : this(null, null, null, 0.0, null, null, null, null, null) {
         // Nothing to do
     }
 
@@ -57,11 +57,11 @@ data class TransactionModel constructor(
             source.readString(),
             source.readString(),
             source.readDouble(),
-            source.readDouble(),
+            source.readValue(Double::class.java.classLoader) as Double?,
             source.readString(),
             source.readString(),
             source.readString(),
-            1 == source.readInt()
+            source.readString()
     )
 
     override fun describeContents() = 0
@@ -71,11 +71,11 @@ data class TransactionModel constructor(
         writeString(paymentDate)
         writeString(purchaseDate)
         writeDouble(price)
-        writeDouble(refund)
+        writeValue(refund)
         writeString(tag)
         writeString(paymentType)
         writeString(content)
-        writeInt((if (fixed) 1 else 0))
+        writeString(parcels)
     }
 
     companion object {

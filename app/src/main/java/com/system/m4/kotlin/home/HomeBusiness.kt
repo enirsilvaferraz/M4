@@ -102,10 +102,7 @@ class HomeBusiness {
 
         if (group != null) group.paymentTypeList.forEach { type ->
 
-            val items = transactions.filter { it.paymentType.key == type.key }.map {
-                it.isOnGroup = true
-                it
-            }.toMutableList()
+            val items = transactions.filter { it.paymentType.key == type.key }.map { it.putOnGroup() }.toMutableList()
 
             if (items.isNotEmpty()) {
 

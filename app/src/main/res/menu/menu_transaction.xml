@@ -4,20 +4,6 @@
     tools:context="com.system.m4.views.home.MainActivity">
 
     <item
-        android:id="@+id/action_unpin"
-        android:icon="@drawable/ic_bookmark_white_24dp"
-        android:orderInCategory="25"
-        android:title="@string/system_action_unpin"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/action_pin"
-        android:icon="@drawable/ic_bookmark_border_white_24dp"
-        android:orderInCategory="25"
-        android:title="@string/system_action_pin"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/action_copy"
         android:icon="@drawable/ic_content_copy_white_24dp"
         android:orderInCategory="50"

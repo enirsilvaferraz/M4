@@ -38,6 +38,7 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
     private lateinit var tvRefund: TextView
     private lateinit var tvPaymentType: TextView
     private lateinit var tvContent: TextView
+    private lateinit var tvParcels: TextView
 
     private lateinit var llPaymentDate: LinearLayout
     private lateinit var llPurchaseDate: LinearLayout
@@ -45,6 +46,7 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
     private lateinit var llRefund: LinearLayout
     private lateinit var llPaymentType: LinearLayout
     private lateinit var llContent: LinearLayout
+    private lateinit var llParcels: LinearLayout
 
     private lateinit var presenter: TransactionManagerContract.Presenter
 
@@ -61,6 +63,7 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         tvRefund = rootView.findViewById(R.id.transaction_manager_textview_refund)
         tvPaymentType = rootView.findViewById(R.id.transaction_manager_textview_payment_type)
         tvContent = rootView.findViewById(R.id.transaction_manager_textview_content)
+        tvParcels = rootView.findViewById(R.id.transaction_manager_textview_parcels)
 
         llPaymentDate = rootView.findViewById(R.id.transaction_manager_action_payment_date)
         llPurchaseDate = rootView.findViewById(R.id.transaction_manager_action_purchase_date)
@@ -68,6 +71,7 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         llRefund = rootView.findViewById(R.id.transaction_manager_action_refund)
         llPaymentType = rootView.findViewById(R.id.transaction_manager_action_payment_type)
         llContent = rootView.findViewById(R.id.transaction_manager_action_content)
+        llParcels = rootView.findViewById(R.id.transaction_manager_action_parcels)
 
         llPaymentDate.setOnClickListener { actionPaymentDate() }
         llPurchaseDate.setOnClickListener { actionPurchaseDate() }
@@ -75,6 +79,7 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         llRefund.setOnClickListener { actionRefund() }
         llPaymentType.setOnClickListener { actionPaymentType() }
         llContent.setOnClickListener { actionContent() }
+        llParcels.setOnClickListener { actionParcels() }
 
         llPaymentDate.setOnLongClickListener { clearPaymentDate() }
         llPurchaseDate.setOnLongClickListener { clearPurchaseDate() }
@@ -82,6 +87,7 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         llRefund.setOnLongClickListener { clearRefund() }
         llPaymentType.setOnLongClickListener { clearPaymentType() }
         llContent.setOnLongClickListener { clearContent() }
+        llParcels.setOnLongClickListener { clearParcels() }
 
         presenter = TransactionManagerPresenter(this)
         return rootView
@@ -102,6 +108,7 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         presenter.setPaymentType(transaction.paymentType)
         presenter.setPrice(transaction.price)
         presenter.setRefund(transaction.refund)
+        presenter.setParcels(transaction.parcels)
     }
 
     /*
@@ -141,6 +148,10 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         presenter.requestContentDialog(tvContent.text.toString())
     }
 
+    private fun actionParcels() {
+        presenter.requestParcelsDialog(tvParcels.text.toString())
+    }
+
     private fun clearPaymentDate(): Boolean {
         presenter.clearPaymentDate()
         tvPaymentDate.setText(R.string.system_empty_field)
@@ -177,6 +188,12 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         return true
     }
 
+    private fun clearParcels(): Boolean {
+        presenter.clearParcels()
+        tvParcels.setText(R.string.system_empty_field)
+        return true
+    }
+
     override fun setPaymentDate(value: String) {
         tvPaymentDate.text = value
     }
@@ -205,6 +222,10 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         tvContent.text = value
     }
 
+    override fun setParcels(value: String) {
+        tvParcels.text = value
+    }
+
     override fun showPriceDialog(value: Double?) {
         NumberComponentDialog.newInstance(R.string.transaction_price, value) { valueParam -> presenter.setPrice(JavaUtils.NumberUtil.removeFormat(valueParam)) }.show(childFragmentManager)
     }
@@ -217,12 +238,20 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         TextComponentDialog.newInstance(R.string.transaction_content, value) { valueParam -> presenter.setContent(valueParam) }.show(childFragmentManager)
     }
 
+    override fun showParcelsDialog(value: String?) {
+        TextComponentDialog.newInstance(R.string.transaction_parcels, value) { valueParam -> presenter.setParcels(valueParam) }.show(childFragmentManager)
+    }
+
     override fun showPaymentDateDialog(date: Date) {
-        JavaUtils.AndroidUtil.showDatePicker(context, date) { view, year, month, dayOfMonth -> presenter.setPaymentDate(JavaUtils.DateUtil.getDate(year, month, dayOfMonth)) }
+        JavaUtils.AndroidUtil.showDatePicker(context, date) { view, year, month, dayOfMonth ->
+            presenter.setPaymentDate(JavaUtils.DateUtil.getDate(year, month + 1, dayOfMonth))
+        }
     }
 
     override fun showPurchaseDateDialog(date: Date) {
-        JavaUtils.AndroidUtil.showDatePicker(context, date) { view, year, month, dayOfMonth -> presenter.setPurchaseDate(JavaUtils.DateUtil.getDate(year, month, dayOfMonth)) }
+        JavaUtils.AndroidUtil.showDatePicker(context, date) { view, year, month, dayOfMonth ->
+            presenter.setPurchaseDate(JavaUtils.DateUtil.getDate(year, month + 1, dayOfMonth))
+        }
     }
 
     override fun dismissDialog(vo: VOInterface<*>) {
