@@ -68,6 +68,8 @@ public class HomePresenter implements HomeContract.Presenter {
 
         listVO.add(new SubTitleVO("Resumo"));
         listVO.add(new SummaryVO("Total Gasto", item.getAmount()));
+        listVO.add(new SummaryVO("Total Retornado", item.getRefound()));
+        listVO.add(new SummaryVO("Total Real", item.getAmount() - item.getRefound()));
         listVO.add(new SpaceVO());
 
         if (!item.getPendingTransaction().isEmpty()) {

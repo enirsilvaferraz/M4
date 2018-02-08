@@ -70,6 +70,7 @@ class HomeBusiness {
             homeVO.pendingTransaction = splitPendingTransactions(homeDTO.listTransaction!!)
             homeVO.groups = splitGroupTransaction(group, homeDTO.listTransaction!!)
             homeVO.amount = homeVO.transactions1Q.amount + homeVO.transactions2Q.amount
+            homeVO.refound = homeVO.transactions1Q.refound + homeVO.transactions2Q.refound
 
             listener.onSuccess(homeVO)
         }
@@ -110,7 +111,7 @@ class HomeBusiness {
 
                 items.sortWith(compareBy({ it.purchaseDate }))
 
-                val transactionListVO = TransactionListVO(items, items.sumByDouble { it.price }.roundTo2Decimal())
+                val transactionListVO = TransactionListVO(items, items.sumByDouble { it.price }.roundTo2Decimal(), items.sumByDouble { it.refund }.roundTo2Decimal())
                 map.put(type, transactionListVO)
             }
         }
@@ -137,10 +138,10 @@ class HomeBusiness {
             splitTransactionGrouped(group, transactions20)
 
             transactions20.sortWith(compareBy({ it.paymentDate }, { it.tag.parentName }, { it.tag.name }))
-            return TransactionListVO(transactions20, transactions20.sumByDouble { it.price }.roundTo2Decimal())
+            return TransactionListVO(transactions20, transactions20.sumByDouble { it.price }.roundTo2Decimal(), transactions20.sumByDouble { it.refund }.roundTo2Decimal())
 
         } else {
-            return TransactionListVO(mutableListOf(), 0.0)
+            return TransactionListVO(mutableListOf(), 0.0, 0.0)
         }
     }
 
@@ -157,6 +158,7 @@ class HomeBusiness {
                 transaction.tag = TagVO(null, "Grupo de Transações", paymentType.name)
                 transaction.paymentDate = filter[0].paymentDate
                 transaction.price = filter.sumByDouble { it.price }
+                transaction.refund = filter.sumByDouble { it.refund }
                 transaction.isClickable = false
 
                 transactions.removeAll { it.paymentType.key == paymentType.key }

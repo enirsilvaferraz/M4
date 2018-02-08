@@ -16,6 +16,7 @@ public class HomeVO {
     private List<TransactionVO> pendingTransaction;
     private HashMap<PaymentTypeVO, TransactionListVO> groups;
     private double amount;
+    private double refound;
 
     public TransactionListVO getTransactions1Q() {
         return transactions1Q;
@@ -63,6 +64,14 @@ public class HomeVO {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public double getRefound() {
+        return refound;
+    }
+
+    public void setRefound(double refound) {
+        this.refound = refound;
     }
 }
 
