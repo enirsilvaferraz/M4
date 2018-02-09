@@ -16,93 +16,77 @@ interface TransactionManagerContract {
 
     interface View {
 
-        fun configureModel(transaction: TransactionVO)
-
+        fun setToolbarTitle(titleString: String)
         fun setPaymentDate(value: String)
-
         fun setPurchaseDate(value: String)
-
         fun setPrice(value: String)
-
         fun setRefund(value: String)
-
         fun setTags(value: String)
-
         fun setPaymentType(value: String)
-
         fun setContent(value: String)
-
         fun setParcels(value: String)
+        fun setAlreadyPaid(value: String)
 
         fun showPriceDialog(value: Double?)
-
         fun showRefundDialog(value: Double?)
-
         fun showContentDialog(value: String?)
-
         fun showParcelsDialog(value: String?)
-
         fun showPaymentDateDialog(date: Date)
 
         fun showPurchaseDateDialog(date: Date)
-
         fun dismissDialog(vo: VOInterface<*>)
-
-        fun showError(error: String)
-
         fun showSuccessMessage(template: Int, param: Int)
-
+        fun showError(error: String)
         fun showError(template: Int, param: Int)
-
         fun getContext(): Context
     }
 
     interface Presenter {
 
-        fun setPaymentDate(date: Date?)
-
-        fun setPurchaseDate(date: Date?)
-
-        fun setPrice(value: Double?)
-
-        fun setRefund(value: Double?)
-
-        fun setTags(tagVO: TagVO)
-
-        fun setPaymentType(paymentTypeVO: PaymentTypeVO?)
-
-        fun setContent(content: String?)
-
-        fun setParcels(parcels: String?)
-
-        fun requestPriceDialog(text: String)
-
-        fun requestRefundDialog(text: String)
-
-        fun requestContentDialog(text: String)
-
-        fun requestParcelsDialog(text: String)
-
-        fun requestPaymentDateDialog(text: String)
-
-        fun requestPurchaseDateDialog(text: String)
-
-        fun clearContent()
-
-        fun clearParcels()
-
-        fun clearPaymentType()
-
-        fun clearPrice()
-
-        fun clearRefund()
-
-        fun clearPurchaseDate()
-
-        fun clearPaymentDate()
-
-        fun save()
+        /*
+         * INIT
+         */
 
         fun init(transaction: TransactionVO)
+
+        /*
+         * ON CLICK EVENTS
+         */
+
+        fun onPurchaseDateClick(text: String)
+        fun onPaymentDateClick(text: String)
+        fun onPriceClick(text: String)
+        fun onRefundClick(text: String)
+        fun onContentClick(text: String)
+        fun onParcelsClick(text: String)
+        fun onAlreadyPaidClick(value: String)
+
+        /*
+         * ON CLICK EVENTS
+         */
+
+        fun onPaymentTypeLongClick(): Boolean
+        fun onPurchaseDateLongClick(): Boolean
+        fun onPaymentDateLongClick(): Boolean
+        fun onPriceLongClick(): Boolean
+        fun onRefundLongClick(): Boolean
+        fun onContentLongClick(): Boolean
+        fun onParcelsLongClick(): Boolean
+
+        /*
+         * SETTERS
+         */
+
+        fun setTags(tagVO: TagVO)
+        fun setPaymentType(paymentTypeVO: PaymentTypeVO?)
+        fun setPurchaseDate(date: Date?)
+        fun setPaymentDate(date: Date?)
+        fun setPrice(value: Double?)
+        fun setRefund(value: Double?)
+        fun setContent(content: String?)
+        fun setParcels(parcels: String?)
+        fun setAlreadyPaid(alreadyPaid: Boolean)
+
+        fun save()
     }
 }

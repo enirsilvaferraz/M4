@@ -25,87 +25,34 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
 
     private var mVO = TransactionVO()
 
-    override fun setPaymentDate(date: Date?) {
-        mVO.paymentDate = date
-        mView.setPaymentDate(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)))
-    }
-
-    override fun setPurchaseDate(date: Date?) {
-        mVO.purchaseDate = date
-        mView.setPurchaseDate(JavaUtils.StringUtil.formatEmpty(JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)))
-    }
-
-    override fun setPrice(value: Double?) {
-        mVO.price = value
-        mView.setPrice(JavaUtils.StringUtil.formatEmpty(JavaUtils.NumberUtil.currencyFormat(value)))
-    }
-
-    override fun setRefund(value: Double?) {
-        mVO.refund = value
-        mView.setRefund(JavaUtils.StringUtil.formatEmpty(JavaUtils.NumberUtil.currencyFormat(value)))
-    }
+    /*
+     * INIT
+     */
 
     override fun init(transaction: TransactionVO) {
+
         mVO = transaction
         if (TextUtils.isEmpty(mVO.key)) {
             mVO.paymentDate = Calendar.getInstance().time
         }
 
-        mView.configureModel(transaction)
+        mView.setToolbarTitle(transaction.tag.name)
+        mView.setTags(getValueOrEmpty(transaction.tag.name))
+        mView.setPaymentDate(getValueOrEmpty(transaction.paymentDate))
+        mView.setPurchaseDate(getValueOrEmpty(transaction.purchaseDate))
+        mView.setPrice(getValueOrEmpty(transaction.price))
+        mView.setRefund(getValueOrEmpty(transaction.refund))
+        mView.setPaymentType(getValueOrEmpty(if (transaction.paymentType != null) transaction.paymentType.name else null))
+        mView.setContent(getValueOrEmpty(transaction.content))
+        mView.setParcels(getValueOrEmpty(transaction.parcels))
+        mView.setAlreadyPaid(if (transaction.alreadyPaid) "YES" else "NO")
     }
 
-    override fun setTags(tagVO: TagVO) {
-        mVO.tag = tagVO
-        mView.setTags(JavaUtils.StringUtil.formatEmpty(tagVO.name))
-    }
+    /*
+     * ON CLICK EVENTS
+     */
 
-    override fun setPaymentType(paymentTypeVO: PaymentTypeVO?) {
-        if (paymentTypeVO != null) {
-            mVO.paymentType = paymentTypeVO
-            mView.setPaymentType(JavaUtils.StringUtil.formatEmpty(paymentTypeVO.name))
-        }
-    }
-
-    override fun setContent(content: String?) {
-        mVO.content = content
-        mView.setContent(JavaUtils.StringUtil.formatEmpty(content))
-    }
-
-    override fun setParcels(parcels: String?) {
-        mVO.parcels = parcels
-        mView.setParcels(JavaUtils.StringUtil.formatEmpty(parcels))
-    }
-
-    override fun requestPriceDialog(text: String) {
-        val value = if (text.isEmpty() || text == Constants.EMPTY_FIELD) null else JavaUtils.NumberUtil.removeFormat(text)
-        mView.showPriceDialog(value)
-    }
-
-    override fun requestRefundDialog(text: String) {
-        val value = if (text.isEmpty() || text == Constants.EMPTY_FIELD) null else JavaUtils.NumberUtil.removeFormat(text)
-        mView.showRefundDialog(value)
-    }
-
-    override fun requestContentDialog(text: String) {
-        mView.showContentDialog(if (text == Constants.EMPTY_FIELD) null else text)
-    }
-
-    override fun requestParcelsDialog(text: String) {
-        mView.showParcelsDialog(if (text == Constants.EMPTY_FIELD) null else text)
-    }
-
-    override fun requestPaymentDateDialog(text: String) {
-
-        val date = if (text.isEmpty() || text == Constants.EMPTY_FIELD) {
-            Calendar.getInstance().time
-        } else {
-            JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)
-        }
-
-        mView.showPaymentDateDialog(date)
-    }
-
-    override fun requestPurchaseDateDialog(text: String) {
+    override fun onPurchaseDateClick(text: String) {
 
         val date = if (text.isEmpty() || text == Constants.EMPTY_FIELD) {
             Calendar.getInstance().time
@@ -116,32 +63,126 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
         mView.showPurchaseDateDialog(date)
     }
 
-    override fun clearContent() {
-        mVO.content = null
+    override fun onPaymentDateClick(text: String) {
+
+        val date = if (text.isEmpty() || text == Constants.EMPTY_FIELD) {
+            Calendar.getInstance().time
+        } else {
+            JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)
+        }
+
+        mView.showPaymentDateDialog(date)
     }
 
-    override fun clearParcels() {
-        mVO.parcels = null
+    override fun onPriceClick(text: String) {
+        val value = if (text.isEmpty() || text == Constants.EMPTY_FIELD) null else JavaUtils.NumberUtil.removeFormat(text)
+        mView.showPriceDialog(value)
     }
 
-    override fun clearPaymentType() {
-        mVO.paymentType = null
+    override fun onRefundClick(text: String) {
+        val value = if (text.isEmpty() || text == Constants.EMPTY_FIELD) null else JavaUtils.NumberUtil.removeFormat(text)
+        mView.showRefundDialog(value)
     }
 
-    override fun clearPrice() {
-        mVO.price = null
+    override fun onContentClick(text: String) {
+        mView.showContentDialog(if (text == Constants.EMPTY_FIELD) null else text)
     }
 
-    override fun clearRefund() {
-        mVO.refund = null
+    override fun onParcelsClick(text: String) {
+        mView.showParcelsDialog(if (text == Constants.EMPTY_FIELD) null else text)
     }
 
-    override fun clearPurchaseDate() {
-        mVO.purchaseDate = null
+    override fun onAlreadyPaidClick(value: String) {
+        mVO.alreadyPaid = !value.equals("YES")
+        mView.setAlreadyPaid(if (mVO.alreadyPaid) "YES" else "NO")
     }
 
-    override fun clearPaymentDate() {
-        mVO.paymentDate = null
+    /*
+     * ON CLICK EVENTS
+     */
+
+    override fun onPaymentTypeLongClick(): Boolean {
+        setPaymentType(null)
+        return true
+    }
+
+    override fun onPurchaseDateLongClick(): Boolean {
+        setPurchaseDate(null)
+        return true
+    }
+
+    override fun onPaymentDateLongClick(): Boolean {
+        setPaymentDate(null)
+        return true
+    }
+
+    override fun onPriceLongClick(): Boolean {
+        setPrice(null)
+        return true
+    }
+
+    override fun onRefundLongClick(): Boolean {
+        setRefund(null)
+        return true
+    }
+
+    override fun onContentLongClick(): Boolean {
+        setContent(null)
+        return true
+    }
+
+    override fun onParcelsLongClick(): Boolean {
+        setParcels(null)
+        return true
+    }
+
+    /*
+     * SETTERS
+     */
+
+    override fun setTags(tagVO: TagVO) {
+        mVO.tag = tagVO
+        mView.setTags(getValueOrEmpty(tagVO.name))
+    }
+
+    override fun setPaymentType(paymentTypeVO: PaymentTypeVO?) {
+        mVO.paymentType = paymentTypeVO
+        mView.setPaymentType(getValueOrEmpty(paymentTypeVO?.name))
+    }
+
+    override fun setPaymentDate(date: Date?) {
+        mVO.paymentDate = date
+        mView.setPaymentDate(getValueOrEmpty(date))
+    }
+
+    override fun setPurchaseDate(date: Date?) {
+        mVO.purchaseDate = date
+        mView.setPurchaseDate(getValueOrEmpty(date))
+    }
+
+    override fun setPrice(value: Double?) {
+        mVO.price = value
+        mView.setPrice(getValueOrEmpty(value))
+    }
+
+    override fun setRefund(value: Double?) {
+        mVO.refund = value
+        mView.setRefund(getValueOrEmpty(value))
+    }
+
+    override fun setContent(content: String?) {
+        mVO.content = content
+        mView.setContent(getValueOrEmpty(content))
+    }
+
+    override fun setParcels(parcels: String?) {
+        mVO.parcels = parcels
+        mView.setParcels(getValueOrEmpty(parcels))
+    }
+
+    override fun setAlreadyPaid(alreadyPaid: Boolean) {
+        mVO.alreadyPaid = alreadyPaid
+        mView.setAlreadyPaid(if (mVO.alreadyPaid) "YES" else "NO")
     }
 
     override fun save() {
@@ -169,5 +210,13 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
                 }
             })
         }
+    }
+
+    private fun getValueOrEmpty(value: Any?): String = when {
+        value == null -> mView.getContext().getString(R.string.system_empty_field)
+        value is String && value.isNotEmpty() -> value
+        value is Date -> JavaUtils.DateUtil.format(value, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)
+        value is Double -> JavaUtils.NumberUtil.currencyFormat(value)
+        else -> mView.getContext().getString(R.string.system_empty_field)
     }
 }

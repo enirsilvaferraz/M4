@@ -22,7 +22,6 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
             return new TransactionVO[size];
         }
     };
-
     private String key;
     private Date paymentDate;
     private Date paymentDateOrigin;
@@ -36,6 +35,8 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
     private boolean approved = true;
     private boolean onGroup;
     private String parcels;
+
+    public boolean alreadyPaid = true;
 
     public TransactionVO() {
         // Default constructor
@@ -70,7 +71,7 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         long tmpPurchaseDate = in.readLong();
         this.purchaseDate = tmpPurchaseDate == -1 ? null : new Date(tmpPurchaseDate);
         this.price = (Double) in.readValue(Double.class.getClassLoader());
-        this.refund = in.readDouble();
+        this.refund = (Double) in.readValue(Double.class.getClassLoader());
         this.tag = in.readParcelable(TagVO.class.getClassLoader());
         this.paymentType = in.readParcelable(PaymentTypeVO.class.getClassLoader());
         this.content = in.readString();
@@ -78,6 +79,7 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         this.approved = in.readByte() != 0;
         this.onGroup = in.readByte() != 0;
         this.parcels = in.readString();
+        this.alreadyPaid = in.readByte() != 0;
     }
 
     public Date getPaymentDate() {
@@ -235,6 +237,14 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         return this;
     }
 
+    public boolean isAlreadyPaid() {
+        return alreadyPaid;
+    }
+
+    public void setAlreadyPaid(boolean alreadyPaid) {
+        this.alreadyPaid = alreadyPaid;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -247,7 +257,7 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         dest.writeLong(this.paymentDateOrigin != null ? this.paymentDateOrigin.getTime() : -1);
         dest.writeLong(this.purchaseDate != null ? this.purchaseDate.getTime() : -1);
         dest.writeValue(this.price);
-        dest.writeDouble(this.refund);
+        dest.writeValue(this.refund);
         dest.writeParcelable(this.tag, flags);
         dest.writeParcelable(this.paymentType, flags);
         dest.writeString(this.content);
@@ -255,5 +265,7 @@ public class TransactionVO implements VOInterface<TransactionVO>, VOItemListInte
         dest.writeByte(this.approved ? (byte) 1 : (byte) 0);
         dest.writeByte(this.onGroup ? (byte) 1 : (byte) 0);
         dest.writeString(this.parcels);
+        dest.writeByte(this.alreadyPaid ? (byte) 1 : (byte) 0);
     }
 }
+

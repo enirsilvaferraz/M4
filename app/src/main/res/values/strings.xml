@@ -24,6 +24,7 @@
     <string name="transaction_payment_date_start">Payment Date Start</string>
     <string name="transaction_payment_date_end">Payment Date End</string>
     <string name="transaction_parcels">Parcels</string>
+    <string name="transaction_already_paid">Already Paid</string>
     <string name="transaction">Transaction</string>
     <string name="system_action_delete">Delete</string>
     <string name="system_action_ok">OK</string>

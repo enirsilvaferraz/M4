@@ -181,6 +181,29 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/transaction_manager_action_already_paid"
+                style="@style/AppTheme.Card.Section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/AppTheme.Card.TextView.Primary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transaction_already_paid" />
+
+                <TextView
+                    android:id="@+id/transaction_manager_textview_already_paid"
+                    style="@style/AppTheme.Card.TextView.Secundary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/system_empty_field"
+                    tools:text="YES" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>

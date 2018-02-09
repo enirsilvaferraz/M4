@@ -137,6 +137,7 @@ class TransactionBusiness {
             dto.price = vo.price
             dto.refund = vo.refund
             dto.parcels = vo.parcels
+            dto.alreadyPaid = vo.alreadyPaid
             return dto
         }
 
@@ -154,6 +155,7 @@ class TransactionBusiness {
             vo.refund = if (dto.refund != null) dto.refund else 0.0
             vo.isApproved = true
             vo.parcels = dto.parcels
+            vo.alreadyPaid = dto.alreadyPaid
 
             // Usado para saber onde é o path, não é armazenado no Firebase
             vo.paymentDateOrigin = vo.paymentDate

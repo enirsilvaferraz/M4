@@ -163,7 +163,7 @@ class ViewHolderTransaction private constructor(itemView: View) : CustomViewHold
         tvPaymentDate.setTextColor(if (!empty) Color.parseColor(vo.paymentType.color) else
             ContextCompat.getColor(itemView.context, R.color.dafault_color))
 
-        val itemColor = if (vo.isApproved) R.color.item_default else R.color.item_pinned
+        val itemColor = if (vo.alreadyPaid) R.color.item_default else R.color.item_pinned
         tvTag.setTextColor(itemView.context.getColor(itemColor))
 
         container.setOnClickListener(if (vo.isClickable) onClickListener else null)

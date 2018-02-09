@@ -39,6 +39,7 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
     private lateinit var tvPaymentType: TextView
     private lateinit var tvContent: TextView
     private lateinit var tvParcels: TextView
+    private lateinit var tvAlreadyPaid: TextView
 
     private lateinit var llPaymentDate: LinearLayout
     private lateinit var llPurchaseDate: LinearLayout
@@ -47,6 +48,7 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
     private lateinit var llPaymentType: LinearLayout
     private lateinit var llContent: LinearLayout
     private lateinit var llParcels: LinearLayout
+    private lateinit var llAlreadyPaid: LinearLayout
 
     private lateinit var presenter: TransactionManagerContract.Presenter
 
@@ -64,6 +66,7 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         tvPaymentType = rootView.findViewById(R.id.transaction_manager_textview_payment_type)
         tvContent = rootView.findViewById(R.id.transaction_manager_textview_content)
         tvParcels = rootView.findViewById(R.id.transaction_manager_textview_parcels)
+        tvAlreadyPaid = rootView.findViewById(R.id.transaction_manager_textview_already_paid)
 
         llPaymentDate = rootView.findViewById(R.id.transaction_manager_action_payment_date)
         llPurchaseDate = rootView.findViewById(R.id.transaction_manager_action_purchase_date)
@@ -72,22 +75,24 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         llPaymentType = rootView.findViewById(R.id.transaction_manager_action_payment_type)
         llContent = rootView.findViewById(R.id.transaction_manager_action_content)
         llParcels = rootView.findViewById(R.id.transaction_manager_action_parcels)
+        llAlreadyPaid = rootView.findViewById(R.id.transaction_manager_action_already_paid)
 
-        llPaymentDate.setOnClickListener { actionPaymentDate() }
-        llPurchaseDate.setOnClickListener { actionPurchaseDate() }
-        llPrice.setOnClickListener { actionPrice() }
-        llRefund.setOnClickListener { actionRefund() }
+        llPaymentDate.setOnClickListener { presenter.onPaymentDateClick(tvPaymentDate.text.toString()) }
+        llPurchaseDate.setOnClickListener { presenter.onPurchaseDateClick(tvPurchaseDate.text.toString()) }
+        llPrice.setOnClickListener { presenter.onPriceClick(tvPrice.text.toString()) }
+        llRefund.setOnClickListener { presenter.onRefundClick(tvRefund.text.toString()) }
         llPaymentType.setOnClickListener { actionPaymentType() }
-        llContent.setOnClickListener { actionContent() }
-        llParcels.setOnClickListener { actionParcels() }
+        llContent.setOnClickListener { presenter.onContentClick(tvContent.text.toString()) }
+        llParcels.setOnClickListener { presenter.onParcelsClick(tvParcels.text.toString()) }
+        llAlreadyPaid.setOnClickListener { presenter.onAlreadyPaidClick(tvAlreadyPaid.text.toString()) }
 
-        llPaymentDate.setOnLongClickListener { clearPaymentDate() }
-        llPurchaseDate.setOnLongClickListener { clearPurchaseDate() }
-        llPrice.setOnLongClickListener { clearPrice() }
-        llRefund.setOnLongClickListener { clearRefund() }
-        llPaymentType.setOnLongClickListener { clearPaymentType() }
-        llContent.setOnLongClickListener { clearContent() }
-        llParcels.setOnLongClickListener { clearParcels() }
+        llPaymentDate.setOnLongClickListener { presenter.onPaymentDateLongClick() }
+        llPurchaseDate.setOnLongClickListener { presenter.onPurchaseDateLongClick() }
+        llPrice.setOnLongClickListener { presenter.onPriceLongClick() }
+        llRefund.setOnLongClickListener { presenter.onRefundLongClick() }
+        llPaymentType.setOnLongClickListener { presenter.onPaymentTypeLongClick() }
+        llContent.setOnLongClickListener { presenter.onContentLongClick() }
+        llParcels.setOnLongClickListener { presenter.onParcelsLongClick() }
 
         presenter = TransactionManagerPresenter(this)
         return rootView
@@ -99,37 +104,17 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         presenter.init(transaction)
     }
 
-    override fun configureModel(transaction: TransactionVO) {
-        setTitle(transaction.tag.name)
-        presenter.setTags(transaction.tag)
-        presenter.setContent(transaction.content)
-        presenter.setPaymentDate(transaction.paymentDate)
-        presenter.setPurchaseDate(transaction.purchaseDate)
-        presenter.setPaymentType(transaction.paymentType)
-        presenter.setPrice(transaction.price)
-        presenter.setRefund(transaction.refund)
-        presenter.setParcels(transaction.parcels)
+    /*
+     * MVP
+     */
+
+    override fun setToolbarTitle(titleString: String) {
+        setTitle(titleString)
     }
 
     /*
-    * ACTIONS
-    */
-
-    private fun actionPaymentDate() {
-        presenter.requestPaymentDateDialog(tvPaymentDate.text.toString())
-    }
-
-    private fun actionPurchaseDate() {
-        presenter.requestPurchaseDateDialog(tvPurchaseDate.text.toString())
-    }
-
-    private fun actionPrice() {
-        presenter.requestPriceDialog(tvPrice.text.toString())
-    }
-
-    private fun actionRefund() {
-        presenter.requestRefundDialog(tvRefund.text.toString())
-    }
+     * ACTIONS
+     */
 
     private fun actionPaymentType() {
         PaymentTypeListDialog.instance(object : PaymentTypeListContract.OnSelectedListener {
@@ -142,56 +127,6 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
 
             }
         }).show(fragmentManager, PaymentTypeListDialog::class.java.simpleName)
-    }
-
-    private fun actionContent() {
-        presenter.requestContentDialog(tvContent.text.toString())
-    }
-
-    private fun actionParcels() {
-        presenter.requestParcelsDialog(tvParcels.text.toString())
-    }
-
-    private fun clearPaymentDate(): Boolean {
-        presenter.clearPaymentDate()
-        tvPaymentDate.setText(R.string.system_empty_field)
-        return true
-    }
-
-    private fun clearPurchaseDate(): Boolean {
-        presenter.clearPurchaseDate()
-        tvPurchaseDate.setText(R.string.system_empty_field)
-        return true
-    }
-
-    private fun clearPrice(): Boolean {
-        presenter.clearPrice()
-        tvPrice.setText(R.string.system_empty_field)
-        return true
-    }
-
-    private fun clearRefund(): Boolean {
-        presenter.clearRefund()
-        tvRefund.setText(R.string.system_empty_field)
-        return true
-    }
-
-    private fun clearPaymentType(): Boolean {
-        presenter.clearPaymentType()
-        tvPaymentType.setText(R.string.system_empty_field)
-        return true
-    }
-
-    private fun clearContent(): Boolean {
-        presenter.clearContent()
-        tvContent.setText(R.string.system_empty_field)
-        return true
-    }
-
-    private fun clearParcels(): Boolean {
-        presenter.clearParcels()
-        tvParcels.setText(R.string.system_empty_field)
-        return true
     }
 
     override fun setPaymentDate(value: String) {
@@ -224,6 +159,10 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
 
     override fun setParcels(value: String) {
         tvParcels.text = value
+    }
+
+    override fun setAlreadyPaid(value: String) {
+        tvAlreadyPaid.text = value
     }
 
     override fun showPriceDialog(value: Double?) {

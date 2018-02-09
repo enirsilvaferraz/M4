@@ -45,10 +45,14 @@ data class TransactionModel(
 
         @Expose
         @SerializedName("parcels")
-        var parcels: String?
+        var parcels: String?,
+
+        @Expose
+        @SerializedName("alreadyPaid")
+        var alreadyPaid: Boolean
 
 ) : Parcelable {
-    constructor() : this(null, null, null, 0.0, null, null, null, null, null) {
+    constructor() : this(null, null, null, 0.0, null, null, null, null, null, true) {
         // Nothing to do
     }
 
@@ -61,7 +65,8 @@ data class TransactionModel(
             source.readString(),
             source.readString(),
             source.readString(),
-            source.readString()
+            source.readString(),
+            1 == source.readInt()
     )
 
     override fun describeContents() = 0
@@ -76,6 +81,7 @@ data class TransactionModel(
         writeString(paymentType)
         writeString(content)
         writeString(parcels)
+        writeInt((if (alreadyPaid) 1 else 0))
     }
 
     companion object {
