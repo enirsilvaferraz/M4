@@ -151,55 +151,13 @@ class TransactionBusiness {
             vo.purchaseDate = if (dto.purchaseDate != null) JavaUtils.DateUtil.parse(dto.purchaseDate, JavaUtils.DateUtil.YYYY_MM_DD) else null
             vo.content = dto.content
             vo.price = dto.price
-            vo.refund = dto.refund
+            vo.refund = if (dto.refund != null) dto.refund else 0.0
             vo.isApproved = true
             vo.parcels = dto.parcels
 
             // Usado para saber onde é o path, não é armazenado no Firebase
             vo.paymentDateOrigin = vo.paymentDate
             return vo
-        }
-
-        fun fromFixedTransaction(dto: TransactionModel, year: Int, month: Int): TransactionVO {
-
-            val vo = TransactionVO()
-            vo.key = dto.key
-            vo.tag = TagVO()
-            vo.tag.key = dto.tag
-            vo.paymentType = PaymentTypeVO()
-            vo.paymentType.key = dto.paymentType
-
-            val calPaymentDate = Calendar.getInstance()
-            calPaymentDate.time = JavaUtils.DateUtil.parse(dto.paymentDate, JavaUtils.DateUtil.YYYY_MM_DD)
-            calPaymentDate.set(Calendar.YEAR, year)
-            calPaymentDate.set(Calendar.MONTH, month)
-            vo.paymentDate = calPaymentDate.time
-
-            if (dto.purchaseDate != null) {
-                val calPurchaseDate = Calendar.getInstance()
-                calPurchaseDate.time = JavaUtils.DateUtil.parse(dto.purchaseDate, JavaUtils.DateUtil.YYYY_MM_DD)
-                calPurchaseDate.set(Calendar.YEAR, year)
-                calPurchaseDate.set(Calendar.MONTH, month)
-                vo.purchaseDate = calPurchaseDate.time
-            }
-
-            vo.content = dto.content
-            vo.price = dto.price
-            vo.refund = dto.refund
-
-            vo.isApproved = false
-
-            // Usado para saber onde é o path, não é armazenado no Firebase
-            vo.paymentDateOrigin = vo.paymentDate
-            return vo
-        }
-
-        fun fromFixedTransaction(list: List<TransactionModel>, year: Int, month: Int): ArrayList<TransactionVO> {
-            val listVO = ArrayList<TransactionVO>()
-            for (model in list) {
-                listVO.add(fromFixedTransaction(model, year, month))
-            }
-            return listVO
         }
 
         fun fromTransaction(list: List<TransactionModel>): ArrayList<TransactionVO> {

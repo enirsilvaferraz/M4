@@ -154,7 +154,7 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
             mView.showError(R.string.system_error_required_field, R.string.transaction_payment_date)
         } else if (mVO.price == null) {
             mView.showError(R.string.system_error_required_field, R.string.transaction_price)
-        } else if (mVO.parcels.isNotEmpty() && !mVO.parcels.contains(Regex(REGEX))) {
+        } else if (mVO.parcels != null && mVO.parcels.isNotEmpty() && !mVO.parcels.contains(Regex(REGEX))) {
             mView.showError(R.string.system_error_not_allowed_field, R.string.transaction_parcels)
         } else {
 

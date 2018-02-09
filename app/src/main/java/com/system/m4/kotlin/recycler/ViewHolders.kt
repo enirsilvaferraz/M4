@@ -155,7 +155,9 @@ class ViewHolderTransaction private constructor(itemView: View) : CustomViewHold
         val date = if (vo.isOnGroup) vo.purchaseDate else vo.paymentDate
         tvPaymentDate.text = JavaUtils.DateUtil.format(date, JavaUtils.DateUtil.DD)
 
-        tvContext.text = if (JavaUtils.StringUtil.isEmpty(vo.content)) vo.tag.parentName else vo.content
+        var content = if (JavaUtils.StringUtil.isEmpty(vo.content)) vo.tag.parentName else vo.content
+        content += if (!vo.parcels.isNullOrBlank()) " (${vo.parcels})" else ""
+        tvContext.text = content
 
         val empty = TextUtils.isEmpty(vo.paymentType.color)
         tvPaymentDate.setTextColor(if (!empty) Color.parseColor(vo.paymentType.color) else

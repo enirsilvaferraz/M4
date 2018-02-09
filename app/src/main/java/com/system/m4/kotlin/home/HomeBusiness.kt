@@ -135,7 +135,9 @@ class HomeBusiness {
             splitTransactionGrouped(group, transactions20)
 
             transactions20.sortWith(compareBy({ it.paymentDate }, { it.tag.parentName }, { it.tag.name }))
-            return TransactionListVO(transactions20, transactions20.sumByDouble { it.price }.roundTo2Decimal(), transactions20.sumByDouble { it.refund }.roundTo2Decimal())
+            return TransactionListVO(transactions20,
+                    transactions20.sumByDouble { it.price }.roundTo2Decimal(),
+                    transactions20.sumByDouble { it.refund }.roundTo2Decimal())
 
         } else {
             return TransactionListVO(mutableListOf(), 0.0, 0.0)
