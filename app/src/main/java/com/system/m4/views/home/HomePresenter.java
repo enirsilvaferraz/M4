@@ -11,7 +11,6 @@ import com.system.m4.kotlin.transaction.TransactionModel;
 import com.system.m4.views.vos.AmountVO;
 import com.system.m4.views.vos.HomeVO;
 import com.system.m4.views.vos.PaymentTypeVO;
-import com.system.m4.views.vos.RedirectButtomVO;
 import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.SubTitleVO;
 import com.system.m4.views.vos.SummaryVO;
@@ -39,7 +38,7 @@ public class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public void init(int relativePosition, int homeVisibility) {
+    public void init(int relativePosition) {
         date = Calendar.getInstance();
         date.add(Calendar.MONTH, relativePosition);
         requestListTransaction();
@@ -152,8 +151,6 @@ public class HomePresenter implements HomeContract.Presenter {
             selectItem(((TransactionVO) vo));
         } else if (vo instanceof TagSummaryVO) {
             requestShowListTransaction(((TagSummaryVO) vo));
-        } else if (vo instanceof RedirectButtomVO) {
-            mView.openDetail(((RedirectButtomVO) vo));
         }
     }
 

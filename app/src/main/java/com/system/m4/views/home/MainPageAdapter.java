@@ -25,7 +25,6 @@ class MainPageAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Bundle args = new Bundle();
         args.putInt(HomeFragment.RELATIVE_POSITION, position - PAGE_MIDDLE);
-        args.putInt(HomeFragment.ITEM_VIEW, HomeVisibility.ALL);
 
         HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);

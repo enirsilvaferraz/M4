@@ -1,7 +1,6 @@
 package com.system.m4.views.home;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,9 +19,7 @@ import android.widget.Toast;
 import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.kotlin.home.HomeAdapter;
-import com.system.m4.kotlin.home.HomeDetailActivity;
 import com.system.m4.kotlin.transaction.TransactionListDialog;
-import com.system.m4.views.vos.RedirectButtomVO;
 import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -38,7 +35,6 @@ import java.util.List;
 public class HomeFragment extends Fragment implements HomeContract.View {
 
     public static final String RELATIVE_POSITION = "RELATIVE_POSITION";
-    public static final String ITEM_VIEW = "ITEM_VIEW";
 
     private RecyclerView mRecyclerview;
 
@@ -57,22 +53,21 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRecyclerview = getView().findViewById(R.id.home_recyclerview);
+        mRecyclerview = view.findViewById(R.id.home_recyclerview);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerview.setAdapter(new HomeAdapter(new HomeAdapter.Listener() {
-            @Override
-            public void onClickVO(@NotNull VOItemListInterface vo, @NotNull View view) {
-                presenter.onClickVO(vo);
-            }
+        mRecyclerview.setAdapter(new HomeAdapter(new HomeListener()));
 
-            @Override
-            public boolean onLongClickVO(@NotNull VOItemListInterface vo, @NotNull View view) {
-                return presenter.onLongClickVO(vo, view);
-            }
-        }));
+        this.presenter.init(getArguments().getInt(RELATIVE_POSITION));
+    }
 
-        this.presenter.init(getArguments().getInt(RELATIVE_POSITION), getArguments().getInt(ITEM_VIEW));
+    public void requestListTransaction() {
+        presenter.requestListTransaction();
+    }
+
+    @Override
+    public void setPresenter(HomeContract.Presenter presenter) {
+        this.presenter = presenter;
     }
 
     @Override
@@ -80,31 +75,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         HomeAdapter adapter = (HomeAdapter) mRecyclerview.getAdapter();
         adapter.clearList();
         adapter.addCurrentList(listVo);
-    }
-
-    @Override
-    public void openDeleteDialog(final TransactionVO item) {
-        JavaUtils.AndroidUtil.showAlertDialog(getContext(), R.string.system_message_request_delete,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        presenter.onConfirmDeleteClicked(item);
-                    }
-                });
-    }
-
-    @Override
-    public void requestShowListTransaction(TagSummaryVO item) {
-        TransactionListDialog dialogFragment = TransactionListDialog.Companion.instance(new ArrayList<>(item.getTransactions()));
-        dialogFragment.show(getFragmentManager(), TransactionListDialog.class.getSimpleName());
-    }
-
-    @Override
-    public void openDetail(RedirectButtomVO vo) {
-        Intent intent = new Intent(getContext(), HomeDetailActivity.class);
-        intent.putExtra(HomeFragment.ITEM_VIEW, vo.getHomeVisibility());
-        intent.putExtra(HomeFragment.RELATIVE_POSITION, vo.getRelativePosition());
-        startActivity(intent);
     }
 
     @Override
@@ -123,13 +93,21 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    public HomeContract.Presenter getPresenter() {
-        return presenter;
+    @Override
+    public void openDeleteDialog(final TransactionVO item) {
+        JavaUtils.AndroidUtil.showAlertDialog(getContext(), R.string.system_message_request_delete,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        presenter.onConfirmDeleteClicked(item);
+                    }
+                });
     }
 
     @Override
-    public void setPresenter(HomeContract.Presenter presenter) {
-        this.presenter = presenter;
+    public void requestShowListTransaction(TagSummaryVO item) {
+        TransactionListDialog dialogFragment = TransactionListDialog.Companion.instance(new ArrayList<>(item.getTransactions()));
+        dialogFragment.show(getFragmentManager(), TransactionListDialog.class.getSimpleName());
     }
 
     @Override
@@ -160,5 +138,18 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         MenuPopupHelper menuHelper = new MenuPopupHelper(getContext(), (MenuBuilder) popupMenu.getMenu(), viewClicked);
         menuHelper.setForceShowIcon(true);
         menuHelper.show();
+    }
+
+    private class HomeListener implements HomeAdapter.Listener {
+
+        @Override
+        public void onClickVO(@NotNull VOItemListInterface vo, @NotNull View view) {
+            presenter.onClickVO(vo);
+        }
+
+        @Override
+        public boolean onLongClickVO(@NotNull VOItemListInterface vo, @NotNull View view) {
+            return presenter.onLongClickVO(vo, view);
+        }
     }
 }
