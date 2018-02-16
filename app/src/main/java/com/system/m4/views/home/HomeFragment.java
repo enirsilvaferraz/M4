@@ -27,12 +27,10 @@ import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -42,10 +40,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     public static final String RELATIVE_POSITION = "RELATIVE_POSITION";
     public static final String ITEM_VIEW = "ITEM_VIEW";
 
-    @BindView(R.id.home_recyclerview)
-    RecyclerView mRecyclerview;
-
-    Unbinder unbinder;
+    private RecyclerView mRecyclerview;
 
     private HomeContract.Presenter presenter;
 
@@ -55,31 +50,29 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mRecyclerview = getView().findViewById(R.id.home_recyclerview);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerview.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerview.setAdapter(new HomeAdapter(presenter));
+        mRecyclerview.setAdapter(new HomeAdapter(new HomeAdapter.Listener() {
+            @Override
+            public void onClickVO(@NotNull VOItemListInterface vo, @NotNull View view) {
+                presenter.onClickVO(vo);
+            }
+
+            @Override
+            public boolean onLongClickVO(@NotNull VOItemListInterface vo, @NotNull View view) {
+                return presenter.onLongClickVO(vo, view);
+            }
+        }));
 
         this.presenter.init(getArguments().getInt(RELATIVE_POSITION), getArguments().getInt(ITEM_VIEW));
-        requestListTransaction();
-    }
-
-    public void requestListTransaction() {
-        this.presenter.requestListTransaction();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override
@@ -90,12 +83,12 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void requestDelete(final TransactionVO item) {
+    public void openDeleteDialog(final TransactionVO item) {
         JavaUtils.AndroidUtil.showAlertDialog(getContext(), R.string.system_message_request_delete,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        presenter.delete(item);
+                        presenter.onConfirmDeleteClicked(item);
                     }
                 });
     }

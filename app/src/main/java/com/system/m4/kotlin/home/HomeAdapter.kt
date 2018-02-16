@@ -4,14 +4,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.system.m4.kotlin.recycler.*
-import com.system.m4.views.home.HomeContract
 import com.system.m4.views.vos.*
 import java.util.*
 
 /**
  *
  */
-class HomeAdapter internal constructor(private val presenter: HomeContract.Presenter) : RecyclerView.Adapter<CustomViewHolder<VOItemListInterface>>() {
+class HomeAdapter internal constructor(private val listener: Listener) : RecyclerView.Adapter<CustomViewHolder<VOItemListInterface>>() {
 
     private val list: MutableList<VOItemListInterface> = ArrayList()
 
@@ -54,8 +53,8 @@ class HomeAdapter internal constructor(private val presenter: HomeContract.Prese
 
     override fun onBindViewHolder(holder: CustomViewHolder<VOItemListInterface>, position: Int) {
         val vo = list[position]
-        holder.onClickListener = View.OnClickListener { presenter.onClickVO(vo) }
-        holder.onLongClickListener = View.OnLongClickListener { view -> presenter.onLongClickVO(vo, view) }
+        holder.onClickListener = View.OnClickListener { view -> listener.onClickVO(vo, view) }
+        holder.onLongClickListener = View.OnLongClickListener { view -> listener.onLongClickVO(vo, view) }
         holder.bind(vo)
     }
 
@@ -71,5 +70,10 @@ class HomeAdapter internal constructor(private val presenter: HomeContract.Prese
     fun clearList() {
         this.list.clear()
         notifyDataSetChanged()
+    }
+
+    interface Listener {
+        fun onClickVO(vo: VOItemListInterface, view: View)
+        fun onLongClickVO(vo: VOItemListInterface, view: View): Boolean
     }
 }

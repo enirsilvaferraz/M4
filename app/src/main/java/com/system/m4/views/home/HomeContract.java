@@ -32,7 +32,7 @@ public class HomeContract {
 
         void showSuccessMessage(int template, int param);
 
-        void requestDelete(TransactionVO item);
+        void openDeleteDialog(TransactionVO item);
 
         void requestShowListTransaction(TagSummaryVO item);
 
@@ -58,7 +58,7 @@ public class HomeContract {
 
         void requestDelete(@NonNull TransactionVO item);
 
-        void delete(TransactionVO item);
+        void onConfirmDeleteClicked(TransactionVO item);
 
         void requestShowListTransaction(@NonNull TagSummaryVO item);
 

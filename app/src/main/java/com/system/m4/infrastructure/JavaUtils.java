@@ -179,7 +179,7 @@ public final class JavaUtils {
 
         public static void enableOffline(String flavor) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            FirebaseDatabase.getInstance().getReference(flavor).keepSynced(true);
+            //FirebaseDatabase.getInstance().getReference(flavor).keepSynced(true);
         }
     }
 }

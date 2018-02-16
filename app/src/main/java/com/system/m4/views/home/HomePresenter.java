@@ -42,6 +42,7 @@ public class HomePresenter implements HomeContract.Presenter {
     public void init(int relativePosition, int homeVisibility) {
         date = Calendar.getInstance();
         date.add(Calendar.MONTH, relativePosition);
+        requestListTransaction();
     }
 
     @Override
@@ -115,7 +116,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void requestDelete(@NonNull TransactionVO item) {
-        mView.requestDelete(item);
+        mView.openDeleteDialog(item);
     }
 
     @Override
@@ -125,7 +126,7 @@ public class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public void delete(TransactionVO item) {
+    public void onConfirmDeleteClicked(TransactionVO item) {
         TransactionBusiness.Companion.delete(item, new PersistenceListener<TransactionModel>() {
             @Override
             public void onSuccess(TransactionModel transactionVO) {
