@@ -77,14 +77,14 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         llParcels = rootView.findViewById(R.id.transaction_manager_action_parcels)
         llAlreadyPaid = rootView.findViewById(R.id.transaction_manager_action_already_paid)
 
-        llPaymentDate.setOnClickListener { presenter.onPaymentDateClick(tvPaymentDate.text.toString()) }
-        llPurchaseDate.setOnClickListener { presenter.onPurchaseDateClick(tvPurchaseDate.text.toString()) }
-        llPrice.setOnClickListener { presenter.onPriceClick(tvPrice.text.toString()) }
-        llRefund.setOnClickListener { presenter.onRefundClick(tvRefund.text.toString()) }
-        llPaymentType.setOnClickListener { actionPaymentType() }
-        llContent.setOnClickListener { presenter.onContentClick(tvContent.text.toString()) }
-        llParcels.setOnClickListener { presenter.onParcelsClick(tvParcels.text.toString()) }
-        llAlreadyPaid.setOnClickListener { presenter.onAlreadyPaidClick(tvAlreadyPaid.text.toString()) }
+        llPaymentDate.setOnClickListener { presenter.onPaymentDateClick() }
+        llPurchaseDate.setOnClickListener { presenter.onPurchaseDateClick() }
+        llPrice.setOnClickListener { presenter.onPriceClick() }
+        llRefund.setOnClickListener { presenter.onRefundClick() }
+        llPaymentType.setOnClickListener { presenter.onPaymentTypeClick() }
+        llContent.setOnClickListener { presenter.onContentClick() }
+        llParcels.setOnClickListener { presenter.onParcelsClick() }
+        llAlreadyPaid.setOnClickListener { presenter.onAlreadyPaidClick() }
 
         llPaymentDate.setOnLongClickListener { presenter.onPaymentDateLongClick() }
         llPurchaseDate.setOnLongClickListener { presenter.onPurchaseDateLongClick() }
@@ -110,23 +110,6 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
 
     override fun setToolbarTitle(titleString: String) {
         setTitle(titleString)
-    }
-
-    /*
-     * ACTIONS
-     */
-
-    private fun actionPaymentType() {
-        PaymentTypeListDialog.instance(object : PaymentTypeListContract.OnSelectedListener {
-            override fun onSelect(model: PaymentTypeModel) {
-                val vo = PaymentTypeVO()
-                vo.key = model.key
-                vo.name = model.name
-                vo.color = model.color
-                presenter.setPaymentType(vo)
-
-            }
-        }).show(fragmentManager, PaymentTypeListDialog::class.java.simpleName)
     }
 
     override fun setPaymentDate(value: String) {
@@ -163,6 +146,14 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
 
     override fun setAlreadyPaid(value: String) {
         tvAlreadyPaid.text = value
+    }
+
+    override fun showPaymentTypeDialog() {
+        PaymentTypeListDialog.instance(object : PaymentTypeListContract.OnSelectedListener {
+            override fun onSelect(model: PaymentTypeModel) {
+                presenter.setPaymentType(PaymentTypeVO(model.key, model.name, model.color))
+            }
+        }).show(fragmentManager, PaymentTypeListDialog::class.java.simpleName)
     }
 
     override fun showPriceDialog(value: Double?) {
@@ -222,10 +213,7 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
     override fun onTitleClick() {
         TagListDialog.instance(object : TagListContract.OnSelectedListener {
             override fun onSelect(model: TagModel) {
-                val vo = TagVO()
-                vo.key = model.key
-                vo.name = model.name
-                presenter.setTags(vo)
+                presenter.setTags(TagVO(model.key, null, model.name))
             }
         }).show(fragmentManager, TagListDialog::class.java.simpleName)
     }

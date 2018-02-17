@@ -10,13 +10,12 @@ import java.util.List;
 
 public class HomeVO {
 
+    private List<SummaryVO> summaries;
     private TransactionListVO transactions1Q;
     private TransactionListVO transactions2Q;
     private List<TagSummaryVO> tagSummary;
     private List<TransactionVO> pendingTransaction;
     private HashMap<PaymentTypeVO, TransactionListVO> groups;
-    private double amount;
-    private double refound;
 
     public TransactionListVO getTransactions1Q() {
         return transactions1Q;
@@ -58,20 +57,12 @@ public class HomeVO {
         this.groups = groups;
     }
 
-    public double getAmount() {
-        return amount;
+    public List<SummaryVO> getSummaries() {
+        return summaries;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public double getRefound() {
-        return refound;
-    }
-
-    public void setRefound(double refound) {
-        this.refound = refound;
+    public void setSummaries(List<SummaryVO> summaries) {
+        this.summaries = summaries;
     }
 }
 

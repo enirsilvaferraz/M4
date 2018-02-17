@@ -41,39 +41,33 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
     /**
      * LIFECYCLE
      */
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.dialog_tag_list, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.dialog_tag_list, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mToolbar = view!!.findViewById<Toolbar>(R.id.dialog_toolbar)
+        mPresenter = TagListPresenter(this)
+
+        mToolbar = view.findViewById(R.id.dialog_toolbar)
         mToolbar.setOnMenuItemClickListener(this)
         mToolbar.inflateMenu(R.menu.menu_crud_list)
 
-        mRecyclerView = view.findViewById<RecyclerView>(R.id.dialog_list_recycler)
+        mRecyclerView = view.findViewById(R.id.dialog_list_recycler)
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
-        mRecyclerView.adapter = TagAdapter(object : TagListContract.OnAdapterClickListener {
+        mRecyclerView.adapter = TagAdapter(mPresenter)
 
-            override fun onSelect(model: TagModel) {
-                mPresenter.select(model)
-            }
+        mProgress = view.findViewById(R.id.dialog_progress)
 
-            override fun onEdit(model: TagModel) {
-                mPresenter.edit(model)
-            }
-
-            override fun onDelete(model: TagModel) {
-                mPresenter.delete(model)
-            }
-        })
-
-        mProgress = view.findViewById<ProgressBar>(R.id.dialog_progress)
-
-        mPresenter = TagListPresenter(this)
-        mPresenter.load()
+        mPresenter.init()
     }
+
+//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+//        val dialog = super.onCreateDialog(savedInstanceState)
+//        dialog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
+//        return dialog
+//    }
 
     /**
      * LISTENERS
@@ -88,7 +82,7 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
     /**
      * MVP
      */
-    override fun load(list: ArrayList<TagModel>) {
+    override fun loadTags(list: ArrayList<TagModel>) {
         (mRecyclerView.adapter as TagAdapter).updateList(list)
     }
 

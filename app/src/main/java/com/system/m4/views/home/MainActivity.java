@@ -15,7 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -61,8 +60,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Window w = getWindow(); // in Activity's onCreate() for instance
-        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         setSupportActionBar(toolbar);
 
@@ -152,10 +150,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         TagListDialog.Companion.instance(new TagListContract.OnSelectedListener() {
             @Override
             public void onSelect(@NotNull TagModel model) {
-                TagVO vo = new TagVO();
-                vo.setKey(model.getKey());
-                vo.setName(model.getName());
-                presenter.requestTransactionDialog(vo);
+                presenter.requestTransactionDialog(new TagVO(model.getKey(), null, model.getName()));
             }
         }).show(getSupportFragmentManager(), TagListDialog.class.getSimpleName());
     }

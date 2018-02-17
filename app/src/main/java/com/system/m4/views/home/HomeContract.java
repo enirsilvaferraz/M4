@@ -33,7 +33,7 @@ public class HomeContract {
 
         void openDeleteDialog(TransactionVO item);
 
-        void requestShowListTransaction(TagSummaryVO item);
+        void showListTransaction(TagSummaryVO item);
 
         Context getContext();
 

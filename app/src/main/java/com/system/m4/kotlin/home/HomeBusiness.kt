@@ -69,11 +69,24 @@ class HomeBusiness {
             homeVO.transactions2Q = splitTransactionsByDate20(homeDTO.listTransaction!!, false, group)
             homeVO.pendingTransaction = splitPendingTransactions(homeDTO.listTransaction!!)
             homeVO.groups = splitGroupTransaction(group, homeDTO.listTransaction!!)
-            homeVO.amount = homeVO.transactions1Q.amount + homeVO.transactions2Q.amount
-            homeVO.refound = homeVO.transactions1Q.refound + homeVO.transactions2Q.refound
+            homeVO.summaries = splitSummaries(homeVO.transactions1Q, homeVO.transactions2Q)
 
             listener.onSuccess(homeVO)
         }
+    }
+
+    private fun splitSummaries(transactions1Q: TransactionListVO, transactions2Q: TransactionListVO): MutableList<SummaryVO>? {
+
+        val items = arrayListOf<SummaryVO>()
+
+        val amount = transactions1Q.amount + transactions2Q.amount
+        val refound = transactions1Q.refound + transactions2Q.refound
+
+        items.add(SummaryVO("Total Gasto", amount))
+        items.add(SummaryVO("Total Retornado", refound))
+        items.add(SummaryVO("Total Real", amount - refound))
+
+        return items
     }
 
     abstract class ErrorListener<T>(val listener: SingleResultListener<HomeVO>) : MultResultListener<T> {

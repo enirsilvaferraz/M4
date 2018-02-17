@@ -6,7 +6,6 @@ package com.system.m4.kotlin.transaction
 
 import android.text.TextUtils
 import com.system.m4.R
-import com.system.m4.infrastructure.Constants
 import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
 import com.system.m4.views.vos.PaymentTypeVO
@@ -52,48 +51,36 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
      * ON CLICK EVENTS
      */
 
-    override fun onPurchaseDateClick(text: String) {
-
-        val date = if (text.isEmpty() || text == Constants.EMPTY_FIELD) {
-            Calendar.getInstance().time
-        } else {
-            JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)
-        }
-
-        mView.showPurchaseDateDialog(date)
+    override fun onPaymentTypeClick() {
+        mView.showPaymentTypeDialog()
     }
 
-    override fun onPaymentDateClick(text: String) {
-
-        val date = if (text.isEmpty() || text == Constants.EMPTY_FIELD) {
-            Calendar.getInstance().time
-        } else {
-            JavaUtils.DateUtil.parse(text, JavaUtils.DateUtil.DD_DE_MMMM_DE_YYYY)
-        }
-
-        mView.showPaymentDateDialog(date)
+    override fun onPurchaseDateClick() {
+        mView.showPurchaseDateDialog(mVO.purchaseDate)
     }
 
-    override fun onPriceClick(text: String) {
-        val value = if (text.isEmpty() || text == Constants.EMPTY_FIELD) null else JavaUtils.NumberUtil.removeFormat(text)
-        mView.showPriceDialog(value)
+    override fun onPaymentDateClick() {
+        mView.showPaymentDateDialog(mVO.paymentDate)
     }
 
-    override fun onRefundClick(text: String) {
-        val value = if (text.isEmpty() || text == Constants.EMPTY_FIELD) null else JavaUtils.NumberUtil.removeFormat(text)
-        mView.showRefundDialog(value)
+    override fun onPriceClick() {
+        mView.showPriceDialog(mVO.price)
     }
 
-    override fun onContentClick(text: String) {
-        mView.showContentDialog(if (text == Constants.EMPTY_FIELD) null else text)
+    override fun onRefundClick() {
+        mView.showRefundDialog(mVO.refund)
     }
 
-    override fun onParcelsClick(text: String) {
-        mView.showParcelsDialog(if (text == Constants.EMPTY_FIELD) null else text)
+    override fun onContentClick() {
+        mView.showContentDialog(mVO.content)
     }
 
-    override fun onAlreadyPaidClick(value: String) {
-        mVO.alreadyPaid = !value.equals("YES")
+    override fun onParcelsClick() {
+        mView.showParcelsDialog(mVO.parcels)
+    }
+
+    override fun onAlreadyPaidClick() {
+        mVO.alreadyPaid = !mVO.alreadyPaid
         mView.setAlreadyPaid(if (mVO.alreadyPaid) "YES" else "NO")
     }
 
@@ -178,11 +165,6 @@ class TransactionManagerPresenter(private val mView: TransactionManagerContract.
     override fun setParcels(parcels: String?) {
         mVO.parcels = parcels
         mView.setParcels(getValueOrEmpty(parcels))
-    }
-
-    override fun setAlreadyPaid(alreadyPaid: Boolean) {
-        mVO.alreadyPaid = alreadyPaid
-        mView.setAlreadyPaid(if (mVO.alreadyPaid) "YES" else "NO")
     }
 
     override fun save() {

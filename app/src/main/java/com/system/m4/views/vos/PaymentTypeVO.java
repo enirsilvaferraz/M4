@@ -26,6 +26,12 @@ public class PaymentTypeVO implements VOInterface<PaymentTypeVO> {
     private String name;
     private String color;
 
+    public PaymentTypeVO(String key, String name, String color) {
+        this.key = key;
+        this.name = name;
+        this.color = color;
+    }
+
     public PaymentTypeVO() {
     }
 

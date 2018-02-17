@@ -56,7 +56,7 @@ public class M4LineChart extends LineChart {
         // add empty data
         setData(data);
 
-        // load the legend (only possible after setting data)
+        // loadTags the legend (only possible after setting data)
         Legend l = getLegend();
         l.setEnabled(false);
 

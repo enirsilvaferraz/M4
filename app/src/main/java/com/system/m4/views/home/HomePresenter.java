@@ -13,7 +13,6 @@ import com.system.m4.views.vos.HomeVO;
 import com.system.m4.views.vos.PaymentTypeVO;
 import com.system.m4.views.vos.SpaceVO;
 import com.system.m4.views.vos.SubTitleVO;
-import com.system.m4.views.vos.SummaryVO;
 import com.system.m4.views.vos.TagSummaryVO;
 import com.system.m4.views.vos.TransactionVO;
 import com.system.m4.views.vos.VOItemListInterface;
@@ -33,7 +32,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
     private Calendar date;
 
-    public HomePresenter(HomeContract.View view) {
+    HomePresenter(HomeContract.View view) {
         this.mView = view;
     }
 
@@ -66,11 +65,11 @@ public class HomePresenter implements HomeContract.Presenter {
 
         List<VOItemListInterface> listVO = new ArrayList<>();
 
-        listVO.add(new SubTitleVO("Resumo"));
-        listVO.add(new SummaryVO("Total Gasto", item.getAmount()));
-        listVO.add(new SummaryVO("Total Retornado", item.getRefound()));
-        listVO.add(new SummaryVO("Total Real", item.getAmount() - item.getRefound()));
-        listVO.add(new SpaceVO());
+        if (!item.getSummaries().isEmpty()) {
+            listVO.add(new SubTitleVO("Resumo"));
+            listVO.addAll(item.getSummaries());
+            listVO.add(new SpaceVO());
+        }
 
         if (!item.getPendingTransaction().isEmpty()) {
             listVO.add(new SubTitleVO("Transações Pendentes"));
@@ -141,7 +140,7 @@ public class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void requestShowListTransaction(@NonNull TagSummaryVO item) {
-        mView.requestShowListTransaction(item);
+        mView.showListTransaction(item);
     }
 
     @Override

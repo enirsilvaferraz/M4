@@ -4,23 +4,21 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.system.m4.R
+import com.system.m4.kotlin.home.HomeAdapter
 import com.system.m4.kotlin.infrastructure.BaseDialogFragment
 import com.system.m4.views.vos.TransactionVO
 import com.system.m4.views.vos.VOInterface
+import com.system.m4.views.vos.VOItemListInterface
 
 /**
  * Created by enirs on 11/10/2017.
  * Dialog for transaction
  */
 class TransactionListDialog : DialogFragment() {
-
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mToolbar: Toolbar
 
     /**
      * STATIC
@@ -47,19 +45,31 @@ class TransactionListDialog : DialogFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mRecyclerView = view!!.findViewById<RecyclerView>(R.id.dialog_list_recycler)
-        mRecyclerView.layoutManager = LinearLayoutManager(view.context)
-        mRecyclerView.adapter = TransactionAdapter(arguments.getParcelableArrayList<TransactionVO>("LIST"), object : TransactionAdapter.OnClickListener {
+        val recyclerView = view!!.findViewById(R.id.dialog_list_recycler) as RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(view.context)
 
-            override fun onClick(vo: TransactionVO) {
-                val dialogFragment = TransactionManagerDialog.newInstance(vo)
-                dialogFragment.dialogListener = object : BaseDialogFragment.DialogListener {
-                    override fun onFinish(vo: VOInterface<*>) {
-                        mRecyclerView.adapter.notifyDataSetChanged()
-                    }
-                }
-                dialogFragment.show(fragmentManager, TransactionManagerDialog::class.java.simpleName)
-            }
+        recyclerView.adapter = HomeAdapter(object : HomeAdapter.Listener {
+            override fun onClickVO(vo: VOItemListInterface, view: View) = showTransactionManager(vo, recyclerView)
+            override fun onLongClickVO(vo: VOItemListInterface, view: View): Boolean = false
         })
+
+        (recyclerView.adapter as HomeAdapter).addCurrentList(arguments.getParcelableArrayList<TransactionVO>("LIST"))
+    }
+
+    /**
+     * LISTENERS
+     */
+    private fun showTransactionManager(vo: VOItemListInterface, recyclerView: RecyclerView) {
+
+        if (vo is TransactionVO) {
+
+            val dialogFragment = TransactionManagerDialog.newInstance(vo)
+            dialogFragment.dialogListener = object : BaseDialogFragment.DialogListener {
+                override fun onFinish(vo: VOInterface<*>) {
+                    recyclerView.adapter.notifyDataSetChanged()
+                }
+            }
+            dialogFragment.show(fragmentManager, TransactionManagerDialog::class.java.simpleName)
+        }
     }
 }

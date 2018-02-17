@@ -9,7 +9,7 @@ import java.util.*
 interface TagListContract {
 
     interface View {
-        fun load(list: ArrayList<TagModel>)
+        fun loadTags(list: ArrayList<TagModel>)
         fun select(model: TagModel)
         fun remove(model: TagModel)
         fun openManager(model: TagModel?)
@@ -18,12 +18,9 @@ interface TagListContract {
         fun showError(error: String)
     }
 
-    interface Presenter {
-        fun load()
+    interface Presenter : TagListContract.OnAdapterClickListener {
+        fun init()
         fun create()
-        fun select(model: TagModel)
-        fun edit(model: TagModel)
-        fun delete(model: TagModel)
         fun addList()
     }
 

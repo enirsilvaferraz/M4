@@ -9,13 +9,13 @@ import java.util.*
  * Presenter
  */
 class TagListPresenter(private val view: TagListContract.View) : TagListContract.Presenter {
-    override fun load() {
+    override fun init() {
 
         view.showLoading()
         TagBusiness.findAll(object : MultResultListener<TagModel> {
 
             override fun onSuccess(list: ArrayList<TagModel>) {
-                view.load(list)
+                view.loadTags(list)
                 view.stopLoading()
             }
 
@@ -26,7 +26,7 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
         })
     }
 
-    override fun select(model: TagModel) {
+    override fun onSelect(model: TagModel) {
         view.select(model)
     }
 
@@ -34,11 +34,11 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
         view.openManager(null)
     }
 
-    override fun edit(model: TagModel) {
+    override fun onEdit(model: TagModel) {
         view.openManager(model)
     }
 
-    override fun delete(model: TagModel) {
+    override fun onDelete(model: TagModel) {
 
         view.showLoading()
         TagBusiness.delete(model, object : PersistenceListener<TagModel> {
@@ -56,6 +56,6 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
     }
 
     override fun addList() {
-        load()
+        init()
     }
 }

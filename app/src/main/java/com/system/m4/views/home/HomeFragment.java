@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     }
 
     @Override
-    public void requestShowListTransaction(TagSummaryVO item) {
+    public void showListTransaction(TagSummaryVO item) {
         TransactionListDialog dialogFragment = TransactionListDialog.Companion.instance(new ArrayList<>(item.getTransactions()));
         dialogFragment.show(getFragmentManager(), TransactionListDialog.class.getSimpleName());
     }

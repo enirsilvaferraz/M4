@@ -27,6 +27,7 @@ interface TransactionManagerContract {
         fun setParcels(value: String)
         fun setAlreadyPaid(value: String)
 
+        fun showPaymentTypeDialog()
         fun showPriceDialog(value: Double?)
         fun showRefundDialog(value: Double?)
         fun showContentDialog(value: String?)
@@ -53,13 +54,14 @@ interface TransactionManagerContract {
          * ON CLICK EVENTS
          */
 
-        fun onPurchaseDateClick(text: String)
-        fun onPaymentDateClick(text: String)
-        fun onPriceClick(text: String)
-        fun onRefundClick(text: String)
-        fun onContentClick(text: String)
-        fun onParcelsClick(text: String)
-        fun onAlreadyPaidClick(value: String)
+        fun onPaymentTypeClick()
+        fun onPurchaseDateClick()
+        fun onPaymentDateClick()
+        fun onPriceClick()
+        fun onRefundClick()
+        fun onContentClick()
+        fun onParcelsClick()
+        fun onAlreadyPaidClick()
 
         /*
          * ON CLICK EVENTS
@@ -85,7 +87,6 @@ interface TransactionManagerContract {
         fun setRefund(value: Double?)
         fun setContent(content: String?)
         fun setParcels(parcels: String?)
-        fun setAlreadyPaid(alreadyPaid: Boolean)
 
         fun save()
     }
