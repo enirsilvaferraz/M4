@@ -114,7 +114,8 @@ class ViewHolderTagSummary private constructor(itemView: View) : CustomViewHolde
  */
 class ViewHolderAmount private constructor(itemView: View) : CustomViewHolder<AmountVO>(itemView) {
 
-    private val tvAmount: TextView = itemView.findViewById(R.id.item_amount_text)
+    private val tvLabel: TextView = itemView.findViewById(R.id.item_amount_label)
+    private val tvValue: TextView = itemView.findViewById(R.id.item_amount_value)
 
     private var vo: AmountVO? = null
 
@@ -122,7 +123,8 @@ class ViewHolderAmount private constructor(itemView: View) : CustomViewHolder<Am
 
     override fun bind(vo: AmountVO) {
         this.vo = vo
-        tvAmount.text = JavaUtils.NumberUtil.currencyFormat(vo.value)
+        tvLabel.text = vo.label
+        tvValue.text = JavaUtils.NumberUtil.currencyFormat(vo.value)
     }
 }
 

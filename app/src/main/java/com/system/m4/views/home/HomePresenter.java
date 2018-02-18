@@ -80,21 +80,23 @@ public class HomePresenter implements HomeContract.Presenter {
         if (!item.getTransactions1Q().getTransactions().isEmpty()) {
             listVO.add(new SubTitleVO("Transações da 1a quinzena"));
             listVO.addAll(item.getTransactions1Q().getTransactions());
-            listVO.add(new AmountVO(item.getTransactions1Q().getAmount()));
+            listVO.add(new AmountVO("Total", item.getTransactions1Q().getAmount()));
+            listVO.add(new AmountVO("Pagamentos futuros", item.getTransactions1Q().getValueNotPaid()));
             listVO.add(new SpaceVO());
         }
 
         if (!item.getTransactions2Q().getTransactions().isEmpty()) {
             listVO.add(new SubTitleVO("Transações da 2a quinzena"));
             listVO.addAll(item.getTransactions2Q().getTransactions());
-            listVO.add(new AmountVO(item.getTransactions2Q().getAmount()));
+            listVO.add(new AmountVO("Total", item.getTransactions2Q().getAmount()));
+            listVO.add(new AmountVO("Pagamentos futuros", item.getTransactions2Q().getValueNotPaid()));
             listVO.add(new SpaceVO());
         }
 
         for (PaymentTypeVO key : item.getGroups().keySet()) {
             listVO.add(new SubTitleVO(key.getName()));
             listVO.addAll(item.getGroups().get(key).getTransactions());
-            listVO.add(new AmountVO(item.getGroups().get(key).getAmount()));
+            listVO.add(new AmountVO("Total", item.getGroups().get(key).getAmount()));
             listVO.add(new SpaceVO());
         }
 

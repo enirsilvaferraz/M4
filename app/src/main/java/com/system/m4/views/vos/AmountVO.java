@@ -10,13 +10,19 @@ import java.util.Objects;
 public class AmountVO implements VOItemListInterface {
 
     private final Double value;
+    private final String label;
 
-    public AmountVO(Double value) {
+    public AmountVO(String label, Double value) {
         this.value = value;
+        this.label = label;
     }
 
     public Double getValue() {
         return value;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
     @Override
@@ -29,7 +35,6 @@ public class AmountVO implements VOItemListInterface {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(value);
     }
 }

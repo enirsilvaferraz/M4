@@ -121,8 +121,9 @@ class HomeBusiness {
 
                 items.sortWith(compareBy({ it.purchaseDate }))
 
-                val transactionListVO = TransactionListVO(items, items.sumByDouble { it.price }.roundTo2Decimal(), items.sumByDouble { it.refund }.roundTo2Decimal())
-                map.put(type, transactionListVO)
+                map.put(type, TransactionListVO(items,
+                        items.sumByDouble { it.price }.roundTo2Decimal(),
+                        items.sumByDouble { it.refund }.roundTo2Decimal(), 0.0))
             }
         }
 
@@ -150,10 +151,11 @@ class HomeBusiness {
             transactions20.sortWith(compareBy({ it.paymentDate }, { it.tag.parentName }, { it.tag.name }))
             return TransactionListVO(transactions20,
                     transactions20.sumByDouble { it.price }.roundTo2Decimal(),
-                    transactions20.sumByDouble { it.refund }.roundTo2Decimal())
+                    transactions20.sumByDouble { it.refund }.roundTo2Decimal(),
+                    transactions20.filter { !it.alreadyPaid }.sumByDouble { it.price })
 
         } else {
-            return TransactionListVO(mutableListOf(), 0.0, 0.0)
+            return TransactionListVO(mutableListOf(), 0.0, 0.0, 0.0)
         }
     }
 
@@ -172,6 +174,7 @@ class HomeBusiness {
                 transaction.price = filter.sumByDouble { it.price }
                 transaction.refund = filter.sumByDouble { it.refund }
                 transaction.isClickable = false
+                transaction.alreadyPaid = Calendar.getInstance().time.after(transaction.paymentDate)
 
                 transactions.removeAll { it.paymentType.key == paymentType.key }
                 transactions.add(transaction)
