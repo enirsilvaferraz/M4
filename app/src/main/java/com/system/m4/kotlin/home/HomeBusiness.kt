@@ -52,6 +52,12 @@ class HomeBusiness {
         })
     }
 
+    abstract class ErrorListener<T>(val listener: SingleResultListener<HomeVO>) : MultResultListener<T> {
+        override fun onError(error: String) {
+            listener.onError(error)
+        }
+    }
+
     private fun validate(homeDTO: HomeDTO, listener: SingleResultListener<HomeVO>) {
 
         if (homeDTO.listTransaction != null && homeDTO.listTag != null && homeDTO.listPaymentType != null && homeDTO.listGroup != null) {
@@ -64,48 +70,42 @@ class HomeBusiness {
             }
 
             val homeVO = HomeVO()
-            homeVO.tagSummary = splitTagSummary(homeDTO.listTag!!, homeDTO.listTransaction!!)
-            homeVO.transactions1Q = splitTransactionsByDate20(homeDTO.listTransaction!!, true, group)
-            homeVO.transactions2Q = splitTransactionsByDate20(homeDTO.listTransaction!!, false, group)
-            homeVO.pendingTransaction = splitPendingTransactions(homeDTO.listTransaction!!)
+            homeVO.tagSummary = calculateTagSummary(homeDTO.listTag!!, homeDTO.listTransaction!!)
+            homeVO.transactions1Q = calculateTransactionsByDate20(homeDTO.listTransaction!!, true, group)
+            homeVO.transactions2Q = calculateTransactionsByDate20(homeDTO.listTransaction!!, false, group)
+            homeVO.pendingTransaction = calculatePendingTransactions(homeDTO.listTransaction!!)
             homeVO.groups = splitGroupTransaction(group, homeDTO.listTransaction!!)
-            homeVO.summaries = splitSummaries(homeVO.transactions1Q, homeVO.transactions2Q)
+            homeVO.summaries = calculateSummary(homeVO.transactions1Q, homeVO.transactions2Q)
 
             listener.onSuccess(homeVO)
         }
     }
 
-    private fun splitSummaries(transactions1Q: TransactionListVO, transactions2Q: TransactionListVO): MutableList<SummaryVO>? {
+    fun calculateSummary(transactions1Q: TransactionListVO, transactions2Q: TransactionListVO): MutableList<SummaryVO>? {
 
         val items = arrayListOf<SummaryVO>()
 
         val amount = transactions1Q.amount + transactions2Q.amount
-        val refound = transactions1Q.refound + transactions2Q.refound
+        val refund = transactions1Q.refund + transactions2Q.refund
 
         items.add(SummaryVO("Total Gasto", amount))
-        items.add(SummaryVO("Total Retornado", refound))
-        items.add(SummaryVO("Total Real", amount - refound))
+        items.add(SummaryVO("Total Retornado", refund))
+        items.add(SummaryVO("Total Real", amount - refund))
 
         return items
     }
 
-    abstract class ErrorListener<T>(val listener: SingleResultListener<HomeVO>) : MultResultListener<T> {
-        override fun onError(error: String) {
-            listener.onError(error)
-        }
-    }
-
-    fun splitTagSummary(tags: MutableList<TagVO>, transactions: MutableList<TransactionVO>): List<TagSummaryVO> {
+    fun calculateTagSummary(tags: MutableList<TagVO>, transactions: MutableList<TransactionVO>): List<TagSummaryVO> {
 
         val items = arrayListOf<TagSummaryVO>()
 
         tags.forEach { tag ->
             val filter = transactions.filter { transaction -> transaction.tag.key == tag.key }
             if (filter.isNotEmpty())
-                items.add(TagSummaryVO(tag.key, tag.parentName, tag.name, filter.sumByDouble { it.price }))
+                items.add(TagSummaryVO(tag.key, tag.parentName, tag.name, filter, filter.sumByDouble { it.price - it.refund }))
         }
 
-        items.sortWith(compareBy({ it.parentName }, { it.name }, { it.value }))
+        items.sortWith(compareBy({ it.parentName }, { it.name }, { it.value })) // TODO Mudar para o presenter
         return items
     }
 
@@ -130,13 +130,13 @@ class HomeBusiness {
         return map
     }
 
-    fun splitPendingTransactions(transactions: MutableList<TransactionVO>): MutableList<TransactionVO> {
+    fun calculatePendingTransactions(transactions: MutableList<TransactionVO>): MutableList<TransactionVO> {
         val items = transactions.filter { it.tag.key.isNullOrBlank() }.toMutableList()
         items.sortWith(compareBy({ it.paymentDate }))
         return items
     }
 
-    fun splitTransactionsByDate20(transactions: MutableList<TransactionVO>, firstFortnight: Boolean, group: GroupTransactionVO?): TransactionListVO {
+    fun calculateTransactionsByDate20(transactions: MutableList<TransactionVO>, firstFortnight: Boolean, group: GroupTransactionVO?): TransactionListVO {
 
         if (transactions.isNotEmpty()) {
 
@@ -146,7 +146,7 @@ class HomeBusiness {
                 if (firstFortnight) it.paymentDate.before(date20) else it.paymentDate.equals(date20) || it.paymentDate.after(date20)
             }.toMutableList()
 
-            splitTransactionGrouped(group, transactions20)
+            calculateTransactionGrouped(group, transactions20)
 
             transactions20.sortWith(compareBy({ it.paymentDate }, { it.tag.parentName }, { it.tag.name }))
             return TransactionListVO(transactions20,
@@ -159,7 +159,7 @@ class HomeBusiness {
         }
     }
 
-    fun splitTransactionGrouped(group: GroupTransactionVO?, transactions: MutableList<TransactionVO>): MutableList<TransactionVO> {
+    fun calculateTransactionGrouped(group: GroupTransactionVO?, transactions: MutableList<TransactionVO>): MutableList<TransactionVO> {
 
         if (group != null) group.paymentTypeList.forEach { paymentType ->
 

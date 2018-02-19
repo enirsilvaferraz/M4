@@ -2,9 +2,7 @@ package com.system.m4.kotlin.tags
 
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
-import com.system.m4.views.vos.TagSummaryVO
 import com.system.m4.views.vos.TagVO
-import com.system.m4.views.vos.TransactionVO
 
 /**
  * Created by enirs on 30/08/2017.
@@ -111,31 +109,6 @@ class TagBusiness {
                 }
             }
             return array
-        }
-
-
-        fun calculateTagSummaryToExport(transactions: ArrayList<TransactionVO>, tags: ArrayList<TagVO>): List<TagSummaryVO> {
-
-            val itens = arrayListOf<TagSummaryVO>()
-
-            for (tag in tags) {
-
-                if (tag.parentName.isNullOrBlank()) {
-                    continue
-                }
-
-                val summary = TagSummaryVO(tag.key, tag.parentName, tag.name, 0.0)
-
-                for (transaction in transactions) {
-                    if (transaction.tag.key.equals(tag.key)) {
-                        summary.value += transaction.total
-                    }
-                }
-
-                itens.add(summary)
-            }
-
-            return itens
         }
 
         fun fromTag(list: List<TagModel>): ArrayList<TagVO> {

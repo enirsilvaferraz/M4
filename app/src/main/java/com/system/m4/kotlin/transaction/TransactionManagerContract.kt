@@ -32,9 +32,9 @@ interface TransactionManagerContract {
         fun showRefundDialog(value: Double?)
         fun showContentDialog(value: String?)
         fun showParcelsDialog(value: String?)
-        fun showPaymentDateDialog(date: Date)
+        fun showPaymentDateDialog(date: Date?)
+        fun showPurchaseDateDialog(date: Date?)
 
-        fun showPurchaseDateDialog(date: Date)
         fun dismissDialog(vo: VOInterface<*>)
         fun showSuccessMessage(template: Int, param: Int)
         fun showError(error: String)

@@ -172,13 +172,13 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         TextComponentDialog.newInstance(R.string.transaction_parcels, value) { valueParam -> presenter.setParcels(valueParam) }.show(childFragmentManager)
     }
 
-    override fun showPaymentDateDialog(date: Date) {
+    override fun showPaymentDateDialog(date: Date?) {
         JavaUtils.AndroidUtil.showDatePicker(context, date) { view, year, month, dayOfMonth ->
             presenter.setPaymentDate(JavaUtils.DateUtil.getDate(year, month + 1, dayOfMonth))
         }
     }
 
-    override fun showPurchaseDateDialog(date: Date) {
+    override fun showPurchaseDateDialog(date: Date?) {
         JavaUtils.AndroidUtil.showDatePicker(context, date) { view, year, month, dayOfMonth ->
             presenter.setPurchaseDate(JavaUtils.DateUtil.getDate(year, month + 1, dayOfMonth))
         }

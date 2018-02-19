@@ -43,10 +43,8 @@ public final class JavaUtils {
         public static final String DD_DE_MMMM_DE_YYYY = "dd 'de' MMMM 'de' yyyy";
 
         public static final String DD = "dd";
-
-        private static final String MMM = "MMM";
-
         public static final String DD_MM_YYYY_HH_MM_SS = "dd/MM/yyyy hh:mm:ss";
+        private static final String MMM = "MMM";
 
         public static Date parse(String date, String template) {
             try {
@@ -148,7 +146,10 @@ public final class JavaUtils {
 
         public static void showDatePicker(Context context, Date date, DatePickerDialog.OnDateSetListener onDateSetListener) {
             final Calendar c = Calendar.getInstance();
-            c.setTime(date);
+
+            if (date != null) {
+                c.setTime(date);
+            }
 
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);

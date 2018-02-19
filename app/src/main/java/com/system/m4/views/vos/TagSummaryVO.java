@@ -33,11 +33,12 @@ public class TagSummaryVO implements VOInterface<TagSummaryVO>, VOItemListInterf
     public TagSummaryVO() {
     }
 
-    public TagSummaryVO(String key, String parentName, String name, Double price) {
+    public TagSummaryVO(String key, String parentName, String name, List<TransactionVO> transactions, Double price) {
         this.key = key;
         this.parentName = parentName;
         this.name = name;
         this.value = price;
+        this.transactions = transactions;
     }
 
     protected TagSummaryVO(Parcel in) {

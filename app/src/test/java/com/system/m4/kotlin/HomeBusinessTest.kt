@@ -19,8 +19,8 @@ class HomeBusinessTest {
 
         homeDTO.listTransaction = arrayListOf()
 
-        homeVO.transactions1Q = HomeBusiness().splitTransactionsByDate20(homeDTO.listTransaction!!, true, null)
-        homeVO.transactions2Q = HomeBusiness().splitTransactionsByDate20(homeDTO.listTransaction!!, false, null)
+        homeVO.transactions1Q = HomeBusiness().calculateTransactionsByDate20(homeDTO.listTransaction!!, true, null)
+        homeVO.transactions2Q = HomeBusiness().calculateTransactionsByDate20(homeDTO.listTransaction!!, false, null)
 
         Assert.assertEquals(0, homeVO.transactions1Q.transactions.size)
         Assert.assertEquals(0, homeVO.transactions2Q.transactions.size)
@@ -39,8 +39,8 @@ class HomeBusinessTest {
 
         val homeVO = HomeVO()
 
-        homeVO.transactions1Q = HomeBusiness().splitTransactionsByDate20(homeDTO.listTransaction!!, true, null)
-        homeVO.transactions2Q = HomeBusiness().splitTransactionsByDate20(homeDTO.listTransaction!!, false, null)
+        homeVO.transactions1Q = HomeBusiness().calculateTransactionsByDate20(homeDTO.listTransaction!!, true, null)
+        homeVO.transactions2Q = HomeBusiness().calculateTransactionsByDate20(homeDTO.listTransaction!!, false, null)
 
         Assert.assertEquals(0, homeVO.transactions1Q.transactions.size)
         Assert.assertEquals(0, homeVO.transactions2Q.transactions.size)
@@ -63,8 +63,8 @@ class HomeBusinessTest {
 
         val homeVO = HomeVO()
 
-        homeVO.transactions1Q = HomeBusiness().splitTransactionsByDate20(homeDTO.listTransaction!!, true, null)
-        homeVO.transactions2Q = HomeBusiness().splitTransactionsByDate20(homeDTO.listTransaction!!, false, null)
+        homeVO.transactions1Q = HomeBusiness().calculateTransactionsByDate20(homeDTO.listTransaction!!, true, null)
+        homeVO.transactions2Q = HomeBusiness().calculateTransactionsByDate20(homeDTO.listTransaction!!, false, null)
 
         Assert.assertEquals(4, homeVO.transactions1Q.transactions.size)
         Assert.assertEquals("4", homeVO.transactions1Q.transactions[0].key)
@@ -93,8 +93,8 @@ class HomeBusinessTest {
 
         val homeVO = HomeVO()
 
-        homeVO.transactions1Q = HomeBusiness().splitTransactionsByDate20(homeDTO.listTransaction!!, true, null)
-        homeVO.transactions2Q = HomeBusiness().splitTransactionsByDate20(homeDTO.listTransaction!!, false, null)
+        homeVO.transactions1Q = HomeBusiness().calculateTransactionsByDate20(homeDTO.listTransaction!!, true, null)
+        homeVO.transactions2Q = HomeBusiness().calculateTransactionsByDate20(homeDTO.listTransaction!!, false, null)
 
         Assert.assertEquals(0, homeVO.transactions1Q.transactions.size)
 
@@ -123,8 +123,8 @@ class HomeBusinessTest {
 
         val homeVO = HomeVO()
 
-        homeVO.transactions1Q = HomeBusiness().splitTransactionsByDate20(homeDTO.listTransaction!!, true, null)
-        homeVO.transactions2Q = HomeBusiness().splitTransactionsByDate20(homeDTO.listTransaction!!, false, null)
+        homeVO.transactions1Q = HomeBusiness().calculateTransactionsByDate20(homeDTO.listTransaction!!, true, null)
+        homeVO.transactions2Q = HomeBusiness().calculateTransactionsByDate20(homeDTO.listTransaction!!, false, null)
 
         Assert.assertEquals(2, homeVO.transactions1Q.transactions.size)
         Assert.assertEquals("1", homeVO.transactions1Q.transactions[0].key)
@@ -153,7 +153,7 @@ class HomeBusinessTest {
 
         val homeVO = HomeVO()
 
-        homeVO.pendingTransaction = HomeBusiness().splitPendingTransactions(homeDTO.listTransaction!!)
+        homeVO.pendingTransaction = HomeBusiness().calculatePendingTransactions(homeDTO.listTransaction!!)
 
         Assert.assertEquals(4, homeVO.pendingTransaction.size)
         Assert.assertEquals("1", homeVO.pendingTransaction[0].key)
@@ -227,7 +227,7 @@ class HomeBusinessTest {
         homeDTO.listTransaction = ArrayList(listOfTransactions)
         homeDTO.listTag = ArrayList(listOfTags)
 
-        val tagsSummary = HomeBusiness().splitTagSummary(homeDTO.listTag!!, homeDTO.listTransaction!!)
+        val tagsSummary = HomeBusiness().calculateTagSummary(homeDTO.listTag!!, homeDTO.listTransaction!!)
 
         Assert.assertEquals("A1", tagsSummary[0].key)
         Assert.assertEquals("Alimentação", tagsSummary[0].parentName)
@@ -252,8 +252,8 @@ class HomeBusinessTest {
 
     @Test
     fun getTransactionGroupedWithNulls() {
-        Assert.assertEquals(true, HomeBusiness().splitTransactionGrouped(null, mutableListOf()).isEmpty())
-        Assert.assertEquals(true, HomeBusiness().splitTransactionGrouped(GroupTransactionVO(mutableListOf()), mutableListOf()).isEmpty())
+        Assert.assertEquals(true, HomeBusiness().calculateTransactionGrouped(null, mutableListOf()).isEmpty())
+        Assert.assertEquals(true, HomeBusiness().calculateTransactionGrouped(GroupTransactionVO(mutableListOf()), mutableListOf()).isEmpty())
     }
 
     @Test
@@ -273,7 +273,7 @@ class HomeBusinessTest {
         listOfTransactions.add(mockTransaction("KEY5", "01/01/2018", "PAY2", "P2", 50.0))
         listOfTransactions.add(mockTransaction("KEY6", "01/01/2018", "PAY3", "P3", 50.0))
 
-        val grouped = HomeBusiness().splitTransactionGrouped(group, listOfTransactions)
+        val grouped = HomeBusiness().calculateTransactionGrouped(group, listOfTransactions)
 
         Assert.assertEquals(6, grouped.size)
     }
@@ -296,7 +296,7 @@ class HomeBusinessTest {
         listOfTransactions.add(mockTransaction("KEY5", "01/01/2018", "PAY2", "P2", 50.0))
         listOfTransactions.add(mockTransaction("KEY6", "02/01/2018", "PAY3", "P3", 50.0))
 
-        val grouped = HomeBusiness().splitTransactionGrouped(group, listOfTransactions)
+        val grouped = HomeBusiness().calculateTransactionGrouped(group, listOfTransactions)
 
         Assert.assertEquals(4, grouped.size)
 
