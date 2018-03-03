@@ -9,22 +9,22 @@ import java.util.*
  * Created by enirs on 30/08/2017.
  * Business
  */
-class PaymentTypeBusiness {
+class PaymentTypeBusiness(private val repository: PaymentTypeRepository) {
 
     fun save(model: PaymentTypeModel, listener: PersistenceListener<PaymentTypeModel>) {
-        PaymentTypeRepository().save(model, listener)
+        repository.save(model, listener)
     }
 
     fun update(model: PaymentTypeModel, listener: PersistenceListener<PaymentTypeModel>) {
-        PaymentTypeRepository().update(model, listener)
+        repository.update(model, listener)
     }
 
     fun delete(model: PaymentTypeModel, listener: PersistenceListener<PaymentTypeModel>) {
-        PaymentTypeRepository().delete(model, listener)
+        repository.delete(model, listener)
     }
 
     fun findAll(listener: MultResultListener<PaymentTypeModel>) {
-        PaymentTypeRepository().findAll("name", listener)
+        repository.findAll("name", listener)
     }
 
     fun fromPaymentType(dto: PaymentTypeModel): PaymentTypeVO {

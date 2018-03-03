@@ -15,8 +15,6 @@ import com.system.m4.views.components.DialogFooter;
 import com.system.m4.views.components.DialogToolbar;
 import com.system.m4.views.vos.VOInterface;
 
-import butterknife.BindView;
-
 /**
  * Created by Enir on 20/04/2017.
  * Base dialog
@@ -26,10 +24,7 @@ public abstract class BaseDialogFragment extends DialogFragment implements Dialo
 
     public static final String TITLE_BUNDLE = "TITLE_BUNDLE";
 
-    @BindView(R.id.dialog_toolbar_title)
     public DialogToolbar mToolbar;
-
-    @BindView(R.id.base_dialog_container_action)
     public DialogFooter mFooter;
 
     @Deprecated
@@ -40,7 +35,11 @@ public abstract class BaseDialogFragment extends DialogFragment implements Dialo
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mToolbar = view.findViewById(R.id.dialog_toolbar_title);
         mToolbar.setListener(this);
+
+        mToolbar = view.findViewById(R.id.base_dialog_container_action);
         mFooter.setListener(this);
     }
 

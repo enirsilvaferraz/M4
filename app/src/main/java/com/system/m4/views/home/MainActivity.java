@@ -33,23 +33,13 @@ import com.system.m4.views.vos.VOInterface;
 
 import org.jetbrains.annotations.NotNull;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class MainActivity extends AppCompatActivity implements MainContract.View {
 
     private static final int READ_SMS_PERMISSIONS_REQUEST = 1;
 
-    @BindView(R.id.home_activity_toolbar)
     Toolbar toolbar;
-
-    @BindView(R.id.home_activity_fab)
     FloatingActionButton fab;
-
-    @BindView(R.id.home_view_pager)
     ViewPager mViewPager;
-
-    @BindView(R.id.main_collapsingToolbar)
     CollapsingToolbarLayout mCollapsingToolbar;
 
     private MainContract.Presenter presenter;
@@ -58,7 +48,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+
+        toolbar = findViewById(R.id.home_activity_toolbar);
+        fab = findViewById(R.id.home_activity_fab);
+        mViewPager = findViewById(R.id.home_view_pager);
+        mCollapsingToolbar = findViewById(R.id.main_collapsingToolbar);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 

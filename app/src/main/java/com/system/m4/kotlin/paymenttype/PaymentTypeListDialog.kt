@@ -13,6 +13,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.system.m4.R
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Created by enirs on 30/08/2017.
@@ -25,7 +26,13 @@ class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, To
     private lateinit var mToolbar: Toolbar
 
     private lateinit var mListener: PaymentTypeListContract.OnSelectedListener
-    private lateinit var mPresenter: PaymentTypeListContract.Presenter
+
+    @Inject
+    lateinit var mPresenter: PaymentTypeListContract.Presenter
+
+    init {
+        DaggerPaymentTypeComponent.builder().paymentTypeModule(PaymentTypeModule(this)).build().inject(this)
+    }
 
     /**
      * STATIC
@@ -71,7 +78,6 @@ class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, To
 
         mProgress = view.findViewById(R.id.dialog_progress)
 
-        mPresenter = PaymentTypeListPresenter(this)
         mPresenter.onInit()
     }
 

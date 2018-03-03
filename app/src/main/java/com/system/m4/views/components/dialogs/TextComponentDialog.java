@@ -14,10 +14,6 @@ import com.system.m4.infrastructure.Constants;
 import com.system.m4.views.BaseDialogFragment;
 import com.system.m4.views.components.DialogToolbar;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 /**
  * Created by eferraz on 14/04/17.
  * Text component dialog
@@ -27,13 +23,8 @@ public class TextComponentDialog extends BaseDialogFragment {
 
     public static final String TAG = TextComponentDialog.class.getSimpleName();
 
-    @BindView(R.id.dialog_toolbar_title)
     DialogToolbar mToolbar;
-
-    @BindView(R.id.dialog_edit_text)
     EditText etText;
-
-    Unbinder unbinder;
 
     public static TextComponentDialog newInstance(@StringRes int title, String value, OnFinishListener onFinishListener) {
 
@@ -49,17 +40,18 @@ public class TextComponentDialog extends BaseDialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_text_component, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
+        return inflater.inflate(R.layout.dialog_text_component, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mToolbar = view.findViewById(R.id.dialog_toolbar_title);
         mToolbar.setTitle(getArguments().getInt(Constants.TITLE_BUNDLE));
         setTextContent(getArguments().getString(Constants.VALUE_BUNDLE));
+
+        etText = view.findViewById(R.id.dialog_edit_text);
 
         if (getDialog().getWindow() != null) {
             getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -74,7 +66,6 @@ public class TextComponentDialog extends BaseDialogFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override

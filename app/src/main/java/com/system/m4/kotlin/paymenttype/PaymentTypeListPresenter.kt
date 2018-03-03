@@ -8,12 +8,12 @@ import java.util.*
  * Created by enirs on 30/08/2017.
  * Presenter
  */
-class PaymentTypeListPresenter(private val view: PaymentTypeListContract.View) : PaymentTypeListContract.Presenter {
+class PaymentTypeListPresenter(private val view: PaymentTypeListContract.View, val business: PaymentTypeBusiness) : PaymentTypeListContract.Presenter {
 
     override fun onInit() {
 
         view.showLoading()
-        PaymentTypeBusiness().findAll(object : MultResultListener<PaymentTypeModel> {
+        business.findAll(object : MultResultListener<PaymentTypeModel> {
 
             override fun onSuccess(list: ArrayList<PaymentTypeModel>) {
                 view.load(list)
@@ -42,7 +42,7 @@ class PaymentTypeListPresenter(private val view: PaymentTypeListContract.View) :
     override fun delete(model: PaymentTypeModel) {
 
         view.showLoading()
-        PaymentTypeBusiness().delete(model, object : PersistenceListener<PaymentTypeModel> {
+        business.delete(model, object : PersistenceListener<PaymentTypeModel> {
 
             override fun onSuccess(model: PaymentTypeModel) {
                 view.remove(model)

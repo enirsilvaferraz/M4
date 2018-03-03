@@ -6,6 +6,7 @@ import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.SingleResultListener
 import com.system.m4.kotlin.paymenttype.PaymentTypeBusiness
 import com.system.m4.kotlin.paymenttype.PaymentTypeModel
+import com.system.m4.kotlin.paymenttype.PaymentTypeRepository
 import com.system.m4.kotlin.tags.TagBusiness
 import com.system.m4.kotlin.tags.TagModel
 import com.system.m4.kotlin.transaction.TransactionBusiness
@@ -37,9 +38,10 @@ class HomeBusiness {
             }
         })
 
-        PaymentTypeBusiness().findAll(object : ErrorListener<PaymentTypeModel>(listener) {
+        val paymentTypeBusiness = PaymentTypeBusiness(PaymentTypeRepository())
+        paymentTypeBusiness.findAll(object : ErrorListener<PaymentTypeModel>(listener) {
             override fun onSuccess(list: ArrayList<PaymentTypeModel>) {
-                homeDTO.listPaymentType = PaymentTypeBusiness().fromPaymentType(list)
+                homeDTO.listPaymentType = paymentTypeBusiness.fromPaymentType(list)
                 validate(homeDTO, listener)
             }
         })

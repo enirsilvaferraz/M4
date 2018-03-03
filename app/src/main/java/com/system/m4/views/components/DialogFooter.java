@@ -3,14 +3,11 @@ package com.system.m4.views.components;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.system.m4.R;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Enir on 20/05/2017.
@@ -19,10 +16,7 @@ import butterknife.OnClick;
 
 public class DialogFooter extends LinearLayout {
 
-    @BindView(R.id.base_dialog_btn_cancel)
     Button mBtnCancel;
-
-    @BindView(R.id.base_dialog_btn_done)
     Button mBtnDone;
 
     private OnClickListener listener;
@@ -30,22 +24,35 @@ public class DialogFooter extends LinearLayout {
     public DialogFooter(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         inflate(getContext(), R.layout.base_tab_buttom_dialog, this);
+
+        mBtnCancel = findViewById(R.id.base_dialog_btn_cancel);
+        mBtnDone = findViewById(R.id.base_dialog_btn_done);
+
+        mBtnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onCancelClick();
+            }
+        });
+        mBtnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDoneClick();
+            }
+        });
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.base_dialog_btn_done)
     public void onDoneClick() {
         if (listener != null) {
             listener.onDoneClick();
         }
     }
 
-    @OnClick(R.id.base_dialog_btn_cancel)
     public void onCancelClick() {
         if (listener != null) {
             listener.onCancelClick();

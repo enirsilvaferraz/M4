@@ -13,10 +13,6 @@ import com.system.m4.R;
 import com.system.m4.infrastructure.JavaUtils;
 import com.system.m4.views.BaseDialogFragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 /**
  * Created by eferraz on 14/04/17.
  * Number compoenent dialog
@@ -24,10 +20,7 @@ import butterknife.Unbinder;
 
 public class NumberComponentDialog extends BaseDialogFragment {
 
-    @BindView(R.id.dialog_edit_number)
     CurrencyEditText etNumber;
-
-    Unbinder unbinder;
 
     public static NumberComponentDialog newInstance(@StringRes int title, Double value, OnFinishListener onFinishListener) {
 
@@ -46,9 +39,7 @@ public class NumberComponentDialog extends BaseDialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_number_component, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
+        return inflater.inflate(R.layout.dialog_number_component, container, false);
     }
 
     @Override
@@ -57,6 +48,7 @@ public class NumberComponentDialog extends BaseDialogFragment {
 
         setTitle(getArguments().getInt("TITLE"));
 
+        etNumber = view.findViewById(R.id.dialog_edit_number);
         etNumber.setDefaultHintEnabled(false);
         etNumber.requestFocus();
 
@@ -71,7 +63,6 @@ public class NumberComponentDialog extends BaseDialogFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override
