@@ -15,11 +15,7 @@ import com.system.m4.R
  */
 class PaymentTypeAdapter(val onClick: PaymentTypeListContract.OnAdapterClickListener) : RecyclerView.Adapter<PaymentTypeAdapter.ViewHolder>() {
 
-    private val mList: ArrayList<PaymentTypeModel>
-
-    init {
-        mList = arrayListOf()
-    }
+    private val mList = arrayListOf<PaymentTypeModel>()
 
     override fun onBindViewHolder(holder: PaymentTypeAdapter.ViewHolder?, position: Int) {
         holder?.bind(mList.get(position), onClick)

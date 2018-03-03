@@ -11,46 +11,43 @@ import java.util.*
  */
 class PaymentTypeBusiness {
 
-    companion object {
+    fun save(model: PaymentTypeModel, listener: PersistenceListener<PaymentTypeModel>) {
+        PaymentTypeRepository().save(model, listener)
+    }
 
-        fun save(model: PaymentTypeModel, listener: PersistenceListener<PaymentTypeModel>) {
-            PaymentTypeRepository().save(model, listener)
-        }
+    fun update(model: PaymentTypeModel, listener: PersistenceListener<PaymentTypeModel>) {
+        PaymentTypeRepository().update(model, listener)
+    }
 
-        fun update(model: PaymentTypeModel, listener: PersistenceListener<PaymentTypeModel>) {
-            PaymentTypeRepository().update(model, listener)
-        }
+    fun delete(model: PaymentTypeModel, listener: PersistenceListener<PaymentTypeModel>) {
+        PaymentTypeRepository().delete(model, listener)
+    }
 
-        fun delete(model: PaymentTypeModel, listener: PersistenceListener<PaymentTypeModel>) {
-            PaymentTypeRepository().delete(model, listener)
-        }
+    fun findAll(listener: MultResultListener<PaymentTypeModel>) {
+        PaymentTypeRepository().findAll("name", listener)
+    }
 
-        fun findAll(listener: MultResultListener<PaymentTypeModel>) {
-            PaymentTypeRepository().findAll("name", listener)
-        }
+    fun fromPaymentType(dto: PaymentTypeModel): PaymentTypeVO {
+        val vo = PaymentTypeVO()
+        vo.key = dto.key
+        vo.name = dto.name
+        vo.color = dto.color
+        return vo
+    }
 
-        fun fromPaymentType(dto: PaymentTypeModel): PaymentTypeVO {
-            val vo = PaymentTypeVO()
-            vo.key = dto.key
-            vo.name = dto.name
-            vo.color = dto.color
-            return vo
-        }
+    fun fromPaymentType(vo: PaymentTypeVO): PaymentTypeModel {
+        val dto = PaymentTypeModel()
+        dto.key = vo.key
+        dto.name = vo.name
+        dto.color = vo.color
+        return dto
+    }
 
-        fun fromPaymentType(vo: PaymentTypeVO): PaymentTypeModel {
-            val dto = PaymentTypeModel()
-            dto.key = vo.key
-            dto.name = vo.name
-            dto.color = vo.color
-            return dto
+    fun fromPaymentType(list: ArrayList<PaymentTypeModel>): ArrayList<PaymentTypeVO> {
+        val listVO = ArrayList<PaymentTypeVO>()
+        for (model in list) {
+            listVO.add(fromPaymentType(model))
         }
-
-        fun fromPaymentType(list: ArrayList<PaymentTypeModel>): ArrayList<PaymentTypeVO> {
-            val listVO = ArrayList<PaymentTypeVO>()
-            for (model in list) {
-                listVO.add(fromPaymentType(model))
-            }
-            return listVO
-        }
+        return listVO
     }
 }

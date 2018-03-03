@@ -19,7 +19,7 @@ interface PaymentTypeListContract {
     }
 
     interface Presenter {
-        fun load()
+        fun onInit()
         fun create()
         fun select(model: PaymentTypeModel)
         fun edit(model: PaymentTypeModel)

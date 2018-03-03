@@ -37,9 +37,9 @@ class HomeBusiness {
             }
         })
 
-        PaymentTypeBusiness.findAll(object : ErrorListener<PaymentTypeModel>(listener) {
+        PaymentTypeBusiness().findAll(object : ErrorListener<PaymentTypeModel>(listener) {
             override fun onSuccess(list: ArrayList<PaymentTypeModel>) {
-                homeDTO.listPaymentType = PaymentTypeBusiness.fromPaymentType(list)
+                homeDTO.listPaymentType = PaymentTypeBusiness().fromPaymentType(list)
                 validate(homeDTO, listener)
             }
         })

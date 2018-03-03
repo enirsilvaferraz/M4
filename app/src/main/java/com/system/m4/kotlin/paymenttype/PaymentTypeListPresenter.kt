@@ -10,10 +10,10 @@ import java.util.*
  */
 class PaymentTypeListPresenter(private val view: PaymentTypeListContract.View) : PaymentTypeListContract.Presenter {
 
-    override fun load() {
+    override fun onInit() {
 
         view.showLoading()
-        PaymentTypeBusiness.findAll(object : MultResultListener<PaymentTypeModel> {
+        PaymentTypeBusiness().findAll(object : MultResultListener<PaymentTypeModel> {
 
             override fun onSuccess(list: ArrayList<PaymentTypeModel>) {
                 view.load(list)
@@ -42,7 +42,7 @@ class PaymentTypeListPresenter(private val view: PaymentTypeListContract.View) :
     override fun delete(model: PaymentTypeModel) {
 
         view.showLoading()
-        PaymentTypeBusiness.delete(model, object : PersistenceListener<PaymentTypeModel> {
+        PaymentTypeBusiness().delete(model, object : PersistenceListener<PaymentTypeModel> {
 
             override fun onSuccess(model: PaymentTypeModel) {
                 view.remove(model)

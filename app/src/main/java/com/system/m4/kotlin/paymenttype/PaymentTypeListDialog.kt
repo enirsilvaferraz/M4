@@ -48,11 +48,11 @@ class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, To
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mToolbar = view!!.findViewById<Toolbar>(R.id.dialog_toolbar)
+        mToolbar = view!!.findViewById(R.id.dialog_toolbar)
         mToolbar.setOnMenuItemClickListener(this)
         mToolbar.inflateMenu(R.menu.menu_crud_list)
 
-        mRecyclerView = view.findViewById<RecyclerView>(R.id.dialog_list_recycler)
+        mRecyclerView = view.findViewById(R.id.dialog_list_recycler)
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
         mRecyclerView.adapter = PaymentTypeAdapter(object : PaymentTypeListContract.OnAdapterClickListener {
 
@@ -69,10 +69,10 @@ class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, To
             }
         })
 
-        mProgress = view.findViewById<ProgressBar>(R.id.dialog_progress)
+        mProgress = view.findViewById(R.id.dialog_progress)
 
         mPresenter = PaymentTypeListPresenter(this)
-        mPresenter.load()
+        mPresenter.onInit()
     }
 
     /**
@@ -81,8 +81,8 @@ class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, To
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         if (item?.itemId!!.equals(R.id.menu_crud_list_add_new)) {
             mPresenter.create()
-        }
-        return true
+            return true
+        } else return false
     }
 
     /**

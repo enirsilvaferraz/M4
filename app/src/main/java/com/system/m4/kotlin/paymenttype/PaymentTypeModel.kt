@@ -4,16 +4,17 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.system.m4.kotlin.infrastructure.GenericRepository
 
 /**
  * Created by eferraz on 27/08/17.
  * DTO for PaymentType
  */
-class PaymentTypeModel() : Parcelable {
+class PaymentTypeModel() : Parcelable, GenericRepository.Model {
 
     @Expose
     @SerializedName("key")
-    var key: String? = null
+    override var key: String? = null
 
     @Expose
     @SerializedName("name")

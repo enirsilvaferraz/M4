@@ -23,7 +23,7 @@ class PaymentTypeManagerPresenter(private val view: PaymentTypeManagerContract.V
 
         if (mModel.key.isNullOrBlank()) {
 
-            PaymentTypeBusiness.save(mModel, object : PersistenceListener<PaymentTypeModel> {
+            PaymentTypeBusiness().save(mModel, object : PersistenceListener<PaymentTypeModel> {
 
                 override fun onSuccess(model: PaymentTypeModel) {
                     view.returnData(model)
@@ -38,7 +38,7 @@ class PaymentTypeManagerPresenter(private val view: PaymentTypeManagerContract.V
 
         } else {
 
-            PaymentTypeBusiness.update(mModel, object : PersistenceListener<PaymentTypeModel> {
+            PaymentTypeBusiness().update(mModel, object : PersistenceListener<PaymentTypeModel> {
 
                 override fun onSuccess(model: PaymentTypeModel) {
                     view.returnData(model)

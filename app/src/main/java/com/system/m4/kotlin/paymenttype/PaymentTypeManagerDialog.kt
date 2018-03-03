@@ -27,6 +27,7 @@ class PaymentTypeManagerDialog : DialogFragment(), PaymentTypeManagerContract.Vi
      * STATIC
      */
     companion object {
+
         fun instance(model: PaymentTypeModel?, listener: PaymentTypeManagerContract.OnCompleteListener): PaymentTypeManagerDialog {
 
             val bundle = Bundle()
@@ -39,7 +40,7 @@ class PaymentTypeManagerDialog : DialogFragment(), PaymentTypeManagerContract.Vi
             return dialog
         }
 
-        val TAG: String = "PaymentTypeManagerDialog"
+        const val TAG: String = "PaymentTypeManagerDialog"
     }
 
     /**
@@ -52,7 +53,7 @@ class PaymentTypeManagerDialog : DialogFragment(), PaymentTypeManagerContract.Vi
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mDialogFooter = view!!.findViewById<DialogFooter>(R.id.base_dialog_container_action)
+        mDialogFooter = view!!.findViewById(R.id.base_dialog_container_action)
         mDialogFooter.setListener(object : DialogFooter.OnClickListener {
 
             override fun onDoneClick() {
@@ -69,7 +70,7 @@ class PaymentTypeManagerDialog : DialogFragment(), PaymentTypeManagerContract.Vi
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 
         mPresenter = PaymentTypeManagerPresenter(this)
-        mPresenter.init(arguments.getParcelable<PaymentTypeModel>(PaymentTypeModel.TAG))
+        mPresenter.init(arguments.getParcelable(PaymentTypeModel.TAG))
     }
 
     /**
@@ -95,6 +96,4 @@ class PaymentTypeManagerDialog : DialogFragment(), PaymentTypeManagerContract.Vi
     override fun showError(error: String) {
         Toast.makeText(context, error, Toast.LENGTH_LONG).show()
     }
-
-
 }
