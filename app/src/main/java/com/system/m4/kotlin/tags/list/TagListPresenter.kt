@@ -1,7 +1,9 @@
-package com.system.m4.kotlin.tags
+package com.system.m4.kotlin.tags.list
 
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
+import com.system.m4.kotlin.tags.TagBusiness
+import com.system.m4.kotlin.tags.TagModel
 import java.util.*
 
 /**

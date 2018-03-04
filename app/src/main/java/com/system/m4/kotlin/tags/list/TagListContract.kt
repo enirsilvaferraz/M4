@@ -1,5 +1,6 @@
-package com.system.m4.kotlin.tags
+package com.system.m4.kotlin.tags.list
 
+import com.system.m4.kotlin.tags.TagModel
 import java.util.*
 
 /**
@@ -18,7 +19,7 @@ interface TagListContract {
         fun showError(error: String)
     }
 
-    interface Presenter : TagListContract.OnAdapterClickListener {
+    interface Presenter : OnAdapterClickListener {
         fun init()
         fun create()
         fun addList()

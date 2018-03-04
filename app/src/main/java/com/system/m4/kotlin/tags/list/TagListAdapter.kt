@@ -1,4 +1,4 @@
-package com.system.m4.kotlin.tags
+package com.system.m4.kotlin.tags.list
 
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
@@ -9,12 +9,13 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
 import com.system.m4.R
+import com.system.m4.kotlin.tags.TagModel
 
 /**
  * Created by enirs on 30/08/2017.
  * Tag Adapter
  */
-class TagAdapter(val onClick: TagListContract.OnAdapterClickListener) : RecyclerView.Adapter<TagAdapter.ViewHolder>() {
+class TagListAdapter(val onClick: TagListContract.OnAdapterClickListener) : RecyclerView.Adapter<TagListAdapter.ViewHolder>() {
 
     private val mList: ArrayList<TagModel>
 
@@ -22,11 +23,11 @@ class TagAdapter(val onClick: TagListContract.OnAdapterClickListener) : Recycler
         mList = arrayListOf()
     }
 
-    override fun onBindViewHolder(holder: TagAdapter.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         holder?.bind(mList.get(position), onClick)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TagAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.item_tag, parent, false))
     }
 

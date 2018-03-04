@@ -1,13 +1,15 @@
-package com.system.m4.kotlin.tags
+package com.system.m4.kotlin.tags.manager
 
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
+import com.system.m4.kotlin.tags.TagBusiness
+import com.system.m4.kotlin.tags.TagModel
 
 /**
  * Created by eferraz on 01/09/17.
  * Presenter
  */
-class TagManagerPresenter(private val view: TagManagerContract.View) : TagManagerContract.Presenter {
+class TagManagerPresenter(private val view: TagManagerContract.View, private val business: TagBusiness) : TagManagerContract.Presenter {
 
     private lateinit var mModel: TagModel
     private var mParent: TagModel? = null
@@ -21,7 +23,7 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
     private fun loadParent() {
 
         view.showLoading()
-        TagBusiness(TagRepository()).findAllParents(object : MultResultListener<TagModel> {
+        business.findAllParents(object : MultResultListener<TagModel> {
 
             override fun onSuccess(list: ArrayList<TagModel>) {
 
@@ -49,7 +51,7 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
 
         if (mModel.key.isNullOrBlank()) {
 
-            TagBusiness(TagRepository()).create(model = mModel, parent = mParent, listener = object : PersistenceListener<TagModel> {
+            business.create(model = mModel, parent = mParent, listener = object : PersistenceListener<TagModel> {
 
                 override fun onSuccess(model: TagModel) {
                     view.returnData(model)
@@ -64,7 +66,7 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
 
         } else {
 
-            TagBusiness(TagRepository()).update(child = mModel, parent = mParent, listener = object : PersistenceListener<TagModel> {
+            business.update(child = mModel, parent = mParent, listener = object : PersistenceListener<TagModel> {
 
                 override fun onSuccess(model: TagModel) {
                     view.returnData(model)

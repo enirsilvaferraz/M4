@@ -1,4 +1,6 @@
-package com.system.m4.kotlin.tags
+package com.system.m4.kotlin.tags.manager
+
+import com.system.m4.kotlin.tags.TagModel
 
 /**
  * Created by enirs on 30/08/2017.

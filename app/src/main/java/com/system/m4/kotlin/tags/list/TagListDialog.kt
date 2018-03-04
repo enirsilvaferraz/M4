@@ -1,4 +1,4 @@
-package com.system.m4.kotlin.tags
+package com.system.m4.kotlin.tags.list
 
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -12,6 +12,9 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.system.m4.R
+import com.system.m4.kotlin.tags.TagModel
+import com.system.m4.kotlin.tags.manager.TagManagerContract
+import com.system.m4.kotlin.tags.manager.TagManagerDialog
 import java.util.*
 import javax.inject.Inject
 
@@ -31,7 +34,7 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
     lateinit var mPresenter: TagListContract.Presenter
 
     init {
-        DaggerTagComponent.builder().tagModule(TagModule(this)).build().inject(this)
+        DaggerTagListComponent.builder().tagListModule(TagListModule(this)).build().inject(this)
     }
 
     /**
@@ -61,7 +64,7 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
 
         mRecyclerView = view.findViewById(R.id.dialog_list_recycler)
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
-        mRecyclerView.adapter = TagAdapter(mPresenter)
+        mRecyclerView.adapter = TagListAdapter(mPresenter)
 
         mProgress = view.findViewById(R.id.dialog_progress)
 
@@ -88,7 +91,7 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
      * MVP
      */
     override fun loadTags(list: ArrayList<TagModel>) {
-        (mRecyclerView.adapter as TagAdapter).updateList(list)
+        (mRecyclerView.adapter as TagListAdapter).updateList(list)
     }
 
     override fun select(model: TagModel) {
@@ -97,7 +100,7 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
     }
 
     override fun remove(model: TagModel) {
-        (mRecyclerView.adapter as TagAdapter).deleteItem(model)
+        (mRecyclerView.adapter as TagListAdapter).deleteItem(model)
     }
 
     override fun openManager(model: TagModel?) {

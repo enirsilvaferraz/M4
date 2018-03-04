@@ -1,18 +1,13 @@
-package com.system.m4.kotlin.tags
+package com.system.m4.kotlin.tags.list
 
-import dagger.Component
+import com.system.m4.kotlin.tags.TagBusiness
+import com.system.m4.kotlin.tags.TagRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-@Singleton
-@Component(modules = [TagModule::class])
-interface TagComponent {
-    fun inject(target: TagListDialog)
-}
-
 @Module
-class TagModule(val view: TagListContract.View) {
+class TagListModule(val view: TagListContract.View) {
 
     @Singleton
     @Provides

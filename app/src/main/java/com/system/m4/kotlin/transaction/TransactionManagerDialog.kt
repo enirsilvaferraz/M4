@@ -14,9 +14,9 @@ import com.system.m4.kotlin.infrastructure.BaseDialogFragment
 import com.system.m4.kotlin.paymenttype.PaymentTypeListContract
 import com.system.m4.kotlin.paymenttype.PaymentTypeListDialog
 import com.system.m4.kotlin.paymenttype.PaymentTypeModel
-import com.system.m4.kotlin.tags.TagListContract
-import com.system.m4.kotlin.tags.TagListDialog
 import com.system.m4.kotlin.tags.TagModel
+import com.system.m4.kotlin.tags.list.TagListContract
+import com.system.m4.kotlin.tags.list.TagListDialog
 import com.system.m4.views.components.dialogs.NumberComponentDialog
 import com.system.m4.views.components.dialogs.TextComponentDialog
 import com.system.m4.views.vos.PaymentTypeVO

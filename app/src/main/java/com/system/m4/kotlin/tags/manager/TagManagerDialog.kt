@@ -1,4 +1,4 @@
-package com.system.m4.kotlin.tags
+package com.system.m4.kotlin.tags.manager
 
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -12,7 +12,9 @@ import android.widget.EditText
 import android.widget.Toast
 import com.system.m4.R
 import com.system.m4.kotlin.infrastructure.customviews.CustomSpinnerAdapter
+import com.system.m4.kotlin.tags.TagModel
 import com.system.m4.views.components.DialogFooter
+import javax.inject.Inject
 
 /**
  * Created by enirs on 30/08/2017.
@@ -20,12 +22,18 @@ import com.system.m4.views.components.DialogFooter
  */
 class TagManagerDialog : DialogFragment(), TagManagerContract.View {
 
-    private lateinit var mPresenter: TagManagerContract.Presenter
     private lateinit var mEtName: EditText
     private lateinit var mSpParent: AppCompatSpinner
     private lateinit var mDialogFooter: DialogFooter
 
     private lateinit var mListener: TagManagerContract.OnCompleteListener
+
+    @Inject
+    lateinit var mPresenter: TagManagerContract.Presenter
+
+    init {
+        DaggerTagManagerComponent.builder().tagManagerModule(TagManagerModule(this)).build().inject(this)
+    }
 
     /**
      * STATIC
@@ -74,7 +82,6 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
 
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 
-        mPresenter = TagManagerPresenter(this)
         mPresenter.init(arguments.getParcelable<TagModel>(TagModel.TAG))
     }
 
