@@ -32,7 +32,7 @@ class TagManagerDialog : DialogFragment(), TagManagerContract.View {
     lateinit var mPresenter: TagManagerContract.Presenter
 
     init {
-        DaggerTagManagerComponent.builder().tagManagerModule(TagManagerModule(this)).build().inject(this)
+        TagManagerComponent.injectObject(this)
     }
 
     /**

@@ -34,7 +34,7 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
     lateinit var mPresenter: TagListContract.Presenter
 
     init {
-        DaggerTagListComponent.builder().tagListModule(TagListModule(this)).build().inject(this)
+        TagListComponent.injectObject(this)
     }
 
     /**
