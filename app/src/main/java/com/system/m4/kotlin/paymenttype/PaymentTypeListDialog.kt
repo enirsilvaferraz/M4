@@ -31,7 +31,7 @@ class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, To
     lateinit var mPresenter: PaymentTypeListContract.Presenter
 
     init {
-        DaggerPaymentTypeComponent.builder().paymentTypeModule(PaymentTypeModule(this)).build().inject(this)
+        PaymentTypeComponent.injectObject(this)
     }
 
     /**
