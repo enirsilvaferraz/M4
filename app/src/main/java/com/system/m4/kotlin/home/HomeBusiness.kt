@@ -9,6 +9,7 @@ import com.system.m4.kotlin.paymenttype.PaymentTypeModel
 import com.system.m4.kotlin.paymenttype.PaymentTypeRepository
 import com.system.m4.kotlin.tags.TagBusiness
 import com.system.m4.kotlin.tags.TagModel
+import com.system.m4.kotlin.tags.TagRepository
 import com.system.m4.kotlin.transaction.TransactionBusiness
 import com.system.m4.views.vos.*
 import java.math.BigDecimal
@@ -31,9 +32,10 @@ class HomeBusiness {
             }
         })
 
-        TagBusiness.findAll(object : ErrorListener<TagModel>(listener) {
+        val tagBusiness = TagBusiness(TagRepository())
+        tagBusiness.findAll(object : ErrorListener<TagModel>(listener) {
             override fun onSuccess(list: ArrayList<TagModel>) {
-                homeDTO.listTag = TagBusiness.fromTag(list)
+                homeDTO.listTag = tagBusiness.fromTag(list)
                 validate(homeDTO, listener)
             }
         })

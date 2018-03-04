@@ -21,7 +21,7 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
     private fun loadParent() {
 
         view.showLoading()
-        TagBusiness.findAllParents(object : MultResultListener<TagModel> {
+        TagBusiness(TagRepository()).findAllParents(object : MultResultListener<TagModel> {
 
             override fun onSuccess(list: ArrayList<TagModel>) {
 
@@ -49,7 +49,7 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
 
         if (mModel.key.isNullOrBlank()) {
 
-            TagBusiness.create(model = mModel, parent = mParent, listener = object : PersistenceListener<TagModel> {
+            TagBusiness(TagRepository()).create(model = mModel, parent = mParent, listener = object : PersistenceListener<TagModel> {
 
                 override fun onSuccess(model: TagModel) {
                     view.returnData(model)
@@ -64,7 +64,7 @@ class TagManagerPresenter(private val view: TagManagerContract.View) : TagManage
 
         } else {
 
-            TagBusiness.update(child = mModel, parent = mParent, listener = object : PersistenceListener<TagModel> {
+            TagBusiness(TagRepository()).update(child = mModel, parent = mParent, listener = object : PersistenceListener<TagModel> {
 
                 override fun onSuccess(model: TagModel) {
                     view.returnData(model)

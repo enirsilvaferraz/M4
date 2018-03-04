@@ -13,6 +13,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.system.m4.R
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Created by enirs on 30/08/2017.
@@ -25,7 +26,13 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
     private lateinit var mToolbar: Toolbar
 
     private lateinit var mListener: TagListContract.OnSelectedListener
-    private lateinit var mPresenter: TagListContract.Presenter
+
+    @Inject
+    lateinit var mPresenter: TagListContract.Presenter
+
+    init {
+        DaggerTagComponent.builder().tagModule(TagModule(this)).build().inject(this)
+    }
 
     /**
      * STATIC
@@ -47,8 +54,6 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mPresenter = TagListPresenter(this)
 
         mToolbar = view.findViewById(R.id.dialog_toolbar)
         mToolbar.setOnMenuItemClickListener(this)

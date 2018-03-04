@@ -9,6 +9,7 @@ import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.tags.TagBusiness
 import com.system.m4.kotlin.tags.TagModel
+import com.system.m4.kotlin.tags.TagRepository
 import com.system.m4.kotlin.transaction.TransactionBusiness
 import com.system.m4.views.vos.TagVO
 import com.system.m4.views.vos.TransactionVO
@@ -21,11 +22,12 @@ object ExportToCSVBusiness {
 
     fun findData() {
 
-        TagBusiness.findAll(object : MultResultListener<TagModel> {
+        var tagBusiness = TagBusiness(TagRepository())
+        tagBusiness.findAll(object : MultResultListener<TagModel> {
 
             override fun onSuccess(list: ArrayList<TagModel>) {
 
-                val tags = TagBusiness.fromTag(list)
+                val tags = tagBusiness.fromTag(list)
                 val transactionsList = arrayOfNulls<ArrayList<TransactionVO>>(12)
                 val year = Calendar.getInstance().get(Calendar.YEAR)
 

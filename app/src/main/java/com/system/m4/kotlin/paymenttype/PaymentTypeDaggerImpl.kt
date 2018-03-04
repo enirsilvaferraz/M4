@@ -1,8 +1,15 @@
 package com.system.m4.kotlin.paymenttype
 
+import dagger.Component
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
+
+@Singleton
+@Component(modules = [PaymentTypeModule::class])
+interface PaymentTypeComponent {
+    fun inject(target: PaymentTypeListDialog)
+}
 
 @Module
 class PaymentTypeModule(val view: PaymentTypeListContract.View) {

@@ -8,7 +8,7 @@ import java.util.*
  * Created by enirs on 30/08/2017.
  * Presenter
  */
-class PaymentTypeListPresenter(private val view: PaymentTypeListContract.View, val business: PaymentTypeBusiness) : PaymentTypeListContract.Presenter {
+class PaymentTypeListPresenter(private val view: PaymentTypeListContract.View, private val business: PaymentTypeBusiness) : PaymentTypeListContract.Presenter {
 
     override fun onInit() {
 

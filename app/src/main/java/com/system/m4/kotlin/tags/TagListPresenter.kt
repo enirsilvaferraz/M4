@@ -8,11 +8,12 @@ import java.util.*
  * Created by enirs on 30/08/2017.
  * Presenter
  */
-class TagListPresenter(private val view: TagListContract.View) : TagListContract.Presenter {
+class TagListPresenter(private val view: TagListContract.View, private val business: TagBusiness) : TagListContract.Presenter {
+
     override fun init() {
 
         view.showLoading()
-        TagBusiness.findAll(object : MultResultListener<TagModel> {
+        business.findAll(object : MultResultListener<TagModel> {
 
             override fun onSuccess(list: ArrayList<TagModel>) {
                 view.loadTags(list)
@@ -41,7 +42,7 @@ class TagListPresenter(private val view: TagListContract.View) : TagListContract
     override fun onDelete(model: TagModel) {
 
         view.showLoading()
-        TagBusiness.delete(model, object : PersistenceListener<TagModel> {
+        business.delete(model, object : PersistenceListener<TagModel> {
 
             override fun onSuccess(model: TagModel) {
                 view.remove(model)
