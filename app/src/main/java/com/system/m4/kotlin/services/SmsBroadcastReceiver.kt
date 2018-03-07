@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.telephony.SmsMessage
 import com.system.m4.kotlin.transaction.TransactionBusiness
+import com.system.m4.views.vos.TransactionVO
 
 class SmsBroadcastReceiver : BroadcastReceiver() {
 
@@ -21,7 +22,7 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
                 val format = intentExtras.getString(SMS_FORMAT)
                 val smsMessage = SmsMessage.createFromPdu(sm as ByteArray, format)
 
-                val transaction = SmsReaderBusiness.readSMS(context, smsMessage.messageBody)
+                val transaction: TransactionVO? = SmsReaderBusiness.readSMS(context, smsMessage.messageBody)
                 if (transaction != null) {
                     TransactionBusiness.save(transaction, null)
                 }

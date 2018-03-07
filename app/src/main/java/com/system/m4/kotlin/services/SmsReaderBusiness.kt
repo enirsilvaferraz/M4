@@ -24,10 +24,14 @@ class SmsReaderBusiness {
 
         fun readSMS(context: Context, message: String): TransactionVO? {
 
-            return when {
-                message.startsWith(SMS_TITLE_DEBIT) -> readSMSTextDebit(context, message)
-                message.startsWith(SMS_TITLE_PAYMENT) -> readSMSTextPayment(message, context.resources.getString(R.string.paymenttype_debito_key))
-                else -> null
+            return try {
+                when {
+                    message.startsWith(SMS_TITLE_DEBIT) -> readSMSTextDebit(context, message)
+                    message.startsWith(SMS_TITLE_PAYMENT) -> readSMSTextPayment(message, context.resources.getString(R.string.paymenttype_debito_key))
+                    else -> null
+                }
+            } catch (exception: Exception) {
+                null
             }
         }
 
