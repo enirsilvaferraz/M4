@@ -1,4 +1,4 @@
-package com.system.m4.kotlin.paymenttype
+package com.system.m4.kotlin.paymenttype.list
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
 import com.system.m4.R
+import com.system.m4.kotlin.paymenttype.PaymentTypeModel
 
 /**
  * Created by enirs on 30/08/2017.
@@ -17,11 +18,11 @@ class PaymentTypeAdapter(val onClick: PaymentTypeListContract.OnAdapterClickList
 
     private val mList = arrayListOf<PaymentTypeModel>()
 
-    override fun onBindViewHolder(holder: PaymentTypeAdapter.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         holder?.bind(mList.get(position), onClick)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PaymentTypeAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.item_paymenttype, parent, false))
     }
 
@@ -61,7 +62,7 @@ class PaymentTypeAdapter(val onClick: PaymentTypeListContract.OnAdapterClickList
         fun bind(model: PaymentTypeModel, listener: PaymentTypeListContract.OnAdapterClickListener) {
             mTvName.text = model.name
             mBtMoreActions.setOnClickListener({ showPopupDialog(mBtMoreActions, model, listener) })
-            view.setOnClickListener({ listener.onSelect(model) })
+            view.setOnClickListener({ listener.onSelectClicked(model) })
         }
 
         private fun showPopupDialog(view: View, model: PaymentTypeModel, listener: PaymentTypeListContract.OnAdapterClickListener) {
@@ -71,14 +72,8 @@ class PaymentTypeAdapter(val onClick: PaymentTypeListContract.OnAdapterClickList
 
             popupMenu.setOnMenuItemClickListener {
                 when (it?.itemId) {
-                    R.id.menu_crud_manager_edit -> {
-                        listener.onEdit(model)
-                        true
-                    }
-                    R.id.menu_crud_manager_delete -> {
-                        listener.onDelete(model)
-                        true
-                    }
+                    R.id.menu_crud_manager_edit -> listener.onEditClicked(model)
+                    R.id.menu_crud_manager_delete -> listener.onDeleteClicked(model)
                     else -> false
                 }
             }

@@ -1,7 +1,6 @@
 package com.system.m4.kotlin.tags.list
 
 import com.system.m4.kotlin.tags.TagBusiness
-import com.system.m4.kotlin.tags.TagRepository
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -15,14 +14,6 @@ interface TagListComponent {
 
     @Module
     class TagListModule(val view: TagListContract.View) {
-
-        @Singleton
-        @Provides
-        fun provideRepository(): TagRepository = TagRepository()
-
-        @Singleton
-        @Provides
-        fun provideBusiness(repository: TagRepository): TagBusiness = TagBusiness(repository)
 
         @Singleton
         @Provides

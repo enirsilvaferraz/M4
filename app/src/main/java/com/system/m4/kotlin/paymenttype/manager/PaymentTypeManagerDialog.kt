@@ -1,4 +1,4 @@
-package com.system.m4.kotlin.paymenttype
+package com.system.m4.kotlin.paymenttype.manager
 
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -9,7 +9,9 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.Toast
 import com.system.m4.R
+import com.system.m4.kotlin.paymenttype.PaymentTypeModel
 import com.system.m4.views.components.DialogFooter
+import javax.inject.Inject
 
 /**
  * Created by enirs on 30/08/2017.
@@ -17,12 +19,18 @@ import com.system.m4.views.components.DialogFooter
  */
 class PaymentTypeManagerDialog : DialogFragment(), PaymentTypeManagerContract.View {
 
-    private lateinit var mPresenter: PaymentTypeManagerContract.Presenter
+    @Inject
+    lateinit var mPresenter: PaymentTypeManagerContract.Presenter
+
     private lateinit var mEtName: EditText
     private lateinit var mDialogFooter: DialogFooter
 
     private lateinit var mListener: PaymentTypeManagerContract.OnCompleteListener
 
+    init {
+        PaymentTypeManagerComponent.injectObject(this)
+    }
+    
     /**
      * STATIC
      */
@@ -69,7 +77,6 @@ class PaymentTypeManagerDialog : DialogFragment(), PaymentTypeManagerContract.Vi
 
         dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 
-        mPresenter = PaymentTypeManagerPresenter(this)
         mPresenter.init(arguments.getParcelable(PaymentTypeModel.TAG))
     }
 

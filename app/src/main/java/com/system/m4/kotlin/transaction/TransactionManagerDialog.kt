@@ -11,9 +11,9 @@ import com.system.m4.R
 import com.system.m4.infrastructure.Constants
 import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.kotlin.infrastructure.BaseDialogFragment
-import com.system.m4.kotlin.paymenttype.PaymentTypeListContract
-import com.system.m4.kotlin.paymenttype.PaymentTypeListDialog
 import com.system.m4.kotlin.paymenttype.PaymentTypeModel
+import com.system.m4.kotlin.paymenttype.list.PaymentTypeListContract
+import com.system.m4.kotlin.paymenttype.list.PaymentTypeListDialog
 import com.system.m4.kotlin.tags.TagModel
 import com.system.m4.kotlin.tags.list.TagListContract
 import com.system.m4.kotlin.tags.list.TagListDialog
@@ -173,13 +173,13 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
     }
 
     override fun showPaymentDateDialog(date: Date?) {
-        JavaUtils.AndroidUtil.showDatePicker(context, date) { view, year, month, dayOfMonth ->
+        JavaUtils.AndroidUtil.showDatePicker(context, date) { _, year, month, dayOfMonth ->
             presenter.setPaymentDate(JavaUtils.DateUtil.getDate(year, month + 1, dayOfMonth))
         }
     }
 
     override fun showPurchaseDateDialog(date: Date?) {
-        JavaUtils.AndroidUtil.showDatePicker(context, date) { view, year, month, dayOfMonth ->
+        JavaUtils.AndroidUtil.showDatePicker(context, date) { _, year, month, dayOfMonth ->
             presenter.setPurchaseDate(JavaUtils.DateUtil.getDate(year, month + 1, dayOfMonth))
         }
     }

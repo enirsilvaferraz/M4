@@ -1,17 +1,18 @@
-package com.system.m4.kotlin.paymenttype
+package com.system.m4.kotlin.paymenttype.list
 
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
 import com.system.m4.R
+import com.system.m4.kotlin.paymenttype.PaymentTypeModel
+import com.system.m4.kotlin.paymenttype.manager.PaymentTypeManagerDialog
+import kotlinx.android.synthetic.main.dialog_paymenttype_list.*
 import java.util.*
 import javax.inject.Inject
 
@@ -21,17 +22,13 @@ import javax.inject.Inject
  */
 class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, Toolbar.OnMenuItemClickListener {
 
-    private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mProgress: ProgressBar
-    private lateinit var mToolbar: Toolbar
-
     private lateinit var mListener: PaymentTypeListContract.OnSelectedListener
 
     @Inject
     lateinit var mPresenter: PaymentTypeListContract.Presenter
 
     init {
-        PaymentTypeComponent.injectObject(this)
+        PaymentTypeListComponent.injectObject(this)
     }
 
     /**
@@ -55,38 +52,21 @@ class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, To
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mToolbar = view!!.findViewById(R.id.dialog_toolbar)
         mToolbar.setOnMenuItemClickListener(this)
         mToolbar.inflateMenu(R.menu.menu_crud_list)
 
-        mRecyclerView = view.findViewById(R.id.dialog_list_recycler)
-        mRecyclerView.layoutManager = LinearLayoutManager(view.context)
-        mRecyclerView.adapter = PaymentTypeAdapter(object : PaymentTypeListContract.OnAdapterClickListener {
+        mRecyclerPaymentType.layoutManager = LinearLayoutManager(view!!.context)
+        mRecyclerPaymentType.adapter = PaymentTypeAdapter(mPresenter)
+    }
 
-            override fun onSelect(model: PaymentTypeModel) {
-                mPresenter.select(model)
-            }
-
-            override fun onEdit(model: PaymentTypeModel) {
-                mPresenter.edit(model)
-            }
-
-            override fun onDelete(model: PaymentTypeModel) {
-                mPresenter.delete(model)
-            }
-        })
-
-        mProgress = view.findViewById(R.id.dialog_progress)
-
+    override fun onStart() {
+        super.onStart()
         mPresenter.onInit()
     }
 
-    /**
-     * LISTENERS
-     */
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         if (item?.itemId!!.equals(R.id.menu_crud_list_add_new)) {
-            mPresenter.create()
+            mPresenter.onAddNewClicked()
             return true
         } else return false
     }
@@ -94,33 +74,32 @@ class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, To
     /**
      * MVP
      */
-    override fun load(list: ArrayList<PaymentTypeModel>) {
-        (mRecyclerView.adapter as PaymentTypeAdapter).updateList(list)
+    override fun loadList(list: ArrayList<PaymentTypeModel>) {
+        (mRecyclerPaymentType.adapter as PaymentTypeAdapter).updateList(list)
     }
 
-    override fun select(model: PaymentTypeModel) {
+    override fun addOrUpdateItem(model: PaymentTypeModel) {
+        (mRecyclerPaymentType.adapter as PaymentTypeAdapter).addOrUpdateItem(model)
+    }
+
+    override fun selectItem(model: PaymentTypeModel) {
         mListener.onSelect(model)
-        dismiss()
     }
 
     override fun remove(model: PaymentTypeModel) {
-        (mRecyclerView.adapter as PaymentTypeAdapter).deleteItem(model)
+        (mRecyclerPaymentType.adapter as PaymentTypeAdapter).deleteItem(model)
     }
 
     override fun openManager(model: PaymentTypeModel?) {
-        PaymentTypeManagerDialog.instance(model, object : PaymentTypeManagerContract.OnCompleteListener {
-            override fun onComplete(model: PaymentTypeModel) {
-                (mRecyclerView.adapter as PaymentTypeAdapter).addOrUpdateItem(model)
-            }
-        }).show(fragmentManager, PaymentTypeManagerDialog.TAG)
+        PaymentTypeManagerDialog.instance(model, mPresenter).show(fragmentManager, PaymentTypeManagerDialog.TAG)
     }
 
     override fun showLoading() {
-        mProgress.visibility = View.VISIBLE
+        mProgressPayment.visibility = View.VISIBLE
     }
 
     override fun stopLoading() {
-        mProgress.visibility = View.INVISIBLE
+        mProgressPayment.visibility = View.INVISIBLE
     }
 
     override fun showError(error: String) {

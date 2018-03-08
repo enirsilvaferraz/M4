@@ -58,15 +58,15 @@ class TagListDialog : DialogFragment(), TagListContract.View, Toolbar.OnMenuItem
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mToolbar = view.findViewById(R.id.dialog_toolbar)
+        mToolbar = view.findViewById(R.id.mToolbar)
         mToolbar.setOnMenuItemClickListener(this)
         mToolbar.inflateMenu(R.menu.menu_crud_list)
 
-        mRecyclerView = view.findViewById(R.id.dialog_list_recycler)
+        mRecyclerView = view.findViewById(R.id.mRecyclerPaymentType)
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
         mRecyclerView.adapter = TagListAdapter(mPresenter)
 
-        mProgress = view.findViewById(R.id.dialog_progress)
+        mProgress = view.findViewById(R.id.mProgressPayment)
 
         mPresenter.init()
     }

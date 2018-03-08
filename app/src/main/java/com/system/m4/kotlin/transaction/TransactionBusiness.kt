@@ -47,7 +47,7 @@ class TransactionBusiness {
 
                         vo.parcels = "${actualParcel}/${countParcel}"
 
-                        TransactionRepository(year, month).create(fromTransaction(vo), listener)
+                        TransactionRepository(year, month).save(fromTransaction(vo), listener)
 
                         val instance = Calendar.getInstance()
                         instance.time = vo.paymentDate
@@ -58,7 +58,7 @@ class TransactionBusiness {
                     }
 
                 } else {
-                    TransactionRepository(year, month).create(fromTransaction(vo), listener)
+                    TransactionRepository(year, month).save(fromTransaction(vo), listener)
                 }
 
             } else if (isInPath(vo)) {
@@ -114,7 +114,7 @@ class TransactionBusiness {
 
         fun findAll(year: Int, month: Int, listener: MultResultListener<TransactionVO>) {
 
-            TransactionRepository(year, month).findAll(object : MultResultListener<TransactionModel> {
+            TransactionRepository(year, month).findAll(listener = object : MultResultListener<TransactionModel> {
 
                 override fun onSuccess(list: ArrayList<TransactionModel>) {
                     listener.onSuccess(fromTransaction(list))

@@ -4,16 +4,17 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.system.m4.kotlin.infrastructure.GenericRepository
 
 /**
  * Created by enirs on 30/08/2017.
  * Data Tag
  */
-class TagModel() : Parcelable {
+class TagModel() : Parcelable, GenericRepository.Model {
 
     @Expose
     @SerializedName("key")
-    var key: String? = null
+    override var key: String? = null
 
     @Expose
     @SerializedName("name")

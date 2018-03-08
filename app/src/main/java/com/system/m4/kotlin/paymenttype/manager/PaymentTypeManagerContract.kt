@@ -1,4 +1,6 @@
-package com.system.m4.kotlin.paymenttype
+package com.system.m4.kotlin.paymenttype.manager
+
+import com.system.m4.kotlin.paymenttype.PaymentTypeModel
 
 /**
  * Created by enirs on 30/08/2017.

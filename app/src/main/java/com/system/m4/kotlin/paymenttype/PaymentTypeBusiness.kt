@@ -4,12 +4,13 @@ import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
 import com.system.m4.views.vos.PaymentTypeVO
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Created by enirs on 30/08/2017.
  * Business
  */
-class PaymentTypeBusiness(private val repository: PaymentTypeRepository) {
+class PaymentTypeBusiness @Inject constructor(private val repository: PaymentTypeRepository) {
 
     fun save(model: PaymentTypeModel, listener: PersistenceListener<PaymentTypeModel>) {
         repository.save(model, listener)

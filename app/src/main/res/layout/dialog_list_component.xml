@@ -10,7 +10,7 @@
         android:layout_height="wrap_content" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/dialog_list_recycler"
+        android:id="@+id/mRecyclerPaymentType"
         android:layout_width="match_parent"
         android:layout_height="@dimen/custom_dialog_heght_recyclerview"
         android:layout_above="@+id/base_dialog_container_action"

@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.system.m4.kotlin.infrastructure.GenericRepository
 
 /**
  * Created by eferraz on 27/08/17.
@@ -13,7 +14,7 @@ data class TransactionModel(
 
         @Expose
         @SerializedName("key")
-        var key: String?,
+        override var key: String?,
 
         @Expose
         @SerializedName("paymentDate")
@@ -51,7 +52,8 @@ data class TransactionModel(
         @SerializedName("alreadyPaid")
         var alreadyPaid: Boolean
 
-) : Parcelable {
+) : Parcelable, GenericRepository.Model {
+
     constructor() : this(null, null, null, 0.0, null, null, null, null, null, true) {
         // Nothing to do
     }

@@ -1,12 +1,14 @@
-package com.system.m4.kotlin.paymenttype
+package com.system.m4.kotlin.paymenttype.manager
 
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
+import com.system.m4.kotlin.paymenttype.PaymentTypeBusiness
+import com.system.m4.kotlin.paymenttype.PaymentTypeModel
 
 /**
  * Created by eferraz on 01/09/17.
  * Presenter
  */
-class PaymentTypeManagerPresenter(private val view: PaymentTypeManagerContract.View) : PaymentTypeManagerContract.Presenter {
+class PaymentTypeManagerPresenter(private val view: PaymentTypeManagerContract.View, private val business: PaymentTypeBusiness) : PaymentTypeManagerContract.Presenter {
 
     private lateinit var mModel: PaymentTypeModel
 
@@ -14,8 +16,6 @@ class PaymentTypeManagerPresenter(private val view: PaymentTypeManagerContract.V
         mModel = if (model != null) model else PaymentTypeModel()
         view.fillFields(mModel)
     }
-
-    private val paymentTypeBusiness = PaymentTypeBusiness(PaymentTypeRepository())
 
     override fun done(name: String) {
 
@@ -25,7 +25,7 @@ class PaymentTypeManagerPresenter(private val view: PaymentTypeManagerContract.V
 
         if (mModel.key.isNullOrBlank()) {
 
-            paymentTypeBusiness.save(mModel, object : PersistenceListener<PaymentTypeModel> {
+            business.save(mModel, object : PersistenceListener<PaymentTypeModel> {
 
                 override fun onSuccess(model: PaymentTypeModel) {
                     view.returnData(model)
@@ -40,7 +40,7 @@ class PaymentTypeManagerPresenter(private val view: PaymentTypeManagerContract.V
 
         } else {
 
-            paymentTypeBusiness.update(mModel, object : PersistenceListener<PaymentTypeModel> {
+            business.update(mModel, object : PersistenceListener<PaymentTypeModel> {
 
                 override fun onSuccess(model: PaymentTypeModel) {
                     view.returnData(model)

@@ -1,7 +1,9 @@
-package com.system.m4.kotlin.paymenttype
+package com.system.m4.kotlin.paymenttype.list
 
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
+import com.system.m4.kotlin.paymenttype.PaymentTypeBusiness
+import com.system.m4.kotlin.paymenttype.PaymentTypeModel
 import java.util.*
 
 /**
@@ -16,7 +18,7 @@ class PaymentTypeListPresenter(private val view: PaymentTypeListContract.View, p
         business.findAll(object : MultResultListener<PaymentTypeModel> {
 
             override fun onSuccess(list: ArrayList<PaymentTypeModel>) {
-                view.load(list)
+                view.loadList(list)
                 view.stopLoading()
             }
 
@@ -27,20 +29,18 @@ class PaymentTypeListPresenter(private val view: PaymentTypeListContract.View, p
         })
     }
 
-    override fun select(model: PaymentTypeModel) {
-        view.select(model)
+    override fun onSelectClicked(model: PaymentTypeModel): Boolean {
+        view.selectItem(model)
+        view.dismiss()
+        return true
     }
 
-    override fun create() {
-        view.openManager(null)
-    }
-
-    override fun edit(model: PaymentTypeModel) {
+    override fun onEditClicked(model: PaymentTypeModel): Boolean {
         view.openManager(model)
+        return true
     }
 
-    override fun delete(model: PaymentTypeModel) {
-
+    override fun onDeleteClicked(model: PaymentTypeModel): Boolean {
         view.showLoading()
         business.delete(model, object : PersistenceListener<PaymentTypeModel> {
 
@@ -54,5 +54,14 @@ class PaymentTypeListPresenter(private val view: PaymentTypeListContract.View, p
                 view.stopLoading()
             }
         })
+        return true
+    }
+
+    override fun onAddNewClicked() {
+        view.openManager(null)
+    }
+
+    override fun onComplete(model: PaymentTypeModel) {
+        view.addOrUpdateItem(model)
     }
 }

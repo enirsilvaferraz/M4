@@ -3,16 +3,17 @@ package com.system.m4.kotlin.tags
 import com.system.m4.kotlin.infrastructure.listeners.MultResultListener
 import com.system.m4.kotlin.infrastructure.listeners.PersistenceListener
 import com.system.m4.views.vos.TagVO
+import javax.inject.Inject
 
 /**
  * Created by enirs on 30/08/2017.
  * Business
  */
-class TagBusiness(private val repository: TagRepository) {
+class TagBusiness @Inject constructor(private val repository: TagRepository) {
 
     fun create(model: TagModel, parent: TagModel? = null, listener: PersistenceListener<TagModel>) {
         model.parentKey = parent?.key
-        repository.create(model, listener)
+        repository.save(model, listener)
     }
 
     fun update(child: TagModel, parent: TagModel? = null, listener: PersistenceListener<TagModel>) {

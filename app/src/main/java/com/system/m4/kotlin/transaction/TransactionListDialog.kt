@@ -45,7 +45,7 @@ class TransactionListDialog : DialogFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view!!.findViewById(R.id.dialog_list_recycler) as RecyclerView
+        val recyclerView = view!!.findViewById(R.id.mRecyclerPaymentType) as RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
         recyclerView.adapter = HomeAdapter(object : HomeAdapter.Listener {

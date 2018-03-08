@@ -21,21 +21,21 @@ abstract class GenericRepository<T : GenericRepository.Model>(val database: Stri
     fun save(model: T, listener: PersistenceListener<T>) {
         val push = mFireRef.push()
         model.key = push.key
-        push.setValue(model) { error, p1 ->
+        push.setValue(model) { error, _ ->
             if (error == null) listener.onSuccess(model)
             else listener.onError(error.message)
         }
     }
 
     fun update(model: T, listener: PersistenceListener<T>) {
-        mFireRef.child(model.key).updateChildren(KotlinUtils().modelToMap(model)) { error, p1 ->
+        mFireRef.child(model.key).updateChildren(KotlinUtils().modelToMap(model)) { error, _ ->
             if (error == null) listener.onSuccess(model)
             else listener.onError(error.message)
         }
     }
 
     fun delete(model: T, listener: PersistenceListener<T>) {
-        mFireRef.child(model.key).removeValue { error, p1 ->
+        mFireRef.child(model.key).removeValue { error, _ ->
             if (error == null) listener.onSuccess(model)
             else listener.onError(error.message)
         }
