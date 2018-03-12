@@ -45,7 +45,7 @@
             android:textSize="16sp"
             tools:text="Nome" />
 
-        <com.system.m4.views.components.DialogFooter
+        <com.system.m4.labs.components.DialogFooter
             android:id="@+id/base_dialog_container_action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

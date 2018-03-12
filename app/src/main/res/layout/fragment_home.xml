@@ -11,4 +11,4 @@
     android:paddingRight="8dp"
     android:paddingTop="8dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.system.m4.views.home.MainActivity" />
+    tools:context="com.system.m4.kotlin.view.activities.MainActivity" />

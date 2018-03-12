@@ -5,11 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 
-import com.google.firebase.database.FirebaseDatabase;
 import com.system.m4.R;
-import com.system.m4.views.vos.VOInterface;
+import com.system.m4.labs.vos.VOInterface;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -124,24 +122,6 @@ public final class JavaUtils {
     /**
      *
      */
-    public static class StringUtil {
-
-        public static boolean isEmpty(String string) {
-            return string == null || string.trim().isEmpty();
-        }
-
-        public static String formatEmpty(String s) {
-            if (TextUtils.isEmpty(s)) {
-                return Constants.EMPTY_FIELD;
-            } else {
-                return s;
-            }
-        }
-    }
-
-    /**
-     *
-     */
     public static class AndroidUtil {
 
         public static void showDatePicker(Context context, Date date, DatePickerDialog.OnDateSetListener onDateSetListener) {
@@ -173,14 +153,6 @@ public final class JavaUtils {
     public static class ClassUtil {
         public static boolean isEmpty(VOInterface vo) {
             return vo == null || vo.getKey() == null || vo.getKey().isEmpty();
-        }
-    }
-
-    public static class FirebaseUtil {
-
-        public static void enableOffline(String flavor) {
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            //FirebaseDatabase.getInstance().getReference(flavor).keepSynced(true);
         }
     }
 }

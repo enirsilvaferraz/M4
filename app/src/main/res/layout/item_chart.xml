@@ -18,7 +18,7 @@
         android:paddingStart="16dp"
         android:paddingTop="12dp">
 
-        <com.system.m4.views.components.CustomBarChart
+        <com.system.m4.labs.chart.CustomBarChart
             android:id="@+id/item_bar_chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

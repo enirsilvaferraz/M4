@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentManager
 import android.view.View
 import android.widget.Toast
 import com.system.m4.R
-import com.system.m4.views.components.DialogFooter
-import com.system.m4.views.components.DialogToolbar
-import com.system.m4.views.vos.VOInterface
+import com.system.m4.labs.components.DialogFooter
+import com.system.m4.labs.components.DialogToolbar
+import com.system.m4.labs.vos.VOInterface
 
 /**
  * Created by Enir on 20/04/2017.

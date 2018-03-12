@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".kotlin.creditcard.CreditCardActivity">
+    tools:context=".kotlin.view.activities.CreditCardActivity">
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.system.m4.kotlin.creditcard.CreditCardActivityFragment"
+        android:name="com.system.m4.kotlin.view.fragments.CreditCardActivityFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

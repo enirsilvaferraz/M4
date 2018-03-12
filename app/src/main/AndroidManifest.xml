@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
-        android:name=".M4Application"
+        android:name=".kotlin.M4Application"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".views.home.MainActivity"
+            android:name=".kotlin.view.activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -27,7 +27,7 @@
         </activity>
 
         <receiver
-            android:name=".kotlin.services.SmsBroadcastReceiver"
+            android:name="com.system.m4.kotlin.model.services.SmsBroadcastReceiver"
             android:exported="true">
             <intent-filter android:priority="999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
@@ -35,7 +35,7 @@
         </receiver>
 
         <service
-            android:name=".kotlin.services.NotificationReceiver"
+            android:name="com.system.m4.kotlin.model.services.NotificationReceiver"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
@@ -43,14 +43,13 @@
             </intent-filter>
         </service>
         <service
-            android:name=".kotlin.services.ExportToCSVService"
+            android:name="com.system.m4.kotlin.model.services.ExportToCSVService"
             android:exported="false" />
 
-        <activity android:name=".kotlin.home.HomeDetailActivity" />
         <activity
-            android:name=".kotlin.creditcard.CreditCardActivity"
+            android:name="com.system.m4.kotlin.view.activities.CreditCardActivity"
             android:label="@string/title_activity_credit_card"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -1,9 +1,8 @@
 package com.system.m4.kotlin
 
 import com.system.m4.infrastructure.JavaUtils
-import com.system.m4.kotlin.home.HomeBusiness
-import com.system.m4.kotlin.home.HomeDTO
-import com.system.m4.views.vos.*
+import com.system.m4.kotlin.model.business.HomeBusiness
+import com.system.m4.labs.vos.*
 import junit.framework.Assert
 import org.junit.Test
 import java.util.*
