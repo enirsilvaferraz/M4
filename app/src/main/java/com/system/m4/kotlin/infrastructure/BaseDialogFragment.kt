@@ -1,7 +1,6 @@
 package com.system.m4.kotlin.infrastructure
 
 import android.os.Bundle
-import android.support.annotation.StringRes
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentManager
 import android.view.View
@@ -9,7 +8,6 @@ import android.widget.Toast
 import com.system.m4.R
 import com.system.m4.labs.components.DialogFooter
 import com.system.m4.labs.components.DialogToolbar
-import com.system.m4.labs.vos.VOInterface
 
 /**
  * Created by Enir on 20/04/2017.
@@ -21,27 +19,14 @@ abstract class BaseDialogFragment : DialogFragment(), DialogFooter.OnClickListen
     lateinit var mToolbar: DialogToolbar
     lateinit var mFooter: DialogFooter
 
-    @Deprecated("")
-    var onFinishListener: OnFinishListener? = null
-
-    var dialogListener: DialogListener? = null
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mToolbar = view!!.findViewById<DialogToolbar>(R.id.dialog_toolbar_title)
-        mFooter = view.findViewById<DialogFooter>(R.id.base_dialog_container_action)
+        mToolbar = view!!.findViewById(R.id.dialog_toolbar_title)
+        mFooter = view.findViewById(R.id.base_dialog_container_action)
 
         mToolbar.setListener(this)
         mFooter.setListener(this)
-    }
-
-    protected fun hideFooter() {
-        mFooter.visibility = View.GONE
-    }
-
-    protected fun setTitle(@StringRes titleId: Int) {
-        mToolbar.setTitle(titleId)
     }
 
     protected fun setTitle(titleString: String) {
@@ -78,18 +63,5 @@ abstract class BaseDialogFragment : DialogFragment(), DialogFooter.OnClickListen
 
     override fun onCancelClick() {
         dismiss()
-    }
-
-    interface OnFinishListener {
-        fun onFinish(value: String)
-    }
-
-    interface DialogListener {
-        fun onFinish(vo: VOInterface<*>)
-    }
-
-    companion object {
-
-        val TITLE_BUNDLE = "TITLE_BUNDLE"
     }
 }

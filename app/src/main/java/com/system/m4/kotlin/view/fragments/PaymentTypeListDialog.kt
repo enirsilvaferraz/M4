@@ -1,7 +1,10 @@
 package com.system.m4.kotlin.view.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
@@ -10,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.system.m4.R
+import com.system.m4.infrastructure.Constants
 import com.system.m4.kotlin.contracts.PaymentTypeListContract
 import com.system.m4.kotlin.infrastructure.di.DaggerFactory
 import com.system.m4.kotlin.model.entity.PaymentTypeModel
@@ -24,8 +28,6 @@ import javax.inject.Inject
  */
 class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, Toolbar.OnMenuItemClickListener {
 
-    private lateinit var mListener: PaymentTypeListContract.OnSelectedListener
-
     @Inject
     lateinit var mPresenter: PaymentTypeListContract.Presenter
 
@@ -37,9 +39,9 @@ class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, To
      * STATIC
      */
     companion object {
-        fun instance(listener: PaymentTypeListContract.OnSelectedListener): PaymentTypeListDialog {
+        fun instance(target: Fragment, requestCode: Int): PaymentTypeListDialog {
             val dialog = PaymentTypeListDialog()
-            dialog.mListener = listener
+            dialog.setTargetFragment(target, requestCode)
             return dialog
         }
     }
@@ -85,7 +87,9 @@ class PaymentTypeListDialog : DialogFragment(), PaymentTypeListContract.View, To
     }
 
     override fun selectItem(model: PaymentTypeModel) {
-        mListener.onSelect(model)
+        val intent = Intent()
+        intent.putExtra(Constants.VALUE_BUNDLE, model)
+        targetFragment.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
     }
 
     override fun remove(model: PaymentTypeModel) {

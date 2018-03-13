@@ -1,14 +1,18 @@
 package com.system.m4.kotlin.view.components
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v4.app.DialogFragment
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import com.system.m4.R
+import com.system.m4.infrastructure.Constants
 import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.labs.components.DialogFooter
 import kotlinx.android.synthetic.main.dialog_number_component.*
@@ -19,9 +23,6 @@ import kotlinx.android.synthetic.main.dialog_number_component.*
  */
 
 class NumberComponentDialog : DialogFragment(), DialogFooter.OnClickListener {
-
-    @Deprecated("Sera substituido por Activity for result")
-    private lateinit var onFinishListener: OnFinishListener
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater!!.inflate(R.layout.dialog_number_component, container, false)
@@ -51,14 +52,17 @@ class NumberComponentDialog : DialogFragment(), DialogFooter.OnClickListener {
 
     override fun onDoneClick() {
         dismiss()
-        onFinishListener.onFinish(dialog_edit_number.text.toString())
+
+        val intent = Intent()
+        intent.putExtra(Constants.VALUE_BUNDLE, dialog_edit_number.text.toString())
+        targetFragment.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
     }
 
     override fun onCancelClick() {}
 
     companion object {
 
-        fun newInstance(@StringRes title: Int, value: Double?, onFinishListener: OnFinishListener): NumberComponentDialog {
+        fun newInstance(@StringRes title: Int, value: Double?, target: Fragment, requestCode: Int): NumberComponentDialog {
 
             val bundle = Bundle()
             bundle.putInt("TITLE", title)
@@ -68,8 +72,8 @@ class NumberComponentDialog : DialogFragment(), DialogFooter.OnClickListener {
             }
 
             val dialog = NumberComponentDialog()
+            dialog.setTargetFragment(target, requestCode)
             dialog.arguments = bundle
-            dialog.onFinishListener = onFinishListener
             return dialog
         }
     }
@@ -84,10 +88,5 @@ class NumberComponentDialog : DialogFragment(), DialogFooter.OnClickListener {
         ft.addToBackStack(null)
 
         super.show(ft, javaClass.simpleName)
-    }
-
-
-    interface OnFinishListener {
-        fun onFinish(value: String)
     }
 }

@@ -19,7 +19,6 @@ import com.system.m4.infrastructure.JavaUtils
 import com.system.m4.kotlin.contracts.HomeContract
 import com.system.m4.kotlin.contracts.MainContract
 import com.system.m4.kotlin.contracts.TagListContract
-import com.system.m4.kotlin.infrastructure.BaseDialogFragment
 import com.system.m4.kotlin.model.entity.TagModel
 import com.system.m4.kotlin.model.services.ExportToCSVService
 import com.system.m4.kotlin.model.services.NotificationReceiver
@@ -30,7 +29,6 @@ import com.system.m4.kotlin.view.fragments.TagListDialog
 import com.system.m4.kotlin.view.fragments.TransactionManagerDialog
 import com.system.m4.labs.vos.TagVO
 import com.system.m4.labs.vos.TransactionVO
-import com.system.m4.labs.vos.VOInterface
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
@@ -115,12 +113,15 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
     }
 
+    private lateinit var homeFragment: Fragment
+
     override fun onAttachFragment(fragment: Fragment?) {
         super.onAttachFragment(fragment)
 
         if (fragment is HomeContract.View) {
             val view = fragment as HomeContract.View?
             view!!.setPresenter(HomePresenter(view))
+            this@MainActivity.homeFragment = fragment
         }
     }
 
@@ -138,13 +139,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     }
 
     override fun showTransactionDialog(vo: TransactionVO) {
-        val dialogFragment = TransactionManagerDialog.newInstance(vo)
-        dialogFragment.dialogListener = object : BaseDialogFragment.DialogListener {
-            override fun onFinish(vo: VOInterface<*>) {
-                mViewPager.adapter.notifyDataSetChanged()
-            }
-        }
-        dialogFragment.show(supportFragmentManager, TransactionManagerDialog::class.java.simpleName)
+        TransactionManagerDialog.newInstance(vo, homeFragment, 1).show(supportFragmentManager, TransactionManagerDialog::class.java.simpleName)
     }
 
     override fun setMainTitle(title: String) {

@@ -1,18 +1,18 @@
 package com.system.m4.kotlin.view.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.system.m4.R
-import com.system.m4.kotlin.infrastructure.BaseDialogFragment
 import com.system.m4.kotlin.view.adapters.HomeAdapter
 import com.system.m4.labs.vos.TransactionVO
-import com.system.m4.labs.vos.VOInterface
 import com.system.m4.labs.vos.VOItemListInterface
+import kotlinx.android.synthetic.main.dialog_transaction_list.*
 
 /**
  * Created by enirs on 11/10/2017.
@@ -45,31 +45,32 @@ class TransactionListDialog : DialogFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view!!.findViewById(R.id.mRecyclerPaymentType) as RecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(view.context)
+        mRecyclerPaymentType.layoutManager = LinearLayoutManager(view!!.context)
 
-        recyclerView.adapter = HomeAdapter(object : HomeAdapter.Listener {
-            override fun onClickVO(vo: VOItemListInterface, view: View) = showTransactionManager(vo, recyclerView)
+        mRecyclerPaymentType.adapter = HomeAdapter(object : HomeAdapter.Listener {
+            override fun onClickVO(vo: VOItemListInterface, view: View) = showTransactionManager(vo)
             override fun onLongClickVO(vo: VOItemListInterface, view: View): Boolean = false
         })
 
-        (recyclerView.adapter as HomeAdapter).addCurrentList(arguments.getParcelableArrayList<TransactionVO>("LIST"))
+        (mRecyclerPaymentType.adapter as HomeAdapter).addCurrentList(arguments.getParcelableArrayList<TransactionVO>("LIST"))
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            when (requestCode) {
+                1 -> mRecyclerPaymentType.adapter.notifyDataSetChanged()
+            }
+        }
     }
 
     /**
      * LISTENERS
      */
-    private fun showTransactionManager(vo: VOItemListInterface, recyclerView: RecyclerView) {
-
+    private fun showTransactionManager(vo: VOItemListInterface) {
         if (vo is TransactionVO) {
-
-            val dialogFragment = TransactionManagerDialog.newInstance(vo)
-            dialogFragment.dialogListener = object : BaseDialogFragment.DialogListener {
-                override fun onFinish(vo: VOInterface<*>) {
-                    recyclerView.adapter.notifyDataSetChanged()
-                }
-            }
-            dialogFragment.show(fragmentManager, TransactionManagerDialog::class.java.simpleName)
+            TransactionManagerDialog.newInstance(vo, this, 1).show(fragmentManager, TransactionManagerDialog::class.java.simpleName)
         }
     }
 }

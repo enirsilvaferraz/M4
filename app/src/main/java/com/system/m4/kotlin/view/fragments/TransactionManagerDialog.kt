@@ -1,6 +1,9 @@
 package com.system.m4.kotlin.view.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +13,9 @@ import android.widget.Toast
 import com.system.m4.R
 import com.system.m4.infrastructure.Constants
 import com.system.m4.infrastructure.JavaUtils
-import com.system.m4.kotlin.contracts.PaymentTypeListContract
 import com.system.m4.kotlin.contracts.TagListContract
 import com.system.m4.kotlin.contracts.TransactionManagerContract
 import com.system.m4.kotlin.infrastructure.BaseDialogFragment
-import com.system.m4.kotlin.model.entity.PaymentTypeModel
 import com.system.m4.kotlin.model.entity.TagModel
 import com.system.m4.kotlin.presenters.TransactionManagerPresenter
 import com.system.m4.kotlin.view.components.NumberComponentDialog
@@ -104,6 +105,23 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
         presenter.init(transaction)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            when (requestCode) {
+                1 -> presenter.setPrice(JavaUtils.NumberUtil.removeFormat(data.getStringExtra(Constants.VALUE_BUNDLE)))
+                2 -> presenter.setRefund(JavaUtils.NumberUtil.removeFormat(data.getStringExtra(Constants.VALUE_BUNDLE)))
+                3 -> presenter.setContent(data.getStringExtra(Constants.VALUE_BUNDLE))
+                4 -> presenter.setParcels(data.getStringExtra(Constants.VALUE_BUNDLE))
+                5 -> {
+                    val model = data.getParcelableExtra<PaymentTypeVO>(Constants.VALUE_BUNDLE)
+                    presenter.setPaymentType(PaymentTypeVO(model.key, model.name, model.color))
+                }
+            }
+        }
+    }
+
     /*
      * MVP
      */
@@ -149,46 +167,23 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
     }
 
     override fun showPaymentTypeDialog() {
-        PaymentTypeListDialog.instance(object : PaymentTypeListContract.OnSelectedListener {
-            override fun onSelect(model: PaymentTypeModel) {
-                presenter.setPaymentType(PaymentTypeVO(model.key, model.name, model.color))
-            }
-        }).show(fragmentManager, PaymentTypeListDialog::class.java.simpleName)
+        PaymentTypeListDialog.instance(this, 5).show(fragmentManager, PaymentTypeListDialog::class.java.simpleName)
     }
 
     override fun showPriceDialog(value: Double?) {
-        NumberComponentDialog.newInstance(
-                R.string.transaction_price, value,
-                object : NumberComponentDialog.OnFinishListener {
-                    override fun onFinish(value: String) {
-                        presenter.setPrice(JavaUtils.NumberUtil.removeFormat(value))
-                    }
-                }
-        ).show(childFragmentManager)
+        NumberComponentDialog.newInstance(R.string.transaction_price, value, this, 1).show(fragmentManager)
     }
 
     override fun showRefundDialog(value: Double?) {
-        NumberComponentDialog.newInstance(R.string.transaction_refund, value, object : NumberComponentDialog.OnFinishListener {
-            override fun onFinish(value: String) {
-                presenter.setRefund(JavaUtils.NumberUtil.removeFormat(value))
-            }
-        }).show(childFragmentManager)
+        NumberComponentDialog.newInstance(R.string.transaction_refund, value, this, 2).show(fragmentManager)
     }
 
     override fun showContentDialog(value: String?) {
-        TextComponentDialog.newInstance(R.string.transaction_content, value, object : TextComponentDialog.OnFinishListener {
-            override fun onFinish(value: String) {
-                presenter.setContent(value)
-            }
-        }).show(childFragmentManager)
+        TextComponentDialog.newInstance(R.string.transaction_content, value, this, 3).show(fragmentManager)
     }
 
     override fun showParcelsDialog(value: String?) {
-        TextComponentDialog.newInstance(R.string.transaction_parcels, value, object : TextComponentDialog.OnFinishListener {
-            override fun onFinish(value: String) {
-                presenter.setParcels(value)
-            }
-        }).show(childFragmentManager)
+        TextComponentDialog.newInstance(R.string.transaction_parcels, value, this, 4).show(fragmentManager)
     }
 
     override fun showPaymentDateDialog(date: Date?) {
@@ -205,7 +200,10 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
 
     override fun dismissDialog(vo: VOInterface<*>) {
         dismiss()
-        dialogListener?.onFinish(vo)
+
+        val intent = Intent()
+        intent.putExtra(Constants.VALUE_BUNDLE, vo)
+        targetFragment.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
     }
 
     override fun showError(error: String) {
@@ -239,12 +237,13 @@ class TransactionManagerDialog : BaseDialogFragment(), TransactionManagerContrac
 
     companion object {
 
-        fun newInstance(transaction: TransactionVO): TransactionManagerDialog {
+        fun newInstance(transaction: TransactionVO, target: Fragment, requestCode: Int): TransactionManagerDialog {
             val bundle = Bundle()
             bundle.putParcelable(Constants.BUNDLE_TRANSACTION_VO, transaction)
 
             val fragment = TransactionManagerDialog()
             fragment.arguments = bundle
+            fragment.setTargetFragment(fragment, requestCode)
             return fragment
         }
     }

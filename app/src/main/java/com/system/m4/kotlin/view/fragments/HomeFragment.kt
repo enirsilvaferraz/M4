@@ -1,5 +1,7 @@
 package com.system.m4.kotlin.view.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.view.menu.MenuBuilder
@@ -107,6 +109,16 @@ class HomeFragment : Fragment(), HomeContract.View {
         val menuHelper = MenuPopupHelper(context, popupMenu.menu as MenuBuilder, viewClicked)
         menuHelper.setForceShowIcon(true)
         menuHelper.show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            when (requestCode) {
+                1 -> presenter!!.requestListTransaction()
+            }
+        }
     }
 
     private inner class HomeListener : HomeAdapter.Listener {
